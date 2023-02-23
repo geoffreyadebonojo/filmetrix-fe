@@ -1,11 +1,5 @@
 <script setup lang="ts">
   import { RouterLink, RouterView } from 'vue-router'
-  import ApolloClient from 'apollo-boost'
-  
-  const apolloClient = new ApolloClient({
-    // You should use an absolute URL here
-    uri: 'https://api.graphcms.com/simple/v1/awesomeTalksClone'
-  })
 
 </script>
 
