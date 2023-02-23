@@ -11,12 +11,10 @@ export default {
   data: () => ({
     branches: ['main', 'v2-compat'],
     currentBranch: 'main',
-    commits: null,
-    greeting: null
+    response: null
   }),
 
   created() {
-    // fetch on init
     this.fetchData()
   },
 
@@ -27,37 +25,33 @@ export default {
 
   methods: {
     async fetchData() {
-      const url = `${API_URL}`
-      // this.commits = await (await fetch(url)).json()
-      this.greeting = await (
-        // await fetch(url)
+      this.response = await (
         fetch(API_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ query: `
-          query { test }
-          ` })
+          body: JSON.stringify({ query: `query {
+            nodes {
+              id
+              name
+              poster
+            }
+            links {
+              source
+              target
+              roles
+            }
+          }`})
         }).then((response) => {
           return response.json()
         })
       )
-      // debugger
     }
-
-    // ,
-    // truncate(v) {
-    //   const newline = v.indexOf('\n')
-    //   return newline > 0 ? v.slice(0, newline) : v
-    // },
-    // formatDate(v) {
-    //   return v.replace(/T|Z/g, ' ')
-    // }
   }
 }
 </script>
 
 <template>
-  <h1>{{greeting.data.test}}</h1>
+  <h1>{{response["data"]}}</h1>
 
 </template>
 
