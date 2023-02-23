@@ -69,3 +69,7 @@ npm run lint
 
 
 [Gotta figure out how to use all this shit](https://raw.githubusercontent.com/vuejs/create-vue/main/media/screenshot-cli.png)
+
+
+
+https://www.apollographql.com/blog/frontend/getting-started-with-vue-apollo/
