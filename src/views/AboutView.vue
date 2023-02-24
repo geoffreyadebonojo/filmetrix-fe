@@ -16,62 +16,65 @@
 
 <script>
   import * as d3 from 'd3'  
+  function chart (responseData) {
+    // const links = [
+    //   {source: "Microsoft", target: "HTC", type: "licensing"},
+    //   {source: "Samsung", target: "Apple", type: "suit"},
+    //   {source: "Motorola", target: "Apple", type: "suit"},
+    //   {source: "Nokia", target: "Apple", type: "resolved"},
+    //   {source: "HTC", target: "Apple", type: "suit"},
+    //   {source: "Kodak", target: "Apple", type: "suit"},
+    //   {source: "Microsoft", target: "Barnes & Noble", type: "suit"},
+    //   {source: "Microsoft", target: "Foxconn", type: "suit"},
+    //   {source: "Oracle", target: "Google", type: "suit"},
+    //   {source: "Apple", target: "HTC", type: "suit"},
+    //   {source: "Microsoft", target: "Inventec", type: "suit"},
+    //   {source: "Samsung", target: "Kodak", type: "resolved"},
+    //   {source: "LG", target: "Kodak", type: "resolved"},
+    //   {source: "RIM", target: "Kodak", type: "suit"},
+    //   {source: "Sony", target: "LG", type: "suit"},
+    //   {source: "Kodak", target: "LG", type: "resolved"},
+    //   {source: "Apple", target: "Nokia", type: "resolved"},
+    //   {source: "Qualcomm", target: "Nokia", type: "resolved"},
+    //   {source: "Apple", target: "Motorola", type: "suit"}
+    // ]
 
-  function chart () {
-    const links = [
-      {source: "Microsoft", target: "HTC", type: "licensing"},
-      {source: "Samsung", target: "Apple", type: "suit"},
-      {source: "Motorola", target: "Apple", type: "suit"},
-      {source: "Nokia", target: "Apple", type: "resolved"},
-      {source: "HTC", target: "Apple", type: "suit"},
-      {source: "Kodak", target: "Apple", type: "suit"},
-      {source: "Microsoft", target: "Barnes & Noble", type: "suit"},
-      {source: "Microsoft", target: "Foxconn", type: "suit"},
-      {source: "Oracle", target: "Google", type: "suit"},
-      {source: "Apple", target: "HTC", type: "suit"},
-      {source: "Microsoft", target: "Inventec", type: "suit"},
-      {source: "Samsung", target: "Kodak", type: "resolved"},
-      {source: "LG", target: "Kodak", type: "resolved"},
-      {source: "RIM", target: "Kodak", type: "suit"},
-      {source: "Sony", target: "LG", type: "suit"},
-      {source: "Kodak", target: "LG", type: "resolved"},
-      {source: "Apple", target: "Nokia", type: "resolved"},
-      {source: "Qualcomm", target: "Nokia", type: "resolved"},
-      {source: "Apple", target: "Motorola", type: "suit"}
-    ]
+    // const nodes = [
+    //   {id: "Microsoft"},
+    //   {id: "Amazon"},
+    //   {id: "HTC"},
+    //   {id: "Samsung"},
+    //   {id: "Apple"},
+    //   {id: "Motorola"},
+    //   {id: "Nokia"},
+    //   {id: "Kodak"},
+    //   {id: "Barnes & Noble"},
+    //   {id: "Foxconn"},
+    //   {id: "Oracle"},
+    //   {id: "Google"},
+    //   {id: "Inventec"},
+    //   {id: "LG"},
+    //   {id: "RIM"},
+    //   {id: "Sony"},
+    //   {id: "Qualcomm"},
+    //   {id: "Huawei"},
+    //   {id: "ZTE"},
+    //   {id: "Ericsson"}
+    // ]
 
-    const nodes = [
-      {id: "Microsoft"},
-      {id: "Amazon"},
-      {id: "HTC"},
-      {id: "Samsung"},
-      {id: "Apple"},
-      {id: "Motorola"},
-      {id: "Nokia"},
-      {id: "Kodak"},
-      {id: "Barnes & Noble"},
-      {id: "Foxconn"},
-      {id: "Oracle"},
-      {id: "Google"},
-      {id: "Inventec"},
-      {id: "LG"},
-      {id: "RIM"},
-      {id: "Sony"},
-      {id: "Qualcomm"},
-      {id: "Huawei"},
-      {id: "ZTE"},
-      {id: "Ericsson"}
-    ]
+    const links = responseData.links
+    const nodes = responseData.nodes
 
+    // debugger
     const simulation = d3.forceSimulation(nodes)
-        .force("link", d3.forceLink(links).id(d => d.id))
+        .force("link", d3.forceLink(links).id(d => d.index))
         .force("charge", d3.forceManyBody().strength(-300))
         .force("x", d3.forceX())
         .force("y", d3.forceY())
         .force('collide', d3.forceCollide(d => 65))
 
-    const width = 2000
-    const height = 2000
+    const width = 700
+    const height = 700
 
     const types = [
       "licensing",
@@ -83,20 +86,20 @@
       .attr("viewBox", [-width / 2, -height / 2, width, height])
 
     const color = d3.scaleOrdinal(types, d3.schemeCategory10)
-
-    svg.append("defs").selectAll("marker")
-        .data(types)
-        .join("marker")
-        .attr("id", d => `arrow-${d}`)
-        .attr("viewBox", "0 -5 10 10")
-        .attr("refX", 38)
-        .attr("refY", 0)
-        .attr("markerWidth", 6)
-        .attr("markerHeight", 6)
-        .attr("orient", "auto")
-        .append("path")
-        .attr("fill", color)
-        .attr("d", 'M0,-5L10,0L0,5');
+    // const color = "#FFF"
+    // svg.append("defs").selectAll("marker")
+    //     .data(types)
+    //     .join("marker")
+    //     .attr("id", d => `arrow-${d}`)
+    //     .attr("viewBox", "0 -5 10 10")
+    //     .attr("refX", 38)
+    //     .attr("refY", 0)
+    //     .attr("markerWidth", 6)
+    //     .attr("markerHeight", 6)
+    //     .attr("orient", "auto")
+    //     .append("path")
+    //     .attr("fill", color)
+    //     .attr("d", 'M0,-5L10,0L0,5');
 
     const link = svg.append("g")
         .attr("fill", "none")
@@ -139,18 +142,45 @@
         link.attr("d", linkArc);
         node.attr("transform", d => `translate(${d.x},${d.y})`);
     });
-
-    // // invalidation.then(() => simulation.stop());
-
+    // invalidation.then(() => simulation.stop());
     return svg.node();
   }
 
+  const API_URL = `http://localhost:3000/graphql`
+
   export default {
     data () {
-      return {}
+      response: null
     },
-    mounted () {
-      chart()
+    created () {
+    },
+    async mounted () {
+      await this.fetchData()
+      chart(this.response.data)
+    },
+    methods: {
+      async fetchData() {
+        this.response = await (
+          fetch(API_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ query: `query {
+              nodes {
+                id
+                name
+                poster
+              }
+              links {
+                source
+                target
+                roles
+              }
+            }`})
+          }).then((response) => {
+            return response.json()
+          })
+        )
+      }
     }
   }
 </script>
