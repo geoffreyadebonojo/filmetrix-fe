@@ -29,13 +29,20 @@ export default {
         fetch(API_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
+          // body: JSON.stringify({ query: `query {
+          //   nodes {
+          //     id
+          //     name
+          //     poster
+          //   }
+          //   links {
+          //     source
+          //     target
+          //     roles
+          //   }
+          // }`})
           body: JSON.stringify({ query: `query {
-            nodes {
-              id
-              name
-              poster
-            }
-            links {
+            network_map(movieId: [74]) {
               source
               target
               roles
