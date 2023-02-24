@@ -62,7 +62,7 @@ export default {
 
 </template>
 
-<style>
+<!-- <style>
 a {
   text-decoration: none;
   color: #42b883;
@@ -75,4 +75,4 @@ li {
 .date {
   font-weight: bold;
 }
-</style>
+</style> -->
