@@ -1,6 +1,3 @@
-<script setup lang="ts">
-
-</script>
 
 <template>
   <div>
@@ -9,89 +6,144 @@
   </div>
 </template>
 
-<script lang="ts">
-import * as d3 from "d3";
+<script>
+  import * as d3 from 'd3'  
 
-export default {
-  data() {
-    return {};
-  },
-  mounted() {
-    const width = 800;
-    const height = 500;
-    const data = [
-      { date: "24-Apr-07", amount: 93.24 },
-      { date: "25-Apr-07", amount: 95.35 },
-      { date: "26-Apr-07", amount: 98.84 },
-      { date: "27-Apr-07", amount: 99.92 },
-      { date: "30-Apr-07", amount: 99.8 },
-      { date: "1-May-07", amount: 99.47 },
-      { date: "2-May-07", amount: 100.39 },
-      { date: "3-May-07", amount: 100.4 },
-      { date: "4-May-07", amount: 100.81 },
-      { date: "7-May-07", amount: 103.92 },
-      { date: "8-May-07", amount: 105.06 },
-      { date: "9-May-07", amount: 106.88 },
-      { date: "10-May-07", amount: 107.34 },
-    ];
+  function chart () {
+  const links = [
+    {source: "Microsoft", target: "HTC", type: "licensing"},
+    {source: "Samsung", target: "Apple", type: "suit"},
+    {source: "Motorola", target: "Apple", type: "suit"},
+    {source: "Nokia", target: "Apple", type: "resolved"},
+    {source: "HTC", target: "Apple", type: "suit"},
+    {source: "Kodak", target: "Apple", type: "suit"},
+    {source: "Microsoft", target: "Barnes & Noble", type: "suit"},
+    {source: "Microsoft", target: "Foxconn", type: "suit"},
+    {source: "Oracle", target: "Google", type: "suit"},
+    {source: "Apple", target: "HTC", type: "suit"},
+    {source: "Microsoft", target: "Inventec", type: "suit"},
+    {source: "Samsung", target: "Kodak", type: "resolved"},
+    {source: "LG", target: "Kodak", type: "resolved"},
+    {source: "RIM", target: "Kodak", type: "suit"},
+    {source: "Sony", target: "LG", type: "suit"},
+    {source: "Kodak", target: "LG", type: "resolved"},
+    {source: "Apple", target: "Nokia", type: "resolved"},
+    {source: "Qualcomm", target: "Nokia", type: "resolved"},
+    {source: "Apple", target: "Motorola", type: "suit"}
+  ]
 
-    const svg = d3.select("svg").attr("width", width).attr("height", height);
-    const g = svg.append("g");
+  const nodes = [
+    {id: "Microsoft"},
+    {id: "Amazon"},
+    {id: "HTC"},
+    {id: "Samsung"},
+    {id: "Apple"},
+    {id: "Motorola"},
+    {id: "Nokia"},
+    {id: "Kodak"},
+    {id: "Barnes & Noble"},
+    {id: "Foxconn"},
+    {id: "Oracle"},
+    {id: "Google"},
+    {id: "Inventec"},
+    {id: "LG"},
+    {id: "RIM"},
+    {id: "Sony"},
+    {id: "Qualcomm"},
+    {id: "Huawei"},
+    {id: "ZTE"},
+    {id: "Ericsson"}
+  ]
 
-    //2. Parse the dates
-    const parseTime = d3.timeParse("%d-%b-%y");
+  const simulation = d3.forceSimulation(nodes)
+      .force("link", d3.forceLink(links).id(d => d.id))
+      .force("charge", d3.forceManyBody().strength(-300))
+      .force("x", d3.forceX())
+      .force("y", d3.forceY())
+      .force('collide', d3.forceCollide(d => 65))
 
-    //3. Creating the Chart Axes
-    const x = d3
-      .scaleTime()
-      .domain(
-        d3.extent(data, function (d) {
-          return parseTime(d.date);
-        })
-      )
-      .rangeRound([0, width]);
+  const width = 500
+  const height = 500
 
-    const y = d3
-      .scaleLinear()
-      .domain(
-        d3.extent(data, function (d) {
-          return d.amount;
-        })
-      )
-      .rangeRound([height, 0]);
+  const types = [
+    "licensing",
+    "suit",
+    "resolved"
+  ]
 
-    //4. Creating a Line
-    const line = d3
-      .line()
-      .x(function (d) {
-        return x(parseTime(d.date));
-      })
-      .y(function (d) {
-        return y(d.amount);
-      });
+  const svg = d3.select("svg")
+      .attr("viewBox", [-width / 2, -height / 2, width, height])
 
-    //5. Appending the Axes to the Chart
-    g.append("g")
-      .attr("transform", "translate(0," + height + ")")
-      .call(d3.axisBottom(x));
+    const color = d3.scaleOrdinal(types, d3.schemeCategory10)
 
-    g.append("g")
-      .call(d3.axisLeft(y))
-      .append("text")
-      .attr("fill", "#000")
-      .attr("transform", "rotate(-90)")
-      .attr("y", 6)
-      .attr("dy", "0.71em")
-      .attr("text-anchor", "end")
-      .text("Price ($)");    
+    svg.append("defs").selectAll("marker")
+        .data(types)
+        .join("marker")
+        .attr("id", d => `arrow-${d}`)
+        .attr("viewBox", "0 -5 10 10")
+        .attr("refX", 38)
+        .attr("refY", 0)
+        .attr("markerWidth", 6)
+        .attr("markerHeight", 6)
+        .attr("orient", "auto")
+        .append("path")
+        .attr("fill", color)
+        .attr("d", 'M0,-5L10,0L0,5');
 
-    //6. Appending a path to the Chart
-    g.append("path")
-      .datum(data)
-      .attr("fill", "none")
-      .attr("stroke", "steelblue")
-      .attr("stroke-width", 1.5)
-      .attr("d", line);
-  },
-};
+    const link = svg.append("g")
+        .attr("fill", "none")
+        .attr("stroke-width", 1.5)
+        .selectAll("path")
+        .data(links)
+        .join("path")
+        .attr("stroke", d => color(d.type))
+        .attr("marker-end", d => `url(${new URL(`#arrow-${d.type}`, location)})`);
+
+    const node = svg.append("g")
+        .attr("fill", "currentColor")
+        .attr("stroke-linecap", "round")
+        .attr("stroke-linejoin", "round")
+        .selectAll("g")
+        .data(nodes)
+        .join("g")
+        // .call(drag(simulation));
+
+    node.append("circle")
+        .attr("stroke", "white")
+        .attr("stroke-width", 1.5)
+        .attr("r", 25)
+        .attr('fill', d => '#6baed6');
+  
+    node.append("text")
+        .attr("x", 30 + 4)
+        .attr("y", "0.31em")
+        .text(d => d.id)
+        .clone(true).lower()
+        .attr("fill", "none")
+        .attr("stroke", "white")
+        .attr("stroke-width", 3);
+  
+    node.on('dblclick', (e, d) => console.log(nodes[d.index]))
+
+    const linkArc = d =>`M${d.source.x},${d.source.y}A0,0 0 0,1 ${d.target.x},${d.target.y}`
+
+    simulation.on("tick", () => {
+        link.attr("d", linkArc);
+        node.attr("transform", d => `translate(${d.x},${d.y})`);
+    });
+
+    // // invalidation.then(() => simulation.stop());
+
+    return svg.node();
+  }
+
+  export default {
+    data () {
+      return {}
+    },
+
+    mounted () {
+      chart()
+    }
+  }
 </script>

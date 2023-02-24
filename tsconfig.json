@@ -10,5 +10,10 @@
     {
       "path": "./tsconfig.vitest.json"
     }
-  ]
+  ],
+  
+  // "vueCompilerOptions": {
+  //   "target": 2.7,
+  //   "experimentalDisableTemplateSupport": true
+  // }
 }
