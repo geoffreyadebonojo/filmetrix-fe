@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import { RouterLink, RouterView } from 'vue-router'
+  import * as d3 from 'd3'  
 </script>
 
 <template>

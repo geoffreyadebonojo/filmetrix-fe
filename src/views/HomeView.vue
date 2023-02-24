@@ -15,7 +15,7 @@ export default {
   }),
 
   created() {
-    this.fetchData()
+    // this.fetchData()
   },
 
   watch: {
@@ -58,7 +58,7 @@ export default {
 </script>
 
 <template>
-  <h1>{{response["data"]}}</h1>
+  <h1>HEAD</h1>
 
 </template>
 
