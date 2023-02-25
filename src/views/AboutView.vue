@@ -17,64 +17,22 @@
 <script>
   import * as d3 from 'd3'  
   function chart (responseData) {
-    // const links = [
-    //   {source: "Microsoft", target: "HTC", type: "licensing"},
-    //   {source: "Samsung", target: "Apple", type: "suit"},
-    //   {source: "Motorola", target: "Apple", type: "suit"},
-    //   {source: "Nokia", target: "Apple", type: "resolved"},
-    //   {source: "HTC", target: "Apple", type: "suit"},
-    //   {source: "Kodak", target: "Apple", type: "suit"},
-    //   {source: "Microsoft", target: "Barnes & Noble", type: "suit"},
-    //   {source: "Microsoft", target: "Foxconn", type: "suit"},
-    //   {source: "Oracle", target: "Google", type: "suit"},
-    //   {source: "Apple", target: "HTC", type: "suit"},
-    //   {source: "Microsoft", target: "Inventec", type: "suit"},
-    //   {source: "Samsung", target: "Kodak", type: "resolved"},
-    //   {source: "LG", target: "Kodak", type: "resolved"},
-    //   {source: "RIM", target: "Kodak", type: "suit"},
-    //   {source: "Sony", target: "LG", type: "suit"},
-    //   {source: "Kodak", target: "LG", type: "resolved"},
-    //   {source: "Apple", target: "Nokia", type: "resolved"},
-    //   {source: "Qualcomm", target: "Nokia", type: "resolved"},
-    //   {source: "Apple", target: "Motorola", type: "suit"}
-    // ]
-
-    // const nodes = [
-    //   {id: "Microsoft"},
-    //   {id: "Amazon"},
-    //   {id: "HTC"},
-    //   {id: "Samsung"},
-    //   {id: "Apple"},
-    //   {id: "Motorola"},
-    //   {id: "Nokia"},
-    //   {id: "Kodak"},
-    //   {id: "Barnes & Noble"},
-    //   {id: "Foxconn"},
-    //   {id: "Oracle"},
-    //   {id: "Google"},
-    //   {id: "Inventec"},
-    //   {id: "LG"},
-    //   {id: "RIM"},
-    //   {id: "Sony"},
-    //   {id: "Qualcomm"},
-    //   {id: "Huawei"},
-    //   {id: "ZTE"},
-    //   {id: "Ericsson"}
-    // ]
 
     const links = responseData.links
     const nodes = responseData.nodes
+    debugger
 
-    // debugger
     const simulation = d3.forceSimulation(nodes)
-        .force("link", d3.forceLink(links).id(d => d.index))
+        .force("link", d3.forceLink(links).id(d => {
+          return d.id
+        }))
         .force("charge", d3.forceManyBody().strength(-300))
         .force("x", d3.forceX())
         .force("y", d3.forceY())
         .force('collide', d3.forceCollide(d => 65))
 
-    const width = 700
-    const height = 700
+    const width = 2000
+    const height = 2000
 
     const types = [
       "licensing",
@@ -108,7 +66,7 @@
         .data(links)
         .join("path")
         .attr("stroke", d => color(d.type))
-        .attr("marker-end", d => `url(${new URL(`#arrow-${d.type}`, location)})`);
+        // .attr("marker-end", d => `url(${new URL(`#arrow-${d.type}`, location)})`);
 
     const node = svg.append("g")
         .attr("fill", "currentColor")
@@ -128,7 +86,7 @@
     node.append("text")
         .attr("x", 30 + 4)
         .attr("y", "0.31em")
-        .text(d => d.id)
+        .text(d => d.name)
         // .clone(true).lower()
         // .attr("fill", "none")
         // .attr("stroke", "white")
@@ -138,6 +96,15 @@
 
     const linkArc = d =>`M${d.source.x},${d.source.y}A0,0 0 0,1 ${d.target.x},${d.target.y}`
 
+
+      // query {
+      //       link(personIds: [500, 196]) {
+      //         source
+      //         target
+      //         roles
+      //       }
+      //     }`
+
     simulation.on("tick", () => {
         link.attr("d", linkArc);
         node.attr("transform", d => `translate(${d.x},${d.y})`);
@@ -145,8 +112,19 @@
     // invalidation.then(() => simulation.stop());
     return svg.node();
   }
-
   const API_URL = `http://localhost:3000/graphql`
+
+  const queryAll = `query {
+    links {
+      source
+      target
+      roles
+    }
+    nodes {
+      id
+      name
+    }
+  }`
 
   export default {
     data () {
@@ -164,18 +142,7 @@
           fetch(API_URL, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ query: `query {
-              nodes {
-                id
-                name
-                poster
-              }
-              links {
-                source
-                target
-                roles
-              }
-            }`})
+            body: JSON.stringify({ query: queryAll})
           }).then((response) => {
             return response.json()
           })
@@ -183,4 +150,11 @@
       }
     }
   }
+
+// link(movieIds: [628], personIds: [500]) {
+//   source
+//   target
+//   roles
+// }
+
 </script>
