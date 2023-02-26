@@ -16,23 +16,26 @@
 
 <script>
   import * as d3 from 'd3'  
-  function chart (responseData) {
 
+  const zoom = d3.zoom();
+
+  const API_URL = `http://localhost:3000/graphql`
+
+  function chart (responseData) {
     const links = responseData.links
     const nodes = responseData.nodes
-
     const simulation = d3.forceSimulation(nodes, links)
 
     simulation
-        .force("link", d3.forceLink(links).id(d => d.id).distance(140))
-        .force("charge", d3.forceManyBody().strength(-500))
-        .force('collide', d3.forceCollide(d => 30))
-        .force("center", d3.forceCenter(0, 0))
-        .force("x", d3.forceX(100))
-        .force("y", d3.forceY())
-        // .alpha(0.95)
-        // .alphaMin(0.82)
-        // .alphaTarget(0.78)
+      .force("link", d3.forceLink(links).id(d => d.id).distance(140))
+      .force("charge", d3.forceManyBody().strength(-500))
+      .force('collide', d3.forceCollide(d => 30))
+      .force("center", d3.forceCenter(0, 0))
+      .force("x", d3.forceX(100))
+      .force("y", d3.forceY())
+      // .alpha(0.95)
+      // .alphaMin(0.82)
+      // .alphaTarget(0.78)
 
     const width = 1000
     const height = 1000
@@ -45,22 +48,10 @@
 
     const svg = d3.select("svg")
       .attr("viewBox", [-width / 2, -height / 2, width, height])
+      .call(zoom)
+      .on("wheel.zoom", null);
 
-    const color = d3.scaleOrdinal(types, d3.schemeCategory10)
-    // const color = "#FFF"
-    // svg.append("defs").selectAll("marker")
-    //     .data(types)
-    //     .join("marker")
-    //     .attr("id", d => `arrow-${d}`)
-    //     .attr("viewBox", "0 -5 10 10")
-    //     .attr("refX", 38)
-    //     .attr("refY", 0)
-    //     .attr("markerWidth", 6)
-    //     .attr("markerHeight", 6)
-    //     .attr("orient", "auto")
-    //     .append("path")
-    //     .attr("fill", color)
-    //     .attr("d", 'M0,-5L10,0L0,5');
+    const color = "#FFF"
 
     const link = svg.append("g")
         .attr("fill", "none")
@@ -68,8 +59,7 @@
         .selectAll("path")
         .data(links)
         .join("path")
-        .attr("stroke", d => color(d.type))
-        // .attr("marker-end", d => `url(${new URL(`#arrow-${d.type}`, location)})`);
+        .attr("stroke", color)
 
     const node = svg.append("g")
         .attr("fill", "currentColor")
@@ -87,21 +77,17 @@
         .attr('fill', d => '#6baed6');
 
     node.append("svg:image")
-        .attr('x', -9)
-        .attr('y', -12)
-        .attr('width', 20)
-        .attr('height', 24)
+        .attr('x', -20)
+        .attr('y', -22)
+        .attr('width', 40)
+        .attr('height', 44)
         .attr("xlink:href", d => d.poster)
-        .attr("clip-path", "inset(0% round 15px)")
+        .attr("clip-path", "inset(5% round 20px)")
 
     node.append("text")
         .attr("x", 30 + 4)
         .attr("y", "0.31em")
         .text(d => d.name)
-        // .clone(true).lower()
-        // .attr("fill", "none")
-        // .attr("stroke", "white")
-        // .attr("stroke-width", 3);
 
     node.on('dblclick', (e, d) => console.log(nodes[d.index]))
 
@@ -111,10 +97,11 @@
         link.attr("d", linkArc);
         node.attr("transform", d => `translate(${d.x},${d.y})`);
     });
+
     // invalidation.then(() => simulation.stop());
+
     return svg.node();
   }
-  const API_URL = `http://localhost:3000/graphql`
 
   export default {
     data () {
@@ -139,13 +126,12 @@
           }
         }`
       },
-
       async fetchData() {
         this.response = await (
           fetch(API_URL, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ query: this.queryAll([500, 1704239], [74], 5) })
+            body: JSON.stringify({ query: this.queryAll([500, 287], [74], 5) })
           }).then((response) => {
             return response.json()
           })
