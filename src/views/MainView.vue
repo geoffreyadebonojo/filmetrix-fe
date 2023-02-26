@@ -1,5 +1,12 @@
 <template>
-  <button @click="tu()">Add 1</button>
+  <button @click="increment()">+1</button>
+  <button @click="addPerson(287)">p287</button>
+  <button @click="addPerson(192)">p192</button>
+  <button @click="addPerson(500)">p500</button>
+  <button @click="addMovie(74)">m74</button>
+  <button @click="addMovie(628)">m628</button>
+  <button @click="newCharge(500)">charge+</button>
+  <button @click="newCharge(-500)">charge-</button>>
   <p>Count is: {{ count }}</p>
 
   <div class="graph-wrapper">
@@ -19,7 +26,7 @@
   import * as d3 from 'd3'
   const API_URL = `http://localhost:3000/graphql`
 
-  function chart (responseData) {
+  function chart (responseData, settings=[]) {
     const links = responseData.links
     const nodes = responseData.nodes
     const simulation = d3.forceSimulation(nodes, links)
@@ -27,18 +34,20 @@
     const width = 800
     const height = 800
 
+    const charge = settings.charge
+
     simulation
-      .force("link", d3.forceLink(links).id(d => d.id).distance(140))
-      .force("charge", d3.forceManyBody().strength(-500))
+      .force("link", d3.forceLink(links).id(d => d.id).distance(200))
+      .force("charge", d3.forceManyBody().strength(charge))
       .force('collide', d3.forceCollide(d => 30))
       .force("center", d3.forceCenter(0, 0))
       // .force("x", d3.forceX(100))
       // .force("y", d3.forceY())
       .force('x', d3.forceX().x(width * 0.5))
-      .force('y', d3.forceY().y(height * 0.5));
-      // .alpha(0.95)
+      .force('y', d3.forceY().y(height * 0.5))
+      // .alpha(1)
       // .alphaMin(0.82)
-      // .alphaTarget(0.78)
+      // .alphaTarget(0.81)
 
 
     const svg = d3.select("svg")
@@ -47,6 +56,7 @@
     const color = "#FFF"
 
     const link = svg.append("g")
+        .attr("class", "links")
         .attr("fill", "none")
         .attr("stroke-width", 1.5)
         .selectAll("path")
@@ -55,6 +65,7 @@
         .attr("stroke", color)
 
     const node = svg.append("g")
+        .attr("class", "nodes")
         .attr("fill", "currentColor")
         .attr("stroke-linecap", "round")
         .attr("stroke-linejoin", "round")
@@ -76,11 +87,6 @@
         .attr("xlink:href", d => d.poster)
         .attr("clip-path", "inset(5% round 20px)")
 
-    // node.append("text")
-    //     .attr("x", 30 + 4)
-    //     .attr("y", "0.31em")
-    //     .text(d => d.name)
-
     node.on('dblclick', (e, d) => console.log(nodes[d.index]))
 
     const linkArc = d =>`M${d.source.x},${d.source.y}A0,0 0 0,1 ${d.target.x},${d.target.y}`
@@ -96,37 +102,82 @@
   export default {
     data () {
       response: null
-      return {count: 0}
+      return {
+        charge: -500,
+        pids: [],
+        mids: [],
+        count: 5,
+      }
     },
-    tu() {
-
-
-      // .strength(1))
-      // .alpha(1)
-      // .restart()
-    },
-    async created () {
-      await this.fetchData([287], [74], 4)
-      chart(this.response.data)
-    },
+    
     methods: {
-       tu() {
-
-         d3.select("svg").html('')
-
-        const pids =[500, 287, 192]
-        const mids =[74, 628, 33]
-        
-        this.fetchData(pids, mids, this.count)
-        
-        this.count += 1
+  
+      async increment() {
         d3.select("svg").html('')
 
         this.count += 1
-        
+      
+        await this.fetchData(
+          this.pids, 
+          this.mids, 
+          this.count
+        )
         chart(this.response.data)
-
       },
+
+      async addPerson (id) {
+        d3.select("svg").html('')
+
+        this.pids.push(id)
+
+        await this.fetchData(
+          this.pids, 
+          this.mids, 
+          this.count
+        )
+        chart(this.response.data)
+      },
+  
+      async addMovie (id) {
+        d3.select("svg").html('')
+
+        this.mids.push(id)
+
+        await this.fetchData(
+          this.pids, 
+          this.mids, 
+          this.count
+        )
+        chart(this.response.data)
+      },
+
+      async newCharge (i) {
+        d3.select("svg").html('')
+
+        this.charge += i
+
+        await this.fetchData(
+          this.pids, 
+          this.mids, 
+          this.count
+        )
+
+        chart(
+          this.response.data, 
+          {charge: this.charge}
+        )
+      },
+  
+      async created () {
+        await this.fetchData(
+          this.pids, 
+          this.mids, 
+          this.count
+        )
+
+        chart(this.response.data)
+      },
+
       queryAll(pids, mids, count) {
         return `query {
           nodes(personIds: ${JSON.stringify(pids)}, movieIds: ${JSON.stringify(mids)}, count: ${count}) {
