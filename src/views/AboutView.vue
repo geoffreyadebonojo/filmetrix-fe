@@ -6,11 +6,11 @@
   </div>
 </template>
 
-<style>
-  .graph-wrapper{
-    width: 80%;
-    display: flex;
-    margin: auto;
+<style scoped>
+  svg {
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
   }
 </style>
 
@@ -20,19 +20,16 @@
 
     const links = responseData.links
     const nodes = responseData.nodes
-    debugger
 
     const simulation = d3.forceSimulation(nodes)
-        .force("link", d3.forceLink(links).id(d => {
-          return d.id
-        }))
+        .force("link", d3.forceLink(links).id(d => d.id))
         .force("charge", d3.forceManyBody().strength(-300))
         .force("x", d3.forceX())
         .force("y", d3.forceY())
         .force('collide', d3.forceCollide(d => 65))
 
-    const width = 2000
-    const height = 2000
+    const width = 1000
+    const height = 1000
 
     const types = [
       "licensing",
@@ -96,15 +93,6 @@
 
     const linkArc = d =>`M${d.source.x},${d.source.y}A0,0 0 0,1 ${d.target.x},${d.target.y}`
 
-
-      // query {
-      //       link(personIds: [500, 196]) {
-      //         source
-      //         target
-      //         roles
-      //       }
-      //     }`
-
     simulation.on("tick", () => {
         link.attr("d", linkArc);
         node.attr("transform", d => `translate(${d.x},${d.y})`);
@@ -114,35 +102,38 @@
   }
   const API_URL = `http://localhost:3000/graphql`
 
-  const queryAll = `query {
-    links {
-      source
-      target
-      roles
-    }
-    nodes {
-      id
-      name
-    }
-  }`
+  // const queryAll = 
 
   export default {
     data () {
       response: null
     },
-    created () {
-    },
-    async mounted () {
+    async created () {
       await this.fetchData()
       chart(this.response.data)
     },
     methods: {
+      queryAll (pids, mids, count) {
+        return `query {
+          nodes(personIds: ${JSON.stringify(pids)}, movieIds: ${JSON.stringify(mids)}, count: ${count}) {
+            id
+            name
+            poster
+          }
+          links(personIds: ${JSON.stringify(pids)}, movieIds: ${JSON.stringify(mids)}, count: ${count}) {
+            source
+            target
+            roles
+          }
+        }`
+      },
+
       async fetchData() {
         this.response = await (
           fetch(API_URL, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ query: queryAll})
+            body: JSON.stringify({ query: this.queryAll([500, 192], [74], 10) })
           }).then((response) => {
             return response.json()
           })
@@ -150,11 +141,4 @@
       }
     }
   }
-
-// link(movieIds: [628], personIds: [500]) {
-//   source
-//   target
-//   roles
-// }
-
 </script>
