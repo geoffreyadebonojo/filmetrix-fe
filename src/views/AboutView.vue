@@ -21,12 +21,18 @@
     const links = responseData.links
     const nodes = responseData.nodes
 
-    const simulation = d3.forceSimulation(nodes)
-        .force("link", d3.forceLink(links).id(d => d.id))
-        .force("charge", d3.forceManyBody().strength(-300))
-        .force("x", d3.forceX())
+    const simulation = d3.forceSimulation(nodes, links)
+
+    simulation
+        .force("link", d3.forceLink(links).id(d => d.id).distance(140))
+        .force("charge", d3.forceManyBody().strength(-500))
+        .force('collide', d3.forceCollide(d => 30))
+        .force("center", d3.forceCenter(0, 0))
+        .force("x", d3.forceX(100))
         .force("y", d3.forceY())
-        .force('collide', d3.forceCollide(d => 65))
+        // .alpha(0.95)
+        // .alphaMin(0.82)
+        // .alphaTarget(0.78)
 
     const width = 1000
     const height = 1000
@@ -80,6 +86,14 @@
         .attr("r", 25)
         .attr('fill', d => '#6baed6');
 
+    node.append("svg:image")
+        .attr('x', -9)
+        .attr('y', -12)
+        .attr('width', 20)
+        .attr('height', 24)
+        .attr("xlink:href", d => d.poster)
+        .attr("clip-path", "inset(0% round 15px)")
+
     node.append("text")
         .attr("x", 30 + 4)
         .attr("y", "0.31em")
@@ -101,8 +115,6 @@
     return svg.node();
   }
   const API_URL = `http://localhost:3000/graphql`
-
-  // const queryAll = 
 
   export default {
     data () {
@@ -133,7 +145,7 @@
           fetch(API_URL, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ query: this.queryAll([500, 192], [74], 10) })
+            body: JSON.stringify({ query: this.queryAll([500, 1704239], [74], 5) })
           }).then((response) => {
             return response.json()
           })
