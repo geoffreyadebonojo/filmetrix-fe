@@ -1,0 +1,9 @@
+<template>
+  <button @click="increment()">+1</button>
+  <!-- <button @click="newCharge(500)">charge+</button>
+  <button @click="newCharge(-500)">charge-</button> -->
+  <input id="search-field" type="text"/>
+  <!-- <button @click="submitPerson()">person</button>
+  <button @click="submitMovie()">movie</button> -->
+  <button @click="submitSearch()">run</button>
+</template>

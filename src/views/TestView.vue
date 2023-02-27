@@ -1,5 +1,5 @@
 <template>
-    <div id="div-mindMap"></div>]
+    <div id="div-mindMap"></div>
 </template>
 
 <style scoped>
@@ -16,7 +16,7 @@ rect {
 </style>
 
 <script>
-  import * as d3 from 'd3'
+import * as d3 from 'd3'
 
 const widthMindMap = 700;
 const heightMindMap = 700;
