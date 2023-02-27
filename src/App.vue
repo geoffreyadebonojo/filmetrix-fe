@@ -114,19 +114,16 @@
     methods: {
       
       closeField(d) {
-        d.transition().duration(300)
-          .style("left", "50%")
-          // .style("width", "0%")
-          .style("padding", "0px")
-          .style("border", "0px")
+        d.transition().duration(0)
+        .style("width", "28px")
+        .style("left", "50%")
+        
       },
 
       openField(d) {
-        d.transition().duration(300)
-          .style("left", "0%")
-          // .style("width", "50%")
-          .style("padding", "0px")
-          .style("border", "0px")
+        d.transition().duration(0)
+          .style("width", "62%")
+          .style("left", "0px")
       },
 
       toggleField(d) {

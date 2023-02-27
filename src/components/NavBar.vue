@@ -14,22 +14,31 @@
 </script>
 
 <style scoped>
+  .nav-button-container {
+    width: 104px;
+    margin: 0 10px 0 0;
+    display: flex;
+    justify-content: space-between;
+    position: absolute;
+    right: 0px;
+  }
+
   #search-text {
-    width: 50%;
+    width: 62%;
     padding: 0px;
     border: 0px;
-    left: 0px;
-    height: 30px;
-    border-radius: 30px 0px 0px 30px
+    left: 0%;
+    height: 26px;
+    border-radius: 30px 30px 30px 30px
   }
 
-  .nav-buttons {
-    width: 100%;
-    margin: auto 0 auto auto
-  }
-
-  .icon {
+  #search-icon, #about-us-icon {
     height: 21px;
+    top: 2px;
+  }
+
+  #details-icon, #commands-icon {
+    height: 26px;
   }
   .icon:hover {
     cursor: pointer;
@@ -39,22 +48,22 @@
 <template>
   <input type="text" name="Search" id="search-text">
   
-  <div class="nav-buttons">
-    <button @click="toggleSearchBar()">
+  <div class="nav-button-container">
+    <div class="nav-button" @click="toggleSearchBar()">
       <img src="../assets/search-icon-333333.png" class="icon" id="search-icon">
-    </button>
+    </div>
 
-    <button @click="setFocus('details')">
+    <div class="nav-button" @click="setFocus('details')">
       <img src="../assets/details-icon-333333.svg" class="icon" id="details-icon">
-    </button>
+    </div>
 
-    <button @click="setFocus('commands')">
+    <div class="nav-button" @click="setFocus('commands')">
       <img src="../assets/command-icon-6E6E6E.svg" class="icon" id="commands-icon">
-    </button>
+    </div>
 
-    <button @click="setFocus('about')">
+    <div class="nav-button" @click="setFocus('about')">
       <img src="../assets/about-us-icon-222222.svg" class="icon" id="about-us-icon">
-    </button>
+    </div>
   </div>
 </template>
 
