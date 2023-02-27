@@ -63,7 +63,7 @@
     background: #333333;
     display: flex;
     margin: auto 0 auto auto;
-    height: 100%;
+    height: 26px;
     width: 100%;
   }
 

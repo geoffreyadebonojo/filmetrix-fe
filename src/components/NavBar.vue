@@ -15,6 +15,7 @@
 
 <style scoped>
   .nav-button-container {
+    height: 100%;
     width: 104px;
     margin: 0 10px 0 0;
     display: flex;
@@ -54,11 +55,11 @@
     </div>
 
     <div class="nav-button" @click="setFocus('details')">
-      <img src="../assets/details-icon-333333.svg" class="icon" id="details-icon">
+      <img src="../assets/details-icon-222222-trans.svg" class="icon" id="details-icon">
     </div>
 
     <div class="nav-button" @click="setFocus('commands')">
-      <img src="../assets/command-icon-6E6E6E.svg" class="icon" id="commands-icon">
+      <img src="../assets/command-icon-FFFFFF.svg" class="icon" id="commands-icon">
     </div>
 
     <div class="nav-button" @click="setFocus('about')">

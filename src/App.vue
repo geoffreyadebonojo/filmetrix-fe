@@ -113,11 +113,14 @@
     
     methods: {
       
-      closeField(d) {
+      moveHighlightCircle(d, x) {
         d.transition().duration(0)
-        .style("width", "28px")
-        .style("left", "50%")
-        
+        .style("width", "27px")
+        .style("left", x)
+      },
+
+      closeField(d) {
+        this.moveHighlightCircle(d, "50%")
       },
 
       openField(d) {
@@ -140,17 +143,23 @@
 
       toggleSearchBar() {
         const d = d3.select("#search-text") 
-
         this.focus = 'search'
         this.toggleField(d)
       },
 
       setFocus(focus) {
         const d = d3.select("#search-text") 
+        const xCord = {
+          details: '62%',
+          commands: '74%',
+          about: '86%'
+        }
 
+        this.closeField(d)
+
+        this.moveHighlightCircle(d, xCord[focus])
         this.focus = focus
         this.searchOpen = false
-        this.closeField(d)
       },
 
       async submitSearch() {
