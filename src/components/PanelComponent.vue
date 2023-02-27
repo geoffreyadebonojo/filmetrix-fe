@@ -4,7 +4,12 @@
 
   const props = defineProps({
     focus:String,
+    searchOpen:Boolean,
     setFocus: Function,
+    default() {
+      return {}
+    },
+    toggleSearchBar: Function,
     default() {
       return {}
     }
@@ -14,11 +19,18 @@
 <template>
   <div id="panel-body">
     <div id="navbar">
-      <NavBar :setFocus="setFocus" />
+      <NavBar 
+        :focus="focus"
+        :searchOpen="searchOpen"
+        :setFocus="setFocus"
+        :toggleSearchBar="toggleSearchBar"
+      />
     </div>
+
     <div id="panel-main">
       <PanelCenter :focus="props.focus" />
     </div>
+
     <div id="controls">
       <!-- <Controls /> -->
     </div>
@@ -39,8 +51,8 @@
       ". . ."
       ". controls ."
       ". . .";
-    width: 225px;
-    background: lightgrey;
+    width: 265px;
+    background: #333333;
     position: absolute;
     top: 0px;
     right: 0px;
@@ -48,17 +60,21 @@
 
   #navbar {
     grid-area: navbar;
-    background: grey;
+    background: #333333;
+    display: flex;
+    margin: auto 0 auto auto;
+    height: 100%;
+    width: 100%;
   }
 
   #panel-main {
     grid-area: panel-main;
-    background: grey;
+    background: #333333;
   }
 
   #controls {
     grid-area: controls;
-    background: grey;
+    background: #333333;
   }
 </style>
 
@@ -71,9 +87,6 @@
     name: "PanelComponent",
     data () {
       return {}
-    },
-    props: {
-
     }
   }
 </script>

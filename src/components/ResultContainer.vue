@@ -28,12 +28,6 @@
     name: "ResultContainer",
     data () {
       return {}
-    },
-    props: {
-      setFocus: Function,
-      default() {
-        return {}
-      }
     }
   }
 </script>

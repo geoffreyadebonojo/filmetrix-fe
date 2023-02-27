@@ -5,13 +5,14 @@
 </script>
 
 <template>
-
   <GraphView />
-  <PanelComponent :setFocus="setFocus" :focus="focus" />
+  <PanelComponent 
+    :focus="focus"
+    :searchOpen="searchOpen"
+    :setFocus="setFocus"
+    :toggleSearchBar="toggleSearchBar"
+   />
 </template>
-
-<style>
-</style>
 
 <script>
   import * as d3 from 'd3'
@@ -102,25 +103,63 @@
       response: null
       return {
         focus: 'empty',
+        searchOpen: true,
         pids: [],
         mids: [],
         charge: -1000,
-        count: 5,
+        count: 5
       }
     },
     
     methods: {
+      
+      closeField(d) {
+        d.transition().duration(300)
+          .style("left", "50%")
+          // .style("width", "0%")
+          .style("padding", "0px")
+          .style("border", "0px")
+      },
+
+      openField(d) {
+        d.transition().duration(300)
+          .style("left", "0%")
+          // .style("width", "50%")
+          .style("padding", "0px")
+          .style("border", "0px")
+      },
+
+      toggleField(d) {
+        if (this.searchOpen) {
+          const d = d3.select("#search-text") 
+
+          this.searchOpen = false
+          this.closeField(d)
+        } else {
+          this.searchOpen = true
+          this.openField(d)
+        }
+      },
+
+      toggleSearchBar() {
+        const d = d3.select("#search-text") 
+
+        this.focus = 'search'
+        this.toggleField(d)
+      },
 
       setFocus(focus) {
+        const d = d3.select("#search-text") 
+
         this.focus = focus
+        this.searchOpen = false
+        this.closeField(d)
       },
 
       async submitSearch() {
         const val = document.querySelector("#search-field").value
 
         await this.fetchSearchData(val)
-
-        console.log(this.response)
       },
 
       async submitPerson() {
@@ -268,3 +307,4 @@
     }
   }
 </script>
+

@@ -17,7 +17,7 @@
     <CommandsContainer />
   </div>
   
-  <div v-else="props.focus === 'about'">
+  <div v-else-if="props.focus === 'about'">
     about
   </div>
 
@@ -37,9 +37,6 @@
 
 <script>
   export default {
-    name: "PanelCenter",
-    data () {
-      return {}
-    }
+    name: "PanelCenter"
   }
 </script>
