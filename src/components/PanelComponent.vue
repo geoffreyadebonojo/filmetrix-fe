@@ -61,7 +61,7 @@
       ". . ."
       ". controls ."
       ". . .";
-    width: 265px;
+    width: 35vw;
     background: #333333;
     position: absolute;
     top: 0px;
@@ -74,7 +74,7 @@
     display: flex;
     margin: auto 0 auto auto;
     height: 26px;
-    width: 100%;
+    width: 67%;
   }
 
   #panel-center {

@@ -122,7 +122,7 @@
     <div id="highlight"></div>
  
     <div class="nav-button" @click="toggleOrSubmit()">
-      <img src="../assets/search-icon.png" id="search-icon">
+      <img src="../assets/search-icon.png" class="icon" id="search-icon">
     </div>
 
     <div 

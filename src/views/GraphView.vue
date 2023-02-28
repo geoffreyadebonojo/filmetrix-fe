@@ -7,10 +7,12 @@
 <style scoped>
   .graph-wrapper {
     color: #222222;
+    width: 65vw;
+    height: 100vh;
   }
   svg {
-    height: 100vh;
-    width: 100vw;
+    height: 100%;
+    width: 100%;
     overflow: hidden;
   }
 </style>

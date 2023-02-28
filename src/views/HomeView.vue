@@ -15,16 +15,16 @@ export default {
   }),
 
   created() {
-    // this.fetchData()
+    // this.fetchGraphData()
   },
 
   watch: {
     // re-fetch whenever currentBranch changes
-    // currentBranch: 'fetchData'
+    // currentBranch: 'fetchGraphData'
   },
 
   methods: {
-    async fetchData() {
+    async fetchGraphData() {
       this.response = await (
         fetch(API_URL, {
           method: 'POST',

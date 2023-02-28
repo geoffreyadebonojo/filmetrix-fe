@@ -1,7 +1,12 @@
 <script setup>
+  import createChart from "../mixins/createChart"
+
   const props = defineProps({
     focus:String,
-    searchResults:Array
+    searchResults:Array,
+    default() {
+      return {}
+    }
   })
 </script>
 
@@ -9,7 +14,7 @@
 
   .result-tile{
     width: 75px;
-    height: 115px;
+    height: 109px;
   }
   
   .result-tile > img {
@@ -29,15 +34,19 @@
     text-transform: uppercase;
     font-family: 'Dosis', sans-serif;
     font-weight: bold;
+    text-align: center;
   }
 
 </style>
 
 <template>
   <div class="result-container" v-bind:id="this.focus + '-results'">
-    <div class="result-tile" v-bind:id="result.id"
+    <div class="result-tile" 
+        v-bind:id="result.id"
         v-if="focus !== 'noResult'"
-        v-for="result in this.searchResults.filter(r => r['id'].includes(focus))">
+        v-for="result in this.searchResults.filter(r => r['id'].includes(focus))" 
+        @click="$event => callForNodes()"
+      >
 
         <img v-bind:src="result.poster"/>
         <div>{{result.name}}</div>
@@ -52,9 +61,47 @@
 <script>
   export default {
     name: "ResultContainer",
+    mixins: [createChart],
     data () {
-
       return {
+        graphData: []
+      }
+    },
+    methods: {
+      async callForNodes() {
+        const id = event.currentTarget.id.split("-")[1]
+        await this.fetchGraphData([id],[],5)
+
+        this.chart(this.graphData.data)
+      },
+
+      queryAll(pids, mids, count) {
+        return `query {
+          nodes(personIds: ${JSON.stringify(pids)}, movieIds: ${JSON.stringify(mids)}, count: ${count}) {
+            id
+            name
+            poster
+          }
+          links(personIds: ${JSON.stringify(pids)}, movieIds: ${JSON.stringify(mids)}, count: ${count}) {
+            source
+            target
+            roles
+          }
+        }`
+      },
+
+      async fetchGraphData(pids, mids, count) {
+        const API_URL = `http://localhost:3000/graphql`
+
+        this.graphData = await (
+          fetch(API_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ query: this.queryAll(pids, mids, count) })
+          }).then((response) => {
+            return response.json()
+          })
+        )
       }
     }
   }

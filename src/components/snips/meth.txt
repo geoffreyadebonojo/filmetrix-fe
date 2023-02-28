@@ -3,7 +3,7 @@
         const id = val
         this.pids.push(id)
 
-        await this.fetchData(
+        await this.fetchGraphData(
           this.pids, 
           this.mids, 
           this.count
@@ -16,7 +16,7 @@
         const id = val
         this.mids.push(id)
 
-        await this.fetchData(
+        await this.fetchGraphData(
           this.pids, 
           this.mids, 
           this.count
@@ -29,7 +29,7 @@
 
         this.count += 1
       
-        await this.fetchData(
+        await this.fetchGraphData(
           this.pids, 
           this.mids, 
           this.count
@@ -45,7 +45,7 @@
 
         this.charge += i
 
-        await this.fetchData(
+        await this.fetchGraphData(
           this.pids, 
           this.mids, 
           this.count
@@ -61,7 +61,7 @@
 
       //   this.pids.push(id)
 
-      //   await this.fetchData(
+      //   await this.fetchGraphData(
       //     this.pids, 
       //     this.mids, 
       //     this.count
@@ -74,7 +74,7 @@
 
       //   this.mids.push(id)
 
-      //   await this.fetchData(
+      //   await this.fetchGraphData(
       //     this.pids, 
       //     this.mids, 
       //     this.count

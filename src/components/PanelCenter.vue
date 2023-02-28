@@ -5,7 +5,10 @@
 
   const props = defineProps({
     focus:String,
-    searchResults:Array
+    searchResults:Array,
+    default() {
+      return {}
+    }
   })
 </script>
 
@@ -29,7 +32,7 @@
   <div v-else class="result-component">
     <ResultContainer
       :focus="props.focus"
-      :searchResults="searchResults"  
+      :searchResults="searchResults"
     />
   </div>
   
@@ -39,10 +42,9 @@
   .result-container {
     width: 100%;
     display: flex;
-    flex-basis: auto;
     flex-wrap: wrap;
     gap: 50px 20px;
-    justify-content: space-between;
+    justify-content: flex-start;
     padding: 15px;
   }
 </style>
