@@ -35,6 +35,7 @@
     padding: 0px;
     border: 0px;
     position: relative;
+    /* adjust to fit length */
     left: 7%;
     height: 26px;
     border-radius: 15px 0 0 15px;

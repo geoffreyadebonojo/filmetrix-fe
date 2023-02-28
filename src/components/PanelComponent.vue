@@ -50,9 +50,10 @@
 <style scoped>
   #panel-body {
     height: 100vh;
+    width: 350px;
     display: grid;
-    grid-template-columns: 20px 1fr 20px;
-    grid-template-rows: 2vh 1.8em 2vh 70vh 2vh 8em 3vh;
+    grid-template-columns: 30px 1fr 30px;
+    grid-template-rows: 2vh 1.8em 4vh 60vh 4vh 9em 4vh;
     grid-template-areas:
       ". . ."
       ". navbar navbar"
@@ -61,7 +62,6 @@
       ". . ."
       ". controls ."
       ". . .";
-    width: 35vw;
     background: #333333;
     position: absolute;
     top: 0px;
@@ -74,7 +74,7 @@
     display: flex;
     margin: auto 0 auto auto;
     height: 26px;
-    width: 67%;
+    width: 100%;
   }
 
   #panel-center {

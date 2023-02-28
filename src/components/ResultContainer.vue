@@ -14,8 +14,10 @@
 <style>
 
   .result-tile{
-    width: 75px;
+    width: 73px;
     height: 109px;
+    border-radius: 8px;
+    border: 1px solid;
   }
   
   .result-tile > img {
