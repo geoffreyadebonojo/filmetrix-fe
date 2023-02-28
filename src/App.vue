@@ -114,7 +114,7 @@
     methods: {
       
       moveHighlightCircle(x) {
-        d3.select("#highlight").transition().duration(0)
+        d3.select("#highlight").transition().duration(100)
         .style("left", x)
       },
 
@@ -127,7 +127,7 @@
       },
 
       openField(d) {
-        d.transition().duration(0)
+        d.transition().duration(0).delay(100)
           .style("width", "60%")
           .style("left", "0px")
 
