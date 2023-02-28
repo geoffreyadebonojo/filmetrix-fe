@@ -5,6 +5,7 @@
   const props = defineProps({
     focus:String,
     searchOpen:Boolean,
+    searchResults:Array,
     setFocus: Function,
     default() {
       return {}
@@ -26,14 +27,18 @@
       <NavBar 
         :focus="focus"
         :searchOpen="searchOpen"
+        :searchResults="searchResults"
         :setFocus="setFocus"
         :toggleOrSubmit="toggleOrSubmit"
         :submitSearch="submitSearch"
       />
     </div>
 
-    <div id="panel-main">
-      <PanelCenter :focus="props.focus" />
+    <div id="panel-center">
+      <PanelCenter 
+        :focus="props.focus" 
+        :searchResults="searchResults"
+      />
     </div>
 
     <div id="controls">
@@ -52,7 +57,7 @@
       ". . ."
       ". navbar navbar"
       ". . ."
-      ". panel-main ."
+      ". panel-center ."
       ". . ."
       ". controls ."
       ". . .";
@@ -72,8 +77,8 @@
     width: 100%;
   }
 
-  #panel-main {
-    grid-area: panel-main;
+  #panel-center {
+    grid-area: panel-center;
     background: #333333;
   }
 

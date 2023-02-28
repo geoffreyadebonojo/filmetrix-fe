@@ -2,6 +2,7 @@
   const props = defineProps({
     focus:String,
     searchOpen:Boolean,
+    searchResults:Array,
     setFocus: Function,
     default() {
       return {}
@@ -96,6 +97,18 @@
   <div class="nav-button-container">
     <div id="highlight"></div>
 
+    <div v-if="this.displayResultIcon('person') === true">
+      PERSON
+    </div>
+
+    <div v-if="this.displayResultIcon('movie') === true">
+      MOVIE
+    </div>
+
+    <div v-if="this.displayResultIcon('tv') === true">
+      TV
+    </div>
+
     <div class="nav-button" @click="toggleOrSubmit()">
       <img src="../assets/search-icon-inactive.png" class="icon" id="search-icon">
     </div>
@@ -118,6 +131,13 @@
 
 <script>
   export default {
-    name: "NavBar"
+    name: "NavBar",
+
+    methods: {
+      displayResultIcon(resultType) {
+        const list = this.searchResults.map(r => r['id'].split("-")[0])
+        return list.includes(resultType)
+      }
+    }
   }
 </script>

@@ -9,6 +9,7 @@
   <PanelComponent 
     :focus="focus"
     :searchOpen="searchOpen"
+    :searchResults="searchResults"
     :setFocus="setFocus"
     :toggleOrSubmit="toggleOrSubmit"
     :submitSearch="submitSearch"
@@ -108,7 +109,8 @@
         pids: [],
         mids: [],
         charge: -1000,
-        count: 5
+        count: 5,
+        searchResults: []
       }
     },
     
@@ -171,92 +173,13 @@
         }
 
         await this.fetchSearchData(val)
-        console.log(this.response.data)
+
+        this.searchResults = this.response.data.search
+        const tab = this.searchResults[0].id.split("-")[0]
+        
+        this.setFocus(tab)
       },
 
-      async submitPerson() {
-        const val = document.querySelector("#search-field").value
-        const id = val
-        this.pids.push(id)
-
-        await this.fetchData(
-          this.pids, 
-          this.mids, 
-          this.count
-        )
-        chart(this.response.data)
-      },
-
-      async submitMovie() {
-        const val = document.querySelector("#search-field").value
-        const id = val
-        this.mids.push(id)
-
-        await this.fetchData(
-          this.pids, 
-          this.mids, 
-          this.count
-        )
-        chart(this.response.data)
-      },
-
-      async increment() {
-        d3.select("svg").html('')
-
-        this.count += 1
-      
-        await this.fetchData(
-          this.pids, 
-          this.mids, 
-          this.count
-        )
-
-        chart(this.response.data)
-      },
-
-      // async addPerson (id) {
-      //   d3.select("svg").html('')
-
-      //   this.pids.push(id)
-
-      //   await this.fetchData(
-      //     this.pids, 
-      //     this.mids, 
-      //     this.count
-      //   )
-      //   chart(this.response.data)
-      // },
-  
-      // async addMovie (id) {
-      //   d3.select("svg").html('')
-
-      //   this.mids.push(id)
-
-      //   await this.fetchData(
-      //     this.pids, 
-      //     this.mids, 
-      //     this.count
-      //   )
-      //   chart(this.response.data)
-      // },
-
-      async newCharge (i) {
-        d3.select("svg").html('')
-
-        this.charge += i
-
-        await this.fetchData(
-          this.pids, 
-          this.mids, 
-          this.count
-        )
-
-        chart(
-          this.response.data, 
-          {charge: this.charge}
-        )
-      },
-  
       async created () {
         await this.fetchData(
           this.pids, 

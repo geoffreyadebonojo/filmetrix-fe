@@ -1,0 +1,83 @@
+      async submitPerson() {
+        const val = document.querySelector("#search-field").value
+        const id = val
+        this.pids.push(id)
+
+        await this.fetchData(
+          this.pids, 
+          this.mids, 
+          this.count
+        )
+        chart(this.response.data)
+      },
+
+      async submitMovie() {
+        const val = document.querySelector("#search-field").value
+        const id = val
+        this.mids.push(id)
+
+        await this.fetchData(
+          this.pids, 
+          this.mids, 
+          this.count
+        )
+        chart(this.response.data)
+      },
+
+      async increment() {
+        d3.select("svg").html('')
+
+        this.count += 1
+      
+        await this.fetchData(
+          this.pids, 
+          this.mids, 
+          this.count
+        )
+
+        chart(this.response.data)
+      },
+
+      // async addPerson (id) {
+
+              async newCharge (i) {
+        d3.select("svg").html('')
+
+        this.charge += i
+
+        await this.fetchData(
+          this.pids, 
+          this.mids, 
+          this.count
+        )
+
+        chart(
+          this.response.data, 
+          {charge: this.charge}
+        )
+      },
+
+      /   d3.select("svg").html('')
+
+      //   this.pids.push(id)
+
+      //   await this.fetchData(
+      //     this.pids, 
+      //     this.mids, 
+      //     this.count
+      //   )
+      //   chart(this.response.data)
+      // },
+  
+      // async addMovie (id) {
+      //   d3.select("svg").html('')
+
+      //   this.mids.push(id)
+
+      //   await this.fetchData(
+      //     this.pids, 
+      //     this.mids, 
+      //     this.count
+      //   )
+      //   chart(this.response.data)
+      // },

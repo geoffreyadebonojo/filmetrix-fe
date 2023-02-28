@@ -4,7 +4,8 @@
   import CommandsContainer from './CommandsContainer.vue'
 
   const props = defineProps({
-    focus:String
+    focus:String,
+    searchResults:Array
   })
 </script>
 
@@ -26,7 +27,10 @@
   </div>
 
   <div v-else>
-    <ResultContainer :focus="props.focus"/>
+    <ResultContainer 
+      :focus="props.focus"
+      :searchResults="searchResults"  
+    />
   </div>
   
 </template>

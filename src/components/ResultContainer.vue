@@ -1,6 +1,7 @@
 <script setup>
   const props = defineProps({
-    focus:String
+    focus:String,
+    searchResults:Array
   })
 </script>
 
