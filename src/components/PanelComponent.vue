@@ -51,8 +51,8 @@
   #panel-body {
     height: 100vh;
     display: grid;
-    grid-template-columns: 30px 1fr 30px;
-    grid-template-rows: 15px 1fr 30px 15fr 30px 5fr 30px;
+    grid-template-columns: 20px 1fr 20px;
+    grid-template-rows: 2vh 1.8em 2vh 70vh 2vh 8em 3vh;
     grid-template-areas:
       ". . ."
       ". navbar navbar"
@@ -80,11 +80,15 @@
   #panel-center {
     grid-area: panel-center;
     background: #333333;
+    height: 100%;
+    border: 3px dashed black;
+    overflow-y: auto;
   }
 
   #controls {
     grid-area: controls;
-    background: #333333;
+    /* background: #333333; */
+    border: 3px dashed black;
   }
 </style>
 

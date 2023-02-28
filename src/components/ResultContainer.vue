@@ -1,5 +1,6 @@
 <script setup>
   import createChart from "../mixins/createChart"
+  import apiService from "../mixins/apiService"
 
   const props = defineProps({
     focus:String,
@@ -37,6 +38,16 @@
     text-align: center;
   }
 
+  .result-container {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 50px 20px;
+    justify-content: flex-start;
+    padding: 20px;
+    overflow-y: auto
+  }
+
 </style>
 
 <template>
@@ -70,6 +81,7 @@
     methods: {
       async callForNodes() {
         const id = event.currentTarget.id.split("-")[1]
+
         await this.fetchGraphData([id],[],5)
 
         this.chart(this.graphData.data)

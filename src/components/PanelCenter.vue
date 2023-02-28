@@ -39,13 +39,8 @@
 </template>
 
 <style>
-  .result-container {
-    width: 100%;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 50px 20px;
-    justify-content: flex-start;
-    padding: 15px;
+  .result-component {
+    height: 100%;
   }
 </style>
 

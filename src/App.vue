@@ -2,8 +2,8 @@
   import { RouterView } from 'vue-router'
   import PanelComponent from './components/PanelComponent.vue'
   import GraphView from './views/GraphView.vue'
-  import createChart from "./mixins/createChart"
 
+  import apiService from "./mixins/apiService"
 </script>
 
 <template>
@@ -23,10 +23,10 @@
 
   export default {
     components: {
-      PanelComponent,
-      GraphView
+      GraphView,
+      PanelComponent
     },
-    mixin: [createChart],
+    mixin: [apiService],
     data () {
       response: null
       return {
@@ -107,7 +107,6 @@
           // maybe a helpful tip?
           return false
         }
-
         await this.fetchSearchData(val)
 
         this.searchResults = this.response.data.search
@@ -115,16 +114,6 @@
         
         this.setFocus(tab)
       },
-
-      // async created () {
-      //   await this.fetchGraphData(
-      //     this.pids, 
-      //     this.mids, 
-      //     this.count
-      //   )
-
-      //   chart(this.response.data)
-      // },
 
       querySearch(term) {
         return `query {
