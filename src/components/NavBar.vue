@@ -32,7 +32,23 @@
     border: 0px;
     left: 0%;
     height: 26px;
-    border-radius: 15px 0 0 15px
+    border-radius: 15px 0 0 15px;
+
+
+    border: 7px solid white;
+    /* padding: 0; */
+    /* color: $panel-grey; */
+    /* border-radius: 30px; */
+    text-align: center;
+    font-size: 15px;
+    letter-spacing: 0.05em;
+    box-sizing: border-box;
+    text-transform: uppercase;
+    font-family: 'Dosis', sans-serif;
+  }
+
+  #search-text:focus {
+    outline: none;
   }
 
   #search-icon {
@@ -53,7 +69,8 @@
 
   #commands-icon {
     height: 24px;
-    top: 1px;
+    top: 0.25px;
+    right: 0.5px;
   }
   .icon:hover {
     cursor: pointer;
