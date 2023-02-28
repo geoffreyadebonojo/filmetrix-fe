@@ -113,7 +113,6 @@
     },
     
     methods: {
-      
       moveHighlightCircle(x) {
         d3.select("#highlight").transition().duration(100)
         .style("left", x)
@@ -170,8 +169,9 @@
           // maybe a helpful tip?
           return false
         }
-        console.log(val)
-        // await this.fetchSearchData(val)
+
+        await this.fetchSearchData(val)
+        console.log(this.response.data)
       },
 
       async submitPerson() {
@@ -269,7 +269,7 @@
 
       querySearch(term) {
         return `query {
-          search(term:'${term}') {
+          search(term:"${term}") {
             id
             name
             poster
