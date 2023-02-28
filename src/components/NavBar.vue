@@ -57,7 +57,7 @@
     width: 27px;
     background: white;
     border-radius: 50%;
-    left: 0%;
+    right: 77%;
   }
 
   #search-icon {
@@ -125,18 +125,25 @@
       <img src="../assets/search-icon.png" id="search-icon">
     </div>
 
-    <div class="result-button" v-if="this.displayResultIcon('person') === true">
-      <img src="../assets/person-icon.svg" class="icon" id="person-icon">
+    <div 
+      class="result-button" v-if="this.displayResultIcon('person') === true" >
+      <div @click="setFocus('person')">
+        <img src="../assets/person-icon.svg" class="icon" id="person-icon" >
+      </div>
     </div>
     <div v-else></div>
 
     <div class="result-button" v-if="this.displayResultIcon('movie') === true">
-      <img src="../assets/movie-icon.svg" class="icon" id="movie-icon">
+      <div @click="setFocus('movie')">
+        <img src="../assets/movie-icon.svg" class="icon" id="movie-icon">
+      </div>
     </div>
     <div v-else></div>
 
     <div class="result-button" v-if="this.displayResultIcon('tv') === true">
-      <img src="../assets/tv-icon.svg" class="icon" id="tv-icon">
+      <div @click="setFocus('tv')">
+        <img src="../assets/tv-icon.svg" class="icon" id="tv-icon">
+      </div>
     </div>
     <div v-else></div>
 
