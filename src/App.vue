@@ -113,20 +113,25 @@
     
     methods: {
       
-      moveHighlightCircle(d, x) {
-        d.transition().duration(0)
-        .style("width", "27px")
+      moveHighlightCircle(x) {
+        d3.select("#highlight").transition().duration(0)
         .style("left", x)
       },
 
       closeField(d) {
-        this.moveHighlightCircle(d, "50%")
+        d.transition().duration(0)
+        .style("width", "0px")
+        .style("left", "56%")
+        
+        // this.moveHighlightCircle("-1%")
       },
 
       openField(d) {
         d.transition().duration(0)
-          .style("width", "62%")
+          .style("width", "60%")
           .style("left", "0px")
+
+        this.moveHighlightCircle("-1%")
       },
 
       toggleField(d) {
@@ -150,14 +155,14 @@
       setFocus(focus) {
         const d = d3.select("#search-text") 
         const xCord = {
-          details: '62%',
-          commands: '74%',
-          about: '86%'
+          details: '24%',
+          commands: '52%',
+          about: '75%'
         }
 
         this.closeField(d)
 
-        this.moveHighlightCircle(d, xCord[focus])
+        this.moveHighlightCircle(xCord[focus])
         this.focus = focus
         this.searchOpen = false
       },

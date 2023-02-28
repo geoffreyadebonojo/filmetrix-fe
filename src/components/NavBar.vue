@@ -16,33 +16,56 @@
 <style scoped>
   .nav-button-container {
     height: 100%;
-    width: 104px;
-    margin: 0 10px 0 0;
+    width: 110px;
+    padding: 0 6px 0 5px;
     display: flex;
     justify-content: space-between;
     position: absolute;
     right: 0px;
+    background: #6e6e6e;
+    border-radius: 15px 0 0 15px;
   }
 
   #search-text {
-    width: 62%;
+    width: 60%;
     padding: 0px;
     border: 0px;
     left: 0%;
     height: 26px;
-    border-radius: 30px 30px 30px 30px
+    border-radius: 15px 0 0 15px
   }
 
-  #search-icon, #about-us-icon {
-    height: 21px;
-    top: 2px;
+  #search-icon {
+    height: 17px;
+    top: 4px;
   }
 
-  #details-icon, #commands-icon {
-    height: 26px;
+  #about-us-icon {
+    height: 17px;
+    top: 4px;
+    right: 1px;
+  }
+
+  #details-icon {
+    height: 24px;
+    top: 1px;
+  }
+
+  #commands-icon {
+    height: 24px;
+    top: 1px;
   }
   .icon:hover {
     cursor: pointer;
+  }
+
+  #highlight {
+    position: absolute;
+    height: 100%;
+    width: 27px;
+    background: white;
+    border-radius: 50%;
+    left: -1%;
   }
 </style>
 
@@ -50,8 +73,10 @@
   <input type="text" name="Search" id="search-text">
   
   <div class="nav-button-container">
+    <div id="highlight"></div>
+
     <div class="nav-button" @click="toggleSearchBar()">
-      <img src="../assets/search-icon-333333.png" class="icon" id="search-icon">
+      <img src="../assets/search-icon-inactive.png" class="icon" id="search-icon">
     </div>
 
     <div class="nav-button" @click="setFocus('details')">
