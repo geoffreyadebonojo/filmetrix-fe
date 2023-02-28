@@ -26,8 +26,8 @@
     empty
   </div>
 
-  <div v-else>
-    <ResultContainer 
+  <div v-else class="result-component">
+    <ResultContainer
       :focus="props.focus"
       :searchResults="searchResults"  
     />
@@ -36,7 +36,15 @@
 </template>
 
 <style>
-
+  .result-container {
+    width: 100%;
+    display: flex;
+    flex-basis: auto;
+    flex-wrap: wrap;
+    gap: 50px 20px;
+    justify-content: space-between;
+    padding: 15px;
+  }
 </style>
 
 <script>

@@ -116,9 +116,11 @@
     
     methods: {
       moveHighlightCircle(x) {
-        d3.select("#highlight").transition()
-        .duration(0)
+
+        // still a little bouncy
+        d3.select("#highlight")
         .style("left", null)
+        .transition()
         .duration(100)
         .style("right", x)
       },
