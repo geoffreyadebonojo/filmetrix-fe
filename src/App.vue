@@ -123,13 +123,13 @@
       closeField(d) {
         d.transition().duration(0)
         .style("width", "0px")
-        .style("left", "56%")
+        .style("left", "62%")
       },
 
       openField(d) {
         d.transition().duration(0).delay(100)
           .style("width", "60%")
-          .style("left", "0px")
+          .style("left", "7%")
 
         this.moveHighlightCircle("-1%")
       },
@@ -152,9 +152,9 @@
       setFocus(focus) {
         const d = d3.select("#search-text") 
         const xCord = {
-          details: '24%',
-          commands: '52%',
-          about: '75%'
+          details: '25%',
+          commands: '54%',
+          about: '77%'
         }
 
         this.closeField(d)

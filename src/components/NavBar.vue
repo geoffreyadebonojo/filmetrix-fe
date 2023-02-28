@@ -21,8 +21,7 @@
 <style scoped>
   .nav-button-container {
     height: 100%;
-    width: 110px;
-    padding: 0 6px 0 5px;
+    width: max-content;
     display: flex;
     justify-content: space-between;
     position: absolute;
@@ -32,10 +31,11 @@
   }
 
   #search-text {
-    width: 60%;
+    width: 50%;
     padding: 0px;
     border: 0px;
-    left: 0%;
+    position: relative;
+    left: 7%;
     height: 26px;
     border-radius: 15px 0 0 15px;
     border: 7px solid white;
@@ -51,38 +51,62 @@
     outline: none;
   }
 
-  #search-icon {
-    height: 17px;
-    top: 4px;
-  }
-
-  #about-us-icon {
-    height: 17px;
-    top: 4px;
-    right: 1px;
-  }
-
-  #details-icon {
-    height: 24px;
-    top: 1px;
-  }
-
-  #commands-icon {
-    height: 24px;
-    top: 0.25px;
-    right: 0.5px;
-  }
-  .icon:hover {
-    cursor: pointer;
-  }
-
   #highlight {
     position: absolute;
     height: 100%;
     width: 27px;
     background: white;
     border-radius: 50%;
-    left: -1%;
+    left: 0%;
+  }
+
+  #search-icon {
+    height: 17px;
+    margin: 4.5px 5.5px;
+    /* top: 4px;
+    padding: 0 4px 0 6px; */
+  }
+
+  #about-us-icon {
+    height: 17px;
+    margin: 4px 6px;
+    /* width: 27px;
+    top: 4px;
+    left: 2px; */
+  }
+
+  #details-icon {
+    height: 27px;
+    left: 1.5px;
+  }
+
+  #commands-icon {
+    height: 24px;
+    top: 0.25px;
+    left: 3px
+  }
+
+  #person-icon, #movie-icon, #tv-icon {
+    height: 16px;
+    top: 5px;
+  }
+
+  #person-icon {
+    top: 5px;
+    left: 8px;
+  }
+
+  #movie-icon {
+    top: 5px;
+    left: 6px;
+  }
+
+  .icon:hover {
+    cursor: pointer;
+  }
+
+  .nav-button, .result-button {
+    width: 28px;
   }
 </style>
 
@@ -96,33 +120,37 @@
   
   <div class="nav-button-container">
     <div id="highlight"></div>
-
-    <div v-if="this.displayResultIcon('person') === true">
-      PERSON
-    </div>
-
-    <div v-if="this.displayResultIcon('movie') === true">
-      MOVIE
-    </div>
-
-    <div v-if="this.displayResultIcon('tv') === true">
-      TV
-    </div>
-
+ 
     <div class="nav-button" @click="toggleOrSubmit()">
-      <img src="../assets/search-icon-inactive.png" class="icon" id="search-icon">
+      <img src="../assets/search-icon.png" id="search-icon">
     </div>
+
+    <div class="result-button" v-if="this.displayResultIcon('person') === true">
+      <img src="../assets/person-icon.svg" class="icon" id="person-icon">
+    </div>
+    <div v-else></div>
+
+    <div class="result-button" v-if="this.displayResultIcon('movie') === true">
+      <img src="../assets/movie-icon.svg" class="icon" id="movie-icon">
+    </div>
+    <div v-else></div>
+
+    <div class="result-button" v-if="this.displayResultIcon('tv') === true">
+      <img src="../assets/tv-icon.svg" class="icon" id="tv-icon">
+    </div>
+    <div v-else></div>
+
 
     <div class="nav-button" @click="setFocus('details')">
-      <img src="../assets/details-icon-222222-trans.svg" class="icon" id="details-icon">
+      <img src="../assets/details-icon.svg" class="icon" id="details-icon">
     </div>
 
     <div class="nav-button" @click="setFocus('commands')">
-      <img src="../assets/command-icon-FFFFFF.svg" class="icon" id="commands-icon">
+      <img src="../assets/command-icon.svg" class="icon" id="commands-icon">
     </div>
 
     <div class="nav-button" @click="setFocus('about')">
-      <img src="../assets/about-us-icon-222222.svg" class="icon" id="about-us-icon">
+      <img src="../assets/about-us-icon.svg" class="icon" id="about-us-icon">
     </div>
   </div>
 </template>
