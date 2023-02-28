@@ -9,7 +9,11 @@
     default() {
       return {}
     },
-    toggleSearchBar: Function,
+    toggleOrSubmit: Function,
+    default() {
+      return {}
+    },
+    submitSearch: Function,
     default() {
       return {}
     }
@@ -23,7 +27,8 @@
         :focus="focus"
         :searchOpen="searchOpen"
         :setFocus="setFocus"
-        :toggleSearchBar="toggleSearchBar"
+        :toggleOrSubmit="toggleOrSubmit"
+        :submitSearch="submitSearch"
       />
     </div>
 
@@ -80,11 +85,11 @@
 
 <script>
   export default {
+    name: "PanelComponent",
     components: {
       NavBar,
       PanelCenter
     },
-    name: "PanelComponent",
     data () {
       return {}
     }

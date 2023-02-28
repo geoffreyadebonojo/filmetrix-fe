@@ -6,7 +6,11 @@
     default() {
       return {}
     },
-    toggleSearchBar: Function,
+    toggleOrSubmit: Function,
+    default() {
+      return {}
+    },
+    submitSearch: Function,
     default() {
       return {}
     }
@@ -33,12 +37,7 @@
     left: 0%;
     height: 26px;
     border-radius: 15px 0 0 15px;
-
-
     border: 7px solid white;
-    /* padding: 0; */
-    /* color: $panel-grey; */
-    /* border-radius: 30px; */
     text-align: center;
     font-size: 15px;
     letter-spacing: 0.05em;
@@ -87,12 +86,17 @@
 </style>
 
 <template>
-  <input type="text" name="Search" id="search-text">
+  <input 
+    type="text" 
+    placeholder="Search" 
+    id="search-text"
+    @keyup.enter="submitSearch($event.target.value)"
+  >
   
   <div class="nav-button-container">
     <div id="highlight"></div>
 
-    <div class="nav-button" @click="toggleSearchBar()">
+    <div class="nav-button" @click="toggleOrSubmit()">
       <img src="../assets/search-icon-inactive.png" class="icon" id="search-icon">
     </div>
 

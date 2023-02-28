@@ -10,7 +10,8 @@
     :focus="focus"
     :searchOpen="searchOpen"
     :setFocus="setFocus"
-    :toggleSearchBar="toggleSearchBar"
+    :toggleOrSubmit="toggleOrSubmit"
+    :submitSearch="submitSearch"
    />
 </template>
 
@@ -122,8 +123,6 @@
         d.transition().duration(0)
         .style("width", "0px")
         .style("left", "56%")
-        
-        // this.moveHighlightCircle("-1%")
       },
 
       openField(d) {
@@ -134,22 +133,19 @@
         this.moveHighlightCircle("-1%")
       },
 
-      toggleField(d) {
-        if (this.searchOpen) {
-          const d = d3.select("#search-text") 
+      toggleOrSubmit() {
+        this.focus = 'search'
+        const d = d3.select("#search-text") 
 
-          this.searchOpen = false
-          this.closeField(d)
+        if (this.searchOpen) {
+          const val = d.node().value
+          this.submitSearch(val)
+          //transition to details
+
         } else {
           this.searchOpen = true
           this.openField(d)
         }
-      },
-
-      toggleSearchBar() {
-        const d = d3.select("#search-text") 
-        this.focus = 'search'
-        this.toggleField(d)
       },
 
       setFocus(focus) {
@@ -167,10 +163,15 @@
         this.searchOpen = false
       },
 
-      async submitSearch() {
-        const val = document.querySelector("#search-field").value
+      async submitSearch(value) {
+        const val = value.toUpperCase()
 
-        await this.fetchSearchData(val)
+        if (val == '' || val == null) { 
+          // maybe a helpful tip?
+          return false
+        }
+        console.log(val)
+        // await this.fetchSearchData(val)
       },
 
       async submitPerson() {
@@ -318,4 +319,3 @@
     }
   }
 </script>
-
