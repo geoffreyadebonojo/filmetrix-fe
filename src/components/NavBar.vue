@@ -1,23 +1,8 @@
 <script setup>
   import { store } from '@/stores/store.js'
+  import apiService from "../mixins/apiService"
+  import * as d3 from 'd3'
 
-  const props = defineProps({
-    focus:String,
-    searchOpen:Boolean,
-    searchResults:Array,
-    setFocus: Function,
-    default() {
-      return {}
-    },
-    toggleOrSubmit: Function,
-    default() {
-      return {}
-    },
-    submitSearch: Function,
-    default() {
-      return {}
-    }
-  })
 </script>
 
 <style scoped>
@@ -94,13 +79,11 @@
     top: 5px;
   }
 
-  #person-icon {
-    top: 5px;
+  #person-icon, #tv-icon {
     left: 8px;
   }
 
   #movie-icon {
-    top: 5px;
     left: 6px;
   }
 
@@ -118,49 +101,47 @@
     type="text" 
     placeholder="Search" 
     id="search-text"
-    value="tom cruise"
-    @keyup.enter="submitSearch($event.target.value)"
+
+    @keyup.enter="this.submitSearch($event.target.value)"
   >
   
   <div class="nav-button-container">
     <div id="highlight"></div>
  
-    <div class="nav-button" @click="toggleOrSubmit()">
+    <div class="nav-button" id="search-button" @click="this.toggleOrSubmit()">
       <img src="../assets/search-icon.png" class="icon" id="search-icon">
     </div>
 
     <div 
-      class="result-button" v-if="this.displayResultIcon('person') === true" >
-      <div @click="setFocus('person')">
+      class="nav-button"  id="-person-button" v-if="this.displayResultIcon('person') === true" >
+      <div @click="this.setCurrentFocus('person')">
         <img src="../assets/person-icon.svg" class="icon" id="person-icon" >
       </div>
     </div>
     <div v-else></div>
 
-    <div class="result-button" v-if="this.displayResultIcon('movie') === true">
-      <div @click="setFocus('movie')">
+    <div class="nav-button"  id="movie-button" v-if="this.displayResultIcon('movie') === true">
+      <div @click="this.setCurrentFocus('movie')">
         <img src="../assets/movie-icon.svg" class="icon" id="movie-icon">
       </div>
     </div>
     <div v-else></div>
 
-    <div class="result-button" v-if="this.displayResultIcon('tv') === true">
-      <div @click="setFocus('tv')">
+    <div class="nav-button" id="tv-button" v-if="this.displayResultIcon('tv') === true">
+      <div @click="this.setCurrentFocus('tv')">
         <img src="../assets/tv-icon.svg" class="icon" id="tv-icon">
       </div>
     </div>
-    <div v-else></div>
 
-
-    <div class="nav-button" @click="setFocus('details')">
+    <div class="nav-button" id="details-button" @click="this.setCurrentFocus('details')">
       <img src="../assets/details-icon.svg" class="icon" id="details-icon">
     </div>
 
-    <div class="nav-button" @click="setFocus('commands')">
+    <div class="nav-button" id="commands-button" @click="this.setCurrentFocus('commands')">
       <img src="../assets/command-icon.svg" class="icon" id="commands-icon">
     </div>
 
-    <div class="nav-button" @click="setFocus('about')">
+    <div class="nav-button" id="about-button" @click="this.setCurrentFocus('about')">
       <img src="../assets/about-us-icon.svg" class="icon" id="about-us-icon">
     </div>
   </div>
@@ -174,6 +155,81 @@
       displayResultIcon(resultType) {
         const list = store.searchResults.map(r => r['id'].split("-")[0])
         return list.includes(resultType)
+      },
+
+      toggleOrSubmit() {
+        this.setCurrentFocus("search")
+        const d = d3.select("#search-text") 
+
+        if (store.searchOpen) {
+          const val = d.node().value
+          this.submitSearch(val)
+          //transition to details
+
+        } else {
+          store.searchOpen = true
+          this.openField(d)
+        }
+      },
+
+      async submitSearch(value) {
+        const val = value.toUpperCase()
+
+        if (val == '' || val == null) { 
+          // maybe a helpful tip?
+          return false
+        }
+
+        await apiService.methods.fetchSearchData(val)
+
+        const tab = store.currentResultTab
+        this.setCurrentFocus(tab)
+      },
+
+      setCurrentFocus(focus) {
+        const navButtons = d3.selectAll(".nav-button").nodes()
+        const buttonMap = navButtons.reverse().map(x => x.id.split("-")[0]);
+        
+        const displaceRight = [
+          1,
+          27,
+          56,
+          85,
+          112,
+          141
+        ]
+
+        const index = buttonMap.indexOf(focus)
+
+        const x = displaceRight[index]
+
+        this.moveHighlightCircle(x)
+
+        store.currentFocus = focus
+      },
+
+      moveHighlightCircle(x) {
+      // still a little bouncy
+        d3.select("#highlight")
+        .style("left", null)
+        .transition()
+        .duration(100)
+        .style("right", `${x}px`)
+      },
+
+      closeField(d) {
+        d.transition().duration(0)
+        .style("width", "0px")
+        .style("left", "62%")
+      },
+
+      openField(d) {
+        d.transition().duration(0).delay(100)
+        .style("width", "60%")
+        .style("left", "7%")
+
+        d3.select("#highlight").transition().duration(100)
+        .style("left", "-1px")
       }
     }
   }

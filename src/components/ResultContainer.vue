@@ -2,16 +2,6 @@
   import createChart from "../mixins/createChart"
   import apiService from "../mixins/apiService"
   import { store } from '@/stores/store.js'
-
-  const props = defineProps({
-    focus:String,
-    searchResults:Array,
-    currentDetailSubjectId:String,
-    setFocus: Function,
-    default() {
-      return {}
-    }
-  })
 </script>
 
 <style>
@@ -56,11 +46,11 @@
 </style>
 
 <template>
-  <div class="result-container" v-bind:id="this.focus + '-results'">
+  <div class="result-container" v-bind:id="store.currentFocus + '-results'">
     <div class="result-tile" 
         v-bind:id="result.id"
-        v-if="focus !== 'noResult'"
-        v-for="result in store.searchResults.filter(r => r['id'].includes(focus))" 
+        v-if="store.currentFocus !== 'noResult'"
+        v-for="result in store.searchResults.filter(r => r['id'].includes(store.currentFocus))" 
         @click="$event => callForNodes()"
       >
 
@@ -68,7 +58,7 @@
         <div>{{result.name}}</div>
     </div>
 
-    <div v-else="focus === 'noResult'">
+    <div v-else="store.currentFocus === 'noResult'">
       No result found. Spelling?
     </div>
   </div>
@@ -79,9 +69,7 @@
     name: "ResultContainer",
     mixins: [createChart],
     data () {
-      return {
-        graphData: []
-      }
+      return {}
     },
     methods: {
       async callForNodes() {
@@ -89,74 +77,13 @@
         
         const id = fullId.split("-")[1]
 
-        await this.fetchGraphData([id],[],5)
+        await apiService.methods.fetchGraphData([id],[],5)
 
-        this.setFocus('details')
-
-        this.currentDetailSubjectId = fullId
-
+        store.currentFocus = 'details'
+        
+        this.currentDetailId = fullId
+        
         // this.chart(this.graphData.data)
-      },
-
-      //DUPE
-      // async fetchDetails(id) {
-      //   const API_URL = `http://localhost:3000/graphql`
-
-      //   this.detailsData = await (
-      //     fetch(API_URL, {
-      //       method: 'POST',
-      //       headers: { 'Content-Type': 'application/json' },
-      //       body: JSON.stringify({ query: this.queryDetails(id) })
-      //     }).then((response) => {
-      //       return response.json()
-      //     })
-      //   )
-      // },
-      // queryDetails(id) {
-      //   // add conditions for entity
-      //   return `query {
-      //     details(id: ${id}) {
-      //       id
-      //       alsoKnownAs
-      //       biography
-      //       birthday
-      //       deathday
-      //       homepage
-      //       imdbId
-      //       name
-      //       knownForDepartment
-      //       placeOfBirth
-      //       popularity
-      //       poster
-      //     }    
-      //   }`
-      // },
-      queryAll(pids, mids, count) {
-        return `query {
-          nodes(personIds: ${JSON.stringify(pids)}, movieIds: ${JSON.stringify(mids)}, count: ${count}) {
-            id
-            name
-            poster
-          }
-          links(personIds: ${JSON.stringify(pids)}, movieIds: ${JSON.stringify(mids)}, count: ${count}) {
-            source
-            target
-            roles
-          }
-        }`
-      },
-      async fetchGraphData(pids, mids, count) {
-        const API_URL = `http://localhost:3000/graphql`
-
-        this.graphData = await (
-          fetch(API_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ query: this.queryAll(pids, mids, count) })
-          }).then((response) => {
-            return response.json()
-          })
-        )
       }
     }
   }

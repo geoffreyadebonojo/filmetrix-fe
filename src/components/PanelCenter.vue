@@ -2,49 +2,29 @@
   import ResultContainer from './ResultContainer.vue'
   import DetailsContainer from './DetailsContainer.vue'
   import CommandsContainer from './CommandsContainer.vue'
-
-  const props = defineProps({
-    focus:String,
-    searchResults:Array,
-    default() {
-      return {}
-    },
-    setFocus:Function,
-    default() {
-      return {}
-    }
-  })
+  import { store } from '@/stores/store.js'
 </script>
 
 <template>
-  <div v-if="props.focus === 'details'">
+  <div v-if="store.currentFocusocus === 'details'">
     <!-- use search result data? later -->
-    <DetailsContainer
-      :focus="props.focus"
-      :setFocus="setFocus"
-      :currentDetailSubjectId="currentDetailSubjectId"
-    />
+    <DetailsContainer />
   </div>
   
-  <div v-else-if="props.focus === 'commands'">
-    <CommandsContainer
-    />
+  <div v-else-if="store.currentFocusocus === 'commands'">
+    <CommandsContainer />
   </div>
   
-  <div v-else-if="props.focus === 'about'">
+  <div v-else-if="store.currentFocusocus === 'about'">
     about
   </div>
 
-  <div v-else="props.focus === 'empty'">
+  <div v-else="store.currentFocusocus === 'empty'">
     empty
   </div>
 
   <div v-else class="result-component">
-    <ResultContainer
-      :focus="props.focus"
-      :searchResults="searchResults"
-      :setFocus="setFocus"
-    />
+    <ResultContainer />
   </div>
   
 </template>

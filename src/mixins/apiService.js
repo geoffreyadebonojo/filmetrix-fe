@@ -19,11 +19,14 @@ export default {
         })
       )
       store.searchResults = api_respsonse.data.search
+      store.currentResultTab = store.searchResults[0].id.split("-")[0]
     },
 
     async fetchDetails(id) {
       const API_URL =`http://localhost:3000/graphql`
-      store.mostRecentSearchId = id
+      
+      store.currentDetailId = id
+      
       const api_response = await (
         fetch(API_URL, {
           method: 'POST',
@@ -34,6 +37,35 @@ export default {
         })
       )
       store.detailsData = api_response.data
+    },
+
+    async fetchGraphData(pids, mids, count) {
+      const API_URL = `http://localhost:3000/graphql`
+      // store.most reent graph id
+      store.graphData = await (
+        fetch(API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ query: this.queryAll(pids, mids, count) })
+        }).then((response) => {
+          return response.json()
+        })
+      )
+    },
+
+    queryAll(pids, mids, count) {
+      return `query {
+        nodes(personIds: ${JSON.stringify(pids)}, movieIds: ${JSON.stringify(mids)}, count: ${count}) {
+          id
+          name
+          poster
+        }
+        links(personIds: ${JSON.stringify(pids)}, movieIds: ${JSON.stringify(mids)}, count: ${count}) {
+          source
+          target
+          roles
+        }
+      }`
     },
 
     querySearch(term) {

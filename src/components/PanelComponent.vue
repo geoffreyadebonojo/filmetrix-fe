@@ -2,44 +2,16 @@
   import NavBar from './NavBar.vue'
   import PanelCenter from './PanelCenter.vue'
 
-  const props = defineProps({
-    focus:String,
-    searchOpen:Boolean,
-    searchResults:Array,
-    setFocus: Function,
-    default() {
-      return {}
-    },
-    toggleOrSubmit: Function,
-    default() {
-      return {}
-    },
-    submitSearch: Function,
-    default() {
-      return {}
-    }
-  })
 </script>
 
 <template>
   <div id="panel-body">
     <div id="navbar">
-      <NavBar 
-        :focus="focus"
-        :searchOpen="searchOpen"
-        :searchResults="searchResults"
-        :setFocus="setFocus"
-        :toggleOrSubmit="toggleOrSubmit"
-        :submitSearch="submitSearch"
-      />
+      <NavBar />
     </div>
 
     <div id="panel-center">
-      <PanelCenter 
-        :focus="props.focus" 
-        :searchResults="searchResults"
-        :setFocus="setFocus"
-      />
+      <PanelCenter />
     </div>
 
     <div id="controls">

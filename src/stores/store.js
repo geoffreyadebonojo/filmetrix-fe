@@ -1,7 +1,10 @@
 import { reactive } from 'vue'
 
 export const store = reactive({
-  focus: 'empty',
-  mostRecentSearchId: '',
-  searchResults: []
+  currentFocus: 'empty',
+  currentResultTab: '',
+  searchResults: [],
+  currentDetailId: '',
+  graphData: [],
+  searchOpen: true // to Navbar
 })
