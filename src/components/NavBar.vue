@@ -108,7 +108,7 @@
   <div class="nav-button-container">
     <div id="highlight"></div>
  
-    <div class="nav-button" id="search-button" @click="this.toggleOrSubmit()">
+    <div class="" id="search-button" @click="this.toggleOrSubmitOnClick()">
       <img src="../assets/search-icon.png" class="icon" id="search-icon">
     </div>
 
@@ -151,45 +151,42 @@
   export default {
     name: "NavBar",
 
+    data () {
+      return {
+        searchOpen: true
+      }
+    },
     methods: {
       displayResultIcon(resultType) {
         const list = store.searchResults.map(r => r['id'].split("-")[0])
         return list.includes(resultType)
       },
 
-      toggleOrSubmit() {
-        this.setCurrentFocus("search")
+      toggleOrSubmitOnClick() {
         const d = d3.select("#search-text") 
-
-        if (store.searchOpen) {
-          const val = d.node().value
-          this.submitSearch(val)
-          store.searchOpen = false
-          closeField(d)
-
-        } else {
-          store.searchOpen = true
-          this.openField(d)
-        }
+        this.openField(d)
+        this.submitSearch(d.node().value)
       },
-
+        
       async submitSearch(value) {
         const val = value.toUpperCase()
-
         if (val == '' || val == null) { 
           // maybe a helpful tip?
           return false
         }
-
         await apiService.methods.fetchSearchData(val)
-
+          
+        document.querySelector("#search-text").value = ''
         const tab = store.currentResultTab
         this.setCurrentFocus(tab)
       },
 
       setCurrentFocus(focus) {
-        const navButtons = d3.selectAll(".nav-button").nodes()
-        const buttonMap = navButtons.reverse().map(x => x.id.split("-")[0]);
+        const navButtons = d3.selectAll(".nav-button").nodes().reverse()
+        
+        navButtons.unshift()
+
+        const buttonMap = navButtons.map(x => x.id.split("-")[0]);
         
         const displaceRight = [
           1,
@@ -201,6 +198,10 @@
         ]
 
         const index = buttonMap.indexOf(focus)
+        // const d3Elem = d3.select(navButtons[index])
+
+        const d = d3.select("#search-text") 
+        this.closeField(d)
 
         this.moveHighlightCircle(displaceRight[index])
         store.currentFocus = focus

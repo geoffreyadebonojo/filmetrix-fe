@@ -5,6 +5,5 @@ export const store = reactive({
   currentResultTab: '',
   searchResults: [],
   currentDetailId: '',
-  graphData: [],
-  searchOpen: true // to Navbar
+  graphData: []
 })
