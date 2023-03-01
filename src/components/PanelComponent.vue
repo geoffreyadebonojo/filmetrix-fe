@@ -38,6 +38,7 @@
       <PanelCenter 
         :focus="props.focus" 
         :searchResults="searchResults"
+        :setFocus="setFocus"
       />
     </div>
 

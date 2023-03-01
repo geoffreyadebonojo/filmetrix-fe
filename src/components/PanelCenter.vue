@@ -5,7 +5,12 @@
 
   const props = defineProps({
     focus:String,
+    
     searchResults:Array,
+    default() {
+      return {}
+    },
+    setFocus:Function,
     default() {
       return {}
     }
@@ -14,11 +19,13 @@
 
 <template>
   <div v-if="props.focus === 'details'">
-    <DetailsContainer />
+    <DetailsContainer
+    />
   </div>
   
   <div v-else-if="props.focus === 'commands'">
-    <CommandsContainer />
+    <CommandsContainer
+    />
   </div>
   
   <div v-else-if="props.focus === 'about'">
@@ -33,6 +40,7 @@
     <ResultContainer
       :focus="props.focus"
       :searchResults="searchResults"
+      :setFocus="setFocus"
     />
   </div>
   
