@@ -113,7 +113,7 @@
     </div>
 
     <div 
-      class="nav-button"  id="-person-button" v-if="this.displayResultIcon('person') === true" >
+      class="nav-button"  id="person-button" v-if="this.displayResultIcon('person') === true" >
       <div @click="this.setCurrentFocus('person')">
         <img src="../assets/person-icon.svg" class="icon" id="person-icon" >
       </div>
@@ -164,7 +164,8 @@
         if (store.searchOpen) {
           const val = d.node().value
           this.submitSearch(val)
-          //transition to details
+          store.searchOpen = false
+          closeField(d)
 
         } else {
           store.searchOpen = true
@@ -201,10 +202,7 @@
 
         const index = buttonMap.indexOf(focus)
 
-        const x = displaceRight[index]
-
-        this.moveHighlightCircle(x)
-
+        this.moveHighlightCircle(displaceRight[index])
         store.currentFocus = focus
       },
 
