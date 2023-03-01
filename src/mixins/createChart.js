@@ -3,7 +3,6 @@ import * as d3 from 'd3'
 export default {
   methods: {
     chart (responseData, settings={charge: -1000}) {
-      debugger
       const links = responseData.links
       const nodes = responseData.nodes
       const simulation = d3.forceSimulation(nodes, links)
@@ -27,10 +26,9 @@ export default {
         // .alphaTarget(0.81)
   
       d3.select("svg").html("")
-  
       const svg = d3.select("svg")
-        .attr("viewBox", [-width / 2, -height / 2, width, height])
-  
+      .attr("viewBox", [-width / 2, -height / 2, width, height])
+
       const color = "#FFF"
   
       const link = svg.append("g")

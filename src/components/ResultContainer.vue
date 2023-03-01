@@ -113,52 +113,7 @@
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ query: this.queryAll(pids, mids, count) })
           }).then((response) => {
-            // return response.json()
-            const data = {
-              nodes: [
-              {
-                id: 1,
-                name: "",
-                poster: ""
-              },
-              {
-                id: 2,
-                name: "",
-                poster: ""
-              },
-              {
-                id: 3,
-                name: "",
-                poster: ""
-              },
-              {
-                id: 4,
-                name: "",
-                poster: ""
-              }
-              ]
-              ,
-              links: [
-              {
-                source: 1,
-                target: 2
-              },
-              {
-                source: 2,
-                target: 3
-              },
-              {
-                source: 3,
-                target: 4
-              },
-              {
-                source: 4,
-                target: 1
-              }
-              ]
-            }
-
-            return data
+            return response.json()
           })
         )
       }
