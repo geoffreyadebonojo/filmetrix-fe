@@ -9,6 +9,7 @@ export default {
   methods: {
     async fetchSearchData(term) {
       const API_URL =`http://localhost:3000/graphql`
+
       const api_respsonse = await (
         fetch(API_URL, {
           method: 'POST',
@@ -18,14 +19,13 @@ export default {
           return response.json()
         })
       )
+
       store.searchResults = api_respsonse.data.search
       store.currentResultTab = store.searchResults[0].id.split("-")[0]
     },
 
     async fetchDetails(id) {
       const API_URL =`http://localhost:3000/graphql`
-      
-      store.currentDetailId = id
       
       const api_response = await (
         fetch(API_URL, {
@@ -36,7 +36,8 @@ export default {
           return response.json()
         })
       )
-      store.detailsData = api_response.data
+
+      store.detailsData = api_response.data.details
     },
 
     async fetchGraphData(pids, mids, count) {

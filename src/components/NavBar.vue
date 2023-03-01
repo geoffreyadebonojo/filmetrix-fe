@@ -133,9 +133,10 @@
       </div>
     </div>
 
-    <div class="nav-button" id="details-button" @click="this.setCurrentFocus('details')">
+    <div class="nav-button" id="details-button" v-if="store.currentDetailId !== false" @click="this.setCurrentFocus('details')">
       <img src="../assets/details-icon.svg" class="icon" id="details-icon">
     </div>
+    <div v-else></div>
 
     <div class="nav-button" id="commands-button" @click="this.setCurrentFocus('commands')">
       <img src="../assets/command-icon.svg" class="icon" id="commands-icon">
@@ -165,6 +166,9 @@
       toggleOrSubmitOnClick() {
         const d = d3.select("#search-text") 
         this.openField(d)
+        
+        // if (store.currentFocus === 'search') {
+        // }
         this.submitSearch(d.node().value)
       },
         

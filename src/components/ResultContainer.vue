@@ -74,16 +74,14 @@
     methods: {
       async callForNodes() {
         const fullId = event.currentTarget.id
-        
         const id = fullId.split("-")[1]
 
         await apiService.methods.fetchGraphData([id],[],5)
 
-        store.currentFocus = 'details'
-        
-        this.currentDetailId = fullId
-        
+        store.currentDetailId = fullId
+
         // this.chart(this.graphData.data)
+        store.currentFocus = 'details'
       }
     }
   }

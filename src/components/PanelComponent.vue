@@ -1,6 +1,7 @@
 <script setup>
   import NavBar from './NavBar.vue'
   import PanelCenter from './PanelCenter.vue'
+  import * as d3 from 'd3'
 
 </script>
 
@@ -23,7 +24,7 @@
 <style scoped>
   #panel-body {
     height: 100vh;
-    width: 350px;
+    width: 0px;
     display: grid;
     grid-template-columns: 30px 1fr 30px;
     grid-template-rows: 2vh 1.8em 4vh 60vh 4vh 9em 4vh;
@@ -71,6 +72,12 @@
     components: {
       NavBar,
       PanelCenter
+    },
+    mounted () {
+      d3.select("#panel-body")
+      .transition()
+      .duration(100)
+      .style("width", "350px")
     }
   }
 </script>

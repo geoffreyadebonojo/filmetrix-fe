@@ -6,20 +6,20 @@
 </script>
 
 <template>
-  <div v-if="store.currentFocusocus === 'details'">
+  <div v-if="store.currentFocus === 'details' && store.currentDetailId !== false">
     <!-- use search result data? later -->
     <DetailsContainer />
   </div>
   
-  <div v-else-if="store.currentFocusocus === 'commands'">
+  <div v-else-if="store.currentFocus === 'commands'">
     <CommandsContainer />
   </div>
   
-  <div v-else-if="store.currentFocusocus === 'about'">
+  <div v-else-if="store.currentFocus === 'about'">
     about
   </div>
 
-  <div v-else="store.currentFocusocus === 'empty'">
+  <div v-else="store.currentFocus === 'empty'">
     empty
   </div>
 
