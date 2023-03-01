@@ -2,6 +2,8 @@
   import PanelComponent from '../components/PanelComponent.vue'
   import GraphComponent from '../components/GraphComponent.vue'
   import apiService from "../mixins/apiService"
+  import { store } from '@/stores/store.js'
+
 </script>
 
 <template>
@@ -10,7 +12,6 @@
   <PanelComponent 
     :focus="focus"
     :searchOpen="searchOpen"
-    :searchResults="searchResults"
     :setFocus="setFocus"
     :toggleOrSubmit="toggleOrSubmit"
     :submitSearch="submitSearch"
@@ -49,8 +50,7 @@
         pids: [],
         mids: [],
         charge: -1000,
-        count: 5,
-        searchResults: []
+        count: 5
       }
     },
     
@@ -121,10 +121,14 @@
           // maybe a helpful tip?
           return false
         }
-        await this.fetchSearchData(val)
 
-        this.searchResults = this.response.data.search
-        const tab = this.searchResults[0].id.split("-")[0]
+        await apiService.methods.fetchSearchData(val)
+
+        const searchResults = store.searchResults
+
+        debugger
+        const tab = searchResults[0].id.split("-")[0]
+
         
         this.setFocus(tab)
       },

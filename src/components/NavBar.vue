@@ -1,4 +1,6 @@
 <script setup>
+  import { store } from '@/stores/store.js'
+
   const props = defineProps({
     focus:String,
     searchOpen:Boolean,
@@ -116,6 +118,7 @@
     type="text" 
     placeholder="Search" 
     id="search-text"
+    value="tom cruise"
     @keyup.enter="submitSearch($event.target.value)"
   >
   
@@ -163,15 +166,13 @@
   </div>
 </template>
 
-
-
 <script>
   export default {
     name: "NavBar",
 
     methods: {
       displayResultIcon(resultType) {
-        const list = this.searchResults.map(r => r['id'].split("-")[0])
+        const list = store.searchResults.map(r => r['id'].split("-")[0])
         return list.includes(resultType)
       }
     }

@@ -1,6 +1,7 @@
 <script setup>
   import createChart from "../mixins/createChart"
   import apiService from "../mixins/apiService"
+  import { store } from '@/stores/store.js'
 
   const props = defineProps({
     focus:String,
@@ -59,7 +60,7 @@
     <div class="result-tile" 
         v-bind:id="result.id"
         v-if="focus !== 'noResult'"
-        v-for="result in this.searchResults.filter(r => r['id'].includes(focus))" 
+        v-for="result in store.searchResults.filter(r => r['id'].includes(focus))" 
         @click="$event => callForNodes()"
       >
 
@@ -91,7 +92,7 @@
         await this.fetchGraphData([id],[],5)
 
         this.setFocus('details')
-        debugger
+
         this.currentDetailSubjectId = fullId
 
         // this.chart(this.graphData.data)

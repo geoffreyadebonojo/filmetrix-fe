@@ -99,9 +99,6 @@
     components: {
       NavBar,
       PanelCenter
-    },
-    data () {
-      return {}
     }
   }
 </script>

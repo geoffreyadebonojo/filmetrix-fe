@@ -140,7 +140,6 @@
           })
   
       node.on('dblclick', (e, d) => {
-        debugger
         console.log(d.id)
       })
   
