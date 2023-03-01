@@ -6,7 +6,9 @@
 </script>
 
 <template>
-  <div v-if="store.currentFocus === 'details' && store.currentDetailId !== false">
+  <div 
+    v-if="store.currentFocus === 'details' && store.currentDetailId !== false"
+    class="details-component">
     <!-- use search result data? later -->
     <DetailsContainer />
   </div>
@@ -32,6 +34,10 @@
 <style>
   .result-component {
     height: 100%;
+  }  
+  .details-component {
+    height: 100%;
+    width: 100%;
   }
 </style>
 
