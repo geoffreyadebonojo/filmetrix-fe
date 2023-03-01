@@ -38,7 +38,9 @@
       GraphComponent,
       PanelComponent
     },
+
     mixin: [apiService],
+
     data () {
       response: null
       return {

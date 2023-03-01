@@ -5,7 +5,6 @@
 
   const props = defineProps({
     focus:String,
-    
     searchResults:Array,
     default() {
       return {}
@@ -19,7 +18,11 @@
 
 <template>
   <div v-if="props.focus === 'details'">
+    <!-- use search result data? later -->
     <DetailsContainer
+      :focus="props.focus"
+      :setFocus="setFocus"
+      :currentDetailSubjectId="currentDetailSubjectId"
     />
   </div>
   
@@ -54,6 +57,11 @@
 
 <script>
   export default {
-    name: "PanelCenter"
+    name: "PanelCenter",
+    data () {
+      return {
+        currentDetailSubjectId: ''
+      }
+    }
   }
 </script>

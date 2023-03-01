@@ -5,6 +5,7 @@
   const props = defineProps({
     focus:String,
     searchResults:Array,
+    currentDetailSubjectId:String,
     setFocus: Function,
     default() {
       return {}
@@ -78,52 +79,57 @@
     mixins: [createChart],
     data () {
       return {
-        graphData: [],
-        detailsData: {}
+        graphData: []
       }
     },
     methods: {
       async callForNodes() {
-        const id = event.currentTarget.id.split("-")[1]
+        const fullId = event.currentTarget.id
+        
+        const id = fullId.split("-")[1]
+
         await this.fetchGraphData([id],[],5)
-        await this.fetchDetails(id)
 
         this.setFocus('details')
+        debugger
+        this.currentDetailSubjectId = fullId
 
         // this.chart(this.graphData.data)
       },
-      async fetchDetails(id) {
-        const API_URL = `http://localhost:3000/graphql`
 
-        this.detailsData = await (
-          fetch(API_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ query: this.queryDetails(id) })
-          }).then((response) => {
-            return response.json()
-          })
-        )
-      },
-      queryDetails(id) {
-        // add conditions for entity
-        return `query {
-          details(id: ${id}) {
-            id
-            alsoKnownAs
-            biography
-            birthday
-            deathday
-            homepage
-            imdbId
-            name
-            knownForDepartment
-            placeOfBirth
-            popularity
-            poster
-          }    
-        }`
-      },
+      //DUPE
+      // async fetchDetails(id) {
+      //   const API_URL = `http://localhost:3000/graphql`
+
+      //   this.detailsData = await (
+      //     fetch(API_URL, {
+      //       method: 'POST',
+      //       headers: { 'Content-Type': 'application/json' },
+      //       body: JSON.stringify({ query: this.queryDetails(id) })
+      //     }).then((response) => {
+      //       return response.json()
+      //     })
+      //   )
+      // },
+      // queryDetails(id) {
+      //   // add conditions for entity
+      //   return `query {
+      //     details(id: ${id}) {
+      //       id
+      //       alsoKnownAs
+      //       biography
+      //       birthday
+      //       deathday
+      //       homepage
+      //       imdbId
+      //       name
+      //       knownForDepartment
+      //       placeOfBirth
+      //       popularity
+      //       poster
+      //     }    
+      //   }`
+      // },
       queryAll(pids, mids, count) {
         return `query {
           nodes(personIds: ${JSON.stringify(pids)}, movieIds: ${JSON.stringify(mids)}, count: ${count}) {
