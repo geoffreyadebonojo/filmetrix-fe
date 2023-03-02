@@ -50,8 +50,8 @@
     content: '';
     background: linear-gradient(to bottom, transparent 0%, #333 100%);
     width: 100%;
-    bottom: 0px;
-    height: 20px;
+    top: -15px;
+    height: 15px;
   }
   
   #description {

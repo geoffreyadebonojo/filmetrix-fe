@@ -1,6 +1,7 @@
 <script setup>
   import { store } from '@/stores/store.js'
   import apiService from "../mixins/apiService"
+  import focusHelper from "../mixins/focusHelper"
   import * as d3 from 'd3'
 
 </script>
@@ -99,7 +100,6 @@
     type="text" 
     placeholder="Search" 
     id="search-text"
-
     @keyup.enter="this.submitSearch($event.target.value)"
   >
   
@@ -164,9 +164,8 @@
       toggleOrSubmitOnClick() {
         const d = d3.select("#search-text") 
         this.openField(d)
+        store.currentFocus = "search"
         
-        // if (store.currentFocus === 'search') {
-        // }
         this.submitSearch(d.node().value)
       },
         
@@ -176,52 +175,19 @@
           // maybe a helpful tip?
           return false
         }
+        
         await apiService.methods.fetchSearchData(val)
-          
-        document.querySelector("#search-text").value = ''
-        const tab = store.currentResultTab
+        
+        const tab = store.searchResults[0].id.split("-")[0]
         this.setCurrentFocus(tab)
+
+        document.querySelector("#search-text").value = ''
       },
 
       setCurrentFocus(focus) {
-        const navButtons = d3.selectAll(".nav-button").nodes().reverse()
-        
-        navButtons.unshift()
+        focusHelper.methods.set(focus)
 
-        const buttonMap = navButtons.map(x => x.id.split("-")[0]);
-        
-        const displaceRight = [
-          1,
-          27,
-          56,
-          85,
-          112,
-          141
-        ]
-
-        const index = buttonMap.indexOf(focus)
         // const d3Elem = d3.select(navButtons[index])
-
-        const d = d3.select("#search-text") 
-        this.closeField(d)
-
-        this.moveHighlightCircle(displaceRight[index])
-        store.currentFocus = focus
-      },
-
-      moveHighlightCircle(x) {
-      // still a little bouncy
-        d3.select("#highlight")
-        .style("left", null)
-        .transition()
-        .duration(100)
-        .style("right", `${x}px`)
-      },
-
-      closeField(d) {
-        d.transition().duration(0)
-        // .style("width", "0%")
-        .style("left", "74%")
       },
 
       openField(d) {

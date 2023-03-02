@@ -53,15 +53,14 @@
 
   #panel-center {
     grid-area: panel-center;
-    background: #333333;
+    /* a cool effect */
+    /* background: #444; */
     height: 100%;
-    border: 3px dashed black;
     overflow-y: auto;
   }
 
   #controls {
     grid-area: controls;
-    /* background: #333333; */
     border: 3px dashed black;
   }
 </style>
