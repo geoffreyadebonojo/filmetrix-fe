@@ -48,7 +48,7 @@
     display: flex;
     margin: auto 0 auto auto;
     height: 26px;
-    width: 100%;
+    width: 100%;  
   }
 
   #panel-center {
@@ -76,7 +76,7 @@
       d3.select("#panel-body")
       .transition()
       .duration(100)
-      .style("width", "350px")
+      .style("width", "35%")
     }
   }
 </script>

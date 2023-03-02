@@ -15,12 +15,12 @@
 <style scoped>
   .graph-wrapper {
     color: #222222;
-    width: 100vw;
+    width: 65%;
     height: 100vh;
   }
   svg {
-    height: 100%;
-    width: 70%;
+    /* height: 100%; */
+    /* width: 70%; */
     overflow: hidden;
   }
 </style>
