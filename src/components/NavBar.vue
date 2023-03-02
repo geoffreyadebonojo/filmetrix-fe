@@ -11,19 +11,17 @@
     width: max-content;
     display: flex;
     justify-content: space-between;
-    position: absolute;
+    /* position: absolute; */
     right: 0px;
     background: #6e6e6e;
     border-radius: 15px 0 0 15px;
   }
 
   #search-text {
-    width: 50%;
+    width: 100%;
     padding: 0px;
-    border: 0px;
     position: relative;
-    /* adjust to fit length */
-    left: 7%;
+    left: 20px;
     height: 26px;
     border-radius: 15px 0 0 15px;
     border: 7px solid white;
@@ -45,7 +43,7 @@
     width: 27px;
     background: white;
     border-radius: 50%;
-    right: 77%;
+    right: 58px;
   }
 
   #search-icon {
@@ -222,13 +220,13 @@
 
       closeField(d) {
         d.transition().duration(0)
-        .style("width", "0px")
-        .style("left", "62%")
+        // .style("width", "0%")
+        .style("left", "74%")
       },
 
       openField(d) {
         d.transition().duration(0).delay(100)
-        .style("width", "60%")
+        .style("width", "100%")
         .style("left", "7%")
 
         d3.select("#highlight").transition().duration(100)
