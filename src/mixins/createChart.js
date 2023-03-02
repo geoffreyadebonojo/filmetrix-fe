@@ -5,7 +5,7 @@ import * as d3 from 'd3'
 export default {
   methods: {
     chart (responseData, settings={charge: -1000}) {
-
+debugger
       const links = responseData.links
       const nodes = responseData.nodes
       var simulation = d3.forceSimulation(nodes, links)
@@ -22,7 +22,7 @@ export default {
         .force("center", d3.forceCenter(0, 0))
         // .force("x", d3.forceX(100))
         // .force("y", d3.forceY())
-        .force('x', d3.forceX().x(width * 0.5))
+        .force('x', d3.forceX().x(width * 0.3))
         .force('y', d3.forceY().y(height * 0.5))
         // .alpha(1)
         // .alphaMin(0.82)

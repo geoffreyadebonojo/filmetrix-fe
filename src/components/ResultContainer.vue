@@ -88,6 +88,7 @@
         store.currentDetailId = fullId
 
         this.chart(store.graphData.data)
+        
         store.currentFocus = 'details'
       }
     }
