@@ -85,8 +85,8 @@ export default {
         details(id: ${id}) {
           id
           alsoKnownAs
-          biography
-          birthday
+          summary
+          year
           deathday
           homepage
           imdbId
