@@ -165,7 +165,6 @@
         const d = d3.select("#search-text") 
         this.openField(d)
         store.currentFocus = "search"
-        
         this.submitSearch(d.node().value)
       },
         
@@ -186,8 +185,6 @@
 
       setCurrentFocus(focus) {
         focusHelper.methods.set(focus)
-
-        // const d3Elem = d3.select(navButtons[index])
       },
 
       openField(d) {

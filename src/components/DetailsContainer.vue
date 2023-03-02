@@ -1,5 +1,6 @@
 <script setup>
   import apiService from "../mixins/apiService"
+  import focusHelper from '../mixins/focusHelper'
   import { store } from '@/stores/store.js'
 </script>
 
@@ -162,7 +163,7 @@
     props: {},
     async created () {
       await apiService.methods.fetchDetails(store.currentDetailId.split("-")[1])
-      store.currentFocus = "details"
+      focusHelper.methods.set('details')
     }
   }
 </script>
