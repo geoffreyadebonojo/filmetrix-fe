@@ -5,7 +5,7 @@ import * as d3 from 'd3'
 export default {
   methods: {
     chart (responseData, settings={charge: -1000}) {
-      debugger
+
       const links = responseData.links
       const nodes = responseData.nodes
       var simulation = d3.forceSimulation(nodes, links)

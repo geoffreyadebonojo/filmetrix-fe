@@ -46,8 +46,6 @@ export default {
     async fetchGraphData(pids, mids, count) {
       const API_URL = `http://localhost:3000/graphql`
 
-
-      debugger
       pids.forEach(elem => {
         store.existingGraphAnchors.person.push(elem)
       });
