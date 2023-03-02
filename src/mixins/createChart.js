@@ -1,12 +1,14 @@
 import apiService from './apiService.js'
+import { store } from '@/stores/store.js'
 import * as d3 from 'd3'
 
 export default {
   methods: {
     chart (responseData, settings={charge: -1000}) {
+      debugger
       const links = responseData.links
       const nodes = responseData.nodes
-      const simulation = d3.forceSimulation(nodes, links)
+      var simulation = d3.forceSimulation(nodes, links)
   
       const width = 800
       const height = 800
@@ -67,9 +69,24 @@ export default {
   
       node.on('dblclick', async (e, d) => {
         await apiService.methods.fetchDetails(d.id)
-        debugger
+        
+        const entity = d.id.split("-")[0]
+        const id = d.id.split("-")[1]
+
+        if (entity === 'person') {
+          store.existingGraphAnchors.person.push(id)
+        } else {
+          store.existingGraphAnchors.movies.push(id)
+        }
+        
+        const pids = store.existingGraphAnchors.person
+        const mids = store.existingGraphAnchors.movies
+
+        await apiService.methods.fetchGraphData(pids, mids, 5)
+
+        this.restart()
       })
-  
+
       const linkArc = d =>`M${d.source.x},${d.source.y}A0,0 0 0,1 ${d.target.x},${d.target.y}`
   
       simulation.on("tick", () => {
@@ -78,6 +95,10 @@ export default {
       });
   
       return svg.node();
-    }  
+    },
+
+    restart() {
+      this.chart(store.graphData.data)
+    }
   }
 }

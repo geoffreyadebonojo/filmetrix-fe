@@ -11,10 +11,17 @@
         <div id="name">{{ store.detailsData.name }}</div>
         <div id="birthday">{{ store.detailsData.year }}</div>
         <div id="links">
-          <a id="imdb" v-bind:href="store.detailsData.imdbId">
+          <a id="imdb" 
+            v-bind:href="store.detailsData.imdbId"
+            target="_blank"
+          >
             <img src="../assets/imdb-icon.png">
           </a>
-          <a id="youtube">
+          <a id="youtube"
+            v-if="store.detailsData.id.split('-')[0] !== 'person'"
+            v-bind:href="'https://www.youtube.com/results?search_query=' + store.detailsData.name.split(' ').join('+')"
+            target="_blank"
+          >
             <img src="../assets/youtube-icon.png">
           </a>
         </div>

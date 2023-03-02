@@ -74,9 +74,15 @@
     methods: {
       async callForNodes() {
         const fullId = event.currentTarget.id
-        const id = fullId.split("-")[1]
+        const entity = fullId.split("-")[0]
+        const id =     fullId.split("-")[1]
 
-        await apiService.methods.fetchGraphData([id],[],5)
+        if (entity == "person"){
+          await apiService.methods.fetchGraphData([id],[],5)
+        } else {
+          await apiService.methods.fetchGraphData([],[id],5)
+        }
+
         await apiService.methods.fetchDetails(fullId)
 
         store.currentDetailId = fullId

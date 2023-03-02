@@ -140,6 +140,7 @@
           })
   
       node.on('dblclick', (e, d) => {
+
         console.log(d.id)
       })
   

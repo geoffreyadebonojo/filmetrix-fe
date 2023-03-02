@@ -29,7 +29,7 @@ export default {
       const id = fullId.split("-")[1]
 
       const API_URL =`http://localhost:3000/graphql`
-      
+
       const api_response = await (
         fetch(API_URL, {
           method: 'POST',
@@ -45,12 +45,27 @@ export default {
 
     async fetchGraphData(pids, mids, count) {
       const API_URL = `http://localhost:3000/graphql`
-      // store.most reent graph id
+
+
+      debugger
+      pids.forEach(elem => {
+        store.existingGraphAnchors.person.push(elem)
+      });
+
+      mids.forEach(elem => {
+        store.existingGraphAnchors.movies.push(elem)
+      })
+
       store.graphData = await (
         fetch(API_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ query: this.queryAll(pids, mids, count) })
+          body: JSON.stringify(
+            { query: this.queryAll(
+              store.existingGraphAnchors.person, 
+              store.existingGraphAnchors.movies, 
+              count)
+          })
         }).then((response) => {
           return response.json()
         })
@@ -87,15 +102,10 @@ export default {
       return `query {
         details(id: ${id}, entity: "${entity}") {
           id
-          alsoKnownAs
           summary
           year
-          deathday
-          homepage
           imdbId
           name
-          knownForDepartment
-          placeOfBirth
           popularity
           poster
         }    
