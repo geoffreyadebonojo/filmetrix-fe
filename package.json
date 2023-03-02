@@ -21,6 +21,7 @@
     "pinia": "^2.0.32",
     "vue": "^3.2.47",
     "vue-multi-split-pane": "^1.2.0",
+    "vue-multipane": "^0.9.5",
     "vue-resize-split-pane": "^0.1.5",
     "vue-router": "^4.1.6"
   },

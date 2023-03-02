@@ -24,14 +24,17 @@ export default {
       // store.currentResultTab = store.searchResults[0].id.split("-")[0]
     },
 
-    async fetchDetails(id) {
+    async fetchDetails(fullId) {
+      const entity = fullId.split("-")[0]
+      const id = fullId.split("-")[1]
+
       const API_URL =`http://localhost:3000/graphql`
       
       const api_response = await (
         fetch(API_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ query: this.queryDetails(id) })
+          body: JSON.stringify({ query: this.queryDetails(entity, id) })
         }).then((response) => {
           return response.json()
         })
@@ -79,10 +82,10 @@ export default {
       }`
     },
 
-    queryDetails(id) {
+    queryDetails(entity, id) {
       // add conditions for entity
       return `query {
-        details(id: ${id}) {
+        details(id: ${id}, entity: "${entity}") {
           id
           alsoKnownAs
           summary

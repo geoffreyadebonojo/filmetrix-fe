@@ -161,8 +161,7 @@
   export default {
     name: "DetailsContainer",
     props: {},
-    async created () {
-      await apiService.methods.fetchDetails(store.currentDetailId.split("-")[1])
+    mounted () {
       focusHelper.methods.set('details')
     }
   }

@@ -77,10 +77,11 @@
         const id = fullId.split("-")[1]
 
         await apiService.methods.fetchGraphData([id],[],5)
+        await apiService.methods.fetchDetails(fullId)
 
         store.currentDetailId = fullId
 
-        // this.chart(this.graphData.data)
+        this.chart(store.graphData.data)
         store.currentFocus = 'details'
       }
     }

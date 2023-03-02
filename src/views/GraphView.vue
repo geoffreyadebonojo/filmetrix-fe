@@ -4,7 +4,6 @@
 
   import { store } from '@/stores/store.js'
   import * as d3 from 'd3'
-
 </script>
 
 <template>
@@ -16,12 +15,12 @@
 <style scoped>
   .graph-wrapper {
     color: #222222;
-    width: 65vw;
+    width: 100vw;
     height: 100vh;
   }
   svg {
     height: 100%;
-    width: 100%;
+    width: 70%;
     overflow: hidden;
   }
 </style>

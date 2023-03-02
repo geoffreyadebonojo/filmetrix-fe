@@ -1,3 +1,4 @@
+import apiService from './apiService.js'
 import * as d3 from 'd3'
 
 export default {
@@ -48,6 +49,7 @@ export default {
           .selectAll("g")
           .data(nodes)
           .join("g")
+          .attr("id", d => d.id)
   
       node.append("circle")
           .attr("stroke", "white")
@@ -63,7 +65,10 @@ export default {
           .attr("xlink:href", d => d.poster)
           .attr("clip-path", "inset(5% round 20px)")
   
-      node.on('dblclick', (e, d) => console.log(d.id))
+      node.on('dblclick', async (e, d) => {
+        await apiService.methods.fetchDetails(d.id)
+        debugger
+      })
   
       const linkArc = d =>`M${d.source.x},${d.source.y}A0,0 0 0,1 ${d.target.x},${d.target.y}`
   
