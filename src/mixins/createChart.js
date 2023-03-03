@@ -2,6 +2,9 @@ import apiService from './apiService.js'
 import { store } from '@/stores/store.js'
 import * as d3 from 'd3'
 
+let timer;
+let alreadyClicked = false
+
 export default {
   methods: {
     chart (responseData, settings={charge: -1000}) {
@@ -66,24 +69,23 @@ export default {
           .attr("xlink:href", d => d.poster)
           .attr("clip-path", "inset(5% round 20px)")
   
-      node.on('dblclick', async (e, d) => {
-        await apiService.methods.fetchDetails(d.id)
-        
-        const entity = d.id.split("-")[0]
-        const id = d.id.split("-")[1]
+      node.on('click', async (e, d) => {
+        const doubleClickDelay = 300
+        if (alreadyClicked) { 
 
-        if (entity === 'person') {
-          store.existingGraphAnchors.person.push(id)
+          await this.callForNewNodes(d)
+
+          alreadyClicked = false;
+          clearTimeout(timer);
         } else {
-          store.existingGraphAnchors.movies.push(id)
+          timer = setTimeout(function () {
+            alreadyClicked = false;
+            
+            apiService.methods.fetchDetails(d.id)
+          
+          }, doubleClickDelay);
+          alreadyClicked = true;
         }
-        
-        const pids = store.existingGraphAnchors.person
-        const mids = store.existingGraphAnchors.movies
-
-        await apiService.methods.fetchGraphData(pids, mids, 5)
-
-        this.restart()
       })
 
       const linkArc = d =>`M${d.source.x},${d.source.y}A0,0 0 0,1 ${d.target.x},${d.target.y}`
@@ -98,6 +100,30 @@ export default {
 
     restart() {
       this.chart(store.graphData.data)
+    },
+
+    async callForNewNodes(d) {
+      await apiService.methods.fetchDetails(d.id)
+        
+      const entity = d.id.split("-")[0]
+      const id = d.id.split("-")[1]
+
+      if (entity === 'person') {
+        if (!store.existingGraphAnchors.person.includes(id)) {
+          store.existingGraphAnchors.person.push(id)
+        }
+      } else {
+        if (!store.existingGraphAnchors.movies.includes(id)) {
+          store.existingGraphAnchors.movies.push(id)
+        }
+      }
+      
+      const pids = store.existingGraphAnchors.person
+      const mids = store.existingGraphAnchors.movies
+
+      await apiService.methods.fetchGraphData(pids, mids, 5)
+
+      this.restart()
     }
   }
 }

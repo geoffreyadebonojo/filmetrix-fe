@@ -47,11 +47,15 @@ export default {
       const API_URL = `http://localhost:3000/graphql`
 
       pids.forEach(elem => {
-        store.existingGraphAnchors.person.push(elem)
+        if (!store.existingGraphAnchors.person.includes(elem)) {
+          store.existingGraphAnchors.person.push(elem)
+        }
       });
 
       mids.forEach(elem => {
-        store.existingGraphAnchors.movies.push(elem)
+        if (!store.existingGraphAnchors.movies.includes(elem)) {
+          store.existingGraphAnchors.movies.push(elem)
+        }
       })
 
       store.graphData = await (

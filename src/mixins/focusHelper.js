@@ -37,7 +37,7 @@ export default {
     closeField(d) {
       d.transition().duration(0)
       // .style("width", "0%")
-      .style("left", "74%")
+      .style("left", "100%")
     },
   }
 }
