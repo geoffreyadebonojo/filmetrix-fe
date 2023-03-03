@@ -12,12 +12,11 @@
     width: max-content;
     display: flex;
     justify-content: space-between;
-    /* position: absolute; */
     right: 0px;
     background: #6e6e6e;
     border-radius: 15px 0 0 15px;
   }
-
+  
   #search-text {
     width: 100%;
     padding: 0px;
