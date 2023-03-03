@@ -82,7 +82,6 @@
         await apiService.methods.fetchGraphData(
           store.existingGraphAnchors, 5
         )
-
         // already fetching details in the api,
         // maybe package that up into a big
         // credit_list object, so I don't have to
@@ -91,9 +90,9 @@
 
         store.currentDetailId = id
 
-        // this.chart(
-        //   store.graphData.data 
-        // )
+        this.chart(
+          store.graphData.data 
+        )
         
         store.currentFocus = 'details'
       }

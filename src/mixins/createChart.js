@@ -78,7 +78,7 @@ export default {
         const doubleClickDelay = 300
         if (alreadyClicked) { 
 
-          await this.callForNewNodes(d)
+          await this.callForNodes(d)
 
           alreadyClicked = false;
           clearTimeout(timer);
@@ -107,28 +107,31 @@ export default {
       this.chart(store.graphData.data)
     },
 
-    async callForNewNodes(d) {
-      // await apiService.methods.fetchDetails(d.id)
-        
-      // const entity = d.id.split("-")[0]
-      // const id = d.id.split("-")[1]
+    async callForNodes(d) {
+      await apiService.methods.fetchDetails(d.id)
 
-      // if (entity === 'person') {
-      //   if (!store.existingGraphAnchors.person.includes(id)) {
-      //     store.existingGraphAnchors.person.push(id)
-      //   }
-      // } else {
-      //   if (!store.existingGraphAnchors.movies.includes(id)) {
-      //     store.existingGraphAnchors.movies.push(id)
-      //   }
-      // }
+      const id = d
+
+      if (!store.existingGraphAnchors.includes(id)) {
+        store.existingGraphAnchors.push(id)
+      }
+
+      await apiService.methods.fetchGraphData(
+        store.existingGraphAnchors, 5
+      )
+      // already fetching details in the api,
+      // maybe package that up into a big
+      // credit_list object, so I don't have to
+      // do it twice?
+      await apiService.methods.fetchDetails(id)
+
+      store.currentDetailId = id
+
+      this.chart(
+        store.graphData.data 
+      )
       
-      // const pids = store.existingGraphAnchors.person
-      // const mids = store.existingGraphAnchors.movies
-
-      // await apiService.methods.fetchGraphData(pids, mids, 5)
-
-      // this.restart()
+      store.currentFocus = 'details'
     }
   }
 }
