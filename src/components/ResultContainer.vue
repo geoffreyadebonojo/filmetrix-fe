@@ -73,21 +73,27 @@
     },
     methods: {
       async callForNodes() {
-        const fullId = event.currentTarget.id
-        const entity = fullId.split("-")[0]
-        const id =     fullId.split("-")[1]
+        const id = event.currentTarget.id
 
-        if (entity == "person"){
-          await apiService.methods.fetchGraphData([id],[],5)
-        } else {
-          await apiService.methods.fetchGraphData([],[id],5)
+        if (!store.existingGraphAnchors.includes(id)) {
+          store.existingGraphAnchors.push(id)
         }
 
-        await apiService.methods.fetchDetails(fullId)
+        await apiService.methods.fetchGraphData(
+          store.existingGraphAnchors, 5
+        )
 
-        store.currentDetailId = fullId
+        // already fetching details in the api,
+        // maybe package that up into a big
+        // credit_list object, so I don't have to
+        // do it twice?
+        await apiService.methods.fetchDetails(id)
 
-        this.chart(store.graphData.data)
+        store.currentDetailId = id
+
+        // this.chart(
+        //   store.graphData.data 
+        // )
         
         store.currentFocus = 'details'
       }

@@ -24,17 +24,14 @@ export default {
       // store.currentResultTab = store.searchResults[0].id.split("-")[0]
     },
 
-    async fetchDetails(fullId) {
-      const entity = fullId.split("-")[0]
-      const id = fullId.split("-")[1]
-
+    async fetchDetails(id) {
       const API_URL =`http://localhost:3000/graphql`
 
       const api_response = await (
         fetch(API_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ query: this.queryDetails(entity, id) })
+          body: JSON.stringify({ query: this.queryDetails(id) })
         }).then((response) => {
           return response.json()
         })
@@ -43,45 +40,28 @@ export default {
       store.detailsData = api_response.data.details
     },
 
-    async fetchGraphData(pids, mids, count) {
+    async fetchGraphData(ids, count) {
       const API_URL = `http://localhost:3000/graphql`
-
-      pids.forEach(elem => {
-        if (!store.existingGraphAnchors.person.includes(elem)) {
-          store.existingGraphAnchors.person.push(elem)
-        }
-      });
-
-      mids.forEach(elem => {
-        if (!store.existingGraphAnchors.movies.includes(elem)) {
-          store.existingGraphAnchors.movies.push(elem)
-        }
-      })
 
       store.graphData = await (
         fetch(API_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(
-            { query: this.queryAll(
-              store.existingGraphAnchors.person, 
-              store.existingGraphAnchors.movies, 
-              count)
-          })
+          body: JSON.stringify({ query: this.queryAll(ids, count) })
         }).then((response) => {
           return response.json()
         })
       )
     },
 
-    queryAll(pids, mids, count) {
+    queryAll(ids, count) {
       return `query {
-        nodes(personIds: ${JSON.stringify(pids)}, movieIds: ${JSON.stringify(mids)}, count: ${count}) {
+        nodes(ids: ["${ids}"], count: ${count}) {
           id
           name
           poster
         }
-        links(personIds: ${JSON.stringify(pids)}, movieIds: ${JSON.stringify(mids)}, count: ${count}) {
+        links(ids: ["${ids}"], count: ${count}) {
           source
           target
           roles
@@ -99,10 +79,9 @@ export default {
       }`
     },
 
-    queryDetails(entity, id) {
-      // add conditions for entity
+    queryDetails(id) {
       return `query {
-        details(id: ${id}, entity: "${entity}") {
+        details(id: "${id}") {
           id
           summary
           year

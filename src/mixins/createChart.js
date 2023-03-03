@@ -7,7 +7,7 @@ let alreadyClicked = false
 
 export default {
   methods: {
-    chart (responseData, settings={charge: -1000}) {
+    chart (responseData) {
       const links = responseData.links
       const nodes = responseData.nodes
       var simulation = d3.forceSimulation(nodes, links)
@@ -15,12 +15,15 @@ export default {
       const width = 800
       const height = 800
   
-      const charge = settings.charge
+      const charge = store.graphSettings.charge
   
       simulation
         .force("link", d3.forceLink(links).id(d => d.id).distance(200))
         .force("charge", d3.forceManyBody().strength(charge))
-        .force('collide', d3.forceCollide(d => 30))
+        .force('collide', d3.forceCollide((d) => {
+          d.r = 30
+          return d.r
+        }))
         .force("center", d3.forceCenter(0, 0))
         // .force("x", d3.forceX(100))
         // .force("y", d3.forceY())
@@ -58,7 +61,9 @@ export default {
       node.append("circle")
           .attr("stroke", "white")
           .attr("stroke-width", 1.5)
-          .attr("r", 25)
+          .attr("r", (d) => {
+            return d.r
+          })
           .attr('fill', d => '#6baed6');
   
       node.append("svg:image")
@@ -103,27 +108,27 @@ export default {
     },
 
     async callForNewNodes(d) {
-      await apiService.methods.fetchDetails(d.id)
+      // await apiService.methods.fetchDetails(d.id)
         
-      const entity = d.id.split("-")[0]
-      const id = d.id.split("-")[1]
+      // const entity = d.id.split("-")[0]
+      // const id = d.id.split("-")[1]
 
-      if (entity === 'person') {
-        if (!store.existingGraphAnchors.person.includes(id)) {
-          store.existingGraphAnchors.person.push(id)
-        }
-      } else {
-        if (!store.existingGraphAnchors.movies.includes(id)) {
-          store.existingGraphAnchors.movies.push(id)
-        }
-      }
+      // if (entity === 'person') {
+      //   if (!store.existingGraphAnchors.person.includes(id)) {
+      //     store.existingGraphAnchors.person.push(id)
+      //   }
+      // } else {
+      //   if (!store.existingGraphAnchors.movies.includes(id)) {
+      //     store.existingGraphAnchors.movies.push(id)
+      //   }
+      // }
       
-      const pids = store.existingGraphAnchors.person
-      const mids = store.existingGraphAnchors.movies
+      // const pids = store.existingGraphAnchors.person
+      // const mids = store.existingGraphAnchors.movies
 
-      await apiService.methods.fetchGraphData(pids, mids, 5)
+      // await apiService.methods.fetchGraphData(pids, mids, 5)
 
-      this.restart()
+      // this.restart()
     }
   }
 }

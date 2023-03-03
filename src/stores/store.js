@@ -7,11 +7,10 @@ export const store = reactive({
   ///
   searchResults: [],
   currentDetailId: false,
-  existingGraphAnchors: {
-    person: [],
-    movies: [],
-    tv: []
-  },
+  existingGraphAnchors: [],
   graphData: [],
-  detailsData: {}
+  detailsData: {},
+  graphSettings: {
+    charge: -2000
+  }
 })
