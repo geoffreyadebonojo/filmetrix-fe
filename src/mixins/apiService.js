@@ -42,7 +42,7 @@ export default {
 
     async fetchGraphData(ids, count) {
       const API_URL = `http://localhost:3000/graphql`
-
+      
       store.graphData = await (
         fetch(API_URL, {
           method: 'POST',

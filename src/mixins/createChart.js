@@ -18,10 +18,12 @@ export default {
       const charge = store.graphSettings.charge
   
       simulation
-        .force("link", d3.forceLink(links).id(d => d.id).distance(200))
+        .force("link", d3.forceLink(links).id(d => d.id).distance((d) => {
+          return 100
+        }))
         .force("charge", d3.forceManyBody().strength(charge))
         .force('collide', d3.forceCollide((d) => {
-          d.r = 30
+          d.r = 50
           return d.r
         }))
         .force("center", d3.forceCenter(0, 0))
@@ -29,8 +31,8 @@ export default {
         // .force("y", d3.forceY())
         .force('x', d3.forceX().x(width * 0.3))
         .force('y', d3.forceY().y(height * 0.5))
-        // .alpha(1)
-        // .alphaMin(0.82)
+        .alpha(1)
+        .alphaMin(0.82)
         // .alphaTarget(0.81)
   
       d3.select("svg").html("")
@@ -57,37 +59,55 @@ export default {
           .data(nodes)
           .join("g")
           .attr("id", d => d.id)
+
+      ///////////////////////////////////////
   
       node.append("circle")
           .attr("stroke", "white")
           .attr("stroke-width", 1.5)
           .attr("r", (d) => {
-            return d.r
+            return d.r * 0.75
           })
           .attr('fill', d => '#6baed6');
   
       node.append("svg:image")
-          .attr('x', -20)
-          .attr('y', -22)
-          .attr('width', 40)
-          .attr('height', 44)
+          .attr('x', (d) => {
+            return - d.r * 0.75
+          })
+          .attr('y', (d) => {
+            return - d.r * 0.75
+          })
+          .attr('width', (d) => {
+            return d.r * 1.5
+          })
+          .attr('height', (d) => {
+            return d.r * 1.5
+          })
           .attr("xlink:href", d => d.poster)
-          .attr("clip-path", "inset(5% round 20px)")
+          .attr("clip-path", (d) => {
+            return `inset(3% round ${d.r * 0.75}px)`
+          })
   
       node.on('click', async (e, d) => {
         const doubleClickDelay = 300
         if (alreadyClicked) { 
 
-          await this.callForNodes(d)
+          if (store.existingGraphAnchors.includes(d.id)){
+            await this.callForNodesFromGraph(d)
 
+          } else {
+            await this.callForNodesFromGraph(d)
+          }
+          
           alreadyClicked = false;
           clearTimeout(timer);
         } else {
-          timer = setTimeout(function () {
+          timer = setTimeout(async function () {
             alreadyClicked = false;
-            
-            apiService.methods.fetchDetails(d.id)
-          
+            if (store.currentDetailId !== d.id) {
+              await apiService.methods.fetchDetails(d.id)
+              store.currentDetailId = d.id
+            }
           }, doubleClickDelay);
           alreadyClicked = true;
         }
@@ -95,9 +115,16 @@ export default {
 
       const linkArc = d =>`M${d.source.x},${d.source.y}A0,0 0 0,1 ${d.target.x},${d.target.y}`
   
-      simulation.on("tick", () => {
-          link.attr("d", linkArc);
-          node.attr("transform", d => `translate(${d.x},${d.y})`);
+      simulation
+      .on("tick", () => {
+        link.attr("d", linkArc);
+        node.attr("transform", d => `translate(${d.x},${d.y})scale(0.01)`);
+      })
+      .on("end", () => {
+
+        node.transition().duration(500).delay(100).ease(d3.easeBounceOut).attr("transform", (d) => {
+          return `translate(${d.x},${d.y})scale(0.8)`
+        })
       });
   
       return svg.node();
@@ -107,30 +134,45 @@ export default {
       this.chart(store.graphData.data)
     },
 
-    async callForNodes(d) {
+    async callForNodesFromGraph(d) {
       await apiService.methods.fetchDetails(d.id)
 
-      const id = d
 
-      if (!store.existingGraphAnchors.includes(id)) {
-        store.existingGraphAnchors.push(id)
+      if (!store.existingGraphAnchors.includes(d.id)) {
+        store.existingGraphAnchors.push(d.id)
       }
 
+      
+
+      // maybe package up as array? 
+      // pass as:
+      // arr = [
+      //   {
+      //     id: 'person-500',
+      //     count: store.graphData.data.links.filter(n => n.source.id === 'person-500').length
+      //   },
+      //   {
+      //     id: 'movie-74',
+      //     count: store.graphData.data.links.filter(n => n.source.id === 'movie-74').length
+      //   }
+      // ]
+      //
+      // await apiService.methods.fetchGraphData( arr )
+      
+
       await apiService.methods.fetchGraphData(
-        store.existingGraphAnchors, 5
+        store.existingGraphAnchors, 7
       )
       // already fetching details in the api,
       // maybe package that up into a big
       // credit_list object, so I don't have to
       // do it twice?
-      await apiService.methods.fetchDetails(id)
-
-      store.currentDetailId = id
+      
+      store.currentDetailId = d.id
 
       this.chart(
         store.graphData.data 
       )
-      
       store.currentFocus = 'details'
     }
   }

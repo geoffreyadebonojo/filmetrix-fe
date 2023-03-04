@@ -40,7 +40,6 @@
     gap: 50px 20px;
     justify-content: flex-start;
     padding: 20px;
-    overflow-y: auto
   }
 
 </style>
@@ -79,8 +78,9 @@
           store.existingGraphAnchors.push(id)
         }
 
+        debugger
         await apiService.methods.fetchGraphData(
-          store.existingGraphAnchors, 5
+          store.existingGraphAnchors, 7
         )
         // already fetching details in the api,
         // maybe package that up into a big
