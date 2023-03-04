@@ -42,6 +42,7 @@
     right: 0px;
   }
 
+
   #navbar {
     grid-area: navbar;
     background: #333333;

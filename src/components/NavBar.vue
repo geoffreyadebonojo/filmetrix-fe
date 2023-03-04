@@ -181,6 +181,9 @@
         await apiService.methods.fetchSearchData(val)
         
         const tab = store.searchResults[0].id.split("-")[0]
+
+        //handle for no id
+
         this.setCurrentFocus(tab)
 
         document.querySelector("#search-text").value = ''

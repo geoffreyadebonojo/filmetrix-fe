@@ -342,7 +342,6 @@ function addNewLeftChild(d, i, nodes) {
   console.log(newNode);
   console.log(d)
 
-  // debugger
   // if (d.data.children.length == 0) {
   //   console.log("i have no children")
   //   d.children = []
