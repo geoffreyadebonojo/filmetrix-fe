@@ -31,8 +31,8 @@ export default {
         // .force("y", d3.forceY())
         .force('x', d3.forceX().x(width * 0.3))
         .force('y', d3.forceY().y(height * 0.5))
-        .alpha(1)
-        .alphaMin(0.82)
+        .alpha(1.3)
+        .alphaMin(0.8)
         // .alphaTarget(0.81)
   
       d3.select("svg").html("")
@@ -48,6 +48,12 @@ export default {
           .selectAll("path")
           .data(links)
           .join("path")
+          .attr("source", (d) => {
+            return d.source.id
+          })
+          .attr("target", (d) => {
+            return d.target.id
+          })
           .attr("stroke", color)
   
       const node = svg.append("g")
@@ -93,10 +99,19 @@ export default {
         if (alreadyClicked) { 
 
           if (store.existingGraphAnchors.includes(d.id)){
-            await this.callForNodesFromGraph(d)
+            // await this.callForNodes(d.id)
+
+            const data = store.graphData.data
+            const existingLinkCount = d3.selectAll(`[source='${d.id}']`).nodes().length
+            const n = existingLinkCount + 3
+            const args = 
+            this.chart({ 
+              nodes: data.nodes.slice(0, n+1), 
+              links: data.links.slice(0, n) 
+            } )
 
           } else {
-            await this.callForNodesFromGraph(d)
+            await this.callForNodes(d.id)
           }
           
           alreadyClicked = false;
@@ -115,17 +130,21 @@ export default {
 
       const linkArc = d =>`M${d.source.x},${d.source.y}A0,0 0 0,1 ${d.target.x},${d.target.y}`
   
+      let i = 0
+
       simulation
       .on("tick", () => {
+        i += 1
+        console.log(i);
         link.attr("d", linkArc);
-        node.attr("transform", d => `translate(${d.x},${d.y})scale(0.01)`);
+        node.attr("transform", d => `translate(${d.x},${d.y})scale(${(i/20)})`);
+        // node.attr("transform", d => `translate(${d.x},${d.y})scale(0.01)`);
       })
       .on("end", () => {
-
         node.transition().duration(500).delay(100).ease(d3.easeBounceOut).attr("transform", (d) => {
-          return `translate(${d.x},${d.y})scale(0.8)`
+          return `translate(${d.x},${d.y})scale(0.9)`
         })
-      });
+      })
   
       return svg.node();
     },
@@ -134,12 +153,12 @@ export default {
       this.chart(store.graphData.data)
     },
 
-    async callForNodesFromGraph(d) {
-      await apiService.methods.fetchDetails(d.id)
+    async callForNodes(id) {
+      await apiService.methods.fetchDetails(id)
 
 
-      if (!store.existingGraphAnchors.includes(d.id)) {
-        store.existingGraphAnchors.push(d.id)
+      if (!store.existingGraphAnchors.includes(id)) {
+        store.existingGraphAnchors.push(id)
       }
 
       
@@ -161,17 +180,32 @@ export default {
       
 
       await apiService.methods.fetchGraphData(
-        store.existingGraphAnchors, 7
+        store.existingGraphAnchors, "no-var"
       )
       // already fetching details in the api,
       // maybe package that up into a big
       // credit_list object, so I don't have to
       // do it twice?
       
-      store.currentDetailId = d.id
+      store.currentDetailId = id
+
+      const data = store.graphData.data
+
+      let t
+      if (store.existingGraphAnchors != []) {
+        t = store.existingGraphAnchors.map((d) => {
+          const y = d3.selectAll(`[source='${d}']`).nodes().length
+          return y
+        })
+      }
+      
+      let x = data.links.filter(d => d.source == id)
+      
+      debugger
+      const args = { nodes: data.nodes.slice(0, 5), links: data.links.slice(0, 4) }
 
       this.chart(
-        store.graphData.data 
+        args 
       )
       store.currentFocus = 'details'
     }

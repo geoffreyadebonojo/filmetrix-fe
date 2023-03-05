@@ -47,7 +47,7 @@ export default {
         fetch(API_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ query: this.queryAll(ids, count) })
+          body: JSON.stringify({ query: this.queryAll(ids, 20) })
         }).then((response) => {
           return response.json()
         })

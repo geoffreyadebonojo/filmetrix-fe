@@ -50,7 +50,7 @@
         v-bind:id="result.id"
         v-if="store.currentFocus !== 'noResult'"
         v-for="result in store.searchResults.filter(r => r['id'].includes(store.currentFocus))" 
-        @click="$event => callForNodes()"
+        @click="$event => callForNodes(result.id)"
       >
 
         <img v-bind:src="result.poster"/>
@@ -69,33 +69,6 @@
     mixins: [createChart],
     data () {
       return {}
-    },
-    methods: {
-      async callForNodes() {
-        const id = event.currentTarget.id
-
-        if (!store.existingGraphAnchors.includes(id)) {
-          store.existingGraphAnchors.push(id)
-        }
-
-        debugger
-        await apiService.methods.fetchGraphData(
-          store.existingGraphAnchors, 7
-        )
-        // already fetching details in the api,
-        // maybe package that up into a big
-        // credit_list object, so I don't have to
-        // do it twice?
-        await apiService.methods.fetchDetails(id)
-
-        store.currentDetailId = id
-
-        this.chart(
-          store.graphData.data 
-        )
-        
-        store.currentFocus = 'details'
-      }
     }
   }
 </script>
