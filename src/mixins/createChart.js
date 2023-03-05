@@ -10,6 +10,7 @@ export default {
     chart (responseData) {
       const links = responseData.links
       const nodes = responseData.nodes
+
       var simulation = d3.forceSimulation(nodes, links)
   
       const width = 800
@@ -98,21 +99,26 @@ export default {
         const doubleClickDelay = 300
         if (alreadyClicked) { 
 
-          debugger
-          if (store.existingGraphAnchors.includes(d.id)){
-            // await this.callForNodes(d.id)
-
-            const data = store.graphData
-
-            const existingLinkCount = d3.selectAll(`[source='${d.id}']`).nodes().length
-            const n = existingLinkCount + 3
-            const args = 
-            this.chart({ 
-              nodes: data.nodes.slice(0, n+1), 
-              links: data.links.slice(0, n) 
+          if (store.existing.map(x => x[0]).includes(d.id)){
+            const c = store.existing.filter((y) => {
+              return y[0] === d.id
             })
 
+            const t = c[0][1]
+            const data = store.graphData
+            const n = t + 3
+            c[0][1] = n
+
+            debugger
+
+            const args = 
+            this.chart({ 
+              nodes: data.nodes, 
+              links: data.links
+            }, n)
+
           } else {
+
             await this.callForNodes(d.id)
           }
           
@@ -137,7 +143,9 @@ export default {
       simulation
       .on("tick", () => {
         i += 1
-        console.log(i);
+        // console.log(i);
+
+
         link.attr("d", linkArc);
         node.attr("transform", d => `translate(${d.x},${d.y})scale(${(i/20)})`);
         // node.attr("transform", d => `translate(${d.x},${d.y})scale(0.01)`);
@@ -155,35 +163,43 @@ export default {
       this.chart(store.graphData)
     },
 
-    async callForNodes(id) {
+    async callForNodes(id, i=5) {
       await apiService.methods.fetchDetails(id)
 
-
-      if (!store.existingGraphAnchors.includes(id)) {
-        store.existingGraphAnchors.push(id)
+      if ( !store.existing.map((d) => {d[0]} ).includes(id) ) {
+        store.existing.push([id, i])
+        await apiService.methods.fetchSingle(id)
       }
 
-      
-      await apiService.methods.fetchGraphData(
-        store.existingGraphAnchors, "no-var"
-      )
+      // await apiService.methods.fetchGraphData(
+      //   store.existing.map(d => d[0]), "no-var"
+      // )
 
       store.currentDetailId = id
 
-      const data = store.graphData
+      let li = []
+      let no = []
 
-      // let t
-      // if (store.existingGraphAnchors != []) {
-      //   t = store.existingGraphAnchors.map((d) => {
-      //     const y = d3.selectAll(`[source='${d}']`).nodes().length
-      //     return y
-      //   })
-      // }
+      const currentGraph = store.existing.map((d) => {
+        let data = store.graphData[d[0]]
+        let count = d[1]
+        li = li.concat(data.links.slice(0, count))
+        no = no.concat(data.nodes.slice(0, count+1))
+      })
 
-      debugger
-      
+      var links = li.filter((v,i,a) => {
+        return a.indexOf(v)==i
+      })
+
+      var nodes = no.filter((v,i,a)=> {
+        return a.map(d => d.id).indexOf(v.id)==i
+      })
+
       this.chart(
-        store.graphData 
+        {
+          nodes: nodes,
+          links: links
+        }
       )
       store.currentFocus = 'details'
     }

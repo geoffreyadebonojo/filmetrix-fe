@@ -7,8 +7,8 @@ export const store = reactive({
   ///
   searchResults: [],
   currentDetailId: false,
-  existingGraphAnchors: [],
-  graphData: [],
+  existing: [],
+  graphData: {},
   detailsData: {},
   graphSettings: {
     charge: -2000

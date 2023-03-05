@@ -1,4 +1,5 @@
 import { store } from '@/stores/store.js'
+import { proxyRefs } from 'vue'
 
 export default {
   data() {
@@ -40,10 +41,10 @@ export default {
       store.detailsData = api_response.data.details
     },
 
-    async fetchGraphData(ids, count) {
+    async xxfetchGraphData(ids, count) {
       const API_URL = `http://localhost:3000/graphql`
 
-      const x = await (
+      const resp = await (
         fetch(API_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -53,35 +54,46 @@ export default {
         })
       )
 
-      store.graphData = x.data.graphData
+      store.graphData.links.push(resp.data.graphData.links)
+      store.graphData.nodes.push(resp.data.graphData.nodes)
     },
 
     async fetchSingle(id){
       const API_URL = `http://localhost:3000/graphql`
       
-      store.graphData = await (
+      const resp = await (
         fetch(API_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ query: this.querySinglel(id) })
+          body: JSON.stringify({ query: this.querySingle(id) })
         }).then((response) => {
           return response.json()
         })
       )
+
+      store.graphData[id] = {
+        links: resp.data.querySingle.links,
+        nodes: resp.data.querySingle.nodes
+      }
+
+      // store.graphData.links = store.graphData.links.concat(resp.data.querySingle.links)
+      // store.graphData.nodes = store.graphData.nodes.concat(resp.data.querySingle.nodes)
     },
 
     querySingle(id) {
       return `query {
-        nodes(ids: ["${ids}"], count: ${count}) {
-          id
-          name
-          poster
-        }
-        links(ids: ["${ids}"], count: ${count}) {
-          source
-          target
-          roles
-        }
+        querySingle(ids:["${id}"]) {
+          nodes {
+            id
+            name
+            poster
+          }
+          links { 
+            source
+            target
+            roles
+          }
+        }    
       }`
     },
 
