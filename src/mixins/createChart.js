@@ -98,17 +98,19 @@ export default {
         const doubleClickDelay = 300
         if (alreadyClicked) { 
 
+          debugger
           if (store.existingGraphAnchors.includes(d.id)){
             // await this.callForNodes(d.id)
 
-            const data = store.graphData.data
+            const data = store.graphData
+
             const existingLinkCount = d3.selectAll(`[source='${d.id}']`).nodes().length
             const n = existingLinkCount + 3
             const args = 
             this.chart({ 
               nodes: data.nodes.slice(0, n+1), 
               links: data.links.slice(0, n) 
-            } )
+            })
 
           } else {
             await this.callForNodes(d.id)
@@ -150,7 +152,7 @@ export default {
     },
 
     restart() {
-      this.chart(store.graphData.data)
+      this.chart(store.graphData)
     },
 
     async callForNodes(id) {
@@ -162,50 +164,26 @@ export default {
       }
 
       
-
-      // maybe package up as array? 
-      // pass as:
-      // arr = [
-      //   {
-      //     id: 'person-500',
-      //     count: store.graphData.data.links.filter(n => n.source.id === 'person-500').length
-      //   },
-      //   {
-      //     id: 'movie-74',
-      //     count: store.graphData.data.links.filter(n => n.source.id === 'movie-74').length
-      //   }
-      // ]
-      //
-      // await apiService.methods.fetchGraphData( arr )
-      
-
       await apiService.methods.fetchGraphData(
         store.existingGraphAnchors, "no-var"
       )
-      // already fetching details in the api,
-      // maybe package that up into a big
-      // credit_list object, so I don't have to
-      // do it twice?
-      
+
       store.currentDetailId = id
 
-      const data = store.graphData.data
+      const data = store.graphData
 
-      let t
-      if (store.existingGraphAnchors != []) {
-        t = store.existingGraphAnchors.map((d) => {
-          const y = d3.selectAll(`[source='${d}']`).nodes().length
-          return y
-        })
-      }
-      
-      let x = data.links.filter(d => d.source == id)
-      
+      // let t
+      // if (store.existingGraphAnchors != []) {
+      //   t = store.existingGraphAnchors.map((d) => {
+      //     const y = d3.selectAll(`[source='${d}']`).nodes().length
+      //     return y
+      //   })
+      // }
+
       debugger
-      const args = { nodes: data.nodes.slice(0, 5), links: data.links.slice(0, 4) }
-
+      
       this.chart(
-        args 
+        store.graphData 
       )
       store.currentFocus = 'details'
     }

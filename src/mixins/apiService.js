@@ -42,8 +42,8 @@ export default {
 
     async fetchGraphData(ids, count) {
       const API_URL = `http://localhost:3000/graphql`
-      
-      store.graphData = await (
+
+      const x = await (
         fetch(API_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -52,6 +52,8 @@ export default {
           return response.json()
         })
       )
+
+      store.graphData = x.data.graphData
     },
 
     async fetchSingle(id){
@@ -85,7 +87,7 @@ export default {
 
     graphDataQuery(ids, count) {
       return `query {
-        graphData(ids: ${ids}, count: ${count}){
+        graphData(ids: "${ids}", count: ${count}){
           nodes {
             id
             name
