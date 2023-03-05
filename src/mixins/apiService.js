@@ -47,14 +47,28 @@ export default {
         fetch(API_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ query: this.queryAll(ids, 20) })
+          body: JSON.stringify({ query: this.graphDataQuery(ids, 20) })
         }).then((response) => {
           return response.json()
         })
       )
     },
 
-    queryAll(ids, count) {
+    async fetchSingle(id){
+      const API_URL = `http://localhost:3000/graphql`
+      
+      store.graphData = await (
+        fetch(API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ query: this.querySinglel(id) })
+        }).then((response) => {
+          return response.json()
+        })
+      )
+    },
+
+    querySingle(id) {
       return `query {
         nodes(ids: ["${ids}"], count: ${count}) {
           id
@@ -65,6 +79,23 @@ export default {
           source
           target
           roles
+        }
+      }`
+    },
+
+    graphDataQuery(ids, count) {
+      return `query {
+        graphData(ids: ${ids}, count: ${count}){
+          nodes {
+            id
+            name
+            poster
+          }
+          links {
+            source
+            target
+            roles
+          }
         }
       }`
     },
