@@ -50,7 +50,7 @@
         v-bind:id="result.id"
         v-if="store.currentFocus !== 'noResult'"
         v-for="result in store.searchResults.filter(r => r['id'].includes(store.currentFocus))" 
-        @click="$event => callForNodes(result.id)"
+        @click="$event => callForNodes(result.id, 7)"
       >
 
         <img v-bind:src="result.poster"/>

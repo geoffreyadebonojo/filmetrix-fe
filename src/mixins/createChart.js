@@ -13,7 +13,6 @@ export default {
   },
   methods: {
     chart (responseData) {
-
       d3.select("#inner-wrapper").remove()
 
       const links = responseData.links
@@ -44,7 +43,6 @@ export default {
         .alphaMin(0.8)
         // .alphaTarget(0.81)
 
-        
       const outerWrapper = d3.select("#outer-wrapper")
       const viewerBody = d3.select("#graph-container")
      
@@ -52,14 +50,26 @@ export default {
         outerWrapper.attr("transform", e.transform)
       })
 
-      
       d3.select("#centering-button").style("z-index", "1").transition().duration(30).style("left", "-30px")
       d3.select("#centering-button").on("click", (e) => {
         var transform = d3.zoomIdentity
         .translate(0,0)
         .scale(1)
-        .translate(0,0);
-        viewerBody.call(zoom.transform, transform);
+        viewerBody.transition().duration(1000).call(zoom.transform, transform);
+
+        // simulation
+        // .alpha(1)
+        // .alphaMin(0.3)
+        // .restart()
+        // .on("tick", () => {
+        //   link.attr("d", linkArc);
+        //   node.attr("transform", d => `translate(${d.x},${d.y})`);
+        // })
+        // .on("end", () => {
+        //   node.transition().duration(500).delay(100).ease(d3.easeBounceOut).attr("transform", (d) => {
+        //     return `translate(${d.x},${d.y})scale(0.9)`
+        //   })
+        // })
       })
       
       viewerBody
@@ -133,16 +143,31 @@ export default {
             })
 
             const t = c[0][1]
-            const data = store.graphData
+
             const n = t + 3
             c[0][1] = n
 
+            //call for method
+            let vals
+            let nodes = []
+            let links = []
+      
+            store.existing.forEach(function(key) {
+              vals = store.graphData[key[0]]
+              
+              vals.nodes.slice(0,key[1]+1).forEach((node) => {
+                if (!nodes.map(d => d.id).includes(node.id)){
+                  nodes.push(node)
+                }
+              })
 
-            const args = 
-            this.chart({ 
-              nodes: data.nodes, 
-              links: data.links
-            }, n)
+              links = links.concat( vals.links.slice(0,key[1]) )
+            })
+
+            this.chart({
+              nodes: nodes,
+              links: links
+            })
 
           } else {
 
@@ -170,12 +195,8 @@ export default {
       simulation
       .on("tick", () => {
         i += 1
-        // console.log(i);
-
-
         link.attr("d", linkArc);
         node.attr("transform", d => `translate(${d.x},${d.y})scale(${(i/20)})`);
-        // node.attr("transform", d => `translate(${d.x},${d.y})scale(0.01)`);
       })
       .on("end", () => {
         node.transition().duration(500).delay(100).ease(d3.easeBounceOut).attr("transform", (d) => {
@@ -204,30 +225,45 @@ export default {
 
       store.currentDetailId = id
 
-      let li = []
-      let no = []
+      // let li = []
+      // let no = []
 
-      const currentGraph = store.existing.map((d) => {
-        let data = store.graphData[d[0]]
-        let count = d[1]
-        li = li.concat(data.links.slice(0, count))
-        no = no.concat(data.nodes.slice(0, count+1))
+      // const currentGraph = store.existing.map((d) => {
+      //   let data = store.graphData[d[0]]
+      //   let count = d[1]
+      //   li = li.concat(data.links.slice(0, count))
+      //   no = no.concat(data.nodes.slice(0, count+1))
+      // })
+
+      // var links = li.filter((v,i,a) => {
+      //   return a.indexOf(v)==i
+      // })
+
+      // var nodes = no.filter((v,i,a)=> {
+      //   return a.map(d => d.id).indexOf(v.id)==i
+      // })
+
+      let vals
+      let nodes = []
+      let links = []
+
+      store.existing.forEach(function(key) {
+        vals = store.graphData[key[0]]
+        
+        vals.nodes.slice(0,key[1]+1).forEach((node) => {
+          if (!nodes.map(d => d.id).includes(node.id)){
+            nodes.push(node)
+          }
+        })
+
+        links = links.concat( vals.links.slice(0,key[1]) )
       })
 
-      var links = li.filter((v,i,a) => {
-        return a.indexOf(v)==i
+      this.chart({
+        nodes: nodes,
+        links: links
       })
 
-      var nodes = no.filter((v,i,a)=> {
-        return a.map(d => d.id).indexOf(v.id)==i
-      })
-
-      this.chart(
-        {
-          nodes: nodes,
-          links: links
-        }
-      )
       store.currentFocus = 'details'
     }
   }
