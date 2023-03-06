@@ -45,22 +45,26 @@ export default {
         // .alphaTarget(0.81)
 
         
-        const outerWrapper = d3.select("#outer-wrapper")
-        
-        function handleZoom(e) { outerWrapper.attr("transform", e.transform) }
-        
-        let zoom = d3.zoom().on('zoom', handleZoom)
-        
-        const viewerBody = d3.select("#graph-container")
-        
-        const panelWidth = width - +d3.select("#panel-body").style("width").replace("px", "")
+      const outerWrapper = d3.select("#outer-wrapper")
+      const viewerBody = d3.select("#graph-container")
+     
+      let zoom = d3.zoom().on('zoom', (e) => {
+        outerWrapper.attr("transform", e.transform)
+      })
 
-
-        viewerBody
+      
+      d3.select("#centering-button").style("z-index", "1").transition().duration(30).style("left", "-30px")
+      d3.select("#centering-button").on("click", (e) => {
+        var transform = d3.zoomIdentity
+        .translate(0,0)
+        .scale(1)
+        .translate(0,0);
+        viewerBody.call(zoom.transform, transform);
+      })
+      
+      viewerBody
         .call(zoom)
         .call(zoom).on("dblclick.zoom", null)
-
-      // outerWrapper.transition().call(zoom.translateBy, 50, 0)
        
       const innerWrapper = d3.select("#outer-wrapper").append("g").attr("id", "inner-wrapper")
 
@@ -133,7 +137,6 @@ export default {
             const n = t + 3
             c[0][1] = n
 
-            debugger
 
             const args = 
             this.chart({ 

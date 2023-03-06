@@ -7,6 +7,7 @@
 
 <template>
   <div id="panel-body">
+    <img src="../assets/center-graph-icon.svg" id="centering-button" alt="centering button">
     <div id="resize-bar" class="main-panel-component">
       <div class="vll"></div>
       <div class="vlr"></div>
@@ -40,12 +41,22 @@
     top: 250px;
   }
 
+  #centering-button {
+    background: none;
+    color: white;
+    bottom: 10px;
+    width: 20px;
+    position: absolute;
+    z-index: -1;
+    cursor: pointer;
+  }
+
   #panel-body {
     height: 100vh;
     width: 0px;
     display: grid;
     grid-template-columns: 30px 1fr 30px;
-    grid-template-rows: 2vh 1.8em 4vh 60vh 4vh 9em 6vh;
+    grid-template-rows: 2vh 1.8em 4vh 66vh 4vh 9em 4vh;
     grid-template-areas:
       "resize-bar . ."
       "resize-bar navbar navbar"
@@ -71,7 +82,7 @@
 
   #resize-bar {
     grid-area: resize-bar;
-    background: #444;
+    /* background: #444; */
     width: 12px;
   }
 
