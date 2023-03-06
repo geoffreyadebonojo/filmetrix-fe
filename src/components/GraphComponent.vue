@@ -3,14 +3,16 @@
 </script>
 
 <template>
-  <svg id="graph-container" height="100%" width="100%">
+  <svg id="graph-container">
     <g id="outer-wrapper"></g>
   </svg>
 </template>
 
-<style scoped>
-  /* #graph-container {
-    height: 100%;
-    width: 100%;
-  } */
-</style>
+
+<script>
+  export default {
+    mounted () {
+      d3.select("#graph-container").attr("viewBox", `-${window.innerWidth*2/3} -${window.innerHeight} ${window.innerWidth*2} ${window.innerHeight*2}`)
+    }
+  }
+</script>

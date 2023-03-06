@@ -6,15 +6,23 @@ let timer;
 let alreadyClicked = false
 
 export default {
+  updated () {
+    // let panelWidth = +d3.select('#panel-body').style("width").replace("px", "")
+    // let graph = d3.select('#graph-container').node()
+    // graph.style.width = `${window.innerWidth - panelWidth}px`
+  },
   methods: {
     chart (responseData) {
+
+      d3.select("#inner-wrapper").remove()
+
       const links = responseData.links
       const nodes = responseData.nodes
 
       var simulation = d3.forceSimulation(nodes, links)
   
-      const width = 800
-      const height = 800
+      const width = window.innerWidth
+      const height = window.innerHeight
   
       const charge = store.graphSettings.charge
   
@@ -35,18 +43,22 @@ export default {
         .alpha(1.3)
         .alphaMin(0.8)
         // .alphaTarget(0.81)
-  
+
+        
+        const outerWrapper = d3.select("#outer-wrapper")
+        
+        function handleZoom(e) { outerWrapper.attr("transform", e.transform) }
+        
+        let zoom = d3.zoom().on('zoom', handleZoom)
+        
+        const viewerBody = d3.select("#graph-container")
+        
+        const panelWidth = width - +d3.select("#panel-body").style("width").replace("px", "")
 
 
-      const outerWrapper = d3.select("#outer-wrapper")
-
-      function handleZoom(e) { outerWrapper.attr("transform", e.transform) }
-
-      let zoom = d3.zoom().on('zoom', handleZoom)
-
-      const viewerBody = d3.select("#viewer-body")
-      viewerBody.call(zoom)
-      viewerBody.call(zoom).on("dblclick.zoom", null)
+        viewerBody
+        .call(zoom)
+        .call(zoom).on("dblclick.zoom", null)
 
       // outerWrapper.transition().call(zoom.translateBy, 50, 0)
        

@@ -126,7 +126,7 @@
         let panel = this.parentElement
         panel.style.width = `${window.innerWidth - event.x}px`
 
-        // let graph = d3.select('#graph-wrapper').node()
+        // let graph = d3.select('#graph-container').node()
         // graph.style.width = `${window.innerWidth - (window.innerWidth - event.x)}px`
       }
 

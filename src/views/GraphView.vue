@@ -17,7 +17,6 @@
 <style scoped>
   #viewer-body {
     height: 100vh;
-    display: flex;
   }
 </style>
 
@@ -27,7 +26,6 @@
       GraphComponent,
       PanelComponent
     },
-
     data () {
       return {
         charge: -1000,
