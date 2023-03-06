@@ -3,17 +3,14 @@
 </script>
 
 <template>
-  <div id="graph-wrapper">
-    <svg id="graph-container">
-    </svg>
-  </div>
+  <svg id="graph-container" height="100%" width="100%">
+    <g id="outer-wrapper"></g>
+  </svg>
 </template>
 
 <style scoped>
+  /* #graph-container {
+    height: 100%;
+    width: 100%;
+  } */
 </style>
-
-<script>
-
-
-
-</script>

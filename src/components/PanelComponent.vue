@@ -40,7 +40,6 @@
     top: 250px;
   }
 
-
   #panel-body {
     height: 100vh;
     width: 0px;
@@ -120,11 +119,15 @@
         // dragging = true
       }
       
+      
       function dragged() {
         d3.select(this).style("cursor", "col-resize")
-
+        
         let panel = this.parentElement
         panel.style.width = `${window.innerWidth - event.x}px`
+
+        // let graph = d3.select('#graph-wrapper').node()
+        // graph.style.width = `${window.innerWidth - (window.innerWidth - event.x)}px`
       }
 
       // function dragended() {

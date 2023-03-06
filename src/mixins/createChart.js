@@ -36,21 +36,25 @@ export default {
         .alphaMin(0.8)
         // .alphaTarget(0.81)
   
-      d3.select("svg").html("")
-      const svg = d3.select("svg")
-      .attr("viewBox", [-width / 2, -height / 2, width, height])
 
-      function handleZoom(e) {
-        svg.attr("transform", e.transform)
-      }
-      
+
+      const outerWrapper = d3.select("#outer-wrapper")
+
+      function handleZoom(e) { outerWrapper.attr("transform", e.transform) }
+
       let zoom = d3.zoom().on('zoom', handleZoom)
-      
-      svg.call(zoom)
+
+      const viewerBody = d3.select("#viewer-body")
+      viewerBody.call(zoom)
+      viewerBody.call(zoom).on("dblclick.zoom", null)
+
+      // outerWrapper.transition().call(zoom.translateBy, 50, 0)
+       
+      const innerWrapper = d3.select("#outer-wrapper").append("g").attr("id", "inner-wrapper")
 
       const color = "#FFF"
   
-      const link = svg.append("g")
+      const link = innerWrapper.append("g")
           .attr("class", "links")
           .attr("fill", "none")
           .attr("stroke-width", 1.5)
@@ -65,7 +69,7 @@ export default {
           })
           .attr("stroke", color)
   
-      const node = svg.append("g")
+      const node = innerWrapper.append("g")
           .attr("class", "nodes")
           .attr("fill", "currentColor")
           .attr("stroke-linecap", "round")
@@ -164,7 +168,7 @@ export default {
         })
       })
   
-      return svg.node();
+      return innerWrapper.node();
     },
 
     restart() {

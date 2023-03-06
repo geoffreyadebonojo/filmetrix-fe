@@ -8,9 +8,18 @@
 
 <template>
   <RouterView />
-  <GraphComponent />
-  <PanelComponent />
+  <div id="viewer-body">
+    <GraphComponent />
+    <PanelComponent />
+  </div>
 </template>
+
+<style scoped>
+  #viewer-body {
+    height: 100vh;
+    display: flex;
+  }
+</style>
 
 <script>
   export default {
