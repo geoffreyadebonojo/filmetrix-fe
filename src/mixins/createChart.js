@@ -40,6 +40,14 @@ export default {
       const svg = d3.select("svg")
       .attr("viewBox", [-width / 2, -height / 2, width, height])
 
+      function handleZoom(e) {
+        svg.attr("transform", e.transform)
+      }
+      
+      let zoom = d3.zoom().on('zoom', handleZoom)
+      
+      svg.call(zoom)
+
       const color = "#FFF"
   
       const link = svg.append("g")

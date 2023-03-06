@@ -5,3 +5,9 @@
 <template>
   <RouterView />
 </template>
+
+<style>
+  body {
+    background: #222222;
+  }
+</style>

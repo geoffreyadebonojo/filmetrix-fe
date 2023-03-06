@@ -38,7 +38,7 @@
     display: flex;
     flex-wrap: wrap;
     gap: 50px 20px;
-    justify-content: flex-start;
+    justify-content: center;
     padding: 20px;
   }
 

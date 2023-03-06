@@ -143,7 +143,7 @@
       <img src="../assets/command-icon.svg" class="icon" id="commands-icon">
     </div>
 
-    <div class="nav-button" id="about-button" @click="this.setCurrentFocus('about')">
+    <div class="nav-button" id="about-button" @click="this.transitionToAbout()">
       <img src="../assets/about-us-icon.svg" class="icon" id="about-us-icon">
     </div>
   </div>
@@ -159,6 +159,33 @@
       }
     },
     methods: {
+      transitionToAbout() {
+        this.setCurrentFocus('about')
+
+        const nav = d3.select("#navbar")
+
+        nav.transition()
+        .duration(100)
+        .style("bottom", "50px")
+
+        
+        
+        d3.selectAll('.main-panel-component')
+        .style("display", "none")
+        
+
+        d3.select('#panel-body')
+        .transition()
+        .duration(50).delay(200)
+        .ease(d3.easeBounceOut)
+        .style("left", "0px")
+        
+        d3.select("#graph-container")
+        .transition().duration(100).delay(80)
+        .style("right", "100%")
+
+      },
+
       displayResultIcon(resultType) {
         const list = store.searchResults.map(r => r['id'].split("-")[0])
         return list.includes(resultType)

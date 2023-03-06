@@ -7,6 +7,11 @@
 
 <template>
   <div id="panel-body">
+    <div id="resize-bar" class="main-panel-component">
+      <div class="vll"></div>
+      <div class="vlr"></div>
+    </div>
+
     <div id="navbar">
       <NavBar />
     </div>
@@ -15,33 +20,46 @@
       <PanelCenter />
     </div>
 
-    <div id="controls">
+    <div id="controls" class="main-panel-component">
       <!-- <Controls /> -->
     </div>
   </div>
 </template>
 
 <style scoped>
+  .vll, .vlr {
+    position: relative;
+    border-left: 2px solid black;
+    top: 300px;
+    left: 3px;
+    height: 50px;
+  }
+
+  .vlr {
+    left: 8px;
+    top: 250px;
+  }
+
+
   #panel-body {
     height: 100vh;
     width: 0px;
     display: grid;
     grid-template-columns: 30px 1fr 30px;
-    grid-template-rows: 2vh 1.8em 4vh 60vh 4vh 9em 4vh;
+    grid-template-rows: 2vh 1.8em 4vh 60vh 4vh 9em 6vh;
     grid-template-areas:
-      ". . ."
-      ". navbar navbar"
-      ". . ."
-      ". panel-center ."
-      ". . ."
-      ". controls ."
-      ". . .";
+      "resize-bar . ."
+      "resize-bar navbar navbar"
+      "resize-bar . ."
+      "resize-bar panel-center ."
+      "resize-bar . ."
+      "resize-bar controls ."
+      "resize-bar . .";
     background: #333333;
     position: absolute;
     top: 0px;
     right: 0px;
   }
-
 
   #navbar {
     grid-area: navbar;
@@ -50,6 +68,12 @@
     margin: auto 0 auto auto;
     height: 26px;
     width: 100%;  
+  }
+
+  #resize-bar {
+    grid-area: resize-bar;
+    background: #444;
+    width: 12px;
   }
 
   #panel-center {
@@ -74,10 +98,54 @@
       PanelCenter
     },
     mounted () {
-      d3.select("#panel-body")
-      .transition()
-      .duration(100)
-      .style("width", "35%")
+      const panel = d3.select("#panel-body")
+
+      panel.transition()
+      .duration(80)
+      .ease(d3.easeBounceOut)
+      .style("width", "350px")
+      .style("min-width", "250px")
+
+      const resizeBar = d3.select("#resize-bar")
+
+      resizeBar.call(
+        d3.drag()
+        .on("start", dragstarted)
+        .on("drag", dragged)
+        // .on("end", dragended)
+      )
+
+      function dragstarted() {
+        d3.select(this).style("cursor", "col-resize")
+        // dragging = true
+      }
+      
+      function dragged() {
+        d3.select(this).style("cursor", "col-resize")
+
+        let panel = this.parentElement
+        panel.style.width = `${window.innerWidth - event.x}px`
+      }
+
+      // function dragended() {
+      //   let current = +d3.select("#panel-body").attr("width").split("px")[0]
+
+      //   d3.select(this).styles({
+      //     cursor: "default"
+      //   })
+
+      //   if (current <= 300) {
+      //     closePanel()
+
+      //   } else {
+      //     setPanelParams(true, current)
+      //   }
+
+      //   d3.select("#resize-bar-draggable").attr("x", 0)
+
+      //   console.log('end');
+      //   dragging = false
+      // }
     }
   }
 </script>

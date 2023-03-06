@@ -1,21 +1,19 @@
 <script setup>
+  import * as d3 from 'd3'
 </script>
 
 <template>
-  <div class="graph-wrapper">
-    <svg></svg>
+  <div id="graph-wrapper">
+    <svg id="graph-container">
+    </svg>
   </div>
 </template>
 
 <style scoped>
-  .graph-wrapper {
-    color: #222222;
-    width: 65vw;
-    height: 100vh;
-  }
-  svg {
-    height: 100%;
-    width: 100%;
-    overflow: hidden;
-  }
 </style>
+
+<script>
+
+
+
+</script>

@@ -18,7 +18,6 @@
   </div>
   
   <div v-else-if="store.currentFocus === 'about'">
-    about
   </div>
 
   <div v-else="store.currentFocus === 'empty'">

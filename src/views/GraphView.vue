@@ -12,19 +12,6 @@
   <PanelComponent />
 </template>
 
-<style scoped>
-  .graph-wrapper {
-    color: #222222;
-    width: 65%;
-    height: 100vh;
-  }
-  svg {
-    /* height: 100%; */
-    /* width: 70%; */
-    overflow: hidden;
-  }
-</style>
-
 <script>
   export default {
     components: {
