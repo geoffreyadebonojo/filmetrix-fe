@@ -1,0 +1,8 @@
+    {
+      white: "#FFFFFF",
+      bodyGrey: "#222222",
+      lightGrey: "#ADADAD",
+      midGrey: "#6E6E6E",
+      panelGrey: "#333333",
+      smoothGrey: "#7A7978"
+    }

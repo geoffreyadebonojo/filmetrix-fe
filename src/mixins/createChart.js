@@ -77,23 +77,18 @@ export default {
         .call(zoom).on("dblclick.zoom", null)
        
       const innerWrapper = d3.select("#outer-wrapper").append("g").attr("id", "inner-wrapper")
-
-      const color = "#FFF"
   
       const link = innerWrapper.append("g")
           .attr("class", "links")
-          .attr("fill", "none")
-          .attr("stroke-width", 1.5)
           .selectAll("path")
           .data(links)
           .join("path")
-          .attr("source", (d) => {
-            return d.source.id
-          })
-          .attr("target", (d) => {
-            return d.target.id
-          })
-          .attr("stroke", color)
+          .attr("class", "link")
+          .attr("source", (d => d.source.id))
+          .attr("target", (d => d.target.id))
+          .attr("stroke", "#7A7978")
+          .attr("stroke-width", "1px")
+          .attr("vector-effect", "non-scaling-stroke")
   
       const node = innerWrapper.append("g")
           .attr("class", "nodes")
@@ -108,29 +103,20 @@ export default {
       ///////////////////////////////////////
   
       node.append("circle")
-          .attr("stroke", "white")
+          .attr("stroke", "#7A7978")
           .attr("stroke-width", 1.5)
-          .attr("r", (d) => {
-            return d.r * 0.75
-          })
-          .attr('fill', d => '#6baed6');
+          .attr("r", 50)
+          .attr('fill', '#222222')
+          .attr("vector-effect", "non-scaling-stroke")
   
       node.append("svg:image")
-          .attr('x', (d) => {
-            return - d.r * 0.75
-          })
-          .attr('y', (d) => {
-            return - d.r * 0.75
-          })
-          .attr('width', (d) => {
-            return d.r * 1.5
-          })
-          .attr('height', (d) => {
-            return d.r * 1.5
-          })
+          .attr('x', -35.5)
+          .attr('y', -35.5)
+          .attr('width', 70)
+          .attr('height', 70)
           .attr("xlink:href", d => d.poster)
           .attr("clip-path", (d) => {
-            return `inset(3% round ${d.r * 0.75}px)`
+            return `inset(0% 13px round 10px)`
           })
   
       node.on('click', async (e, d) => {
@@ -195,7 +181,7 @@ export default {
       simulation
       .on("tick", () => {
         i += 1
-        link.attr("d", linkArc);
+        link.attr("d", linkArc)
         node.attr("transform", d => `translate(${d.x},${d.y})scale(${(i/20)})`);
       })
       .on("end", () => {
