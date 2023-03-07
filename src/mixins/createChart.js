@@ -98,7 +98,10 @@ export default {
           .selectAll("g")
           .data(nodes)
           .join("g")
-          .attr("id", d => d.id)
+          .attr("id", d => {
+            // debugger
+            return d.id
+          })
 
       ///////////////////////////////////////
   
@@ -116,7 +119,7 @@ export default {
           .attr('height', 70)
           .attr("xlink:href", d => d.poster)
           .attr("clip-path", (d) => {
-            return `inset(0% 13px round 10px)`
+            return `inset(0% 12px round 8px)`
           })
   
       node.on('click', async (e, d) => {
@@ -173,7 +176,12 @@ export default {
           alreadyClicked = true;
         }
       })
+      .on("mousedown", () => {
+        j+=1
+        console.log(j);
+      })
 
+      let j = 0
       const linkArc = d =>`M${d.source.x},${d.source.y}A0,0 0 0,1 ${d.target.x},${d.target.y}`
   
       let i = 0
@@ -250,6 +258,7 @@ export default {
         links: links
       })
 
+      debugger
       store.currentFocus = 'details'
     }
   }

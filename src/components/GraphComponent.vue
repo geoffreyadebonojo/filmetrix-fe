@@ -9,7 +9,9 @@
 </template>
 
 <style>
-
+  #graph-container {
+    background: #222222;
+  }
 </style>
 
 <script>

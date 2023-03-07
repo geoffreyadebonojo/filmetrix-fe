@@ -65,36 +65,29 @@ export default {
         fetch(API_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ query: this.querySingle(id) })
+          body: JSON.stringify({ query: `
+            query {
+              querySingle(ids:["${id}"]) {
+                nodes {
+                  id
+                  name
+                  poster
+                  type
+                }
+                links { 
+                  source
+                  target
+                  roles
+                }
+              }    
+            }`
+          })
         }).then((response) => {
           return response.json()
         })
       )
 
-      store.graphData[id] = {
-        links: resp.data.querySingle.links,
-        nodes: resp.data.querySingle.nodes
-      }
-
-      // store.graphData.links = store.graphData.links.concat(resp.data.querySingle.links)
-      // store.graphData.nodes = store.graphData.nodes.concat(resp.data.querySingle.nodes)
-    },
-
-    querySingle(id) {
-      return `query {
-        querySingle(ids:["${id}"]) {
-          nodes {
-            id
-            name
-            poster
-          }
-          links { 
-            source
-            target
-            roles
-          }
-        }    
-      }`
+      store.graphData[id] = resp.data.querySingle
     },
 
     graphDataQuery(ids, count) {
