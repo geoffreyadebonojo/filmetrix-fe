@@ -24,7 +24,7 @@ export default {
       const height = window.innerHeight
   
       const charge = store.graphSettings.charge
-  
+
       simulation
         .force("link", d3.forceLink(links).id(d => d.id).distance((d) => {
           return 100
@@ -45,9 +45,18 @@ export default {
 
       const outerWrapper = d3.select("#outer-wrapper")
       const viewerBody = d3.select("#graph-container")
+      var int
      
       let zoom = d3.zoom().on('zoom', (e) => {
         outerWrapper.attr("transform", e.transform)
+      })
+      .on('end', () => {
+        clearInterval(int)
+
+        d3.select('#person-500 circle').transition().duration(500).attr("r", 50)
+        // method for mouseup here
+        // debugger
+
       })
 
       d3.select("#centering-button").style("z-index", "1").transition().duration(30).style("left", "-30px")
@@ -71,10 +80,13 @@ export default {
         //   })
         // })
       })
+
+
       
       viewerBody
         .call(zoom)
         .call(zoom).on("dblclick.zoom", null)
+
        
       const innerWrapper = d3.select("#outer-wrapper").append("g").attr("id", "inner-wrapper")
   
@@ -121,8 +133,9 @@ export default {
           .attr("clip-path", (d) => {
             return `inset(0% 12px round 8px)`
           })
-  
-      node.on('click', async (e, d) => {
+
+      node
+      .on('click', async (e, d) => {
         const doubleClickDelay = 300
         if (alreadyClicked) { 
 
@@ -176,9 +189,16 @@ export default {
           alreadyClicked = true;
         }
       })
-      .on("mousedown", () => {
-        j+=1
-        console.log(j);
+
+
+      node
+      .on("mousedown", (e, d) => {
+        let x = d3.select("#person-500 circle")
+        int = setInterval(() => {
+          j+=1
+          console.log(j)
+          x.attr("r", 50+j)
+        }, 100);
       })
 
       let j = 0
@@ -258,7 +278,6 @@ export default {
         links: links
       })
 
-      debugger
       store.currentFocus = 'details'
     }
   }
