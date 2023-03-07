@@ -1,6 +1,7 @@
 import apiService from './apiService.js'
 import { store } from '@/stores/store.js'
 import * as d3 from 'd3'
+import { proxyRefs } from 'vue';
 
 let timer;
 let alreadyClicked = false
@@ -10,10 +11,13 @@ export default {
     // let panelWidth = +d3.select('#panel-body').style("width").replace("px", "")
     // let graph = d3.select('#graph-container').node()
     // graph.style.width = `${window.innerWidth - panelWidth}px`
+// debugger
   },
   methods: {
     chart (responseData) {
       d3.select("#inner-wrapper").remove()
+
+      var slider = document.getElementById("myRange");
 
       const links = responseData.links
       const nodes = responseData.nodes
@@ -31,7 +35,6 @@ export default {
         }))
         .force("charge", d3.forceManyBody().strength(charge))
         .force('collide', d3.forceCollide((d) => {
-          d.r = 50
           return d.r
         }))
         .force("center", d3.forceCenter(0, 0))
@@ -50,14 +53,14 @@ export default {
       let zoom = d3.zoom().on('zoom', (e) => {
         outerWrapper.attr("transform", e.transform)
       })
-      .on('end', () => {
-        clearInterval(int)
+      // .on('end', () => {
+      //   clearInterval(int)
 
-        d3.select('#person-500 circle').transition().duration(500).attr("r", 50)
-        // method for mouseup here
-        // debugger
+      //   d3.select('#person-500 circle').transition().duration(500).attr("r", 50)
+      //   // method for mouseup here
+      //   // debugger
 
-      })
+      // })
 
       d3.select("#centering-button").style("z-index", "1").transition().duration(30).style("left", "-30px")
       d3.select("#centering-button").on("click", (e) => {
@@ -80,8 +83,6 @@ export default {
         //   })
         // })
       })
-
-
       
       viewerBody
         .call(zoom)
@@ -90,6 +91,7 @@ export default {
        
       const innerWrapper = d3.select("#outer-wrapper").append("g").attr("id", "inner-wrapper")
   
+
       const link = innerWrapper.append("g")
           .attr("class", "links")
           .selectAll("path")
@@ -110,9 +112,12 @@ export default {
           .selectAll("g")
           .data(nodes)
           .join("g")
+          .attr("class", "node")
           .attr("id", d => {
-            // debugger
             return d.id
+          })
+          .attr("type", (d) => {
+            return d.type
           })
 
       ///////////////////////////////////////
@@ -120,15 +125,31 @@ export default {
       node.append("circle")
           .attr("stroke", "#7A7978")
           .attr("stroke-width", 1.5)
-          .attr("r", 50)
+          // .attr("r", 50)
+          .attr("r", (d) => {
+            return d.r
+          })
           .attr('fill', '#222222')
           .attr("vector-effect", "non-scaling-stroke")
   
       node.append("svg:image")
-          .attr('x', -35.5)
-          .attr('y', -35.5)
-          .attr('width', 70)
-          .attr('height', 70)
+          // .attr('x', -35.5)
+          // .attr('y', -35.5)
+          // .attr('width', 70)
+          // .attr('height', 70)
+
+          .attr('x', (d) => {
+            return -(d.r*1.4)/2
+          })
+          .attr('y', (d) => {
+            return -(d.r*1.4)/2
+          })
+          .attr('width', (d) => {
+            return (d.r*1.4)
+          })
+          .attr('height', (d) => {
+            return (d.r*1.4)
+          })
           .attr("xlink:href", d => d.poster)
           .attr("clip-path", (d) => {
             return `inset(0% 12px round 8px)`
@@ -190,15 +211,16 @@ export default {
         }
       })
 
-
       node
       .on("mousedown", (e, d) => {
-        let x = d3.select("#person-500 circle")
-        int = setInterval(() => {
-          j+=1
-          console.log(j)
-          x.attr("r", 50+j)
-        }, 100);
+        // let x = d3.select(`#${d.id} circle`)
+
+        // int = setInterval(() => {
+          // j+=1
+          // console.log(j)
+          // x.attr("r", 50+j)
+        // }, 1000);
+
       })
 
       let j = 0
@@ -210,12 +232,79 @@ export default {
       .on("tick", () => {
         i += 1
         link.attr("d", linkArc)
-        node.attr("transform", d => `translate(${d.x},${d.y})scale(${(i/20)})`);
+        node.attr("transform", d => `translate(${d.x},${d.y})`); //scale(${(i/20)})`);
       })
       .on("end", () => {
         node.transition().duration(500).delay(100).ease(d3.easeBounceOut).attr("transform", (d) => {
-          return `translate(${d.x},${d.y})scale(0.9)`
+          return `translate(${d.x},${d.y})`//scale(0.9)`
         })
+
+        // let ac = []
+        // let dr = []
+
+        const actors = d3.selectAll(".node[type='acting']")
+        const dramas = d3.selectAll(".node[type='drama']")
+        // .nodes().forEach((d) => {
+        //   type = d.__data__.type[0]
+        //   if (type.includes('acting')) {
+        //     ac.push(d)
+        //   } else if (type.includes('drama')) {
+        //     dr.push(d)
+        //   }
+        // })
+
+
+        slider.oninput = function() {
+          store.graphSettings.a = 100 - +this.value
+          store.graphSettings.b = +this.value
+          console.log(store.graphSettings.a)
+          
+          // c = a*1.4
+          // d = b*1.4
+
+          // actors.select("circle").attr("r", a)
+          // actors.select("image").attr("x", -c/2)
+          // actors.select("image").attr("y", -c/2)
+          // actors.select("image").attr("width", c)
+          // actors.select("image").attr("height", c)
+
+          // dramas.select("circle").attr("r", b)
+          // dramas.select("image").attr("x", -d/2)
+          // dramas.select("image").attr("y", -d/2)
+          // dramas.select("image").attr("width", d)
+          // dramas.select("image").attr("height", d)        
+
+          // actors.each((d) => {
+          //   d.r = a
+          // })
+          // dramas.each((d) => {
+          //   d.r = b
+          // })
+
+
+          // var new_nodes = [
+          //   {"cluster": 0, "x": 50,  "y": 50},
+          //   {"cluster": 2, "x": 100, "y": 50},
+          //   {"cluster": 2, "x": 100, "y":100}]
+
+          // var new_nodes = node.attr("r", store.graphSettings.a).data()    
+
+          simulation
+          .force('collide', d3.forceCollide((d) => {
+            return store.graphSettings.a
+          }))
+          .force("link", d3.forceLink(links).id(d => d.id).distance((d) => {
+            return store.graphSettings.a*2
+          }))
+          .force("charge", d3.forceManyBody().strength((d) => {
+            return store.graphSettings.a*22
+          }))
+          .alpha(0.02)
+          .alphaMin(0.01)
+          .restart()
+
+          // debugger
+        }
       })
   
       return innerWrapper.node();
@@ -266,12 +355,14 @@ export default {
         
         vals.nodes.slice(0,key[1]+1).forEach((node) => {
           if (!nodes.map(d => d.id).includes(node.id)){
+            node.r = store.graphSettings.a
             nodes.push(node)
           }
         })
 
         links = links.concat( vals.links.slice(0,key[1]) )
       })
+
 
       this.chart({
         nodes: nodes,

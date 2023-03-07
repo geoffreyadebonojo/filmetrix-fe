@@ -3,7 +3,6 @@
   import apiService from "../mixins/apiService"
   import focusHelper from "../mixins/focusHelper"
   import * as d3 from 'd3'
-
 </script>
 
 <style scoped>
@@ -99,6 +98,11 @@
 </style>
 
 <template>
+
+  <div class="slidecontainer">
+    <input type="range" min="1" max="100" value="50" class="slider" id="myRange">
+  </div>
+
   <input 
     type="text" 
     placeholder="Search" 
@@ -150,14 +154,15 @@
 </template>
 
 <script>
-  export default {
-    name: "NavBar",
 
-    data () {
-      return {
-        searchOpen: true
-      }
-    },
+export default {
+  name: "NavBar",
+  
+  data () {
+    return {
+      searchOpen: true
+    }
+  },
     methods: {
       transitionToAbout() {
         this.setCurrentFocus('about')

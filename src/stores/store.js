@@ -11,6 +11,8 @@ export const store = reactive({
   graphData: {},
   detailsData: {},
   graphSettings: {
-    charge: -2000
+    charge: -2000,
+    a: 50,
+    b: 50
   }
 })

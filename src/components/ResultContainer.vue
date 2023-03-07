@@ -46,7 +46,8 @@
 
 <template>
   <div class="result-container" v-bind:id="store.currentFocus + '-results'">
-    <div class="result-tile" 
+    <div class="result-tile"
+        tabindex="0"
         v-bind:id="result.id"
         v-if="store.currentFocus !== 'noResult'"
         v-for="result in store.searchResults.filter(r => r['id'].includes(store.currentFocus))" 
