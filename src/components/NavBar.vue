@@ -232,6 +232,7 @@ export default {
         .ease(d3.easeBounceOut)
         .style("left", "0px")
         .style("width", "350px")
+        // .style("width", "350px")
         
         d3.select("#graph-container")
         .transition().duration(100).delay(120)
