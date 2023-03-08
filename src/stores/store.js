@@ -5,6 +5,7 @@ export const store = reactive({
   currentFocus: 'empty',
   currentResultTab: '',
   // prev: '',
+  aboutUs: false,
   panelWidth: '350',
   ///
   searchResults: [],

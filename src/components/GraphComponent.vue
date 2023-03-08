@@ -1,5 +1,7 @@
 <script setup>
   import * as d3 from 'd3'
+  import { store } from '@/stores/store.js'
+
 </script>
 
 <template>
@@ -13,6 +15,7 @@
     background: #222222;
     width: 100%;
     height: 100vh;
+    display: flex;
   }
 </style>
 

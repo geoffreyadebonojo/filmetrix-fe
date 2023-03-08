@@ -100,6 +100,7 @@
     display: none;
     top: 50px;
     /* right: 30px; */
+    position: absolute;
     height: 16px;
     margin: 0px 10px 6px 10px;
     transform: rotate(0deg);
@@ -179,16 +180,15 @@ export default {
     methods: {
       back () {
         const nav = d3.select("#navbar")
+        store.aboutUs = false
 
-        d3.selectAll('.main-panel-component')
-        .style("display", "block")
-        
         d3.select('#panel-body')
         .transition()
         .duration(50).delay(200)
         .ease(d3.easeBounceOut)
         .style("left", null)
         .style("right", "0px")
+        .style("width", `${store.panelWidth}px`)
         
         d3.select("#graph-container")
         .transition().duration(100).delay(120)
@@ -200,6 +200,10 @@ export default {
         .transition().delay(100)
         .style("display", "none")
 
+        d3.selectAll('.main-panel-component')
+        .transition().delay(300)
+        .style("display", "block")
+
         d3.select("#highlight")
         .transition()
         .duration(100)
@@ -210,10 +214,13 @@ export default {
         .duration(100)
         .style("bottom", null)
         .style("top", "0px")
+
+        d3.select("#about-outer-wrapper").remove()
       },
 
       transitionToAbout() {
         this.setCurrentFocus('about')
+        store.aboutUs = true
         const nav = d3.select("#navbar")
         
         d3.selectAll('.main-panel-component')
@@ -224,10 +231,15 @@ export default {
         .duration(50).delay(200)
         .ease(d3.easeBounceOut)
         .style("left", "0px")
+        .style("width", "350px")
         
         d3.select("#graph-container")
         .transition().duration(100).delay(120)
         .style("width", "0%")
+
+        d3.select("#about-graph-container")
+        .transition().duration(100).delay(0)
+        .style("width", "100%")
 
         d3.select("#highlight")
         .transition()
@@ -237,6 +249,7 @@ export default {
         d3.select("#back-button")
         .transition().delay(0)
         .style("display", "flex")
+        .style("right", null)
         .transition().delay(50).duration(100)
         .style("transform", "rotate(180deg)")
 

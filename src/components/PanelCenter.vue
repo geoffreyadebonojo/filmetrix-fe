@@ -2,6 +2,7 @@
   import ResultContainer from './ResultContainer.vue'
   import DetailsContainer from './DetailsContainer.vue'
   import CommandsContainer from './CommandsContainer.vue'
+  import AboutContainer from './AboutContainer.vue'
   import { store } from '@/stores/store.js'
 </script>
 
@@ -18,6 +19,7 @@
   </div>
   
   <div v-else-if="store.currentFocus === 'about'">
+    <!-- <AboutContainer /> -->
   </div>
 
   <div v-else="store.currentFocus === 'empty'">
