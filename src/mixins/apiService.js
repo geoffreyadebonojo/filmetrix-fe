@@ -73,6 +73,7 @@ export default {
                   name
                   poster
                   type
+                  entity
                 }
                 links { 
                   source
