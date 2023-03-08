@@ -4,6 +4,8 @@ export const store = reactive({
   // these two clash
   currentFocus: 'empty',
   currentResultTab: '',
+  // prev: '',
+  panelWidth: '350',
   ///
   searchResults: [],
   currentDetailId: false,
@@ -11,7 +13,6 @@ export const store = reactive({
   graphData: {},
   detailsData: {},
   graphSettings: {
-    charge: -2000,
     a: 50,
     b: 50
   }

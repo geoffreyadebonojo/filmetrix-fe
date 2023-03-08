@@ -1,6 +1,7 @@
 <script setup>
   import NavBar from './NavBar.vue'
   import PanelCenter from './PanelCenter.vue'
+  import { store } from '@/stores/store.js'
   import * as d3 from 'd3'
 
 </script>
@@ -122,7 +123,7 @@
         d3.drag()
         .on("start", dragstarted)
         .on("drag", dragged)
-        // .on("end", dragended)
+        .on("end", dragended)
       )
 
       function dragstarted() {
@@ -139,6 +140,10 @@
 
         // let graph = d3.select('#graph-container').node()
         // graph.style.width = `${window.innerWidth - (window.innerWidth - event.x)}px`
+      }
+
+      function dragended() {
+        store.panelWidth = window.innerWidth - event.x
       }
 
       // function dragended() {

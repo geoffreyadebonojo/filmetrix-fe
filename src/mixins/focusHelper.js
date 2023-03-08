@@ -14,12 +14,15 @@ export default {
       //   .nav-button-container {
       //     display: block;
       //   }
-      // }
+
+      // store.prev = store.currentFocus
 
       const navButtons = d3.selectAll(".nav-button").nodes().reverse()
       navButtons.unshift()
-      const d = d3.select("#search-text") 
+      const d = d3.select("#search-text")
+
       this.closeField(d)
+
       const buttonMap = navButtons.map(x => x.id.split("-")[0]);
       const displaceRight = [
         1,
@@ -34,6 +37,7 @@ export default {
   
       const index = buttonMap.indexOf(focus)
       this.moveHighlightCircle(displaceRight[index])
+      
       store.currentFocus = focus
     },
     moveHighlightCircle(x) {

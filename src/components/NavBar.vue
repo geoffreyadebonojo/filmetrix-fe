@@ -95,6 +95,15 @@
   .nav-button, .result-button {
     width: 28px;
   }
+
+  #back-button {
+    display: none;
+    top: 50px;
+    /* right: 30px; */
+    height: 16px;
+    margin: 0px 10px 6px 10px;
+    transform: rotate(0deg);
+  }
 </style>
 
 <template>
@@ -113,7 +122,7 @@
   <div class="nav-button-container">
     <div id="highlight"></div>
  
-    <div class="" id="search-button" @click="this.toggleOrSubmitOnClick()">
+    <div id="search-button" @click="this.toggleOrSubmitOnClick()">
       <img src="../assets/search-icon.png" class="icon" id="search-icon">
     </div>
 
@@ -150,6 +159,10 @@
     <div class="nav-button" id="about-button" @click="this.transitionToAbout()">
       <img src="../assets/about-us-icon.svg" class="icon" id="about-us-icon">
     </div>
+
+    <div class="icon" id="back-button" @click="this.back()">
+      <img src="../assets/back-icon.svg" id="back-icon">
+    </div>
   </div>
 </template>
 
@@ -164,21 +177,48 @@ export default {
     }
   },
     methods: {
-      transitionToAbout() {
-        this.setCurrentFocus('about')
-
+      back () {
         const nav = d3.select("#navbar")
 
-        nav.transition()
-        .duration(100)
-        .style("bottom", "50px")
-
+        d3.selectAll('.main-panel-component')
+        .style("display", "block")
         
+        d3.select('#panel-body')
+        .transition()
+        .duration(50).delay(200)
+        .ease(d3.easeBounceOut)
+        .style("left", null)
+        .style("right", "0px")
+        
+        d3.select("#graph-container")
+        .transition().duration(100).delay(120)
+        .style("width", "100%")
+
+        d3.select("#back-button")
+        .transition().delay(0).duration(200)
+        .style("transform", "rotate(180deg)")
+        .transition().delay(100)
+        .style("display", "none")
+
+        d3.select("#highlight")
+        .transition()
+        .duration(100)
+        .style("display", "block")
+
+        nav.transition()
+        .delay(300)
+        .duration(100)
+        .style("bottom", null)
+        .style("top", "0px")
+      },
+
+      transitionToAbout() {
+        this.setCurrentFocus('about')
+        const nav = d3.select("#navbar")
         
         d3.selectAll('.main-panel-component')
         .style("display", "none")
         
-
         d3.select('#panel-body')
         .transition()
         .duration(50).delay(200)
@@ -186,9 +226,23 @@ export default {
         .style("left", "0px")
         
         d3.select("#graph-container")
-        .transition().duration(100).delay(80)
-        .style("right", "100%")
+        .transition().duration(100).delay(120)
+        .style("width", "0%")
 
+        d3.select("#highlight")
+        .transition()
+        .duration(100)
+        .style("display", "none")
+
+        d3.select("#back-button")
+        .transition().delay(0)
+        .style("display", "flex")
+        .transition().delay(50).duration(100)
+        .style("transform", "rotate(180deg)")
+
+        nav.transition()
+        .duration(0)
+        .style("bottom", "50px")
       },
 
       displayResultIcon(resultType) {

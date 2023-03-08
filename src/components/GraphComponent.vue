@@ -11,6 +11,8 @@
 <style>
   #graph-container {
     background: #222222;
+    width: 100%;
+    height: 100vh;
   }
 </style>
 

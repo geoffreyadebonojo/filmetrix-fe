@@ -1,7 +1,7 @@
 import apiService from './apiService.js'
+import { settingsModule } from './settingsModule.js'
 import { store } from '@/stores/store.js'
 import * as d3 from 'd3'
-import { proxyRefs } from 'vue';
 
 let timer;
 let alreadyClicked = false
@@ -26,25 +26,24 @@ export default {
   
       const width = window.innerWidth
       const height = window.innerHeight
-  
-      const charge = store.graphSettings.charge
 
       simulation
         .force("link", d3.forceLink(links).id(d => d.id).distance((d) => {
-          return 100
+          return settingsModule.defaultSettings.linkLength
         }))
-        .force("charge", d3.forceManyBody().strength(charge))
+        .force("charge", d3.forceManyBody().strength(() => {
+          return settingsModule.defaultSettings.charge
+        }))
         .force('collide', d3.forceCollide((d) => {
-          return d.r
+          return settingsModule.defaultSettings.collide
         }))
         .force("center", d3.forceCenter(0, 0))
-        // .force("x", d3.forceX(100))
-        // .force("y", d3.forceY())
         .force('x', d3.forceX().x(width * 0.3))
         .force('y', d3.forceY().y(height * 0.5))
-        .alpha(1.3)
-        .alphaMin(0.8)
-        // .alphaTarget(0.81)
+        .alpha(1)
+        .alphaMin(0.2)
+        .alphaTarget(0.01)
+
 
       const outerWrapper = d3.select("#outer-wrapper")
       const viewerBody = d3.select("#graph-container")
@@ -53,14 +52,15 @@ export default {
       let zoom = d3.zoom().on('zoom', (e) => {
         outerWrapper.attr("transform", e.transform)
       })
-      // .on('end', () => {
-      //   clearInterval(int)
+      .on('end', () => {
+        clearInterval(int)
 
-      //   d3.select('#person-500 circle').transition().duration(500).attr("r", 50)
-      //   // method for mouseup here
-      //   // debugger
+        // debugger
+        // d3.select('#person-500 circle').transition().duration(500).attr("r", 50)
+        // method for mouseup here
+        // debugger
 
-      // })
+      })
 
       d3.select("#centering-button").style("z-index", "1").transition().duration(30).style("left", "-30px")
       d3.select("#centering-button").on("click", (e) => {
@@ -112,22 +112,18 @@ export default {
           .selectAll("g")
           .data(nodes)
           .join("g")
-          .attr("class", "node")
-          .attr("id", d => {
-            return d.id
+          .attr("class", (d) => {
+            return 'node ' + d.type.join(" ")
           })
-          .attr("type", (d) => {
-            return d.type
-          })
+          .attr("id", d => d.id)
 
       ///////////////////////////////////////
   
       node.append("circle")
           .attr("stroke", "#7A7978")
           .attr("stroke-width", 1.5)
-          // .attr("r", 50)
           .attr("r", (d) => {
-            return d.r
+            return settingsModule.defaultSettings.r
           })
           .attr('fill', '#222222')
           .attr("vector-effect", "non-scaling-stroke")
@@ -139,16 +135,16 @@ export default {
           // .attr('height', 70)
 
           .attr('x', (d) => {
-            return -(d.r*1.4)/2
+            return -settingsModule.defaultSettings.r/2
           })
           .attr('y', (d) => {
-            return -(d.r*1.4)/2
+            return -settingsModule.defaultSettings.r/2
           })
           .attr('width', (d) => {
-            return (d.r*1.4)
+            return settingsModule.defaultSettings.r
           })
           .attr('height', (d) => {
-            return (d.r*1.4)
+            return settingsModule.defaultSettings.r
           })
           .attr("xlink:href", d => d.poster)
           .attr("clip-path", (d) => {
@@ -213,13 +209,13 @@ export default {
 
       node
       .on("mousedown", (e, d) => {
-        // let x = d3.select(`#${d.id} circle`)
+        let x = d3.select(`#${d.id} circle`)
 
-        // int = setInterval(() => {
-          // j+=1
-          // console.log(j)
-          // x.attr("r", 50+j)
-        // }, 1000);
+        int = setInterval(() => {
+          j+=1
+          console.log(j)
+          x.attr("r", 50+j)
+        }, 1000);
 
       })
 
@@ -238,72 +234,94 @@ export default {
         node.transition().duration(500).delay(100).ease(d3.easeBounceOut).attr("transform", (d) => {
           return `translate(${d.x},${d.y})`//scale(0.9)`
         })
+        
+        let scale = 100
+        let scaleA, scaleB
+        const defaultSettings = settingsModule.defaultSettings
+        const neutralSettings = settingsModule.neutralSettings
+        
+        const groupASelector = 'scifi'
+        const groupBSelector = 'drama'
 
-        // let ac = []
-        // let dr = []
+        const groupA = d3.selectAll(`.${groupASelector}`)
+        const groupB = d3.selectAll(`.${groupBSelector}`)
+        const all = d3.selectAll(".node")
 
-        const actors = d3.selectAll(".node[type='acting']")
-        const dramas = d3.selectAll(".node[type='drama']")
-        // .nodes().forEach((d) => {
-        //   type = d.__data__.type[0]
-        //   if (type.includes('acting')) {
-        //     ac.push(d)
-        //   } else if (type.includes('drama')) {
-        //     dr.push(d)
-        //   }
-        // })
-
-
+        
         slider.oninput = function() {
           store.graphSettings.a = 100 - +this.value
           store.graphSettings.b = +this.value
-          console.log(store.graphSettings.a)
+
+          scaleA = store.graphSettings.a / scale
+          scaleB = store.graphSettings.b / scale
           
-          // c = a*1.4
-          // d = b*1.4
+          let vis
 
-          // actors.select("circle").attr("r", a)
-          // actors.select("image").attr("x", -c/2)
-          // actors.select("image").attr("y", -c/2)
-          // actors.select("image").attr("width", c)
-          // actors.select("image").attr("height", c)
+          groupA.select("circle").style("transform", `scale(${(scaleA)})`)
+          groupA.select("image").style("transform", `scale(${(scaleA)})`)
+          groupA.style("display", (d) => {
+            vis = store.graphSettings.a < 3 ? 'none' : "block"
+            d3.selectAll(`.link[target='${d.id}']`).style("display", vis)
 
-          // dramas.select("circle").attr("r", b)
-          // dramas.select("image").attr("x", -d/2)
-          // dramas.select("image").attr("y", -d/2)
-          // dramas.select("image").attr("width", d)
-          // dramas.select("image").attr("height", d)        
+            return vis
+          })
+          
+          groupB.select("circle").style("transform", `scale(${(scaleB)})`)
+          groupB.select("image").style("transform", `scale(${(scaleB)})`)
+          groupB.style("display", (d) => {
+            vis = store.graphSettings.b < 3 ? 'none' : "block"
+            d3.selectAll(`.link[target='${d.id}']`).style("display", vis)
 
-          // actors.each((d) => {
-          //   d.r = a
-          // })
-          // dramas.each((d) => {
-          //   d.r = b
-          // })
+            return vis
+          })
 
-
-          // var new_nodes = [
-          //   {"cluster": 0, "x": 50,  "y": 50},
-          //   {"cluster": 2, "x": 100, "y": 50},
-          //   {"cluster": 2, "x": 100, "y":100}]
-
-          // var new_nodes = node.attr("r", store.graphSettings.a).data()    
 
           simulation
           .force('collide', d3.forceCollide((d) => {
-            return store.graphSettings.a
+
+            if (d.type.includes(groupASelector) && d.type.includes(groupBSelector)) {
+              return (store.graphSettings.a + store.graphSettings.b)/2
+            } else if (d.type.includes(groupASelector)) {
+              return store.graphSettings.a
+            } else if (d.type.includes(groupBSelector)) {
+              return store.graphSettings.b 
+            }
+            // } else if (d.entity == 'person') {
+              // return neutralSettings
+            // }
+            return defaultSettings.collide
           }))
           .force("link", d3.forceLink(links).id(d => d.id).distance((d) => {
-            return store.graphSettings.a*2
+            // base this on the character name length
+            if (d.target.type.includes(groupASelector) && d.target.type.includes(groupBSelector)) {
+              return (store.graphSettings.a + store.graphSettings.b)/2
+            } else if (d.target.type.includes(groupASelector)) {
+              return store.graphSettings.a
+            } else if (d.target.type.includes(groupBSelector)) {
+              return store.graphSettings.b
+            }
+            // } else if (d.entity == 'person') {
+            //   return neutralSettings
+            // }
+            return defaultSettings.linkLength
           }))
           .force("charge", d3.forceManyBody().strength((d) => {
-            return store.graphSettings.a*22
-          }))
-          .alpha(0.02)
-          .alphaMin(0.01)
-          .restart()
 
-          // debugger
+            if (d.type.includes(groupASelector) && d.type.includes(groupBSelector)) {
+              return (store.graphSettings.a + store.graphSettings.b)/2
+            } else if (d.type.includes(groupASelector)) {
+              return -store.graphSettings.a 
+            } else if (d.type.includes(groupBSelector)) {
+              return -store.graphSettings.b 
+            }
+            // } else if (d.entity == 'person') {
+            //   return neutralSettings
+            // }
+            return defaultSettings.charge
+          }))
+          .alpha(0.2)
+          .alphaMin(0.1)
+          .restart()
         }
       })
   
@@ -355,7 +373,7 @@ export default {
         
         vals.nodes.slice(0,key[1]+1).forEach((node) => {
           if (!nodes.map(d => d.id).includes(node.id)){
-            node.r = store.graphSettings.a
+            // node.r = store.graphSettings.a
             nodes.push(node)
           }
         })
