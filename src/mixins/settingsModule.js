@@ -1,5 +1,3 @@
-import { store } from '@/stores/store.js'
-
 export const settingsModule = {
   anchorNodeSettings: {
     collide: 0,
@@ -11,15 +9,27 @@ export const settingsModule = {
     linkLength: 0,
     charge: 0
   },
-  defaultSettings: {
-    r: 50,
-    imageOffset: {
-      x: 70,
-      y: 70,
+  defaults: {
+    node: {
+      collide: 50,
+      charge: -2000,
+      circle: {
+        r: 50
+      }
     },
-    clipPath: '0% 12px round 5px',
-    collide: 100,
-    linkLength: 100,
-    charge: -200
+    link: {
+      length: 200,
+    },
+    image: {
+      offset: {
+        x: -35,
+        y: -35
+      },
+      position: {
+        x: 70,
+        y: 70
+      },
+      clipPath: '0% 12px round 5px',
+    }
   }
 }

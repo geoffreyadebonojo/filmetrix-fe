@@ -1,6 +1,6 @@
 <script setup>
   import { store } from '@/stores/store.js'
-  import apiService from "../mixins/apiService"
+  import api from "../mixins/api"
   import focusHelper from "../mixins/focusHelper"
   import * as d3 from 'd3'
 </script>
@@ -172,130 +172,133 @@ export default {
       searchOpen: true
     }
   },
-    methods: {
-      back () {
-        const nav = d3.select("#navbar")
-        store.aboutUs = false
+  mounted() {
+    document.querySelector("#search-text").focus()
+  },
+  methods: {
+    back () {
+      const nav = d3.select("#navbar")
+      store.aboutUs = false
 
-        d3.select('#panel-body')
-        .transition()
-        .duration(50).delay(200)
-        .ease(d3.easeBounceOut)
-        .style("left", null)
-        .style("right", "0px")
-        .style("width", `${store.panelWidth}px`)
-        
-        d3.select("#graph-container")
-        .transition().duration(100).delay(120)
-        .style("width", "100%")
+      d3.select('#panel-body')
+      .transition()
+      .duration(50).delay(200)
+      .ease(d3.easeBounceOut)
+      .style("left", null)
+      .style("right", "0px")
+      .style("width", `${store.panelWidth}px`)
+      
+      d3.select("#graph-container")
+      .transition().duration(100).delay(120)
+      .style("width", "100%")
 
-        d3.select("#back-button")
-        .transition().delay(0).duration(200)
-        .style("transform", "rotate(180deg)")
-        .transition().delay(100)
-        .style("display", "none")
+      d3.select("#back-button")
+      .transition().delay(0).duration(200)
+      .style("transform", "rotate(180deg)")
+      .transition().delay(100)
+      .style("display", "none")
 
-        d3.selectAll('.main-panel-component')
-        .transition().delay(300)
-        .style("display", "block")
+      d3.selectAll('.main-panel-component')
+      .transition().delay(300)
+      .style("display", "block")
 
-        d3.select("#highlight")
-        .transition()
-        .duration(100)
-        .style("display", "block")
+      d3.select("#highlight")
+      .transition()
+      .duration(100)
+      .style("display", "block")
 
-        nav.transition()
-        .delay(300)
-        .duration(100)
-        .style("bottom", null)
-        .style("top", "0px")
+      nav.transition()
+      .delay(300)
+      .duration(100)
+      .style("bottom", null)
+      .style("top", "0px")
 
-        d3.select("#about-outer-wrapper").remove()
-      },
+      d3.select("#about-outer-wrapper").remove()
+    },
 
-      transitionToAbout() {
-        this.setCurrentFocus('about')
-        store.aboutUs = true
-        const nav = d3.select("#navbar")
-        
-        d3.selectAll('.main-panel-component')
-        .style("display", "none")
-        
-        d3.select('#panel-body')
-        .transition()
-        .duration(50).delay(200)
-        .ease(d3.easeBounceOut)
-        .style("left", "0px")
-        .style("width", "350px")
-        // .style("width", "350px")
-        
-        d3.select("#graph-container")
-        .transition().duration(100).delay(120)
-        .style("width", "0%")
+    transitionToAbout() {
+      this.setCurrentFocus('about')
+      store.aboutUs = true
+      const nav = d3.select("#navbar")
+      
+      d3.selectAll('.main-panel-component')
+      .style("display", "none")
+      
+      d3.select('#panel-body')
+      .transition()
+      .duration(50).delay(200)
+      .ease(d3.easeBounceOut)
+      .style("left", "0px")
+      .style("width", "350px")
+      // .style("width", "350px")
+      
+      d3.select("#graph-container")
+      .transition().duration(100).delay(120)
+      .style("width", "0%")
 
-        d3.select("#about-graph-container")
-        .transition().duration(100).delay(0)
-        .style("width", "100%")
+      d3.select("#about-graph-container")
+      .transition().duration(100).delay(0)
+      .style("width", "100%")
 
-        d3.select("#highlight")
-        .transition()
-        .duration(100)
-        .style("display", "none")
+      d3.select("#highlight")
+      .transition()
+      .duration(100)
+      .style("display", "none")
 
-        d3.select("#back-button")
-        .transition().delay(0)
-        .style("display", "flex")
-        .style("right", null)
-        .transition().delay(50).duration(100)
-        .style("transform", "rotate(180deg)")
+      d3.select("#back-button")
+      .transition().delay(0)
+      .style("display", "flex")
+      .style("right", null)
+      .transition().delay(50).duration(100)
+      .style("transform", "rotate(180deg)")
 
-        nav.transition()
-        .duration(0)
-        .style("bottom", "50px")
-      },
+      nav.transition()
+      .duration(0)
+      .style("bottom", "50px")
+    },
 
-      displayResultIcon(resultType) {
-        const list = store.searchResults.map(r => r['id'].split("-")[0])
-        return list.includes(resultType)
-      },
+    displayResultIcon(resultType) {
+      const list = store.searchResults.map(r => r['id'].split("-")[0])
+      return list.includes(resultType)
+    },
 
-      toggleOrSubmitOnClick() {
-        const d = d3.select("#search-text") 
-        this.openField(d)
-        store.currentFocus = "search"
-        this.submitSearch(d.node().value)
-      },
-        
-      async submitSearch(value) {
-        const val = value.toUpperCase()
-        if (val == '' || val == null) { 
-          // maybe a helpful tip?
-          return false
-        }
-        
-        await apiService.methods.fetchSearchData(val)
-        
-        const tab = store.searchResults[0].id.split("-")[0]
-
-        //handle for no id
-
-        this.setCurrentFocus(tab)
-
-        document.querySelector("#search-text").value = ''
-      },
-
-      setCurrentFocus(focus) {
-        focusHelper.methods.set(focus)
-      },
-
-      openField(d) {
-        d.transition().duration(0).delay(100)
-        .style("width", "100%")
-        .style("left", "7%")
-
-        d3.select("#highlight").transition().duration(100)
-        .style("left", "-1px")
+    toggleOrSubmitOnClick() {
+      const d = d3.select("#search-text") 
+      this.openField(d)
+      store.currentFocus = "search"
+      this.submitSearch(d.node().value)
+    },
+      
+    async submitSearch(value) {
+      const val = value.toUpperCase()
+      if (val == '' || val == null) { 
+        // maybe a helpful tip?
+        return false
       }
+      
+      await api.methods.fetchSearchData(val)
+      
+      const tab = store.searchResults[0].id.split("-")[0]
+
+      //handle for no id
+
+      this.setCurrentFocus(tab)
+
+      document.querySelector("#search-text").value = ''
+    },
+
+    setCurrentFocus(focus) {
+      focusHelper.methods.set(focus)
+    },
+
+    openField(d) {
+      d.transition().duration(0).delay(100)
+      .style("width", "100%")
+      .style("left", "7%")
+
+      d3.select("#highlight").transition().duration(100)
+      .style("left", "-1px")
     }
   }
+}
 </script>

@@ -63,3 +63,17 @@ Array.prototype.flatten = function() {
 
   return flattened
 }
+
+Array.prototype.overlapsWith = function(otherArray) {
+  const x = []
+  
+  this.forEach((c) => {
+    otherArray.forEach((d) => {
+      if (c == d) {
+        x.push(d) 
+      }
+    })
+  })
+
+  return x
+}

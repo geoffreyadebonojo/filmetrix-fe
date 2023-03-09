@@ -17,6 +17,7 @@
     height: 100vh;
     display: flex;
   }
+
 </style>
 
 <script>

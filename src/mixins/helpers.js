@@ -1,6 +1,12 @@
 import { settingsModule } from './settingsModule.js'
 
 export default {
+  props() {
+    return {
+      settings: settingsModule
+    }
+  },
+
   getTypes(nodes) {
     let types = []
     nodes.forEach((node) => {
@@ -57,10 +63,11 @@ export default {
 
   appendCircle(node) {
     node.append("circle")
+      .attr("class", "outline")
       .attr("stroke", "#7A7978")
       .attr("stroke-width", 1.5)
       .attr("r", (d) => {
-        return settingsModule.defaultSettings.r
+        return this.props().settings.defaults.node.circle.r
       })
       .attr('fill', '#222222')
       .attr("vector-effect", "non-scaling-stroke")
@@ -69,22 +76,27 @@ export default {
 
   appendImage(node) {
     node.append("svg:image")
+      .attr("class", "poster")
       .attr('x', (d) => {
-        return -settingsModule.defaultSettings.imageOffset.x/2
+        return this.props().settings.defaults.image.offset.x
       })
       .attr('y', (d) => {
-        return -settingsModule.defaultSettings.imageOffset.x/2
+        return this.props().settings.defaults.image.offset.y
       })
       .attr('width', (d) => {
-        return settingsModule.defaultSettings.imageOffset.x
+        return this.props().settings.defaults.image.position.x
       })
       .attr('height', (d) => {
-        return settingsModule.defaultSettings.imageOffset.x
+        return this.props().settings.defaults.image.position.y
       })
       .attr("xlink:href", d => d.poster)
       .attr("clip-path", (d) => {
-        return `inset(${settingsModule.defaultSettings.clipPath})`
+        return `inset(${this.props().settings.defaults.image.clipPath})`
       })
     return node
+  },
+
+  onClick(node) {
+
   }
 }

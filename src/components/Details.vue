@@ -1,5 +1,5 @@
 <script setup>
-  import apiService from "../mixins/apiService"
+  import api from "../mixins/api"
   import focusHelper from '../mixins/focusHelper'
   import { store } from '@/stores/store.js'
 </script>
@@ -81,7 +81,7 @@
     height: 100%;
     width: 100%;
     display: grid;
-    grid-template-columns: 79px 10px 50px 50px 1fr;
+    grid-template-columns: 79px 10px 55px 50px 1fr;
     grid-template-rows: 95px 21px 10px 1fr 17fr;
     padding: 10px;
     /* gap: 10px; */

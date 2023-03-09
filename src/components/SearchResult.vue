@@ -1,6 +1,6 @@
 <script setup>
-  import createChart from "../mixins/createChart"
-  import apiService from "../mixins/apiService"
+  import graph from "../mixins/graph"
+  import api from "../mixins/api"
   import { store } from '@/stores/store.js'
 </script>
 
@@ -67,7 +67,7 @@
 <script>
   export default {
     name: "SearchResult",
-    mixins: [createChart],
+    mixins: [graph],
     data () {
       return {}
     }

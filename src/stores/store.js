@@ -13,7 +13,7 @@ export const store = reactive({
   existing: [],
   graphData: {},
   graphTypes: [],
-  graphFilters: {},
+  appliedFilters: [], 
   detailsData: {},
   graphSettings: {
     a: 50,
