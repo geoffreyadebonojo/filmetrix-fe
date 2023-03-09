@@ -31,6 +31,7 @@ export default {
 
       simulation
         .force("link", d3.forceLink(links).id(d => d.id).distance((d) => {
+          // by popularity?
           return settingsModule.defaults.link.length
         }))
         .force("charge", d3.forceManyBody().strength(() => {
@@ -56,46 +57,49 @@ export default {
       let zoom = d3.zoom().on('zoom', (e) => {
         outerWrapper.attr("transform", e.transform)
       })
-      .on('end', (e) => {
-        if (!int) { return false }
-        clearInterval(int)
-        int = false
+      // .on('end', (e) => {
+      //   if (!int || j < 4 || !dbl) { return false }
 
-        let d = mouseDownTarget
+      //   clearInterval(int)
+      //   debugger
 
-        const c = store.existing.filter((y) => {
-          return y[0] === d.id
-        })
-        const t = c[0][1]
-        const n = t + j
-        c[0][1] = n
-        //call for method
-        let vals
-        let nodes = []
-        let links = []
+      //   int = false
+
+      //   let d = mouseDownTarget
+
+      //   // const c = store.existing.filter((y) => {
+      //   //   return y[0] === d.id
+      //   // })
+      //   // const t = c[0][1]
+      //   // const n = t + j
+      //   // c[0][1] = n
+      //   //call for method
+      //   let vals
+      //   let nodes = []
+      //   let links = []
   
-        store.existing.forEach(function(key) {
-          vals = store.graphData[key[0]]
+      //   store.existing.forEach(function(key) {
+      //     vals = store.graphData[key[0]]
           
-          vals.nodes.slice(0,key[1]+1).forEach((node) => {
-            if (nodes.map(d => d.id).excludes(node.id)){
-              nodes.push(node)
-            }
-          })
+      //     vals.nodes.slice(0,key[1]+1+j).forEach((node) => {
+      //       if (nodes.map(d => d.id).excludes(node.id)){
+      //         nodes.push(node)
+      //       }
+      //     })
 
-          links = vals.links.slice(0,key[1])
-        })
+      //     links = vals.links.slice(0,key[1]+j)
+      //   })
 
-        this.draw({
-          nodes: nodes,
-          links: links
-        })
+      //   this.draw({
+      //     nodes: nodes,
+      //     links: links
+      //   })
 
-        j = 0
-        mouseDownTarget = null
-        // d3.select('#person-500 circle').transition().duration(500).attr("r", 50)
-        // method for mouseup here
-      })
+      //   j = 0
+      //   mouseDownTarget = null
+      //   // d3.select('#person-500 circle').transition().duration(500).attr("r", 50)
+      //   // method for mouseup here
+      // })
 
       d3.select("#centering-button").style("display", "block").transition().duration(30).style("left", "-30px")
       d3.select("#centering-button").on("click", (e) => {
@@ -165,15 +169,15 @@ export default {
       node.on('click', async (e, d) => {
         const doubleClickDelay = 300
         if (alreadyClicked) { 
-
           if (store.existing.map(x => x[0]).includes(d.id)){
+
             const c = store.existing.filter((y) => {
               return y[0] === d.id
             })
             const t = c[0][1]
             const n = t + 3
             c[0][1] = n
-            //call for method
+            // call for method
             let vals
             let nodes = []
             let links = []
@@ -186,15 +190,14 @@ export default {
                   nodes.push(node)
                 }
               })
-
-              links = vals.links.slice(0,key[1])
+              
+              links = links.concat(vals.links.slice(0,key[1]))
             })
-
+            
             this.draw({
               nodes: nodes,
               links: links
             })
-
           } else {
             await this.callForNodes(d.id)
           }
@@ -213,16 +216,14 @@ export default {
         }
       })
 
-      node
-      .on("mousedown", (e, d) => {
-        // let x = d3.select(`#${d.id} circle`)
-        mouseDownTarget = d
-        int = setInterval(() => {
-          j+=1
-          console.log(j)
-          // x.attr("r", 50+j)
-        }, 1000);
-      })
+      // node
+      // .on("mousedown", (e, d) => {
+      //   mouseDownTarget = d
+      //   int = setInterval(() => {
+      //     j+=1
+      //     console.log(j)
+      //   }, 200);
+      // })
 
       const linkArc = d =>`M${d.source.x},${d.source.y}A0,0 0 0,1 ${d.target.x},${d.target.y}`
       
