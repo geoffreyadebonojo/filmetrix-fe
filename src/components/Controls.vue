@@ -35,13 +35,21 @@
     props: {},
     data() {
       return {
-        applied: []
+        applied: [],
+        selected: []
       }
     },
     methods: {
       applyFilter(g) {
-        this.applied.togglePresence(g)
-        console.log(this.applied)
+        let x = []
+
+        this.applied.togglePresence(g).forEach((f) => {
+          d3.selectAll(`.${f}`).nodes().forEach((n) => {
+            x.pushUnique(n)
+          })
+        })
+
+        console.log(x);
       }
     }
   }

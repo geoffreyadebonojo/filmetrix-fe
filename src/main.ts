@@ -22,12 +22,13 @@ Array.prototype.pushUnique = function(elem) {
 }
 
 Array.prototype.unique = function() {
+  let uniq = []
   this.forEach((d) => {
-    if (!this.includes(d)){
-      this.push(d)
+    if (uniq.excludes(d)){
+      uniq.push(d)
     }
   })
-  return this
+  return uniq
 }
 
 Array.prototype.remove = function(elem) {
@@ -45,4 +46,20 @@ Array.prototype.togglePresence = function(elem) {
     this.pushUnique(elem)
   }
   return this
+}
+
+Array.prototype.excludes = function(elem) {
+  return !this.includes(elem)
+}
+
+Array.prototype.flatten = function() {
+  const flattened = []
+
+  this.forEach((sub) => {
+    sub.forEach((d) => {
+      flattened.push(d)
+    })
+  })
+
+  return flattened
 }

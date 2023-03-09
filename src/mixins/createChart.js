@@ -126,7 +126,6 @@ export default {
             })
 
           } else {
-
             await this.callForNodes(d.id)
           }
           
@@ -306,7 +305,7 @@ export default {
         vals = store.graphData[key[0]]
         
         vals.nodes.slice(0,key[1]+1).forEach((node) => {
-          if (!nodes.map(d => d.id).includes(node.id)){
+          if (nodes.map(d => d.id).excludes(node.id)){
             // node.r = store.graphSettings.a
             nodes.push(node)
           }
