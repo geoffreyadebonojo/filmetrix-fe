@@ -12,6 +12,8 @@ export const store = reactive({
   currentDetailId: false,
   existing: [],
   graphData: {},
+  graphTypes: [],
+  graphFilters: {},
   detailsData: {},
   graphSettings: {
     a: 50,

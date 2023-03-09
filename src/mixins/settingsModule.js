@@ -13,9 +13,13 @@ export const settingsModule = {
   },
   defaultSettings: {
     r: 50,
+    imageOffset: {
+      x: 70,
+      y: 70,
+    },
+    clipPath: '0% 12px round 5px',
     collide: 100,
     linkLength: 100,
-   
     charge: -200
   }
 }

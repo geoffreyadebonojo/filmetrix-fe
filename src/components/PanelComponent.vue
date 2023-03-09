@@ -1,6 +1,7 @@
 <script setup>
   import NavBar from './NavBar.vue'
   import PanelCenter from './PanelCenter.vue'
+  import Controls from './Controls.vue'
   import { store } from '@/stores/store.js'
   import * as d3 from 'd3'
 
@@ -23,7 +24,7 @@
     </div>
 
     <div id="controls" class="main-panel-component">
-      <!-- <Controls /> -->
+      <Controls />
     </div>
   </div>
 </template>
@@ -44,11 +45,12 @@
 
   #centering-button {
     background: none;
+    display: none;
     color: white;
     bottom: 10px;
     width: 20px;
     position: absolute;
-    z-index: -1;
+    z-index: 1;
     cursor: pointer;
   }
 
@@ -70,6 +72,7 @@
     position: absolute;
     top: 0px;
     right: 0px;
+    z-index: 2;
   }
 
   #navbar {

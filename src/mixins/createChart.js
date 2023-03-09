@@ -1,5 +1,6 @@
 import apiService from './apiService.js'
 import { settingsModule } from './settingsModule.js'
+import helpers from './helpers.js'
 import { store } from '@/stores/store.js'
 import * as d3 from 'd3'
 
@@ -11,7 +12,7 @@ export default {
     // let panelWidth = +d3.select('#panel-body').style("width").replace("px", "")
     // let graph = d3.select('#graph-container').node()
     // graph.style.width = `${window.innerWidth - panelWidth}px`
-// debugger
+    // debugger
   },
   methods: {
     chart (responseData) {
@@ -54,21 +55,16 @@ export default {
       })
       .on('end', () => {
         clearInterval(int)
-
-        // debugger
         // d3.select('#person-500 circle').transition().duration(500).attr("r", 50)
         // method for mouseup here
-        // debugger
-
       })
 
-      d3.select("#centering-button").style("z-index", "1").transition().duration(30).style("left", "-30px")
+      d3.select("#centering-button").style("display", "block").transition().duration(30).style("left", "-30px")
       d3.select("#centering-button").on("click", (e) => {
         var transform = d3.zoomIdentity
         .translate(0,0)
         .scale(1)
         viewerBody.transition().duration(1000).call(zoom.transform, transform);
-
         // simulation
         // .alpha(1)
         // .alphaMin(0.3)
@@ -88,71 +84,12 @@ export default {
         .call(zoom)
         .call(zoom).on("dblclick.zoom", null)
 
-       
       const innerWrapper = d3.select("#outer-wrapper").append("g").attr("id", "inner-wrapper")
-  
 
-      const link = innerWrapper.append("g")
-          .attr("class", "links")
-          .selectAll("path")
-          .data(links)
-          .join("path")
-          .attr("class", "link")
-          .attr("source", (d => d.source.id))
-          .attr("target", (d => d.target.id))
-          .attr("stroke", "#7A7978")
-          .attr("stroke-width", "1px")
-          .attr("vector-effect", "non-scaling-stroke")
+      const link = helpers.createLinks(innerWrapper, links)
+      const node = helpers.createNodes(innerWrapper, nodes)
   
-      const node = innerWrapper.append("g")
-          .attr("class", "nodes")
-          .attr("fill", "currentColor")
-          .attr("stroke-linecap", "round")
-          .attr("stroke-linejoin", "round")
-          .selectAll("g")
-          .data(nodes)
-          .join("g")
-          .attr("class", (d) => {
-            return 'node ' + d.type.join(" ")
-          })
-          .attr("id", d => d.id)
-
-      ///////////////////////////////////////
-  
-      node.append("circle")
-          .attr("stroke", "#7A7978")
-          .attr("stroke-width", 1.5)
-          .attr("r", (d) => {
-            return settingsModule.defaultSettings.r
-          })
-          .attr('fill', '#222222')
-          .attr("vector-effect", "non-scaling-stroke")
-  
-      node.append("svg:image")
-          // .attr('x', -35.5)
-          // .attr('y', -35.5)
-          // .attr('width', 70)
-          // .attr('height', 70)
-
-          .attr('x', (d) => {
-            return -settingsModule.defaultSettings.r/2
-          })
-          .attr('y', (d) => {
-            return -settingsModule.defaultSettings.r/2
-          })
-          .attr('width', (d) => {
-            return settingsModule.defaultSettings.r
-          })
-          .attr('height', (d) => {
-            return settingsModule.defaultSettings.r
-          })
-          .attr("xlink:href", d => d.poster)
-          .attr("clip-path", (d) => {
-            return `inset(0% 12px round 8px)`
-          })
-
-      node
-      .on('click', async (e, d) => {
+      node.on('click', async (e, d) => {
         const doubleClickDelay = 300
         if (alreadyClicked) { 
 
@@ -207,17 +144,15 @@ export default {
         }
       })
 
-      node
-      .on("mousedown", (e, d) => {
-        let x = d3.select(`#${d.id} circle`)
-
-        int = setInterval(() => {
-          j+=1
-          console.log(j)
-          x.attr("r", 50+j)
-        }, 1000);
-
-      })
+      // node
+      // .on("mousedown", (e, d) => {
+      //   let x = d3.select(`#${d.id} circle`)
+      //   int = setInterval(() => {
+      //     j+=1
+      //     console.log(j)
+      //     x.attr("r", 50+j)
+      //   }, 1000);
+      // })
 
       let j = 0
       const linkArc = d =>`M${d.source.x},${d.source.y}A0,0 0 0,1 ${d.target.x},${d.target.y}`
@@ -238,7 +173,7 @@ export default {
         let scale = 100
         let scaleA, scaleB
         const defaultSettings = settingsModule.defaultSettings
-        const neutralSettings = settingsModule.neutralSettings
+        // const neutralSettings = settingsModule.neutralSettings
         
         const groupASelector = 'scifi'
         const groupBSelector = 'drama'
@@ -278,7 +213,6 @@ export default {
 
           simulation
           .force('collide', d3.forceCollide((d) => {
-
             if (d.type.includes(groupASelector) && d.type.includes(groupBSelector)) {
               return (store.graphSettings.a + store.graphSettings.b)/2
             } else if (d.type.includes(groupASelector)) {
@@ -381,6 +315,7 @@ export default {
         links = links.concat( vals.links.slice(0,key[1]) )
       })
 
+      store.graphTypes =  helpers.getTypes(nodes)
 
       this.chart({
         nodes: nodes,

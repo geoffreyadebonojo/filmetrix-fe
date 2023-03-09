@@ -1,6 +1,6 @@
 <script setup>
-  import apiService from "../mixins/apiService"
-  import focusHelper from '../mixins/focusHelper'
+  import apiService from "../../mixins/apiService"
+  import focusHelper from '../../mixins/focusHelper'
   import { store } from '@/stores/store.js'
 </script>
 

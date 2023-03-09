@@ -66,7 +66,7 @@
 
 <script>
   export default {
-    name: "ResultContainer",
+    name: "SearchResult",
     mixins: [createChart],
     data () {
       return {}

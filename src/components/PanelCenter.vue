@@ -1,8 +1,8 @@
 <script setup>
-  import ResultContainer from './ResultContainer.vue'
-  import DetailsContainer from './DetailsContainer.vue'
-  import CommandsContainer from './CommandsContainer.vue'
-  import AboutContainer from './AboutContainer.vue'
+  import SearchResult from './SearchResult.vue'
+  import Details from './Details.vue'
+  import CommandsContainer from './Commands.vue'
+  import AboutContainer from './about/AboutContainer.vue'
   import { store } from '@/stores/store.js'
 </script>
 
@@ -11,7 +11,7 @@
     v-if="store.currentFocus === 'details' && store.currentDetailId !== false"
     class="details-component">
     <!-- use search result data? later -->
-    <DetailsContainer />
+    <Details />
   </div>
   
   <div v-else-if="store.currentFocus === 'commands'">
@@ -27,7 +27,7 @@
   </div>
 
   <div v-else class="result-component">
-    <ResultContainer />
+    <SearchResult />
   </div>
   
 </template>
