@@ -28,18 +28,31 @@ export default {
   },
 
   createLinks(parent, links) {
+    const link = this.buildLinks(parent, links)
+
+    return link
+  },
+
+  buildLinks(parent, links) {
     const link = parent.append("g")
       .attr("class", "links")
-      .selectAll("path")
+      .selectAll("g")
       .data(links)
-      .join("path")
+      .enter()
+      .append("g")
       .attr("class", "link")
       .attr("source", (d => d.source.id))
       .attr("target", (d => d.target.id))
+      .append("path")
+      .attr("class", "line")
       .attr("stroke", this.props().strokeColor)
       .attr("stroke-width", "1px")
       .attr("vector-effect", "non-scaling-stroke")
     return link
+  },
+
+  appendPath(link) {
+
   },
 
   createNodes(parent, nodes) {
@@ -100,16 +113,17 @@ export default {
     .enter()
     .append("text")
     .text(d => d)
+    .style("font-size", "12px")
     .style("font-family", "Dosis, sans-serif")
     .style("text-transform", "uppercase")
     .style("transform", (d, i, a) => {
-      let theta = (i- (a.length/2))* 9
+      let theta = (i- (a.length/2))* 7
       return `rotate(${theta}deg)translateY(${r+2}px)`
     })
   },
 
   drawArc(d){
-    const degrees = d.name.length * 9
+    const degrees = d.name.length * 7
 
     const arc = d3.arc()
       .innerRadius(44)
@@ -145,21 +159,24 @@ export default {
   attachMouseEvents(node) {
     node
     .on("mouseenter", (e, d) => {
-      let circle = d3.select(e.target).select('circle')
-      let label = d3.select(e.target).select('.node-label')
-      let sources = d3.selectAll(`.link[source='${e.target.id}']`)
-      let targets = d3.selectAll(`.link[target='${e.target.id}']`)
-
+      let node = d3.select(e.target)
+      let circle = node.select('circle')
+      let label = node.select('.node-label')
+      let sources = d3.selectAll(`.link[source='${e.target.id}']`).select(".line")
+      let targets = d3.selectAll(`.link[target='${e.target.id}']`).select(".line")
+      
+      node.moveToFront()
       circle.style("stroke", "aliceblue")
       sources.style("stroke", "aliceblue")
       targets.style("stroke", "aliceblue")
       label.selectAll("text").style("stroke", "white")
     })
     .on("mouseleave", (e, d) => {
-      let circle = d3.select(e.target).select('circle')
-      let label = d3.select(e.target).select('.node-label')
-      let sources = d3.selectAll(`.link[source='${e.target.id}']`)
-      let targets = d3.selectAll(`.link[target='${e.target.id}']`)
+      let node = d3.select(e.target)
+      let circle = node.select('circle')
+      let label = node.select('.node-label')
+      let sources = d3.selectAll(`.link[source='${e.target.id}']`).select(".line")
+      let targets = d3.selectAll(`.link[target='${e.target.id}']`).select(".line")
       
       circle.style("stroke", this.props().strokeColor)
       sources.style("stroke", this.props().strokeColor)
