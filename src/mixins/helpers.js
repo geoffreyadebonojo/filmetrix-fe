@@ -104,7 +104,7 @@ export default {
     .style("text-transform", "uppercase")
     .style("transform", (d, i, a) => {
       let theta = (i- (a.length/2))* 9
-      return `rotate(${theta}deg)translateY(${r+6}px)`
+      return `rotate(${theta}deg)translateY(${r+2}px)`
     })
   },
 
@@ -113,27 +113,12 @@ export default {
 
     const arc = d3.arc()
       .innerRadius(44)
-      .outerRadius(60)
+      .outerRadius(64)
       .startAngle((-degrees -12 )* Math.PI/180 / 2) //converting from degs to radians
       .endAngle(degrees * Math.PI/180 / 2) //just radians
 
     return arc()
   },
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   appendImage(node) {
     node.append("svg:image")
@@ -161,21 +146,25 @@ export default {
     node
     .on("mouseenter", (e, d) => {
       let circle = d3.select(e.target).select('circle')
+      let label = d3.select(e.target).select('.node-label')
       let sources = d3.selectAll(`.link[source='${e.target.id}']`)
       let targets = d3.selectAll(`.link[target='${e.target.id}']`)
 
       circle.style("stroke", "aliceblue")
       sources.style("stroke", "aliceblue")
       targets.style("stroke", "aliceblue")
+      label.selectAll("text").style("stroke", "white")
     })
     .on("mouseleave", (e, d) => {
       let circle = d3.select(e.target).select('circle')
+      let label = d3.select(e.target).select('.node-label')
       let sources = d3.selectAll(`.link[source='${e.target.id}']`)
       let targets = d3.selectAll(`.link[target='${e.target.id}']`)
-
+      
       circle.style("stroke", this.props().strokeColor)
       sources.style("stroke", this.props().strokeColor)
       targets.style("stroke", this.props().strokeColor)
+      label.selectAll("text").style("stroke", "none")
     })
   },
 
