@@ -51,6 +51,8 @@
     methods: {
       clearAll() {
         store.appliedFilters = []
+        d3.selectAll(".sel").classed("on", false)
+        d3.selectAll(".sel").classed("off", true)
         // let m = d3.selectAll(".node")
         // m.select("circle").transition().duration(300).style("transform", "scale(1)")
         // m.select("image").transition().duration(300).style("transform", "scale(1)")
@@ -75,7 +77,10 @@
         //   })
         // })
 
-        console.log(store.appliedFilters);
+        d3.selectAll("#clear").classed("on", false)
+        d3.selectAll("#clear").classed("off", true)
+
+        // console.log(store.appliedFilters);
       }
     }
   }

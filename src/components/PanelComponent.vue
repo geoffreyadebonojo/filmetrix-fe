@@ -119,7 +119,7 @@
       .duration(80)
       .ease(d3.easeBounceOut)
       .style("width", "350px")
-      .style("min-width", "250px")
+      .style("min-width", "270px")
 
       const resizeBar = d3.select("#resize-bar")
 

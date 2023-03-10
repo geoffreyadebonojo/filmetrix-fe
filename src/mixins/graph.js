@@ -256,9 +256,7 @@ export default {
             links: links,
             nodes: nodes
           })
-
         })
-
       })
 
       // slider.oninput = function() {

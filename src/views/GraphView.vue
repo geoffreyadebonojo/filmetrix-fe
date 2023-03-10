@@ -1,7 +1,7 @@
 <script setup>
   import PanelComponent from '../components/PanelComponent.vue'
   import Graph from '../components/Graph.vue'
-  import AboutGraph from '../components/about/AboutGraph.vue'
+  // import AboutGraph from '../components/about/AboutGraph.vue'
 
   import { store } from '@/stores/store.js'
   import * as d3 from 'd3'
@@ -10,8 +10,8 @@
 <template>
   <div id="viewer-body">
     <Graph />
-    <PanelComponent />
-    <AboutGraph v-if="store.aboutUs"></AboutGraph>
+    <!-- <PanelComponent /> -->
+    <!-- <AboutGraph v-if="store.aboutUs"></AboutGraph> -->
   </div>
 </template>
 
@@ -25,8 +25,8 @@
   export default {
     components: {
       Graph,
-      PanelComponent,
-      AboutGraph
+      PanelComponent//,
+      // AboutGraph
     },
     data () {
       return {

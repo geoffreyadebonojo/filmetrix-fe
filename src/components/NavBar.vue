@@ -152,9 +152,11 @@
       <img src="../assets/command-icon.svg" class="icon" id="commands-icon">
     </div>
 
-    <div class="nav-button" id="about-button" @click="this.transitionToAbout()">
-      <img src="../assets/about-us-icon.svg" class="icon" id="about-us-icon">
-    </div>
+    <router-link to="/about" custom v-slot="{ navigate }">
+      <div class="nav-button" id="about-button" @click="navigate">
+        <img src="../assets/about-us-icon.svg" class="icon" id="about-us-icon">
+      </div>
+    </router-link>
 
     <div class="icon" id="back-button" @click="this.back()">
       <img src="../assets/back-icon.svg" id="back-icon">
