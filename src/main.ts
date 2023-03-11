@@ -14,7 +14,6 @@ app.use(router)
 
 app.mount('#app')
 
-
 Array.prototype.pushUnique = function(elem) {
   if (!this.includes(elem)) {
     this.push(elem)

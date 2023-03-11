@@ -3,6 +3,7 @@ import { settingsModule } from './settingsModule.js'
 import helpers from './helpers.js'
 import { store } from '@/stores/store.js'
 import * as d3 from 'd3'
+import { proxyRefs } from 'vue'
 
 let timer;
 let alreadyClicked = false
@@ -344,9 +345,12 @@ export default {
     async callForNodes(id, i=5) {
       await api.methods.fetchDetails(id)
 
-      if ( !store.existing.map((d) => {d[0]} ).includes(id) ) {
+      if (store.existing.map((d) => d[0]).excludes(id) ) {
         store.existing.push([id, i])
-        await api.methods.fetchSingle(id)
+
+        const ext = store.existing.unique().map((d) => d[0])
+        
+        await api.methods.fetchSingle(id, ext)
       }
 
       // await api.methods.fetchGraphData(

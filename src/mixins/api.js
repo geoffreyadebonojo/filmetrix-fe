@@ -62,16 +62,17 @@ export default {
       store.detailsData = api_response.data.details
     },
 
-    async fetchSingle(id){
+    async fetchSingle(id, existing){
       const API_URL = `http://localhost:3000/graphql`
-      
+
       const resp = await (
         fetch(API_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ query: `
             query {
-              querySingle(ids:["${id}"]) {
+              querySingle(id:"${id}",existing:"${existing}") {
+                matches
                 nodes {
                   id
                   name
@@ -92,7 +93,45 @@ export default {
         })
       )
 
-      store.graphData[id] = resp.data.querySingle
+      store.graphData["matches"] = resp.data.querySingle.matches
+
+      store.graphData[id] = {
+        links: resp.data.querySingle.links,
+        nodes: resp.data.querySingle.nodes
+      }
+    },
+
+    async cacheRequest(id, count){
+      const API_URL = `http://localhost:3000/graphql`
+      
+      const resp = await (
+        fetch(API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ query: `
+            query {
+              cacheRequest(id:"${id}",count:${count},graphId:"${store.gid}") {
+                nodes {
+                  id
+                  name
+                  poster
+                  type
+                  entity
+                }
+                links { 
+                  source
+                  target
+                  roles
+                }
+              }    
+            }`
+          })
+        }).then((response) => {
+          return response.json()
+        })
+      )
+
+      store.graphData = resp.data.cacheRequest
     }
   }
 }

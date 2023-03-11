@@ -18,5 +18,5 @@ export const store = reactive({
   graphSettings: {
     a: 50,
     b: 50
-  }
+  },
 })
