@@ -199,6 +199,7 @@ export default {
               nodes: nodes,
               links: links
             })
+            
           } else {
             await this.callForNodes(d.id)
           }
@@ -267,11 +268,11 @@ export default {
       this.draw(store.graphData)
     },
 
-    async callForNodes(id, nodeCount=5) {
+    async callForNodes(id) {
       await api.methods.fetchDetails(id)
 
       if (store.existing.map((d) => d[0]).excludes(id) ) {
-        store.existing.push([id, nodeCount])
+        store.existing.push([id, 5])
         const ext = store.existing.unique().map((d) => d[0])
         await api.methods.fetchGraphData(ext)
       }
@@ -284,8 +285,8 @@ export default {
 
       store.existing.forEach((d) => {
         data = store.graphData[d[0]]
-        nodes = nodes.concat(data.nodes.slice(0,nodeCount+1))
-        links = links.concat(data.links.slice(0,nodeCount))
+        nodes = nodes.concat(data.nodes.slice(0,d[1]+1))
+        links = links.concat(data.links.slice(0,d[1]))
       })
 
       store.graphTypes =  helpers.getTypes(nodes)
