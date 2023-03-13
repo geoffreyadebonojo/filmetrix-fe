@@ -14,6 +14,28 @@ app.use(router)
 
 app.mount('#app')
 
+
+
+Array.prototype.ids = function(elem) {
+  return this.map(d => d.id)
+}
+
+Array.prototype.uniqueById = function() {
+  let uniq = []
+  this.forEach((d) => {
+    if (uniq.map(d => d.id).excludes(d.id)){
+      uniq.push(d)
+    }
+  })
+  return uniq
+}
+Array.prototype.pushUniqueById = function(elem) {
+  if (!this.map(d => d.id).excludes(elem.id)) {
+    this.push(elem)
+  }
+  return this
+}
+
 Array.prototype.pushUnique = function(elem) {
   if (!this.includes(elem)) {
     this.push(elem)

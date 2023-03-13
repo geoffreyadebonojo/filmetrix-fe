@@ -260,81 +260,6 @@ export default {
         })
       })
 
-      // slider.oninput = function() {
-      //   store.graphSettings.a = 100 - +this.value
-      //   store.graphSettings.b = +this.value
-
-      //   scaleA = store.graphSettings.a / scale
-      //   scaleB = store.graphSettings.b / scale
-        
-      //   let vis
-
-      //   groupA.select("circle").style("transform", `scale(${(scaleA)})`)
-      //   groupA.select("image").style("transform", `scale(${(scaleA)})`)
-      //   groupA.style("display", (d) => {
-      //     vis = store.graphSettings.a < 3 ? 'none' : "block"
-      //     d3.selectAll(`.link[target='${d.id}']`).style("display", vis)
-
-      //     return vis
-      //   })
-        
-      //   groupB.select("circle").style("transform", `scale(${(scaleB)})`)
-      //   groupB.select("image").style("transform", `scale(${(scaleB)})`)
-      //   groupB.style("display", (d) => {
-      //     vis = store.graphSettings.b < 3 ? 'none' : "block"
-      //     d3.selectAll(`.link[target='${d.id}']`).style("display", vis)
-
-      //     return vis
-      //   })
-
-
-      //   simulation
-      //   .force('collide', d3.forceCollide((d) => {
-      //     if (d.type.includes(groupASelector) && d.type.includes(groupBSelector)) {
-      //       return (store.graphSettings.a + store.graphSettings.b)/2
-      //     } else if (d.type.includes(groupASelector)) {
-      //       return store.graphSettings.a
-      //     } else if (d.type.includes(groupBSelector)) {
-      //       return store.graphSettings.b 
-      //     }
-      //     // } else if (d.entity == 'person') {
-      //       // return neutralSettings
-      //     // }
-      //     return defaultSettings.collide
-      //   }))
-      //   .force("link", d3.forceLink(links).id(d => d.id).distance((d) => {
-      //     // base this on the character name length
-      //     if (d.target.type.includes(groupASelector) && d.target.type.includes(groupBSelector)) {
-      //       return (store.graphSettings.a + store.graphSettings.b)/2
-      //     } else if (d.target.type.includes(groupASelector)) {
-      //       return store.graphSettings.a
-      //     } else if (d.target.type.includes(groupBSelector)) {
-      //       return store.graphSettings.b
-      //     }
-      //     // } else if (d.entity == 'person') {
-      //     //   return neutralSettings
-      //     // }
-      //     return defaultSettings.linkLength
-      //   }))
-      //   .force("charge", d3.forceManyBody().strength((d) => {
-
-      //     if (d.type.includes(groupASelector) && d.type.includes(groupBSelector)) {
-      //       return (store.graphSettings.a + store.graphSettings.b)/2
-      //     } else if (d.type.includes(groupASelector)) {
-      //       return -store.graphSettings.a 
-      //     } else if (d.type.includes(groupBSelector)) {
-      //       return -store.graphSettings.b 
-      //     }
-      //     // } else if (d.entity == 'person') {
-      //     //   return neutralSettings
-      //     // }
-      //     return defaultSettings.charge
-      //   }))
-      //   .alpha(0.2)
-      //   .alphaMin(0.1)
-      //   .restart()
-      // }
-  
       return innerWrapper.node();
     },
 
@@ -342,62 +267,31 @@ export default {
       this.draw(store.graphData)
     },
 
-    async callForNodes(id, i=5) {
+    async callForNodes(id, nodeCount=5) {
       await api.methods.fetchDetails(id)
 
       if (store.existing.map((d) => d[0]).excludes(id) ) {
-        store.existing.push([id, i])
-
+        store.existing.push([id, nodeCount])
         const ext = store.existing.unique().map((d) => d[0])
-        
-        await api.methods.fetchSingle(id, ext)
+        await api.methods.fetchGraphData(ext)
       }
-
-      // await api.methods.fetchGraphData(
-      //   store.existing.map(d => d[0]), "no-var"
-      // )
 
       store.currentDetailId = id
 
-      // let li = []
-      // let no = []
-
-      // const currentGraph = store.existing.map((d) => {
-      //   let data = store.graphData[d[0]]
-      //   let count = d[1]
-      //   li = li.concat(data.links.slice(0, count))
-      //   no = no.concat(data.nodes.slice(0, count+1))
-      // })
-
-      // var links = li.filter((v,i,a) => {
-      //   return a.indexOf(v)==i
-      // })
-
-      // var nodes = no.filter((v,i,a)=> {
-      //   return a.map(d => d.id).indexOf(v.id)==i
-      // })
-
-      let vals
-      let nodes = []
       let links = []
+      let nodes = []
+      let data
 
-      store.existing.forEach(function(key) {
-        vals = store.graphData[key[0]]
-        
-        vals.nodes.slice(0,key[1]+1).forEach((node) => {
-          if (nodes.map(d => d.id).excludes(node.id)){
-            // node.r = store.graphSettings.a
-            nodes.push(node)
-          }
-        })
-
-        links = links.concat( vals.links.slice(0,key[1]) )
+      store.existing.forEach((d) => {
+        data = store.graphData[d[0]]
+        nodes = nodes.concat(data.nodes.slice(0,nodeCount+1))
+        links = links.concat(data.links.slice(0,nodeCount))
       })
 
       store.graphTypes =  helpers.getTypes(nodes)
-
+      
       this.draw({
-        nodes: nodes,
+        nodes: nodes.uniqueById(),
         links: links
       })
 

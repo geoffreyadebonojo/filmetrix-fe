@@ -62,7 +62,7 @@ export default {
       store.detailsData = api_response.data.details
     },
 
-    async fetchSingle(id, existing){
+    async fetchGraphData(ids){
       const API_URL = `http://localhost:3000/graphql`
 
       const resp = await (
@@ -71,8 +71,8 @@ export default {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ query: `
             query {
-              querySingle(id:"${id}",existing:"${existing}") {
-                matches
+              graphData(ids:"${ids}") {
+                id
                 nodes {
                   id
                   name
@@ -93,12 +93,12 @@ export default {
         })
       )
 
-      store.graphData["matches"] = resp.data.querySingle.matches
-
-      store.graphData[id] = {
-        links: resp.data.querySingle.links,
-        nodes: resp.data.querySingle.nodes
-      }
+      resp.data.graphData.forEach((d) => {
+        store.graphData[d.id] = {
+          links: d.links,
+          nodes: d.nodes
+        }
+      })
     },
 
     async cacheRequest(id, count){
