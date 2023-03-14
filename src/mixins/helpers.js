@@ -1,4 +1,5 @@
 import { settingsModule } from './settingsModule.js'
+import { store } from '@/stores/store.js'
 import * as d3 from 'd3'
 
 export default {
@@ -29,7 +30,6 @@ export default {
 
   createLinks(parent, links) {
     const link = this.buildLinks(parent, links)
-
     return link
   },
 
@@ -49,10 +49,6 @@ export default {
       .attr("stroke-width", "1px")
       .attr("vector-effect", "non-scaling-stroke")
     return link
-  },
-
-  appendPath(link) {
-
   },
 
   createNodes(parent, nodes) {
@@ -124,7 +120,6 @@ export default {
 
   drawArc(d){
     const degrees = d.name.length * 7
-
     const arc = d3.arc()
       .innerRadius(44)
       .outerRadius(64)
@@ -159,30 +154,45 @@ export default {
   attachMouseEvents(node) {
     node
     .on("mouseenter", (e, d) => {
-      let node = d3.select(e.target)
-      let circle = node.select('circle')
-      let label = node.select('.node-label')
-      let sources = d3.selectAll(`.link[source='${e.target.id}']`).select(".line")
-      let targets = d3.selectAll(`.link[target='${e.target.id}']`).select(".line")
-      
       node.moveToFront()
-      circle.style("stroke", "aliceblue")
-      sources.style("stroke", "aliceblue")
-      targets.style("stroke", "aliceblue")
-      label.selectAll("text").style("stroke", "white")
+      this.nodeTransformer(e.target, "scale(1.05)", "aliceblue", "white")
     })
     .on("mouseleave", (e, d) => {
-      let node = d3.select(e.target)
-      let circle = node.select('circle')
-      let label = node.select('.node-label')
-      let sources = d3.selectAll(`.link[source='${e.target.id}']`).select(".line")
-      let targets = d3.selectAll(`.link[target='${e.target.id}']`).select(".line")
-      
-      circle.style("stroke", this.props().strokeColor)
-      sources.style("stroke", this.props().strokeColor)
-      targets.style("stroke", this.props().strokeColor)
-      label.selectAll("text").style("stroke", "none")
+      this.nodeTransformer(e.target, "scale(1)", this.props().strokeColor, "none")
     })
+  },
+
+  nodeTransformer(target, scale, highlightColor, textStroke){
+    let node = d3.select(target)
+    let elems = {
+      circle: node.select('circle'),
+      label: node.select('.node-label'),
+      poster: node.select('.poster'),
+      sources: d3.selectAll(`.link[source='${target.id}']`).select(".line"),
+      targets: d3.selectAll(`.link[target='${target.id}']`).select(".line")
+    }
+
+    let scaleElem = [
+      elems.circle, 
+      elems.label,
+      elems.poster, 
+      // elems.sources, 
+      // elems.targets
+    ]
+    scaleElem.forEach((d) => {
+      d.attr("transform", scale)
+    })
+
+    let highlightElems = [
+      elems.circle, 
+      elems.sources, 
+      elems.targets
+    ]
+    highlightElems.forEach((d) => {
+      d.style("stroke", highlightColor)
+    })
+
+    elems.label.selectAll("text").style("stroke", textStroke)
   },
 
   attachClickListeners(node) {

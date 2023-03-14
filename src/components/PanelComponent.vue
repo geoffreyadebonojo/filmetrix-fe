@@ -23,9 +23,9 @@
       <PanelCenter />
     </div>
 
-    <div id="controls" class="main-panel-component">
+    <!-- <div id="controls" class="main-panel-component">
       <Controls />
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -132,43 +132,17 @@
 
       function dragstarted() {
         d3.select(this).style("cursor", "col-resize")
-        // dragging = true
       }
-      
       
       function dragged() {
         d3.select(this).style("cursor", "col-resize")
-        
         let panel = this.parentElement
         panel.style.width = `${window.innerWidth - event.x}px`
-
-        // let graph = d3.select('#graph-container').node()
-        // graph.style.width = `${window.innerWidth - (window.innerWidth - event.x)}px`
       }
 
       function dragended() {
         store.panelWidth = window.innerWidth - event.x
       }
-
-      // function dragended() {
-      //   let current = +d3.select("#panel-body").attr("width").split("px")[0]
-
-      //   d3.select(this).styles({
-      //     cursor: "default"
-      //   })
-
-      //   if (current <= 300) {
-      //     closePanel()
-
-      //   } else {
-      //     setPanelParams(true, current)
-      //   }
-
-      //   d3.select("#resize-bar-draggable").attr("x", 0)
-
-      //   console.log('end');
-      //   dragging = false
-      // }
     }
   }
 </script>

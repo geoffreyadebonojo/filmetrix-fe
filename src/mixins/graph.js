@@ -3,7 +3,6 @@ import { settingsModule } from './settingsModule.js'
 import helpers from './helpers.js'
 import { store } from '@/stores/store.js'
 import * as d3 from 'd3'
-import { proxyRefs } from 'vue'
 
 let timer;
 let alreadyClicked = false
@@ -60,14 +59,9 @@ export default {
       })
       // .on('end', (e) => {
       //   if (!int || j < 4 || !dbl) { return false }
-
       //   clearInterval(int)
-      //   debugger
-
       //   int = false
-
       //   let d = mouseDownTarget
-
       //   // const c = store.existing.filter((y) => {
       //   //   return y[0] === d.id
       //   // })
@@ -78,24 +72,19 @@ export default {
       //   let vals
       //   let nodes = []
       //   let links = []
-  
       //   store.existing.forEach(function(key) {
       //     vals = store.graphData[key[0]]
-          
       //     vals.nodes.slice(0,key[1]+1+j).forEach((node) => {
       //       if (nodes.map(d => d.id).excludes(node.id)){
       //         nodes.push(node)
       //       }
       //     })
-
       //     links = vals.links.slice(0,key[1]+j)
       //   })
-
       //   this.draw({
       //     nodes: nodes,
       //     links: links
       //   })
-
       //   j = 0
       //   mouseDownTarget = null
       //   // d3.select('#person-500 circle').transition().duration(500).attr("r", 50)
@@ -171,48 +160,48 @@ export default {
         const doubleClickDelay = 300
         if (alreadyClicked) { 
           if (store.existing.map(x => x[0]).includes(d.id)){
-
             const c = store.existing.filter((y) => {
               return y[0] === d.id
             })
             const t = c[0][1]
             const n = t + 3
             c[0][1] = n
-            // call for method
             let vals
             let nodes = []
             let links = []
       
             store.existing.forEach(function(key) {
               vals = store.graphData[key[0]]
-              
               vals.nodes.slice(0,key[1]+1).forEach((node) => {
                 if (nodes.map(d => d.id).excludes(node.id)){
                   nodes.push(node)
                 }
               })
-              
               links = links.concat(vals.links.slice(0,key[1]))
             })
-            
+            // double-click existing node to
+            // add new nodes
             this.draw({
               nodes: nodes,
               links: links
             })
-            
+            console.log("double click on existing node")
           } else {
+            // double-click on new node
+            console.log("double click to call new node")
             await this.callForNodes(d.id)
           }
-          
           alreadyClicked = false;
           clearTimeout(timer);
         } else {
           timer = setTimeout(async function () {
             alreadyClicked = false;
+            // single click
             if (store.currentDetailId !== d.id) {
               await api.methods.fetchDetails(d.id)
               store.currentDetailId = d.id
             }
+            console.log("single click to fetch details ", d.id)
           }, doubleClickDelay);
           alreadyClicked = true;
         }
@@ -245,7 +234,7 @@ export default {
         
         d3.selectAll(".sel").on("click", (e) => {
           elem = d3.select(`#${e.target.id}`)
-  
+          
           if (elem.classed("on")) {
             elem.classed("off", true)
             elem.classed("on", false)
@@ -254,10 +243,38 @@ export default {
             elem.classed("on", true)
           }
 
-          v.update({
-            links: links,
-            nodes: nodes
+          let links = []
+          let nodes = []
+          let data
+          
+          store.existing.forEach((d) => {
+            data = store.graphData[d[0]]
+            nodes = nodes.concat(data.nodes.slice(0,d[1]+1))
+            links = links.concat(data.links.slice(0,d[1]))
           })
+          
+          store.graphTypes = helpers.getTypes(nodes)
+          
+          nodes = nodes.uniqueById().filter((d) => {
+            return d.type.excludes(e.target.id)
+          })
+
+          const nids = nodes.ids()
+
+          links = links.filter((d) => {
+            return nids.includes(d.source.id)
+          })
+
+          // v.update({
+          //   links: links,
+          //   nodes: nodes
+          // })
+
+          this.draw({
+            nodes: nodes,
+            links: links
+          })
+
         })
       })
 
@@ -279,9 +296,9 @@ export default {
 
       store.currentDetailId = id
 
-      let links = []
-      let nodes = []
       let data
+      let nodes = []
+      let links = []
 
       store.existing.forEach((d) => {
         data = store.graphData[d[0]]

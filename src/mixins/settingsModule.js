@@ -11,8 +11,8 @@ export const settingsModule = {
   },
   defaults: {
     node: {
-      collide: 50,
-      charge: -2000,
+      collide: 60,
+      charge: -2700,
       circle: {
         r: 50
       }

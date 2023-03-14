@@ -14,7 +14,7 @@
     v-for="genre in store.graphTypes">
     <!-- <label v-bind:for="genre"> -->
         <!-- <input type="checkbox" checked="true" v-bind:id="genre" @click="this.applyFilter(genre)"> -->
-        <div class='sel' v-bind:id="genre" @click="this.applyFilter(genre)">{{ genre }}</div>
+        <div class='sel on' v-bind:id="genre" @click="this.applyFilter(genre)">{{ genre }}</div>
     <!-- </label> -->
   </div>
   <div v-else></div>
@@ -51,36 +51,42 @@
     methods: {
       clearAll() {
         store.appliedFilters = []
-        d3.selectAll(".sel").classed("on", false)
-        d3.selectAll(".sel").classed("off", true)
-        // let m = d3.selectAll(".node")
-        // m.select("circle").transition().duration(300).style("transform", "scale(1)")
-        // m.select("image").transition().duration(300).style("transform", "scale(1)")
+        d3.selectAll(".sel").classed("on", true)
+        d3.selectAll(".sel").classed("off", false)
 
-        // d3.selectAll(".link").transition().duration(300).style("opacity", "1")
+        let m = d3.selectAll(".node")
+        m.select("circle").transition().duration(300).style("transform", "scale(1)")
+        m.select(".node-label").transition().duration(300).style("transform", "scale(1)")
+        m.select("image").transition().duration(300).style("transform", "scale(1)")
+
+        d3.selectAll(".link").transition().duration(300).style("opacity", "1")
       },
 
       applyFilter(g) {
         let x = []
+        store.appliedFilters.togglePresence(g).forEach((f) => {
+          let m = d3.selectAll(`.${f}`)
+          m.select("circle").transition().duration(2000).style("transform", "scale(0)")
+          m.select(".node-label").transition().duration(2000).style("transform", "scale(0)")
+          m.select("image").transition().duration(300).style("transform", "scale(0)")
+          m.each((n) => {
+            x.pushUnique(n)
+          })
 
-        store.appliedFilters.togglePresence(g)
-        // .forEach((f) => {
-        //   let m = d3.selectAll(`.${f}`)
-        //   m.select("circle").transition().duration(2000).style("transform", "scale(0)")
-        //   m.select("image").transition().duration(300).style("transform", "scale(0)")
-        //   m.each((n) => {
-        //     x.pushUnique(n)
-        //   })
-        //   const y = x.forEach((c) => {
-        //     d3.selectAll(`.link[target='${c.id}']`).transition().duration(2000).style("opacity", "0")
-        //     d3.selectAll(`.link[source='${c.id}']`).transition().duration(2000).style("opacity", "0")
-        //   })
-        // })
+          m.remove()
+          const y = x.forEach((c) => {
+            let t = d3.selectAll(`.link[target='${c.id}']`)
+            .transition().duration(2000).style("opacity", "0")
+            t.remove()
+
+            let s = d3.selectAll(`.link[source='${c.id}']`)
+            .transition().duration(2000).style("opacity", "0")
+            s.remove()
+          })
+        })
 
         d3.selectAll("#clear").classed("on", false)
         d3.selectAll("#clear").classed("off", true)
-
-        // console.log(store.appliedFilters);
       }
     }
   }

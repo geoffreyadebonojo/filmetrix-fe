@@ -17,6 +17,9 @@
     height: 100vh;
     display: flex;
   }
+  .nodes:hover {
+    cursor: pointer
+  }
 </style>
 
 <script>
