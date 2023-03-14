@@ -1,6 +1,7 @@
 <script setup>
   import * as d3 from 'd3'
   import { store } from '@/stores/store.js'
+  import PanelComponent from './PanelComponent.vue'
 
 </script>
 
@@ -8,6 +9,7 @@
   <svg id="graph-container">
     <g id="outer-wrapper"></g>
   </svg>
+  <PanelComponent />
 </template>
 
 <style>

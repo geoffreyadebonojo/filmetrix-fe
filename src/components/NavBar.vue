@@ -5,107 +5,6 @@
   import * as d3 from 'd3'
 </script>
 
-<style scoped>
-  .nav-button-container {
-    height: 100%;
-    width: max-content;
-    display: flex;
-    justify-content: space-between;
-    right: 0px;
-    background: #6e6e6e;
-    border-radius: 15px 0 0 15px;
-  }
-  
-  #search-text {
-    width: 100%;
-    padding: 0px;
-    position: relative;
-    left: 20px;
-    height: 26px;
-    border-radius: 15px 0 0 15px;
-    border: 7px solid white;
-    text-align: center;
-    font-size: 15px;
-    letter-spacing: 0.05em;
-    box-sizing: border-box;
-    text-transform: uppercase;
-    font-family: 'Dosis', sans-serif;
-  }
-
-  #search-text:focus {
-    outline: none;
-  }
-    
-  .nav-button-container, #search-text{
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  }
-
-  #highlight {
-    position: absolute;
-    height: 100%;
-    width: 27px;
-    background: white;
-    border-radius: 50%;
-    right: 58px;
-  }
-
-  #search-icon {
-    height: 17px;
-    margin: 4.5px 5.5px;
-    /* top: 4px;
-    padding: 0 4px 0 6px; */
-  }
-
-  #about-us-icon {
-    height: 17px;
-    margin: 4px 6px;
-    /* width: 27px;
-    top: 4px;
-    left: 2px; */
-  }
-
-  #details-icon {
-    height: 27px;
-    left: 1.5px;
-  }
-
-  #commands-icon {
-    height: 24px;
-    top: 0.25px;
-    left: 3px
-  }
-
-  #person-icon, #movie-icon, #tv-icon {
-    height: 16px;
-    top: 5px;
-  }
-
-  #person-icon, #tv-icon {
-    left: 8px;
-  }
-
-  #movie-icon {
-    left: 6px;
-  }
-
-  .icon:hover {
-    cursor: pointer;
-  }
-  .nav-button, .result-button {
-    width: 28px;
-  }
-
-  #back-button {
-    display: none;
-    top: 50px;
-    /* right: 30px; */
-    position: absolute;
-    height: 16px;
-    margin: 0px 10px 6px 10px;
-    transform: rotate(0deg);
-  }
-</style>
-
 <template>
   <input 
     type="text" 
@@ -151,11 +50,15 @@
       <img src="../assets/command-icon.svg" class="icon" id="commands-icon">
     </div>
 
-    <router-link to="/about" custom v-slot="{ navigate }">
+    <!-- <router-link to="/about" custom v-slot="{ navigate }">
       <div class="nav-button" id="about-button" @click="navigate">
         <img src="../assets/about-us-icon.svg" class="icon" id="about-us-icon">
       </div>
-    </router-link>
+    </router-link> -->
+
+    <div class="nav-button" id="settings-button">
+      <img src="../assets/settings.svg" class="icon" id="settings-icon"  @click="$event => this.toggleControls()">
+    </div>
 
     <div class="icon" id="back-button" @click="this.back()">
       <img src="../assets/back-icon.svg" id="back-icon">
@@ -176,6 +79,28 @@ export default {
     document.querySelector("#search-text").focus()
   },
   methods: {
+    toggleControls () {
+      if (store.showControls) {
+
+        //close
+        store.showControls = false
+        let x = d3.select("#controls").transition().duration(500)
+        x.style("transform", "scaleY(0)")
+        x.style("bottom", "-50%")
+        d3.select("#panel-center").transition().duration(500).style("height", "130%")
+
+      } else {
+
+        //open
+        store.showControls = true
+        d3.select("#panel-center").transition().duration(500).style("height", "100%")
+        let x = d3.select("#controls").transition().duration(500)
+        x.style("transform", "scaleY(1)")
+        x.style("bottom", "-0%")
+        
+      }
+      console.log(store.showControls)
+    },
     back () {
       const nav = d3.select("#navbar")
       store.aboutUs = false
@@ -302,3 +227,110 @@ export default {
   }
 }
 </script>
+
+
+<style scoped>
+  .nav-button-container {
+    height: 100%;
+    width: max-content;
+    display: flex;
+    justify-content: space-between;
+    right: 0px;
+    background: #6e6e6e;
+    border-radius: 15px 0 0 15px;
+  }
+  
+  #search-text {
+    width: 100%;
+    padding: 0px;
+    position: relative;
+    left: 20px;
+    height: 26px;
+    border-radius: 15px 0 0 15px;
+    border: 7px solid white;
+    text-align: center;
+    font-size: 15px;
+    letter-spacing: 0.05em;
+    box-sizing: border-box;
+    text-transform: uppercase;
+    font-family: 'Dosis', sans-serif;
+  }
+
+  #search-text:focus {
+    outline: none;
+  }
+    
+  .nav-button-container, #search-text{
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  }
+
+  #highlight {
+    position: absolute;
+    height: 100%;
+    width: 27px;
+    background: white;
+    border-radius: 50%;
+    right: 58px;
+  }
+
+  #search-icon {
+    height: 17px;
+    margin: 4.5px 5.5px;
+    /* top: 4px;
+    padding: 0 4px 0 6px; */
+  }
+
+  #about-us-icon {
+    height: 17px;
+    margin: 4px 6px;
+    /* width: 27px;
+    top: 4px;
+    left: 2px; */
+  }
+
+  #details-icon {
+    height: 27px;
+    left: 1.5px;
+  }
+
+  #commands-icon {
+    height: 24px;
+    top: 0.25px;
+    left: 3px
+  }
+
+  #person-icon, #movie-icon, #tv-icon {
+    height: 16px;
+    top: 5px;
+  }
+
+  #person-icon, #tv-icon {
+    left: 8px;
+  }
+
+  #movie-icon {
+    left: 6px;
+  }
+
+  .icon:hover {
+    cursor: pointer;
+  }
+  .nav-button, .result-button {
+    width: 28px;
+  }
+
+  #back-button {
+    display: none;
+    top: 50px;
+    /* right: 30px; */
+    position: absolute;
+    height: 16px;
+    margin: 0px 10px 6px 10px;
+    transform: rotate(0deg);
+  }
+
+  #settings-icon {
+    height: 20px;
+    top: 35px;
+  }
+</style>

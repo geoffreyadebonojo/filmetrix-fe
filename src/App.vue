@@ -5,7 +5,6 @@
 
 <template>
   <RouterView />
-  <PanelComponent />
 </template>
 
 <style>

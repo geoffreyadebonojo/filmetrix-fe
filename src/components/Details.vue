@@ -14,7 +14,6 @@
   >
     <img id="poster" 
       v-bind:src="store.detailsData.poster"
-      @click="this.setHighlight(store.detailsData.id)"
       @mouseenter="this.highlightNodes(store.detailsData.id)"
       @mouseleave="this.unhighlightNodes(store.detailsData.id)"
     >

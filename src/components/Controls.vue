@@ -18,15 +18,20 @@
     <!-- </label> -->
   </div>
   <div v-else></div>
-  <div class='sel' id="clear" @click="this.clearAll()">clear</div>
+  <!-- <div class='sel' id="clear" @click="this.clearAll()">clear</div> -->
 
 
 </template>
 
 <style>
   #controls {
+    grid-area: controls;
+    border: 3px dashed black;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
+    transform: scaleY(0);
+    position: relative;
+    bottom: -100%;
   }
   .sel {
     font-family: 'Dosis', sans-serif;

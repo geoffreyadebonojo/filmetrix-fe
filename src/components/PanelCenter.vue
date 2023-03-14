@@ -9,12 +9,16 @@
 <template>
   <div 
     v-if="store.currentFocus === 'details' && store.currentDetailId !== false"
-    class="details-component">
+    class="details-component"
+  >
     <!-- use search result data? later -->
     <Details />
   </div>
   
-  <div v-else-if="store.currentFocus === 'commands'">
+  <div 
+    v-else-if="store.currentFocus === 'commands'" 
+    id="commands-container"
+  >
     <CommandsContainer />
   </div>
   
@@ -35,6 +39,9 @@
 </template>
 
 <style>
+  #panel-center {
+    height: 130%
+  }
   .result-component {
     height: 100%;
   }  

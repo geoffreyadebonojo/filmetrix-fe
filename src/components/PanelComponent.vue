@@ -23,9 +23,9 @@
       <PanelCenter />
     </div>
 
-    <!-- <div id="controls" class="main-panel-component">
+    <div id="controls" class="main-panel-component">
       <Controls />
-    </div> -->
+    </div>
   </div>
 </template>
 
@@ -59,7 +59,7 @@
     width: 0px;
     display: grid;
     grid-template-columns: 30px 1fr 30px;
-    grid-template-rows: 2vh 1.8em 4vh 66vh 4vh 9em 4vh;
+    grid-template-rows: 2vh 1.8em 4vh 66vh 1vh 9em 4vh;
     grid-template-areas:
       "resize-bar . ."
       "resize-bar navbar navbar"
@@ -95,13 +95,8 @@
     grid-area: panel-center;
     /* a cool effect */
     /* background: #444; */
-    height: 100%;
+    /* height: 100%; */
     overflow-y: auto;
-  }
-
-  #controls {
-    grid-area: controls;
-    border: 3px dashed black;
   }
 </style>
 

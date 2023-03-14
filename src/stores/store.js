@@ -19,5 +19,6 @@ export const store = reactive({
     a: 50,
     b: 50
   },
-  highlighted: []
+  highlighted: [],
+  showControls: false
 })
