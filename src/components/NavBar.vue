@@ -91,7 +91,6 @@
   .icon:hover {
     cursor: pointer;
   }
-
   .nav-button, .result-button {
     width: 28px;
   }

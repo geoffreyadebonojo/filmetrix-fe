@@ -22,9 +22,11 @@
     <!-- <AboutContainer /> -->
   </div>
 
-  <div v-else="store.currentFocus === 'empty'">
-    empty
-  </div>
+  <div 
+    v-else-if="store.currentFocus === 'empty'" 
+    id="empty-field"
+    @click="$event => focusSearchBar()"
+  ></div>
 
   <div v-else class="result-component">
     <SearchResult />
@@ -40,6 +42,9 @@
     height: 100%;
     width: 100%;
   }
+  #empty-field {
+    height: 100%
+  }
 </style>
 
 <script>
@@ -48,6 +53,11 @@
     data () {
       return {
         currentDetailSubjectId: ''
+      }
+    },
+    methods: {
+      focusSearchBar() {
+        document.querySelector('#search-text').focus()
       }
     }
   }

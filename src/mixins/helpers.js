@@ -168,9 +168,21 @@ export default {
       circle: node.select('circle'),
       label: node.select('.node-label'),
       poster: node.select('.poster'),
-      sources: d3.selectAll(`.link[source='${target.id}']`).select(".line"),
-      targets: d3.selectAll(`.link[target='${target.id}']`).select(".line")
+      sources: d3.selectAll(`.link[source='${target.id}']`),
+      targets: d3.selectAll(`.link[target='${target.id}']`)
     }
+
+    let x = elems.sources.nodes().map((d)=>d.__data__.target.id)
+    let z = elems.targets.nodes().map((d)=>d.__data__.source.id)
+    let y = d3.selectAll('.node').filter((d) => {
+      return x.includes(d.id) || z.includes(d.id)
+    })
+
+
+    y.select('circle').style("stroke", highlightColor)
+    y.selectAll("text").style("stroke", highlightColor)
+    y.select(".poster").attr("transform", scale)
+
 
     let scaleElem = [
       elems.circle, 
@@ -185,8 +197,8 @@ export default {
 
     let highlightElems = [
       elems.circle, 
-      elems.sources, 
-      elems.targets
+      elems.sources.select(".line"), 
+      elems.targets.select(".line")
     ]
     highlightElems.forEach((d) => {
       d.style("stroke", highlightColor)
