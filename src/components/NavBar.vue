@@ -167,7 +167,6 @@
 
 export default {
   name: "NavBar",
-  
   data () {
     return {
       searchOpen: true

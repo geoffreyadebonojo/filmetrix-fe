@@ -1,12 +1,23 @@
 <script setup>
   import api from "../mixins/api"
   import focusHelper from '../mixins/focusHelper'
+  import helpers from '../mixins/helpers'
+  import { settingsModule } from '../mixins/settingsModule'
   import { store } from '@/stores/store.js'
+  import * as d3 from 'd3'
 </script>
 
 <template>
-  <div class="details-container" v-bind:id="store.detailsData.id + '-details'">
-    <img id="poster" v-bind:src="store.detailsData.poster">
+  <div 
+    class="details-container" 
+    v-bind:id="store.detailsData.id + '-details'"
+  >
+    <img id="poster" 
+      v-bind:src="store.detailsData.poster"
+      @click="this.setHighlight(store.detailsData.id)"
+      @mouseenter="this.highlightNodes(store.detailsData.id)"
+      @mouseleave="this.unhighlightNodes(store.detailsData.id)"
+    >
     <div id="name">{{ store.detailsData.name }}</div>
     <div id="birthday">{{ store.detailsData.year }}</div>
     <div id="links">
@@ -30,8 +41,32 @@
   </div>
 </template>
 
-<style scoped>
+<script>
+  export default {
+    name: "Details",
+    mounted () {
+      focusHelper.methods.set('details')
+    },
+    methods: {
+      highlightNodes(id) {
+        let target= d3.select(`#${id}`).node()
+        helpers.nodeTransformer(target, "scale(1.05)", "aliceblue", "white")
+      },
+      unhighlightNodes(id) {
+        // if (store.highlighted.includes(id)) { return }
+        let target= d3.select(`#${id}`).node()
+        let defaultColor = settingsModule.strokeColor
+        helpers.nodeTransformer(target, "scale(1)", defaultColor, "none")
+      },
+      // setHighlight(id) {
+      //   store.highlighted.togglePresence(id)
+      //   this.highlightNodes(id)
+      // }
+    }
+  }
+</script>
 
+<style scoped>
   #fade-top {
     grid-area: ft;
   }
@@ -102,6 +137,11 @@
     border-radius: 8px;
   }
 
+  #poster:hover {
+    cursor: pointer;
+    box-shadow: 0em 0em 5px 5px rgb(240 248 255 / 5%);
+  }
+
   #name {
     grid-area: name;
     font-family: 'Dosis', sans-serif;
@@ -156,16 +196,4 @@
   #youtube > img {
     height: 20px;
   }
-
-
 </style>
-
-<script>
-  export default {
-    name: "Details",
-    props: {},
-    mounted () {
-      focusHelper.methods.set('details')
-    }
-  }
-</script>

@@ -154,16 +154,19 @@ export default {
   attachMouseEvents(node) {
     node
     .on("mouseenter", (e, d) => {
+      // if (store.highlighted.includes(e.target.id)) { return }
       node.moveToFront()
       this.nodeTransformer(e.target, "scale(1.05)", "aliceblue", "white")
     })
     .on("mouseleave", (e, d) => {
+      // if (store.highlighted.includes(e.target.id)) { return }
       this.nodeTransformer(e.target, "scale(1)", this.props().strokeColor, "none")
     })
   },
 
-  nodeTransformer(target, scale, highlightColor, textStroke){
+  nodeTransformer(target, scale, highlightColor, textStroke) {
     let node = d3.select(target)
+
     let elems = {
       circle: node.select('circle'),
       label: node.select('.node-label'),
@@ -178,19 +181,11 @@ export default {
       return x.includes(d.id) || z.includes(d.id)
     })
 
-
     y.select('circle').style("stroke", highlightColor)
     y.selectAll("text").style("stroke", highlightColor)
     y.select(".poster").attr("transform", scale)
 
-
-    let scaleElem = [
-      elems.circle, 
-      elems.label,
-      elems.poster, 
-      // elems.sources, 
-      // elems.targets
-    ]
+    let scaleElem = [elems.circle, elems.label, elems.poster]
     scaleElem.forEach((d) => {
       d.attr("transform", scale)
     })
