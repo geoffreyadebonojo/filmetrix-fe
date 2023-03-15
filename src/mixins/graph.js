@@ -289,7 +289,7 @@ export default {
       await api.methods.fetchDetails(id)
 
       if (store.existing.map((d) => d[0]).excludes(id) ) {
-        store.existing.push([id, 5])
+        store.existing.push([id, 8])
         const ext = store.existing.unique().map((d) => d[0])
         await api.methods.fetchGraphData(ext)
       }

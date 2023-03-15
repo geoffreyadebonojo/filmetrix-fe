@@ -26,10 +26,25 @@
     <div id="controls" class="main-panel-component">
       <Controls />
     </div>
+
+    <img v-if="store.showControls" src="../assets/settings-white.svg" class="icon" id="settings-icon" @click="$event => this.toggleControls()">
+    <img v-else src="../assets/settings-black.svg" class="icon" id="settings-icon" @click="$event => this.toggleControls()">
+
   </div>
 </template>
 
 <style scoped>
+  #settings-icon {
+    grid-area: setting;
+    height: 20px;
+    position: absolute;
+    bottom: 6vh;
+    right: -1px;
+  }
+
+  #settings-icon:hover {
+    cursor: pointer;
+  }
   .vll, .vlr {
     position: relative;
     border-left: 2px solid black;
@@ -59,11 +74,11 @@
     width: 0px;
     display: grid;
     grid-template-columns: 30px 1fr 30px;
-    grid-template-rows: 2vh 1.8em 4vh 66vh 1vh 9em 4vh;
+    grid-template-rows: 2vh 1.8em 4vh 10fr 1vh 4fr 4vh;
     grid-template-areas:
       "resize-bar . ."
       "resize-bar navbar navbar"
-      "resize-bar . ."
+      "resize-bar . settings"
       "resize-bar panel-center ."
       "resize-bar . ."
       "resize-bar controls ."
@@ -106,6 +121,28 @@
     components: {
       NavBar,
       PanelCenter
+    },
+    methods: {
+      toggleControls () {
+        if (store.showControls) {
+          //close
+          store.showControls = false
+          d3.select("#settings-icon").style("bottom", "0px")
+          let x = d3.select("#controls").transition().duration(500)
+          x.style("transform", "scaleY(0)")
+          x.style("bottom", "-50%")
+          d3.select("#panel-center").transition().duration(500).style("height", "144%")
+        } else {
+          //open
+          store.showControls = true
+          d3.select("#settings-icon").style("bottom", "120px")
+          d3.select("#panel-center").transition().duration(500).style("height", "100%")
+          let x = d3.select("#controls").transition().duration(500)
+          x.style("transform", "scaleY(1)")
+          x.style("bottom", "-0%")
+        }
+        console.log(store.showControls)
+      }
     },
     mounted () {
       const panel = d3.select("#panel-body")

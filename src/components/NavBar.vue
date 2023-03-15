@@ -50,15 +50,11 @@
       <img src="../assets/command-icon.svg" class="icon" id="commands-icon">
     </div>
 
-    <!-- <router-link to="/about" custom v-slot="{ navigate }">
+    <router-link to="/about" custom v-slot="{ navigate }">
       <div class="nav-button" id="about-button" @click="navigate">
         <img src="../assets/about-us-icon.svg" class="icon" id="about-us-icon">
       </div>
-    </router-link> -->
-
-    <div class="nav-button" id="settings-button">
-      <img src="../assets/settings.svg" class="icon" id="settings-icon"  @click="$event => this.toggleControls()">
-    </div>
+    </router-link>
 
     <div class="icon" id="back-button" @click="this.back()">
       <img src="../assets/back-icon.svg" id="back-icon">
@@ -79,28 +75,6 @@ export default {
     document.querySelector("#search-text").focus()
   },
   methods: {
-    toggleControls () {
-      if (store.showControls) {
-
-        //close
-        store.showControls = false
-        let x = d3.select("#controls").transition().duration(500)
-        x.style("transform", "scaleY(0)")
-        x.style("bottom", "-50%")
-        d3.select("#panel-center").transition().duration(500).style("height", "130%")
-
-      } else {
-
-        //open
-        store.showControls = true
-        d3.select("#panel-center").transition().duration(500).style("height", "100%")
-        let x = d3.select("#controls").transition().duration(500)
-        x.style("transform", "scaleY(1)")
-        x.style("bottom", "-0%")
-        
-      }
-      console.log(store.showControls)
-    },
     back () {
       const nav = d3.select("#navbar")
       store.aboutUs = false
@@ -327,10 +301,5 @@ export default {
     height: 16px;
     margin: 0px 10px 6px 10px;
     transform: rotate(0deg);
-  }
-
-  #settings-icon {
-    height: 20px;
-    top: 35px;
   }
 </style>

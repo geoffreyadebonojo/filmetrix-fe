@@ -40,7 +40,7 @@
 
 <style>
   #panel-center {
-    height: 130%
+    height: 144%
   }
   .result-component {
     height: 100%;
