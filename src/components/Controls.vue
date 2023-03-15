@@ -18,7 +18,7 @@
     <!-- </label> -->
   </div>
   <div v-else></div>
-  <!-- <div class='sel' id="clear" @click="this.clearAll()">clear</div> -->
+  <div class='sel' id="clear" @click="this.clearAll()">clear</div>
 
 
 </template>

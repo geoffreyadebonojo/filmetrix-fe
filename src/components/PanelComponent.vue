@@ -141,7 +141,6 @@
           x.style("transform", "scaleY(1)")
           x.style("bottom", "-0%")
         }
-        console.log(store.showControls)
       }
     },
     mounted () {

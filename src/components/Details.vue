@@ -27,7 +27,7 @@
       </a>
       <a id="youtube"
         v-if="store.detailsData.id.split('-')[0] !== 'person'"
-        v-bind:href="'https://www.youtube.com/results?search_query=' + store.detailsData.name.split(' ').join('+') + store.detailsData.year"
+        v-bind:href="'https://www.youtube.com/results?search_query=' + store.detailsData.name.split(' ').join('+') + ' ' + store.detailsData.year"
         target="_blank">
         <img src="../assets/youtube-icon.png">
       </a>

@@ -25,6 +25,7 @@ export default {
         })
       }
     })
+
     return types
   },
 
@@ -69,6 +70,17 @@ export default {
       .attr("stroke-linejoin", "round")
       .selectAll("g")
       .data(nodes)
+      // (d) => {
+      //   let def = this.props().settings.defaults.node.circle.r
+      //   store.existing.forEach((f) => {
+      //     if (f[0].includes(d.id)) {
+      //       d.r = def + f[1]
+      //     } else {
+      //       d.r = def
+      //     }
+      //   })
+      // return d
+      // })
       .join("g")
       .attr("class", (d) => {
         return 'node ' + d.type.join(" ")
@@ -84,6 +96,7 @@ export default {
       .attr("stroke-width", 1.5)
       .attr("r", (d) => {
         return this.props().settings.defaults.node.circle.r
+        // return d.r
       })
       .attr('fill', this.props().bodyGrey)
       .attr("vector-effect", "non-scaling-stroke")
