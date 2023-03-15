@@ -1,5 +1,4 @@
 import api from './api.js'
-import { settingsModule } from './settingsModule.js'
 import Simulation from './Simulation.js'
 import createViewerBody from './addCenterGraphAction.js'
 import { store } from '@/stores/store.js'
@@ -22,20 +21,19 @@ export default {
       const outerWrapper = d3.select("#outer-wrapper")
       const innerWrapper = outerWrapper.append("g").attr("id", "inner-wrapper")
       const centeringButton = d3.select("#centering-button") 
-      
-      let link = helpers.createLinks(innerWrapper, links)
-      let node = helpers.createNodes(innerWrapper, nodes)
 
       const simulation = new Simulation({nodes, 
-                                         links, 
-                                         width, 
-                                         height})
+                      links, 
+                      width, 
+                      height}).body
+
+      let link = helpers.createLinks(innerWrapper, links)
+      let node = helpers.createNodes(innerWrapper, nodes)
 
       createViewerBody({
         centeringButton,
         outerWrapper
       })
-
 
       node.on('click', async (e, d) => {
         const doubleClickDelay = 300
@@ -50,7 +48,6 @@ export default {
             let vals
             let nodes = []
             let links = []
-
             store.existing.forEach(function(key) {
               vals = store.graphData[key[0]]
 
@@ -61,6 +58,7 @@ export default {
               })
               links = links.concat(vals.links.slice(0,key[1]))
             })
+
             // double-click existing node to
             // add new nodes
             this.draw({
@@ -69,6 +67,7 @@ export default {
             })
             console.log("double click on existing node")
           } else {
+
             // double-click on new node
             console.log("double click to call new node")
             await this.callForNodes(d.id)
@@ -78,6 +77,7 @@ export default {
         } else {
           timer = setTimeout(async function () {
             alreadyClicked = false;
+            
             // single click
             if (store.currentDetailId !== d.id) {
               await api.methods.fetchDetails(d.id)
@@ -93,7 +93,7 @@ export default {
       let i = 0
       let elem;
 
-      simulation.body
+      simulation
       .on("tick", () => {
         i += 1
         link.attr("d", linkArc)
