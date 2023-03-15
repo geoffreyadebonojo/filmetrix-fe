@@ -77,7 +77,7 @@ export default {
         } else {
           timer = setTimeout(async function () {
             alreadyClicked = false;
-            
+
             // single click
             if (store.currentDetailId !== d.id) {
               await api.methods.fetchDetails(d.id)
@@ -105,8 +105,11 @@ export default {
         })
         
         d3.selectAll(".sel").on("click", (e) => {
+          let links = []
+          let nodes = []
+          let data
+
           elem = d3.select(`#${e.target.id}`)
-          
           if (elem.classed("on")) {
             elem.classed("off", true)
             elem.classed("on", false)
@@ -115,10 +118,6 @@ export default {
             elem.classed("on", true)
           }
 
-          let links = []
-          let nodes = []
-          let data
-          
           store.existing.forEach((d) => {
             data = store.graphData[d[0]]
             nodes = nodes.concat(data.nodes.slice(0,d[1]+1))
@@ -126,15 +125,11 @@ export default {
           })
           
           store.graphTypes = helpers.getTypes(nodes)
-          
           nodes = nodes.uniqueById().filter((d) => {
-            return d.type.excludes(e.target.id)
+            return d.type.excludes(e.target.id) 
           })
-
-          const nids = nodes.ids()
-
           links = links.filter((d) => {
-            return nids.includes(d.source.id)
+            return nodes.ids().includes(d.source.id)
           })
 
           this.draw({
@@ -159,9 +154,7 @@ export default {
         const ext = store.existing.unique().map((d) => d[0])
         await api.methods.fetchGraphData(ext)
       }
-
       store.currentDetailId = id
-
       let data
       let nodes = []
       let links = []
@@ -171,15 +164,13 @@ export default {
         nodes = nodes.concat(data.nodes.slice(0,d[1]+1))
         links = links.concat(data.links.slice(0,d[1]))
       })
-
       store.graphTypes =  helpers.getTypes(nodes)
+      store.currentFocus = 'details'
       
       this.draw({
         nodes: nodes.uniqueById(),
         links: links
       })
-
-      store.currentFocus = 'details'
     }
   }
 }
