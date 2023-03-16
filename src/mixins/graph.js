@@ -1,5 +1,6 @@
 import api from './api.js'
 import Simulation from './Simulation.js'
+import Matcher from './Matcher.js'
 import createViewerBody from './addCenterGraphAction.js'
 import { store } from '@/stores/store.js'
 import helpers from './helpers.js'
@@ -145,6 +146,11 @@ export default {
             }
           })
 
+          let matcher = new Matcher(links, nodes)
+
+          // matcher.nodesOf(links[0])
+          // matcher.linksOf(nodes[0])
+
           links = links.filter((d) => {
             let x = nodes.map((n) => {
               // if (n.entity == 'person') {
@@ -158,7 +164,7 @@ export default {
 
           this.draw({
             nodes: nodes,
-            links: links
+            links: links.unique()
           })
         })
       })
