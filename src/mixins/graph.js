@@ -104,6 +104,7 @@ export default {
           return `translate(${d.x},${d.y})`//scale(0.9)`
         })
         
+        // this is where the control filters are
         d3.selectAll(".sel").on("click", (e) => {
           let links = []
           let nodes = []
@@ -120,16 +121,39 @@ export default {
 
           store.existing.forEach((d) => {
             data = store.graphData[d[0]]
-            nodes = nodes.concat(data.nodes.slice(0,d[1]+1))
-            links = links.concat(data.links.slice(0,d[1]))
+
+            let filteredNodes = data.nodes
+            let filteredLinks = data.links
+
+            nodes = nodes.concat(filteredNodes.slice(0,d[1]+1))
+            links = links.concat(filteredLinks.slice(0,d[1]))
           })
-          
           store.graphTypes = helpers.getTypes(nodes)
+          store.appliedFilters.togglePresence(e.target.id)
+
+          if (e.target.id == "clear") {
+            store.appliedFilters = []
+            d3.selectAll(".sel").classed("off", true)
+            d3.selectAll(".sel").classed("on", false)
+          }
+          
           nodes = nodes.uniqueById().filter((d) => {
-            return d.type.excludes(e.target.id) 
+            if (d.type.overlapsWith(store.appliedFilters).length === 0) {
+              return d.type.excludes(e.target.id) 
+            } else {
+              return false
+            }
           })
+
           links = links.filter((d) => {
-            return nodes.ids().includes(d.source.id)
+            let x = nodes.map((n) => {
+              // if (n.entity == 'person') {
+              return n.id == d.target.id //|| n.id == d.source.id
+              // } else {
+              //   return n.id == d.source.id
+              // }
+            })
+            return x.includes(true)
           })
 
           this.draw({
@@ -140,10 +164,6 @@ export default {
       })
 
       return innerWrapper.node();
-    },
-
-    restart() {
-      this.draw(store.graphData)
     },
 
     async callForNodes(id) {
@@ -164,9 +184,10 @@ export default {
         nodes = nodes.concat(data.nodes.slice(0,d[1]+1))
         links = links.concat(data.links.slice(0,d[1]))
       })
+
       store.graphTypes =  helpers.getTypes(nodes)
       store.currentFocus = 'details'
-      
+
       this.draw({
         nodes: nodes.uniqueById(),
         links: links

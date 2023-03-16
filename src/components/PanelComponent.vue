@@ -38,7 +38,7 @@
     grid-area: setting;
     height: 20px;
     position: absolute;
-    bottom: 6vh;
+    top: 7vh;
     right: -1px;
   }
 
