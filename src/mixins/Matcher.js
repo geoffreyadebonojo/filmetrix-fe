@@ -16,4 +16,14 @@ export default class Matcher {
       return d.target.id == node.id || d.source.id == node.id
     })
   }
+
+  notLinksOf(node) {
+    return this.links.filter((d) => {
+      if (d.target.id != node.id && d.source.id != node.id) {
+        return true
+      } else {
+        return false
+      }
+    })
+  }
 }

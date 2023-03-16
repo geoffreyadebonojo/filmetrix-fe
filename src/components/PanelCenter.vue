@@ -39,9 +39,6 @@
 </template>
 
 <style>
-  #panel-center {
-    height: 144%
-  }
   .result-component {
     height: 100%;
   }  

@@ -19,11 +19,11 @@
       <NavBar />
     </div>
 
-    <div id="panel-center">
+    <div id="panel-center" style="height:142%">
       <PanelCenter />
     </div>
 
-    <div id="controls" class="main-panel-component">
+    <div id="controls" class="main-panel-component" style="transform: scale(1, 0); bottom: -50%;">
       <Controls />
     </div>
 
@@ -34,6 +34,9 @@
 </template>
 
 <style scoped>
+  #controls {
+     /* background: #555; */
+  }
   #settings-icon {
     grid-area: setting;
     height: 20px;
@@ -108,9 +111,7 @@
 
   #panel-center {
     grid-area: panel-center;
-    /* a cool effect */
     /* background: #444; */
-    /* height: 100%; */
     overflow-y: auto;
   }
 </style>
@@ -118,6 +119,11 @@
 <script>
   export default {
     name: "PanelComponent",
+    data () {
+      return {
+        transitionTimer: 500
+      }
+    },
     components: {
       NavBar,
       PanelCenter
@@ -127,19 +133,28 @@
         if (store.showControls) {
           //close
           store.showControls = false
-          d3.select("#settings-icon").style("bottom", "0px")
-          let x = d3.select("#controls").transition().duration(500)
-          x.style("transform", "scaleY(0)")
-          x.style("bottom", "-50%")
-          d3.select("#panel-center").transition().duration(500).style("height", "144%")
+
+          d3.select("#controls")
+          .transition().duration(this.transitionTimer)
+          .style("transform", "scaleY(0)")
+          .style("bottom", "-50%")
+
+          d3.select("#panel-center")
+          .transition().duration(this.transitionTimer)
+          .style("height", "142%")
+          
         } else {
           //open
           store.showControls = true
-          d3.select("#settings-icon").style("bottom", "120px")
-          d3.select("#panel-center").transition().duration(500).style("height", "100%")
-          let x = d3.select("#controls").transition().duration(500)
-          x.style("transform", "scaleY(1)")
-          x.style("bottom", "-0%")
+
+          d3.select("#controls")
+          .transition().duration(this.transitionTimer)
+          .style("transform", "scaleY(1)")
+          .style("bottom", "-0%")
+
+          d3.select("#panel-center")
+          .transition().duration(this.transitionTimer)
+          .style("height", "100%")
         }
       }
     },

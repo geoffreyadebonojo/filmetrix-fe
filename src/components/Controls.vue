@@ -12,8 +12,9 @@
 
   <div class="checkbox"
     v-if="store.graphTypes.length > 0"
-    v-for="genre in store.graphTypes">
-      <div class='sel on' v-bind:id="genre">{{ genre }}</div>
+    v-for="genre in store.graphTypes"
+  >
+    <div class='sel off' v-bind:id="genre">{{ genre }}</div>
   </div>
   <div v-else></div>
   <div class='sel' id="clear">clear</div>
@@ -22,12 +23,12 @@
 <style>
   #controls {
     grid-area: controls;
-    border: 3px dashed black;
+    /* border: 3px dashed black; */
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     transform: scaleY(0);
     position: relative;
-    bottom: -100%;
+    bottom: 0%;
   }
   .sel {
     font-family: 'Dosis', sans-serif;

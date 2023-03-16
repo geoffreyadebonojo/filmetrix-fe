@@ -24,9 +24,9 @@ export default {
       const centeringButton = d3.select("#centering-button") 
 
       const simulation = new Simulation({nodes, 
-                      links, 
-                      width, 
-                      height}).body
+                                         links, 
+                                         width, 
+                                         height}).body
 
       let link = helpers.createLinks(innerWrapper, links)
       let node = helpers.createNodes(innerWrapper, nodes)
@@ -107,9 +107,9 @@ export default {
         
         // this is where the control filters are
         d3.selectAll(".sel").on("click", (e) => {
-          let links = []
-          let nodes = []
           let data
+          let nodes =[]
+          let links =[]
 
           elem = d3.select(`#${e.target.id}`)
           if (elem.classed("on")) {
@@ -120,24 +120,24 @@ export default {
             elem.classed("on", true)
           }
 
+
           store.existing.forEach((d) => {
             data = store.graphData[d[0]]
-
-            let filteredNodes = data.nodes
-            let filteredLinks = data.links
-
-            nodes = nodes.concat(filteredNodes.slice(0,d[1]+1))
-            links = links.concat(filteredLinks.slice(0,d[1]))
+            nodes = nodes.concat(data.nodes.slice(0,d[1]+1))
+            links = links.concat(data.links.slice(0,d[1]+1))
           })
+          
           store.graphTypes = helpers.getTypes(nodes)
-          store.appliedFilters.togglePresence(e.target.id)
 
           if (e.target.id == "clear") {
             store.appliedFilters = []
             d3.selectAll(".sel").classed("off", true)
             d3.selectAll(".sel").classed("on", false)
+          } else {
+            store.appliedFilters.togglePresence(e.target.id)
           }
           
+          console.log(store.appliedFilters)
           nodes = nodes.uniqueById().filter((d) => {
             if (d.type.overlapsWith(store.appliedFilters).length === 0) {
               return d.type.excludes(e.target.id) 
@@ -145,19 +145,10 @@ export default {
               return false
             }
           })
-
-          let matcher = new Matcher(links, nodes)
-
-          // matcher.nodesOf(links[0])
-          // matcher.linksOf(nodes[0])
-
+          
           links = links.filter((d) => {
             let x = nodes.map((n) => {
-              // if (n.entity == 'person') {
-              return n.id == d.target.id //|| n.id == d.source.id
-              // } else {
-              //   return n.id == d.source.id
-              // }
+              return n.id == d.target.id
             })
             return x.includes(true)
           })
