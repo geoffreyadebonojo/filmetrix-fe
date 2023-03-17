@@ -49,18 +49,19 @@
     methods: {
       highlightNodes(id) {
         let target= d3.select(`#${id}`).node()
+
+        if (target == undefined) { return }
+
         helpers.nodeTransformer(target, "scale(1.05)", "aliceblue", "white")
       },
       unhighlightNodes(id) {
-        // if (store.highlighted.includes(id)) { return }
         let target= d3.select(`#${id}`).node()
+
+        if (target == undefined) { return }
+
         let defaultColor = settingsModule.strokeColor
         helpers.nodeTransformer(target, "scale(1)", defaultColor, "none")
-      },
-      // setHighlight(id) {
-      //   store.highlighted.togglePresence(id)
-      //   this.highlightNodes(id)
-      // }
+      }
     }
   }
 </script>

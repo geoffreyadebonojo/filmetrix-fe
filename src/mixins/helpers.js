@@ -167,12 +167,10 @@ export default {
   attachMouseEvents(node) {
     node
     .on("mouseenter", (e, d) => {
-      // if (store.highlighted.includes(e.target.id)) { return }
       node.moveToFront()
       this.nodeTransformer(e.target, "scale(1.05)", "aliceblue", "white")
     })
     .on("mouseleave", (e, d) => {
-      // if (store.highlighted.includes(e.target.id)) { return }
       this.nodeTransformer(e.target, "scale(1)", this.props().strokeColor, "none")
     })
   },

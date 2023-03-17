@@ -18,16 +18,13 @@ export default {
       var nodes = responseData.nodes
       const width = window.innerWidth
       const height = window.innerHeight
-
       const outerWrapper = d3.select("#outer-wrapper")
       const innerWrapper = outerWrapper.append("g").attr("id", "inner-wrapper")
       const centeringButton = d3.select("#centering-button") 
-
       const simulation = new Simulation({nodes, 
                                          links, 
                                          width, 
                                          height}).body
-
       let link = helpers.createLinks(innerWrapper, links)
       let node = helpers.createNodes(innerWrapper, nodes)
 
@@ -101,7 +98,9 @@ export default {
         node.attr("transform", d => `translate(${d.x},${d.y})`); //scale(${(i/20)})`);
       })
       .on("end", (t) => {
-        node.transition().duration(500).delay(100).ease(d3.easeBounceOut).attr("transform", (d) => {
+        node
+        // .transition().duration(500).delay(100).ease(d3.easeBounceOut)
+        .attr("transform", (d) => {
           return `translate(${d.x},${d.y})`//scale(0.9)`
         })
         
@@ -120,7 +119,6 @@ export default {
             elem.classed("on", true)
           }
 
-
           store.existing.forEach((d) => {
             data = store.graphData[d[0]]
             nodes = nodes.concat(data.nodes.slice(0,d[1]+1))
@@ -137,7 +135,6 @@ export default {
             store.appliedFilters.togglePresence(e.target.id)
           }
           
-          console.log(store.appliedFilters)
           nodes = nodes.uniqueById().filter((d) => {
             if (d.type.overlapsWith(store.appliedFilters).length === 0) {
               return d.type.excludes(e.target.id) 
@@ -158,8 +155,17 @@ export default {
             links: links.unique()
           })
         })
+        .on("mouseenter", (e) => {
+          d3.selectAll(`.${e.target.id}`).nodes().forEach((d) => {
+            helpers.nodeTransformer(`#${d.id}`, "scale(1.05)", "aliceblue", "white")
+          })
+        }).on("mouseout", (e) => {
+          d3.selectAll(`.${e.target.id}`).nodes().forEach((d) => {
+            helpers.nodeTransformer(`#${d.id}`, "scale(1)", helpers.props().strokeColor, "none")
+          })
+        })
       })
-
+      
       return innerWrapper.node();
     },
 
@@ -171,6 +177,7 @@ export default {
         const ext = store.existing.unique().map((d) => d[0])
         await api.methods.fetchGraphData(ext)
       }
+
       store.currentDetailId = id
       let data
       let nodes = []
