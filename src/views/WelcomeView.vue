@@ -48,6 +48,17 @@
             { source: 0, target: 7, distance: 100 },
             { source: 0, target: 8, distance: 100 }
           ],
+          links2: [
+            { source: 0, target: 1, distance: 200 },
+            { source: 1, target: 2, distance: 200 },
+            { source: 2, target: 3, distance: 200 },
+            { source: 3, target: 4, distance: 200 },
+            { source: 4, target: 5, distance: 200 },
+            { source: 5, target: 6, distance: 200 },
+            { source: 6, target: 7, distance: 200 },
+            { source: 7, target: 8, distance: 200 },
+            { source: 8, target: 0, distance: 200 }
+          ],
           forces: {
             charge: -3000,
             distance: 400,
@@ -69,30 +80,38 @@
       let nodes = this.data.nodes
       let simulation = d3.forceSimulation(nodes, links)
   
-      const width = 800
-      const height = 800
+      const width = 1600
+      const height = 1600
 
       const forces = this.data.forces
   
       simulation
         .force("link", d3.forceLink(links).id(d => d.id)
         .distance((l) => {
-          return l.distance
+          // if (l.index % 2 == 1) {
+          //   return 200
+          // } else {
+          //   return 100
+          // }
+          return 100
+          // return l.distance
         }))
         .force("charge", d3.forceManyBody().strength((d) => {
-          return d.charge
+          return -1000
         }))
         .force('collide', d3.forceCollide((d) => {
-          return d.collide
+          return 100
         }))
         .force("center", d3.forceCenter(0, 0))
-        .force('x', d3.forceX().x(width * 0.5))
-        .force('y', d3.forceY().y(height * 0.5))
+        // .force('x', d3.forceX().x(width * 0.5))
+        // .force('y', d3.forceY().y(height * 0.5))
         // .force('x', d3.forceX().x(forces.x))
         // .force('y', d3.forceY().y(forces.y))
-        .alpha(2)
-        .alphaMin(0.2)
-        .alphaTarget(0.0)
+        .alpha(0.7)
+        .alphaMin(0.3)
+        .alphaTarget(0.4) 
+  
+
   
       d3.select("svg").html("")
       const svg = d3.select("svg")
@@ -149,34 +168,42 @@
   
       node.on('dblclick', (e, d) => {
 
-        let id = `${d.letter}-${d.id}`
-        let ids = nodes.map((d) => {return `${d.letter}-${d.id}`})
-        let index = ids.indexOf(id)
+        // let id = `${d.letter}-${d.id}`
+        // let ids = nodes.map((d) => {return `${d.letter}-${d.id}`})
+        // let index = ids.indexOf(id)
   
-        let n = nodes.splice(index,1)
+        // let n = nodes.splice(index,1)
 
-        d3.select(`#${`${n[0].letter}-${n[0].id-1}`}`).remove()
-        d3.select(`path[source=${n[0].letter}-${n[0].id}]`).remove()
-        d3.select(`path[target=${n[0].letter}-${n[0].id}]`).remove()
+        // d3.select(`#${`${n[0].letter}-${n[0].id-1}`}`).remove()
+        // d3.selectAll(`path[source=${n[0].letter}-${n[0].id}]`).remove()
+        // d3.selectAll(`path[target=${n[0].letter}-${n[0].id}]`).remove()
 
-        console.log(nodes)
+        let newNodes = [
+          { id: 9, letter: "", charge: -2000, collide: 40, r: 50 },
+          { id: 10, letter: "", charge: -2000, collide: 40, r: 50 },
+        ]
+        let newLinks = [
+          { source: 0, target: 9, distance: 100 },
+          { source: 0, target: 10, distance: 100 },
+        ]
 
-        simulation.nodes(nodes)
-        simulation.force("link", d3.forceLink(links).id(d => d.id)
+        nodes = nodes.push(newNodes[0])
+        links = links.push(newLinks[0])
+
+        simulation.nodes(node)
+        simulation.force("link", d3.forceLink(link).id(d => d.id)
         .distance((l) => {
-          return 200
+          return 10
         }))
         .force("charge", d3.forceManyBody().strength((d) => {
           return -2000
         }))
         .force('collide', d3.forceCollide((d) => {
-          return d.r + 10
+          return 50
         }))
         .force("center", d3.forceCenter(0, 0))
-        .force('x', d3.forceX().x(width * 1))
-        .force('y', d3.forceY().y(height * 0.1))
-        // .force('x', d3.forceX().x(forces.x))
-        // .force('y', d3.forceY().y(forces.y))
+        // .force('x', d3.forceX().x(-1))
+        // .force('y', d3.forceY().y(0))
         .alpha(2)
         .alphaMin(0.2)
         .alphaTarget(0.0)

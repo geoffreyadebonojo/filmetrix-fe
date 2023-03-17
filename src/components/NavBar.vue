@@ -10,6 +10,7 @@
     type="text" 
     placeholder="Search" 
     id="search-text"
+    tabindex="-1"
     @keyup.enter="this.submitSearch($event.target.value)"
   >
   

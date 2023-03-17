@@ -9,6 +9,7 @@
 
 <template>
   <div id="viewer-body">
+    <!-- <div id="instructions">Instruction</div> -->
     <Graph />
     <!-- <PanelComponent /> -->
     <!-- <AboutGraph v-if="store.aboutUs"></AboutGraph> -->
@@ -18,6 +19,12 @@
 <style scoped>
   #viewer-body {
     height: 100vh;
+  }
+  #instructions {
+    position : absolute;
+    top: 40%;
+    right: 0%;
+    z-index: 2
   }
 </style>
 
@@ -34,5 +41,16 @@
         count: 5
       }
     }
+    // mounted () {
+    //   d3.select("#viewer-body").on("click", (d) => {
+    //     let sb = d3.select("#search-text")
+    //     sb
+    //     .style("background", "lightblue")
+    //     .transition().duration(200)
+    //     .style("background", "white")
+    //     .ease(d3.easeCircleIn)
+    //     .node().focus()
+    //   })
+    // }
   }
 </script>
