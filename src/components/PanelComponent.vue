@@ -9,7 +9,13 @@
 
 <template>
   <div id="panel-body">
-    <img src="../assets/center-graph-icon.svg" id="centering-button" alt="centering button">
+
+    <!-- <div id="zoom-controls"> -->
+      <!-- <img src="../assets/square-plus.svg" class="zoom-button" id="plus-button" alt="minus button"> -->
+      <img src="../assets/center-graph-icon.svg" class="zoom-button" id="centering-button" alt="centering button">
+      <!-- <img src="../assets/square-minus.svg" class="zoom-button" id="minus-button" alt="centering button"> -->
+    <!-- </div> -->
+
     <div id="resize-bar" class="main-panel-component">
       <div class="vll"></div>
       <div class="vlr"></div>
@@ -61,7 +67,7 @@
     top: 250px;
   }
 
-  #centering-button {
+  .zoom-button {
     background: none;
     display: none;
     color: white;

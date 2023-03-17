@@ -4,7 +4,51 @@
   import { store } from '@/stores/store.js'
 </script>
 
+<template>
+  <div class="result-container" v-bind:id="store.currentFocus + '-results'">
+    <div class="result-tile"
+        tabindex="0"
+        v-bind:id="result.id"
+        v-if="store.currentFocus !== 'noResult'"
+        v-for="result in store.searchResults.filter(r => r['id'].includes(store.currentFocus))" 
+        @click="$event => this.fetchNodesAndDetails(result.id)"
+      >
+
+        <img v-bind:src="result.poster"/>
+        <div>{{result.name}}</div>
+    </div>
+
+    <div v-else="store.currentFocus === 'noResult'" id="no-result">
+      <p>No result found.</p>
+      <p style="margin-top:30px">Did you get the spelling right?</p>
+    </div>
+  </div>
+</template>
+
+<script>
+  export default {
+    name: "SearchResult",
+    mixins: [graph],
+    data () {
+      return {}
+    },
+    methods: {
+      async fetchNodesAndDetails(result_id) {
+        await api.methods.fetchDetails(result_id)
+        await graph.methods.callForNodes(result_id, 7)
+      }
+    }
+  }
+</script>
+
 <style>
+  #no-result {
+    text-transform: uppercase;
+    font-family: 'Dosis', sans-serif;
+    font-weight: bold;
+    font-size: 40px;
+    text-align: center;
+  }
 
   .result-tile{
     width: 73px;
@@ -41,36 +85,4 @@
     justify-content: center;
     padding: 20px;
   }
-
 </style>
-
-<template>
-  <div class="result-container" v-bind:id="store.currentFocus + '-results'">
-    <div class="result-tile"
-        tabindex="0"
-        v-bind:id="result.id"
-        v-if="store.currentFocus !== 'noResult'"
-        
-        v-for="result in store.searchResults.filter(r => r['id'].includes(store.currentFocus))" 
-        @click="$event => callForNodes(result.id, 7)"
-      >
-
-        <img v-bind:src="result.poster"/>
-        <div>{{result.name}}</div>
-    </div>
-
-    <div v-else="store.currentFocus === 'noResult'">
-      No result found. Spelling?
-    </div>
-  </div>
-</template>
-
-<script>
-  export default {
-    name: "SearchResult",
-    mixins: [graph],
-    data () {
-      return {}
-    }
-  }
-</script>

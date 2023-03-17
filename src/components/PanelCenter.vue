@@ -7,18 +7,12 @@
 </script>
 
 <template>
-  <div 
-    v-if="store.currentFocus === 'details' && store.currentDetailId !== false"
-    class="details-component"
-  >
+  <div v-if="store.currentFocus === 'details' && store.currentDetailId !== false" class="details-component">
     <!-- use search result data? later -->
     <Details />
   </div>
   
-  <div 
-    v-else-if="store.currentFocus === 'commands'" 
-    id="commands-container"
-  >
+  <div v-else-if="store.currentFocus === 'commands'" id="commands-container">
     <CommandsContainer />
   </div>
   
@@ -26,11 +20,8 @@
     <!-- <AboutContainer /> -->
   </div>
 
-  <div 
-    v-else-if="store.currentFocus === 'empty'" 
-    id="empty-field"
-    @click="$event => focusSearchBar()"
-  ></div>
+  <div v-else-if="store.currentFocus === 'empty'" id="empty-field" @click="$event => focusSearchBar()">
+  </div>
 
   <div v-else class="result-component">
     <SearchResult />

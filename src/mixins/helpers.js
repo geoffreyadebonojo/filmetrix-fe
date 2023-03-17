@@ -166,11 +166,13 @@ export default {
 
   attachMouseEvents(node) {
     node
-    .on("mouseenter", (e, d) => {
+    .on("mouseenter", (e) => {
       node.moveToFront()
-      this.nodeTransformer(e.target, "scale(1.05)", "aliceblue", "white")
+      this.nodeTransformer(e.target, "scale(1.03)", "aliceblue", "white")
+      
+      // let conn = d3.selectAll(`.link[target=${d.id}]`)
     })
-    .on("mouseleave", (e, d) => {
+    .on("mouseleave", (e) => {
       this.nodeTransformer(e.target, "scale(1)", this.props().strokeColor, "none")
     })
   },
@@ -218,7 +220,7 @@ export default {
     let alreadyClicked = false
     let timer = null
 
-    node.on('click', async (e, d) => {
+    node.on('click', async () => {
       if (alreadyClicked) { 
 
         this.onDoubleClick()

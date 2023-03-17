@@ -1,7 +1,6 @@
 import api from './api.js'
 import Simulation from './Simulation.js'
-import Matcher from './Matcher.js'
-import createViewerBody from './addCenterGraphAction.js'
+import createViewerBody from './createViewerBody.js'
 import { store } from '@/stores/store.js'
 import helpers from './helpers.js'
 import * as d3 from 'd3'
@@ -56,7 +55,6 @@ export default {
               })
               links = links.concat(vals.links.slice(0,key[1]))
             })
-
             // double-click existing node to
             // add new nodes
             this.draw({
@@ -69,13 +67,13 @@ export default {
             // double-click on new node
             console.log("double click to call new node")
             await this.callForNodes(d.id)
+            return
           }
           alreadyClicked = false;
           clearTimeout(timer);
         } else {
           timer = setTimeout(async function () {
             alreadyClicked = false;
-
             // single click
             if (store.currentDetailId !== d.id) {
               await api.methods.fetchDetails(d.id)
@@ -150,10 +148,10 @@ export default {
             return x.includes(true)
           })
 
-          this.draw({
-            nodes: nodes,
-            links: links.unique()
-          })
+          // this.draw({
+          //   nodes: nodes,
+          //   links: links.unique()
+          // })
         })
         .on("mouseenter", (e) => {
           d3.selectAll(`.${e.target.id}`).nodes().forEach((d) => {
@@ -170,7 +168,7 @@ export default {
     },
 
     async callForNodes(id) {
-      await api.methods.fetchDetails(id)
+      // await api.methods.fetchDetails(id)
 
       if (store.existing.map((d) => d[0]).excludes(id) ) {
         store.existing.push([id, 8])
