@@ -1,6 +1,7 @@
 import { reactive } from 'vue'
 
 export const store = reactive({
+  isMobile: false,
   // these two clash
   currentFocus: 'empty',
   currentResultTab: '',

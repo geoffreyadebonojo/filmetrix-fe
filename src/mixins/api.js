@@ -4,13 +4,14 @@ export default {
   data() {
     store
     return {
+      currentUrl: "http://localhost:3000",
       prodUrl: "https://enigmatic-wildwood-58151.herokuapp.com",
       localUrl: "http://localhost:3000",
-      key: "6GzCesnexrzgnDv3FfxbHBrb"
+      key: "6GzCesnexrzgnDv3FfxbHBrb",
     }
   },
   async fetchSearchData(term) {
-    const API_URL =`${this.data().localUrl}/graphql`
+    const API_URL =`${this.data().currentUrl}/graphql`
 
     const api_respsonse = await (
       fetch(API_URL, {
@@ -36,7 +37,7 @@ export default {
   },
 
   async fetchDetails(id) {
-    const API_URL =`${this.data().localUrl}/graphql`
+    const API_URL =`${this.data().currentUrl}/graphql`
 
     const api_response = await (
       fetch(API_URL, {
@@ -64,7 +65,7 @@ export default {
   },
 
   async fetchGraphData(ids){
-    const API_URL = `${this.data().localUrl}/graphql`
+    const API_URL = `${this.data().currentUrl}/graphql`
 
     const resp = await (
       fetch(API_URL, {
@@ -103,7 +104,7 @@ export default {
   },
 
   async cacheRequest(id, count){
-    const API_URL = `${this.data().localUrl}/graphql`
+    const API_URL = `${this.data().currentUrl}/graphql`
     
     const resp = await (
       fetch(API_URL, {

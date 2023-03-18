@@ -4,6 +4,7 @@ import { createPinia } from 'pinia'
 import App from './App.vue'
 import router from './router'
 import * as d3 from "d3"
+import { store } from '@/stores/store.js'
 
 import './assets/main.css'
 
@@ -13,6 +14,8 @@ app.use(createPinia())
 app.use(router)
 
 app.mount('#app')
+
+store.isMobile = navigator.userAgent.toLowerCase().includes("mobile")
 
 Array.prototype.ids = function(elem) {
   return this.map(d => d.id)

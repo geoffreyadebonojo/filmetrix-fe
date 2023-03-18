@@ -52,7 +52,7 @@
     </div>
 
     <!-- <router-link to="/about" custom v-slot="{ navigate }"> -->
-    <router-link to="/about">
+    <router-link class="nav-button" id="about-button" to="/about">
       <!-- <div class="nav-button" id="about-button" @click="navigate"> -->
       <!-- <div class="nav-button" id="about-button" @click="changeRoute('about')"> -->
         <img src="../assets/about-us-icon.svg" class="icon" id="about-us-icon">
@@ -108,6 +108,7 @@ export default {
       .transition().delay(300)
       .style("display", "block")
 
+      store.focus = "search"
       d3.select("#highlight")
       .transition()
       .duration(100)

@@ -32,9 +32,9 @@ export default {
         112,
         141
       ]
-
+      
       // can be adjusted to be vertical
-  
+      
       const index = buttonMap.indexOf(focus)
       this.moveHighlightCircle(displaceRight[index])
       
