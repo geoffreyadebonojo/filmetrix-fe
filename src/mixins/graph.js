@@ -1,9 +1,9 @@
 import api from './api.js'
-import Simulation from './Simulation.js'
-import createViewerBody from './createViewerBody.js'
-import { store } from '@/stores/store.js'
-import helpers from './helpers.js'
 import * as d3 from 'd3'
+import helpers from './helpers.js'
+import Simulation from './Simulation.js'
+import graphBuilder from './graphBuilder.js'
+import { store } from '@/stores/store.js'
 
 let timer;
 let alreadyClicked = false
@@ -24,10 +24,11 @@ export default {
                                          links, 
                                          width, 
                                          height}).body
-      let link = helpers.createLinks(innerWrapper, links)
-      let node = helpers.createNodes(innerWrapper, nodes)
 
-      createViewerBody({
+      let link = graphBuilder.createLinks(innerWrapper, links)
+      let node = graphBuilder.createNodes(innerWrapper, nodes)
+
+      graphBuilder.createViewerBody({
         centeringButton,
         outerWrapper
       })
@@ -47,7 +48,6 @@ export default {
             let links = []
             store.existing.forEach(function(key) {
               vals = store.graphData[key[0]]
-
               vals.nodes.slice(0,key[1]+1).forEach((node) => {
                 if (nodes.map(d => d.id).excludes(node.id)){
                   nodes.push(node)
@@ -76,7 +76,7 @@ export default {
             alreadyClicked = false;
             // single click
             if (store.currentDetailId !== d.id) {
-              await api.methods.fetchDetails(d.id)
+              await api.fetchDetails(d.id)
               store.currentDetailId = d.id
             }
             console.log("single click to fetch details ", d.id)
@@ -101,7 +101,6 @@ export default {
         .attr("transform", (d) => {
           return `translate(${d.x},${d.y})`//scale(0.9)`
         })
-        
         // this is where the control filters are
         d3.selectAll(".sel").on("click", (e) => {
           let data
@@ -168,12 +167,12 @@ export default {
     },
 
     async callForNodes(id) {
-      // await api.methods.fetchDetails(id)
+      // await api.fetchDetails(id)
 
       if (store.existing.map((d) => d[0]).excludes(id) ) {
         store.existing.push([id, 8])
         const ext = store.existing.unique().map((d) => d[0])
-        await api.methods.fetchGraphData(ext)
+        await api.fetchGraphData(ext)
       }
 
       store.currentDetailId = id

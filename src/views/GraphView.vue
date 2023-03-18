@@ -2,7 +2,6 @@
   import PanelComponent from '../components/PanelComponent.vue'
   import Graph from '../components/Graph.vue'
   // import AboutGraph from '../components/about/AboutGraph.vue'
-
   import { store } from '@/stores/store.js'
   import * as d3 from 'd3'
 </script>

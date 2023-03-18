@@ -1,9 +1,16 @@
 <script setup>
   import * as d3 from 'd3'
-  import { useRouter, useRoute } from 'vue-router'
+  import api from "../mixins/api"
+  import focusHelper from '../mixins/focusHelper'
+  import { store } from '@/stores/store.js'
 </script>
 
 <template>
+  <div class="details-container" id="about-us-details">
+    <img id="poster" class="">
+    <div id="name"></div>
+    <div id="description"></div>
+  </div>
   <svg id="about-graph-container">
     <g id="about-outer-wrapper"></g>
   </svg>
@@ -20,55 +27,123 @@
     left: 0;
     z-index: -1
   }
+
+  .details-container {
+    height: 100%;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 80px 25px 1fr;
+    grid-template-rows: 100px 1fr;
+    padding: 10px;
+    /* gap: 10px; */
+    grid-template-areas:
+    "poster . name"
+    "desc desc desc";
+
+    overflow: hidden;
+  }
+
+  #poster {
+    grid-area: poster;
+    width: 90px;
+    margin: auto;
+  }
+
+  #name {
+    grid-area: name;
+    position: relative;
+    left: -115px;
+    transform: scalex(0);
+    font-family: 'Dosis', sans-serif;
+    width: 100%;
+    margin: auto;
+    font-size: 70px;
+    letter-spacing: 3px;
+    font-weight: 900;
+    text-transform: uppercase;
+    color: white;
+    text-shadow: 1px 0px black;
+  }
+
+  #description {
+    grid-area: desc;
+    font-family: 'Dosis', sans-serif;
+    margin-top: 0px;
+    height: 100%;
+    width: 100%;
+    line-height: 26px;
+    letter-spacing: 0.07em;
+    color: white;
+    text-shadow: 1px 0px black;
+    overflow-y: auto;
+    font-size: 20px;
+    font-weight: 900;
+    line-height: 26px;
+    letter-spacing: 0.002em;
+  }
 </style>
 
 <script>
   export default {
+    name: "AboutContainer",
+    data () {
+      return {
+        detailsData: {
+          nodes: [
+            {
+              id: 'geoff',
+              name: "Geoff",
+              poster: "src/assets/geoff-pixel.png",
+              type: [],
+              description: "Rails • React • Ember • SCSS, SASS, CSS,etc. • Javascript/jQuery • RESTful JSON APIs Mysql • A/B Testing • Stripe pay processing • Jenkins CI • RSpec • Redis/ Sidekiq • Git/Github proficient • Kanban/Agile Web-scraping / data extraction DevOping public APIs Gathering and manipulating data Making visual maps Getting D3 to work half the time Finding excuses to use GraphQL Animations / natural simulations",
+              r: 50,
+              c: 100,
+              i: 50
+            },
+            {
+              id: 'pierce',
+              name: "Pierce",
+              poster: "src/assets/pierce-pixel.png",
+              type: [],
+              description: "Experienced designer specializing in marketing collateral materials and mass emails—internal and external, print and digital. From real estate and the mortgage industry to B2B and eCommerce; be it corporate and clean or something more creative and experimental, I love expanding a company's visual language and bringing the brand to life.",
+              r: 50,
+              c: 80,
+              i: 50
+            },
+            {
+              id: "filmetrix",
+              name: "Filmetrix",
+              poster: "src/assets/filmetrix-logo.png",
+              type: [],
+              description: "Filmetrix visualizes data for networking movies and their cast and crew. The data comes from the wonderful TMDb API. The visualizations use the D3.js library (v4 if you want to know). So here's how it works. More or less. Click here when you're ready to get graphin'!",
+              r: 70,
+              c: 70,
+              i: 50
+            }
+          ],
+          links: [
+            {
+              source: "filmetrix",
+              target: 'geoff',
+              roles: ['Software Engineer']
+            },
+            {
+              source: "filmetrix",
+              target: "pierce",
+              roles: ['Product Designer']
+            }
+          ]
+        },
+        currentDetails: {
+          ndoes: []
+        }
+      }
+    },
     mounted () {
-      d3.select("#about-graph-container").attr("viewBox", "80, -120, 600, 600")
-      // d3.select("#about-graph-container").attr("viewBox", `-${window.innerWidth*2/3} -${window.innerHeight} ${window.innerWidth*2} ${window.innerHeight*2}`)
+      focusHelper.methods.set('about')
 
-      const nodes = [
-        {
-          id: 'geoff',
-          name: "Geoff",
-          poster: "src/assets/geoff-pixel.png",
-          type: [],
-          r: 50,
-          c: 100,
-          i: 50
-        },
-        {
-          id: 'pierce',
-          name: "Pierce",
-          poster: "src/assets/pierce-pixel.png",
-          type: [],
-          r: 50,
-          c: 80,
-          i: 50
-        },
-        {
-          id: "filmetrix",
-          name: "Filmetrix",
-          poster: "src/assets/filmetrix-logo.png",
-          type: [],
-          r: 70,
-          c: 70,
-          i: 50
-        }
-      ]
-      const links = [
-        {
-          source: "filmetrix",
-          target: 'geoff',
-          roles: ['Software Engineer']
-        },
-        {
-          source: "filmetrix",
-          target: "pierce",
-          roles: ['Product Designer']
-        }
-      ]
+      const nodes = this.detailsData.nodes
+      const links = this.detailsData.links
 
       var simulation = d3.forceSimulation(nodes, links)
       simulation
@@ -79,9 +154,11 @@
         .alpha(1)
         .alphaTarget(0.99999)
 
-      const outerWrapper = d3.select("#about-outer-wrapper")
       const viewerBody = d3.select("#about-graph-container")
-      const innerWrapper = d3.select("#about-outer-wrapper").append("g").attr("id", "about-inner-wrapper")
+      const innerWrapper = d3.select("#about-outer-wrapper")
+      .append("g")
+      .attr("id", "about-inner-wrapper")
+      .style("transform", "translateY(30%)")
 
       const link = innerWrapper.append("g")
           .attr("class", "links")
@@ -123,6 +200,30 @@
           .attr('width', d => d.i*2)
           .attr('height', d => d.i*2)
           .attr("xlink:href", d => d.poster)
+
+      node.on("click", (_e, d) => {
+        d3.select("#poster").attr("src", d.poster)
+        .style("width", () => {
+          if (d.name == "Filmetrix") {
+            return "50px"
+          } else {
+            return "90px"
+          }
+        })
+        .style("margin", () => {
+          if (d.name == "Filmetrix") {
+            // return "0 0 95px 95px"
+          // } else {
+            return "15px 0 0 25px"
+          }
+        })
+
+        d3.select("#name").html(d.name)
+        .transition().duration(300)
+        .style("transform", "scale(1)")
+        .style("left", "0px")
+        d3.select("#description").html(d.description)
+      })
 
       simulation.on("tick", () => {
         link.attr("d", (d) => {

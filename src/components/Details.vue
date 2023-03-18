@@ -2,6 +2,7 @@
   import api from "../mixins/api"
   import focusHelper from '../mixins/focusHelper'
   import helpers from '../mixins/helpers'
+  import graphBuilder from '../mixins/graphBuilder'
   import { settingsModule } from '../mixins/settingsModule'
   import { store } from '@/stores/store.js'
   import * as d3 from 'd3'
@@ -52,7 +53,7 @@
 
         if (target == undefined) { return }
 
-        helpers.nodeTransformer(target, "scale(1.05)", "aliceblue", "white")
+        graphBuilder.nodeTransformer(target, "scale(1.05)", "aliceblue", "white")
       },
       unhighlightNodes(id) {
         let target= d3.select(`#${id}`).node()
@@ -60,7 +61,7 @@
         if (target == undefined) { return }
 
         let defaultColor = settingsModule.strokeColor
-        helpers.nodeTransformer(target, "scale(1)", defaultColor, "none")
+        graphBuilder.nodeTransformer(target, "scale(1)", defaultColor, "none")
       }
     }
   }

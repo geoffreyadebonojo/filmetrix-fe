@@ -38,7 +38,7 @@
     grid-area: centerline;
     margin: auto;
     position: relative;
-    border-left: 3px solid black;
+    border-left: 1px solid white;
     height: 100%;
   }
   #commands-container {

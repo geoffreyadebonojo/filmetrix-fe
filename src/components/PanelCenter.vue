@@ -2,7 +2,6 @@
   import SearchResult from './SearchResult.vue'
   import Details from './Details.vue'
   import CommandsContainer from './Commands.vue'
-  import AboutContainer from './about/AboutContainer.vue'
   import { store } from '@/stores/store.js'
 </script>
 
@@ -16,10 +15,6 @@
     <CommandsContainer />
   </div>
   
-  <div v-else-if="store.currentFocus === 'about'">
-    <!-- <AboutContainer /> -->
-  </div>
-
   <div v-else-if="store.currentFocus === 'empty'" id="empty-field" @click="$event => focusSearchBar()">
   </div>
 

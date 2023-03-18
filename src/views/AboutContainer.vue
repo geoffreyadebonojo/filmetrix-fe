@@ -4,38 +4,7 @@
   import { store } from '@/stores/store.js'
 </script>
 
-<template>
-  <div class="details-container" id="-details'">
-      <img id="poster" v-bind:src="about.detailsData.poster">
-
-        <div id="name">{{ about.detailsData.name }}</div>
-        <div id="birthday">{{ about.detailsData.year }}</div>
-        <div id="links">
-          <a id="imdb" 
-            v-bind:href="about.detailsData.imdbId"
-            target="_blank"
-          >
-            <img src="../assets/imdb-icon.png">
-          </a>
-          <a id="youtube"
-            v-if="about.detailsData.id.split('-')[0] !== 'person'"
-            v-bind:href="'https://www.youtube.com/results?search_query=' + about.detailsData.name.split(' ').join('+')"
-            target="_blank"
-          >
-            <img src="../assets/youtube-icon.png">
-          </a>
-        </div>
-        <div id="description">
-          {{  about.detailsData.summary }}
-        </div>
-        <div id="fade-top"></div>
-        <div id="fade-bottom"></div>
-  </div>
-
-</template>
-
 <style scoped>
-
   #fade-top {
     grid-area: ft;
   }
@@ -160,18 +129,4 @@
   #youtube > img {
     height: 20px;
   }
-
-
 </style>
-
-<script>
-  export default {
-    name: "AboutContainer",
-    props: {
-      details: []
-    },
-    mounted () {
-      focusHelper.methods.set('about')
-    }
-  }
-</script>

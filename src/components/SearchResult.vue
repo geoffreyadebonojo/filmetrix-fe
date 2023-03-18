@@ -35,7 +35,7 @@
     },
     methods: {
       async fetchNodesAndDetails(result_id) {
-        await api.methods.fetchDetails(result_id)
+        await api.fetchDetails(result_id)
         await graph.methods.callForNodes(result_id, 7)
       }
     }

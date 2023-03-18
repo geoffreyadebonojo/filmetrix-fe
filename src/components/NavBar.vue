@@ -51,10 +51,12 @@
       <img src="../assets/command-icon.svg" class="icon" id="commands-icon">
     </div>
 
-    <router-link to="/about" custom v-slot="{ navigate }">
-      <div class="nav-button" id="about-button" @click="navigate">
+    <!-- <router-link to="/about" custom v-slot="{ navigate }"> -->
+    <router-link to="/about">
+      <!-- <div class="nav-button" id="about-button" @click="navigate"> -->
+      <!-- <div class="nav-button" id="about-button" @click="changeRoute('about')"> -->
         <img src="../assets/about-us-icon.svg" class="icon" id="about-us-icon">
-      </div>
+      <!-- </div> -->
     </router-link>
 
     <div class="icon" id="back-button" @click="this.back()">
@@ -76,6 +78,10 @@ export default {
     document.querySelector("#search-text").focus()
   },
   methods: {
+    changeRoute(route) {
+      // `route` is either a string or object
+      router.push(route);
+    },
     back () {
       const nav = d3.select("#navbar")
       store.aboutUs = false
@@ -107,6 +113,8 @@ export default {
       .duration(100)
       .style("display", "block")
 
+      d3.select("#settings-icon").transition().delay(300).style('display', 'block')
+
       nav.transition()
       .delay(300)
       .duration(100)
@@ -123,6 +131,8 @@ export default {
       
       d3.selectAll('.main-panel-component')
       .style("display", "none")
+
+      d3.select("#settings-icon").style('display', 'none')
       
       d3.select('#panel-body')
       .transition()
@@ -148,7 +158,7 @@ export default {
       d3.select("#back-button")
       .transition().delay(0)
       .style("display", "flex")
-      .style("right", null)
+      .style("right", "15px")
       .transition().delay(50).duration(100)
       .style("transform", "rotate(180deg)")
 
@@ -176,7 +186,7 @@ export default {
         return false
       }
       
-      await api.methods.fetchSearchData(val)
+      await api.fetchSearchData(val)
       
       const tab = store.searchResults[0].id.split("-")[0]
 

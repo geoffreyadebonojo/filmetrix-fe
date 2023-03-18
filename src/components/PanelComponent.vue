@@ -33,8 +33,8 @@
       <Controls />
     </div>
 
-    <img v-if="store.showControls" src="../assets/settings-white.svg" class="icon" id="settings-icon" @click="$event => this.toggleControls()">
-    <img v-else src="../assets/settings-black.svg" class="icon" id="settings-icon" @click="$event => this.toggleControls()">
+    <!-- <img v-if="store.showControls" src="../assets/settings-white.svg" class="icon" id="settings-icon" @click="$event => this.toggleControls()">
+    <img v-else src="../assets/settings-black.svg" class="icon" id="settings-icon" @click="$event => this.toggleControls()"> -->
 
   </div>
 </template>

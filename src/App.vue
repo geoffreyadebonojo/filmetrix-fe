@@ -1,6 +1,5 @@
 <script setup>
   import { RouterView } from 'vue-router'
-  import PanelComponent from './components/PanelComponent.vue'
 </script>
 
 <template>
