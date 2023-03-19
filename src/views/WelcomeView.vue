@@ -93,11 +93,11 @@
           // } else {
           //   return 100
           // }
-          return 100
+          return 0
           // return l.distance
         }))
         .force("charge", d3.forceManyBody().strength((d) => {
-          return -1000
+          return -2000
         }))
         .force('collide', d3.forceCollide((d) => {
           return 100
@@ -115,7 +115,7 @@
   
       d3.select("svg").html("")
       const svg = d3.select("svg")
-      .attr("viewBox", [-width / 2, -height / 2, width, height])
+      .attr("viewBox", [-8000, -8000, 16000, 16000])
 
       const color = "#FFF"
   
@@ -166,52 +166,65 @@
             return `${d.r * 3/2}px`
           })
   
-      node.on('dblclick', (e, d) => {
+      // node.on('dblclick', (e, d) => {
 
-        // let id = `${d.letter}-${d.id}`
-        // let ids = nodes.map((d) => {return `${d.letter}-${d.id}`})
-        // let index = ids.indexOf(id)
+      //   // let id = `${d.letter}-${d.id}`
+      //   // let ids = nodes.map((d) => {return `${d.letter}-${d.id}`})
+      //   // let index = ids.indexOf(id)
   
-        // let n = nodes.splice(index,1)
+      //   // let n = nodes.splice(index,1)
 
-        // d3.select(`#${`${n[0].letter}-${n[0].id-1}`}`).remove()
-        // d3.selectAll(`path[source=${n[0].letter}-${n[0].id}]`).remove()
-        // d3.selectAll(`path[target=${n[0].letter}-${n[0].id}]`).remove()
+      //   // d3.select(`#${`${n[0].letter}-${n[0].id-1}`}`).remove()
+      //   // d3.selectAll(`path[source=${n[0].letter}-${n[0].id}]`).remove()
+      //   // d3.selectAll(`path[target=${n[0].letter}-${n[0].id}]`).remove()
 
-        let newNodes = [
-          { id: 9, letter: "", charge: -2000, collide: 40, r: 50 },
-          { id: 10, letter: "", charge: -2000, collide: 40, r: 50 },
-        ]
-        let newLinks = [
-          { source: 0, target: 9, distance: 100 },
-          { source: 0, target: 10, distance: 100 },
-        ]
+      //   let newNodes = [
+      //     { id: 9, letter: "", charge: -2000, collide: 40, r: 50 },
+      //     { id: 10, letter: "", charge: -2000, collide: 40, r: 50 },
+      //   ]
+      //   let newLinks = [
+      //     { source: 0, target: 9, distance: 100 },
+      //     { source: 0, target: 10, distance: 100 },
+      //   ]
 
-        nodes = nodes.push(newNodes[0])
-        links = links.push(newLinks[0])
+      //   nodes = nodes.push(newNodes[0])
+      //   links = links.push(newLinks[0])
 
-        simulation.nodes(node)
-        simulation.force("link", d3.forceLink(link).id(d => d.id)
-        .distance((l) => {
-          return 10
-        }))
-        .force("charge", d3.forceManyBody().strength((d) => {
-          return -2000
-        }))
-        .force('collide', d3.forceCollide((d) => {
-          return 50
-        }))
-        .force("center", d3.forceCenter(0, 0))
-        // .force('x', d3.forceX().x(-1))
-        // .force('y', d3.forceY().y(0))
-        .alpha(2)
-        .alphaMin(0.2)
-        .alphaTarget(0.0)
-        .restart()
-      })
+      //   simulation.nodes(node)
+      //   simulation.force("link", d3.forceLink(link).id(d => d.id)
+      //   .distance((l) => {
+      //     return 10
+      //   }))
+      //   .force("charge", d3.forceManyBody().strength((d) => {
+      //     return -5000
+      //   }))
+      //   .force('collide', d3.forceCollide((d) => {
+      //     return 200
+      //   }))
+      //   .force("center", d3.forceCenter(0, 0))
+      //   // .force('x', d3.forceX().x(-1))
+      //   // .force('y', d3.forceY().y(0))
+      //   .alpha(2)
+      //   .alphaMin(0.2)
+      //   .alphaTarget(0.0)
+      //   .restart()
+      // })
   
       const linkArc = d =>`M${d.source.x},${d.source.y}A0,0 0 0,1 ${d.target.x},${d.target.y}`
   
+      let sc = 1
+
+      let vbx = (-width/2)/ sc
+      let vby = (-height/2)/ sc
+      let vbxs = width/ sc
+      let vbys = width/ sc
+
+      d3.select("svg")
+      .transition().duration(2000)
+      .attr("viewBox", [vbx, vby, vbxs, vbys])
+
+      // .style("transform", "scale(0.1)")
+
       simulation.on("tick", () => {
           link.attr("d", linkArc);
           node.attr("transform", d => `translate(${d.x},${d.y})`);

@@ -15,7 +15,11 @@
     <CommandsContainer />
   </div>
   
-  <div v-else-if="store.currentFocus === 'empty'" id="empty-field" @click="$event => focusSearchBar()">
+  <div id="empty-field" v-else-if="store.currentFocus === 'empty'" @click="$event => focusSearchBar()">
+    <div id="search-prompt">
+      <p >search for a movie or actor.</p>
+      <p style="margin-top:40px">please.</p>
+    </div>
   </div>
 
   <div v-else class="result-component">
@@ -33,7 +37,16 @@
     width: 100%;
   }
   #empty-field {
-    height: 100%
+    height: 100%;
+    display: flex;
+  }
+  #search-prompt {
+    margin: 40% 40px;
+    text-transform: uppercase;
+    font-family: 'Dosis', sans-serif;
+    font-weight: 600;
+    font-size: 2em;
+    text-align: center;
   }
 </style>
 

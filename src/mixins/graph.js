@@ -4,11 +4,20 @@ import helpers from './helpers.js'
 import Simulation from './Simulation.js'
 import graphBuilder from './graphBuilder.js'
 import { store } from '@/stores/store.js'
+// import Vue from 'vue'
+// import VueCookies from 'vue-cookies'
 
 let timer;
 let alreadyClicked = false
 
 export default {
+  created() {
+    let x = localStorage.getItem("newHere")
+    if (x === undefined || x === null || x === '') {
+      localStorage.setItem("newHere", true)
+    }
+  },
+
   methods: {
     draw (responseData) {
       d3.select("#inner-wrapper").remove()
@@ -20,6 +29,7 @@ export default {
       const outerWrapper = d3.select("#outer-wrapper")
       const innerWrapper = outerWrapper.append("g").attr("id", "inner-wrapper")
       const centeringButton = d3.select("#centering-button") 
+
       const simulation = new Simulation({nodes, 
                                          links, 
                                          width, 
@@ -65,7 +75,8 @@ export default {
           } else {
 
             // double-click on new node
-            console.log("double click to call new node")
+            console.log("double click to call new node") 
+            localStorage.setItem("newHere", false)
             await this.callForNodes(d.id)
             return
           }

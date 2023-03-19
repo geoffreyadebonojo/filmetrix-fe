@@ -98,7 +98,7 @@ export default {
     .attr("d", f => this.drawArc(f))
     .attr("fill", this.data().bodyGrey)
 
-    actorLabel.selectAll("text")
+    actorLabel.append("g").attr("class", "text-container").selectAll("text")
     .data((d) => {
       return d.name.split("")
     })
@@ -148,42 +148,10 @@ export default {
   },
 
   attachMouseEvents(node) {
-    if (this.data().first) {
-      node
-      .on("mouseenter", (e, d) => {
-        let letters = "Double click me  double click me  double click me  "
-        let r = -50
-
-        let label = d3.select(`#${d.id}`)
-        .select(".node-label")
-
-        label.append("path")
-        .attr("d", f => this.drawArc(f))
-        .attr("fill", this.data().bodyGrey)
-
-        label.selectAll("text")
-        .data(letters.split(""))
-        .enter()
-        .append("text")
-        .text((d) => {
-          return d
-        })
-        .style("font-size", "12px")
-        .style("font-family", "Dosis, sans-serif")
-        .style("text-transform", "uppercase")
-        .style("transform", (d, i, a) => {
-          let theta = (i- (a.length/2))* 7
-          return `rotate(${theta}deg)translateY(${r+2}px)`
-        })
-
-        // this.nodeTransformer(e.target, "scale(1.03)", "aliceblue", "white")
-      })
-      .on("mouseleave", (e, d) => {
-        this.nodeTransformer(e.target, "scale(1)", this.data().strokeColor, "none")
-      })
+    if (localStorage.getItem("newHere") === "true" || localStorage.getItem("newHere") === undefined) {
+      this.instructionLabel(node)
     } else {
-      node
-      .on("mouseenter", (e) => {
+      node.on("mouseenter", (e) => {
         node.moveToFront()
         this.nodeTransformer(e.target, "scale(1.03)", "aliceblue", "white")
         
@@ -193,6 +161,60 @@ export default {
         this.nodeTransformer(e.target, "scale(1)", this.data().strokeColor, "none")
       })
     }
+  },
+
+  instructionLabel(node) {
+    node.on("mouseenter", (e, d) => {
+      let letters = "Double click me  double click me  double click me  "
+      let r = -50
+
+      let label = d3.select(`#${d.id}`).select(".node-label")
+  
+      label.attr("class", "node-label inst")
+      label.select("path").style("display", "none")
+      label.select(".text-container").style("display", "none")
+
+      function tempArc() {
+        const arc = d3.arc()
+        .innerRadius(44)
+        .outerRadius(64)
+        .startAngle(0) //converting from degs to radians
+        .endAngle(Math.PI * 2) //just radians
+
+        return arc()
+      }
+      label.append("path")
+      .attr("class", "instruction")
+      .attr("d", f => tempArc(f))
+      .attr("fill", this.data().bodyGrey)
+
+      label.selectAll("text")
+      .exit()
+      .data(letters.split(""))
+      .enter()
+      .append("text")
+      .attr("class", "instruction")
+      .text((d) => {
+        return d
+      })
+      .style("font-size", "12px")
+      .style("font-family", "Dosis, sans-serif")
+      .style("font-weight", "900")
+      .style("text-transform", "uppercase")
+      .style("transform", (d, i, a) => {
+        let theta = (i- (a.length/2))* 7.1
+        return `rotate(${theta}deg)translateY(${r+2}px)`
+      })
+
+      // this.nodeTransformer(e.target, "scale(1.03)", "aliceblue", "white")
+    })
+    .on("mouseleave", (e, d) => {
+      d3.selectAll(".instruction").remove()
+      let n = d3.select(`#${d.id}`).select('.node-label').classed("inst", false)
+      n.select("path").style("display", "block")
+      n.select(".text-container").style("display", "block")
+      this.nodeTransformer(e.target, "scale(1)", this.data().strokeColor, "none")
+    })
   },
 
   nodeTransformer(target, scale, highlightColor, textStroke) {

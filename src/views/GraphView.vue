@@ -10,7 +10,7 @@
   <div id="viewer-body">
     <!-- <div id="instructions">Instruction</div> -->
     <Graph />
-    <!-- <PanelComponent /> -->
+    <PanelComponent />
     <!-- <AboutGraph v-if="store.aboutUs"></AboutGraph> -->
   </div>
 </template>

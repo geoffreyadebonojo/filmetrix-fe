@@ -32,12 +32,13 @@
     height: 100%;
     width: 100%;
     display: grid;
-    grid-template-columns: 80px 25px 1fr;
-    grid-template-rows: 100px 1fr;
+    grid-template-columns: 175px 25px 1fr;
+    grid-template-rows: 200px 25px 1fr;
     padding: 10px;
     /* gap: 10px; */
     grid-template-areas:
     "poster . name"
+    ". . ."
     "desc desc desc";
 
     overflow: hidden;
@@ -45,7 +46,7 @@
 
   #poster {
     grid-area: poster;
-    width: 90px;
+    width: 220px;
     margin: auto;
   }
 
@@ -56,13 +57,14 @@
     transform: scalex(0);
     font-family: 'Dosis', sans-serif;
     width: 100%;
-    margin: auto;
+    margin: auto 0 10px 0;
     font-size: 70px;
     letter-spacing: 3px;
     font-weight: 900;
     text-transform: uppercase;
     color: white;
     text-shadow: 1px 0px black;
+    transform-origin: left;
   }
 
   #description {
@@ -158,7 +160,7 @@
       const innerWrapper = d3.select("#about-outer-wrapper")
       .append("g")
       .attr("id", "about-inner-wrapper")
-      .style("transform", "translateY(30%)")
+      .style("transform", "translateY(40%)")
 
       const link = innerWrapper.append("g")
           .attr("class", "links")
@@ -205,21 +207,21 @@
         d3.select("#poster").attr("src", d.poster)
         .style("width", () => {
           if (d.name == "Filmetrix") {
-            return "50px"
+            return "120px"
           } else {
-            return "90px"
+            return "220px"
           }
         })
         .style("margin", () => {
           if (d.name == "Filmetrix") {
             // return "0 0 95px 95px"
           // } else {
-            return "15px 0 0 25px"
+            return "40px 0 0 65px"
           }
         })
 
         d3.select("#name").html(d.name)
-        .transition().duration(300)
+        // .transition().duration(300)
         .style("transform", "scale(1)")
         .style("left", "0px")
         d3.select("#description").html(d.description)
