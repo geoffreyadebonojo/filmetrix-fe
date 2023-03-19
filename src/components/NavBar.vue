@@ -66,7 +66,6 @@
 </template>
 
 <script>
-
 export default {
   name: "NavBar",
   data () {
@@ -213,7 +212,6 @@ export default {
   }
 }
 </script>
-
 
 <style scoped>
   .nav-button-container {

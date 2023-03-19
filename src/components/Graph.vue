@@ -2,13 +2,16 @@
   import * as d3 from 'd3'
   import { store } from '@/stores/store.js'
   import PanelComponent from './PanelComponent.vue'
+  import MobilePanelComponent from './MobilePanelComponent.vue'
 </script>
 
 <template>
   <svg id="graph-container">
     <g id="outer-wrapper"></g>
   </svg>
-  <PanelComponent />
+
+  <MobilePanelComponent v-if="store.isMobile"/>
+  <PanelComponent v-else/>
 </template>
 
 <style>

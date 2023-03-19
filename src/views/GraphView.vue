@@ -18,6 +18,7 @@
 <style scoped>
   #viewer-body {
     height: 100vh;
+    overflow: hidden;
   }
   #instructions {
     position : absolute;

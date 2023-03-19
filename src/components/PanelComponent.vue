@@ -4,7 +4,6 @@
   import Controls from './Controls.vue'
   import { store } from '@/stores/store.js'
   import * as d3 from 'd3'
-
 </script>
 
 <template>
@@ -43,6 +42,7 @@
   #controls {
      /* background: #555; */
   }
+  
   #settings-icon {
     grid-area: setting;
     height: 20px;
