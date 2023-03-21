@@ -12,7 +12,6 @@ const app = createApp(App)
 app.use(createPinia())
 app.use(router)
 // app.use(require('vue-cookies'))
-
 app.mount('#app')
 
 Array.prototype.ids = function(elem) {
