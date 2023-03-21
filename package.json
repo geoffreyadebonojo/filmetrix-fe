@@ -14,7 +14,9 @@
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
     "format": "prettier --write src/",
     "postinstall": "npm install express"
-
+  },
+  "engines": {
+    "node": "19.x"
   },
   "dependencies": {
     "d3": "^7.8.2",
