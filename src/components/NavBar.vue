@@ -18,49 +18,49 @@
     <div id="highlight"></div>
  
     <div id="search-button" @click="this.toggleOrSubmitOnClick()">
-      <img src="../assets/search-icon.png" class="icon" id="search-icon">
+      <img src="/assets/search-icon.png" class="icon" id="search-icon">
     </div>
 
     <div 
       class="nav-button"  id="person-button" v-if="this.displayResultIcon('person') === true" >
       <div @click="this.setCurrentFocus('person')">
-        <img src="../assets/person-icon.svg" class="icon" id="person-icon" >
+        <img src="assets/person-icon.svg" class="icon" id="person-icon" >
       </div>
     </div>
     <div v-else></div>
 
     <div class="nav-button"  id="movie-button" v-if="this.displayResultIcon('movie') === true">
       <div @click="this.setCurrentFocus('movie')">
-        <img src="../assets/movie-icon.svg" class="icon" id="movie-icon">
+        <img src="assets/movie-icon.svg" class="icon" id="movie-icon">
       </div>
     </div>
     <div v-else></div>
 
     <div class="nav-button" id="tv-button" v-if="this.displayResultIcon('tv') === true">
       <div @click="this.setCurrentFocus('tv')">
-        <img src="../assets/tv-icon.svg" class="icon" id="tv-icon">
+        <img src="assets/tv-icon.svg" class="icon" id="tv-icon">
       </div>
     </div>
 
     <div class="nav-button" id="details-button" v-if="store.currentDetailId !== false" @click="this.setCurrentFocus('details')">
-      <img src="../assets/details-icon.svg" class="icon" id="details-icon">
+      <img src="assets/details-icon.svg" class="icon" id="details-icon">
     </div>
     <div v-else></div>
 
     <div class="nav-button" id="commands-button" @click="this.setCurrentFocus('commands')">
-      <img src="../assets/command-icon.svg" class="icon" id="commands-icon">
+      <img src="assets/command-icon.svg" class="icon" id="commands-icon">
     </div>
 
     <!-- <router-link to="/about" custom v-slot="{ navigate }"> -->
     <router-link class="nav-button" id="about-button" to="/about">
       <!-- <div class="nav-button" id="about-button" @click="navigate"> -->
       <!-- <div class="nav-button" id="about-button" @click="changeRoute('about')"> -->
-        <img src="../assets/about-us-icon.svg" class="icon" id="about-us-icon">
+        <img src="assets/about-us-icon.svg" class="icon" id="about-us-icon">
       <!-- </div> -->
     </router-link>
 
     <div class="icon" id="back-button" @click="this.back()">
-      <img src="../assets/back-icon.svg" id="back-icon">
+      <img src="assets/back-icon.svg" id="back-icon">
     </div>
   </div>
 </template>

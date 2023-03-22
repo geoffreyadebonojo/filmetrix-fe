@@ -75,7 +75,7 @@
     border-radius: 8px;
   }
 
-  #name {
+  /* #name {
     grid-area: name;
     font-family: 'Dosis', sans-serif;
     height: 100%;
@@ -91,7 +91,7 @@
     color: white;
     text-shadow: 1px 0px black;
   }
-  
+   */
   #birthday {
     grid-area: birthday;
     font-family: 'Dosis', sans-serif;

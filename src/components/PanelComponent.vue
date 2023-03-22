@@ -10,9 +10,9 @@
   <div id="panel-body">
 
     <!-- <div id="zoom-controls"> -->
-      <!-- <img src="../assets/square-plus.svg" class="zoom-button" id="plus-button" alt="minus button"> -->
-      <img src="../assets/center-graph-icon.svg" class="zoom-button" id="centering-button" alt="centering button">
-      <!-- <img src="../assets/square-minus.svg" class="zoom-button" id="minus-button" alt="centering button"> -->
+      <!-- <img src="assets/square-plus.svg" class="zoom-button" id="plus-button" alt="minus button"> -->
+      <img src="assets/center-graph-icon.svg" class="zoom-button" id="centering-button" alt="centering button">
+      <!-- <img src="assets/square-minus.svg" class="zoom-button" id="minus-button" alt="centering button"> -->
     <!-- </div> -->
 
     <div id="resize-bar" class="main-panel-component">
@@ -32,8 +32,8 @@
       <Controls />
     </div>
 
-    <!-- <img v-if="store.showControls" src="../assets/settings-white.svg" class="icon" id="settings-icon" @click="$event => this.toggleControls()">
-    <img v-else src="../assets/settings-black.svg" class="icon" id="settings-icon" @click="$event => this.toggleControls()"> -->
+    <!-- <img v-if="store.showControls" src="assets/settings-white.svg" class="icon" id="settings-icon" @click="$event => this.toggleControls()">
+    <img v-else src="assets/settings-black.svg" class="icon" id="settings-icon" @click="$event => this.toggleControls()"> -->
 
   </div>
 </template>
