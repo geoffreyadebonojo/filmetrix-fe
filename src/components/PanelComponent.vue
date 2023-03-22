@@ -11,7 +11,7 @@
 
     <!-- <div id="zoom-controls"> -->
       <!-- <img src="assets/square-plus.svg" class="zoom-button" id="plus-button" alt="minus button"> -->
-      <img src="assets/center-graph-icon.svg" class="zoom-button" id="centering-button" alt="centering button">
+      <img src="/assets/center-graph-icon.svg" class="zoom-button" id="centering-button" alt="centering button">
       <!-- <img src="assets/square-minus.svg" class="zoom-button" id="minus-button" alt="centering button"> -->
     <!-- </div> -->
 
