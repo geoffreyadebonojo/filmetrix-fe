@@ -5,7 +5,7 @@ import App from './App.vue'
 import router from './router'
 import * as d3 from "d3"
 
-import '/public/assets/main.css'
+import '/public/main.css'
 
 const app = createApp(App)
 
