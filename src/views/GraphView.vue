@@ -1,9 +1,6 @@
 <script setup>
   import PanelComponent from '../components/PanelComponent.vue'
   import GraphComponent from '../components/GraphComponent.vue'
-  // import AboutGraph from '../components/about/AboutGraph.vue'
-  import { store } from '@/stores/store.js'
-  import * as d3 from 'd3'
 </script>
 
 <template>
@@ -20,8 +17,7 @@
     name: 'GraphView',
     components: {
       GraphComponent,
-      PanelComponent//,
-      // AboutGraph
+      PanelComponent
     },
     data () {
       return {
@@ -29,17 +25,6 @@
         count: 5
       }
     }
-    // mounted () {
-    //   d3.select("#viewer-body").on("click", (d) => {
-    //     let sb = d3.select("#search-text")
-    //     sb
-    //     .style("background", "lightblue")
-    //     .transition().duration(200)
-    //     .style("background", "white")
-    //     .ease(d3.easeCircleIn)
-    //     .node().focus()
-    //   })
-    // }
   }
 </script>
 

@@ -57,12 +57,6 @@
       }
     },
     mounted () {
-      function getRandomInt(min, max) {
-        min = Math.ceil(min);
-        max = Math.floor(max);
-        return Math.floor(Math.random() * (max - min + 1)) + min;
-      }
-
       let links = this.data.links
       let nodes = this.data.nodes
       let simulation = d3.forceSimulation(nodes, links)
@@ -70,11 +64,9 @@
       const width = 1600
       const height = 1600
 
-      const forces = this.data.forces
-  
       simulation
         .force("link", d3.forceLink(links).id(d => d.id)
-        .distance((l) => {
+        .distance(() => {
           // if (l.index % 2 == 1) {
           //   return 200
           // } else {
@@ -83,10 +75,10 @@
           return 0
           // return l.distance
         }))
-        .force("charge", d3.forceManyBody().strength((d) => {
+        .force("charge", d3.forceManyBody().strength(() => {
           return -2000
         }))
-        .force('collide', d3.forceCollide((d) => {
+        .force('collide', d3.forceCollide(() => {
           return 100
         }))
         .force("center", d3.forceCenter(0, 0))

@@ -1,8 +1,6 @@
 <script setup>
   import * as d3 from 'd3'
-  import api from "../mixins/api"
   import focusHelper from '../mixins/focusHelper'
-  import { store } from '@/stores/store.js'
 </script>
 
 <template>
@@ -87,7 +85,6 @@
         .alpha(1)
         .alphaTarget(0.99999)
 
-      const viewerBody = d3.select("#about-graph-container")
       const innerWrapper = d3.select("#about-outer-wrapper")
       .append("g")
       .attr("id", "about-inner-wrapper")

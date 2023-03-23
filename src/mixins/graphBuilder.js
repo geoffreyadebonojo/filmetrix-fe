@@ -77,7 +77,7 @@ export default {
       .attr("class", "outline")
       .attr("stroke", this.data().strokeColor)
       .attr("stroke-width", 1.5)
-      .attr("r", (d) => {
+      .attr("r", () => {
         return this.data().settings.defaults.node.circle.r
         // return d.r
       })
@@ -128,20 +128,20 @@ export default {
   appendImage(node) {
     node.append("svg:image")
       .attr("class", "poster")
-      .attr('x', (d) => {
+      .attr('x', () => {
         return this.data().settings.defaults.image.offset.x
       })
-      .attr('y', (d) => {
+      .attr('y', () => {
         return this.data().settings.defaults.image.offset.y
       })
-      .attr('width', (d) => {
+      .attr('width', () => {
         return this.data().settings.defaults.image.position.x
       })
-      .attr('height', (d) => {
+      .attr('height', () => {
         return this.data().settings.defaults.image.position.y
       })
       .attr("xlink:href", d => d.poster)
-      .attr("clip-path", (d) => {
+      .attr("clip-path", () => {
         return `inset(${this.data().settings.defaults.image.clipPath})`
       })
     return node
@@ -287,7 +287,7 @@ export default {
     })
   
     args.centeringButton.style("display", "block").transition().duration(30).style("left", "-30px")
-    args.centeringButton.on("click", (e) => {
+    args.centeringButton.on("click", () => {
       var transform = d3.zoomIdentity
         .translate(0,0)
         .scale(1)

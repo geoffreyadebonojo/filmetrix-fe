@@ -5,24 +5,25 @@
 </script>
 
 <template>
-  <div class="result-container" v-bind:id="store.currentFocus + '-results'">
-    <div class="result-tile"
+  <div class="result-container" 
+    v-bind:id="store.currentFocus + '-results'"
+    v-if="store.currentFocus !== 'noResult'">
+      <div class="result-tile"
         tabindex="0"
         v-bind:id="result.id"
-        v-if="store.currentFocus !== 'noResult'"
         v-for="result in store.searchResults.filter(r => r['id'].includes(store.currentFocus))" 
+        :key="result.id"
         @click="$event => this.fetchNodesAndDetails(result.id)"
-        @keypress="this.fetchNodesAndDetails(result.id)"
-      >
+        @keypress="this.fetchNodesAndDetails(result.id)">
 
         <img v-bind:src="result.poster"/>
         <div>{{result.name}}</div>
     </div>
+  </div>
 
-    <div v-else="store.currentFocus === 'noResult'" id="no-result">
-      <p>No result found.</p>
-      <p style="margin-top:30px">Did you get the spelling right?</p>
-    </div>
+  <div v-else>
+    <p>No result found.</p>
+    <p style="margin-top:30px">Did you get the spelling right?</p>
   </div>
 </template>
 

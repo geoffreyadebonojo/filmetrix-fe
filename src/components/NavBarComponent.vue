@@ -78,10 +78,6 @@ export default {
     document.querySelector("#search-text").focus()
   },
   methods: {
-    changeRoute(route) {
-      // `route` is either a string or object
-      router.push(route);
-    },
     back () {
       const nav = d3.select("#navbar")
       store.aboutUs = false

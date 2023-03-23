@@ -14,7 +14,7 @@ app.use(router)
 
 app.mount('#app')
 
-Array.prototype.ids = function(elem) {
+Array.prototype.ids = function() {
   return this.map(d => d.id)
 }
 

@@ -1,9 +1,3 @@
-<script setup>
-  import api from "../../mixins/api"
-  import focusHelper from '../../mixins/focusHelper'
-  import { store } from '@/stores/store.js'
-</script>
-
 <style>
   #fade-top {
     grid-area: ft;

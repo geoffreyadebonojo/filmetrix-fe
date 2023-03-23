@@ -9,6 +9,9 @@ import { store } from '@/stores/store.js'
 
 let timer;
 let alreadyClicked = false
+// IGNORE THE LINTER
+let i = 0
+      
 
 export default {
   created() {
@@ -71,11 +74,8 @@ export default {
               nodes: nodes,
               links: links
             })
-            console.log("double click on existing node")
           } else {
-
             // double-click on new node
-            console.log("double click to call new node") 
             localStorage.setItem("newHere", false)
             await this.callForNodes(d.id)
             return
@@ -90,14 +90,13 @@ export default {
               await api.fetchDetails(d.id)
               store.currentDetailId = d.id
             }
-            console.log("single click to fetch details ", d.id)
           }, doubleClickDelay);
           alreadyClicked = true;
         }
       })
 
       const linkArc = d =>`M${d.source.x},${d.source.y}A0,0 0 0,1 ${d.target.x},${d.target.y}`
-      let i = 0
+      
       let elem;
 
       simulation
@@ -106,7 +105,7 @@ export default {
         link.attr("d", linkArc)
         node.attr("transform", d => `translate(${d.x},${d.y})`); //scale(${(i/20)})`);
       })
-      .on("end", (t) => {
+      .on("end", () => {
         node
         // .transition().duration(500).delay(100).ease(d3.easeBounceOut)
         .attr("transform", (d) => {
