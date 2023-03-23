@@ -21,15 +21,15 @@
     </div>
 
     <div id="navbar">
-      <NavBar />
+      <NavBar></NavBar>
     </div>
 
     <div id="panel-center" style="height:142%">
-      <PanelCenter />
+      <PanelCenter></PanelCenter>
     </div>
 
     <div id="controls" class="main-panel-component" style="transform: scale(1, 0); bottom: -50%;">
-      <Controls />
+      <Controls></Controls>
     </div>
 
     <!-- <img v-if="store.showControls" src="assets/settings-white.svg" class="icon" id="settings-icon" @click="$event => this.toggleControls()">

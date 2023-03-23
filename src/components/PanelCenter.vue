@@ -8,11 +8,11 @@
 <template>
   <div v-if="store.currentFocus === 'details' && store.currentDetailId !== false" class="details-component">
     <!-- use search result data? later -->
-    <Details />
+    <Details></Details>
   </div>
   
   <div v-else-if="store.currentFocus === 'commands'" id="commands-container">
-    <CommandsContainer />
+    <CommandsContainer></CommandsContainer>
   </div>
   
   <div id="empty-field" v-else-if="store.currentFocus === 'empty'" @click="$event => focusSearchBar()">
@@ -23,7 +23,7 @@
   </div>
 
   <div v-else class="result-component">
-    <SearchResult />
+    <SearchResult></SearchResult>
   </div>
   
 </template>
