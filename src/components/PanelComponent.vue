@@ -115,7 +115,6 @@
   }
 </script>
 
-
 <style scoped>
   #settings-icon {
     grid-area: setting;

@@ -75,15 +75,15 @@ export default {
     }
   },
   methods: {
-    displayPersonIcon() {
+    displayPersonIcon: function() {
       const list = store.searchResults.map(r => r['id'].split("-")[0])
       return list.includes('person')
     },
-    displayMovieIcon() {
+    displayMovieIcon: function() {
       const list = store.searchResults.map(r => r['id'].split("-")[0])
       return list.includes('movie')
     },
-    displayTvIcon() {
+    displayTvIcon: function() {
       const list = store.searchResults.map(r => r['id'].split("-")[0])
       return list.includes('tv')
     },
