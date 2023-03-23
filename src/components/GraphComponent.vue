@@ -1,7 +1,7 @@
 <script setup>
+  import PanelComponent from './PanelComponent.vue'
   import * as d3 from 'd3'
   import { store } from '@/stores/store.js'
-  import PanelComponent from './PanelComponent.vue'
 </script>
 
 <template>
@@ -76,6 +76,10 @@
 
 <script>
   export default {
+    name: "GraphComponent",
+    components: {
+      PanelComponent
+    },
     mounted () {
       d3.select("#graph-container")
       .attr("viewBox", `-${window.innerWidth*2/3} -${window.innerHeight} ${window.innerWidth*2} ${window.innerHeight*2}`)

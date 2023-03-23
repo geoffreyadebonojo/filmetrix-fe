@@ -1,7 +1,7 @@
 <script setup>
   import { store } from '@/stores/store.js'
-  import api from "../mixins/api"
   import focusHelper from "../mixins/focusHelper"
+  import api from "../mixins/api"
   import * as d3 from 'd3'
 </script>
 
@@ -67,7 +67,8 @@
 
 <script>
 export default {
-  name: "NavBar",
+  name: "NavBarComponent",
+  mixins: [focusHelper, api],
   data () {
     return {
       searchOpen: true

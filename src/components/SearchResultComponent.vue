@@ -28,8 +28,8 @@
 
 <script>
   export default {
-    name: "SearchResult",
-    mixins: [graph],
+    name: "SearchResultComponent",
+    mixins: [graph, api],
     data () {
       return {}
     },

@@ -43,7 +43,8 @@
 
 <script>
   export default {
-    name: "Details",
+    name: "DetailsComponent",
+    mixins: [api, focusHelper, helpers, graphBuilder, settingsModule],
     mounted () {
       focusHelper.methods.set('details')
     },

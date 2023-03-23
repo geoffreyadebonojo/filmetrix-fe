@@ -4,7 +4,7 @@
   import { store } from '@/stores/store.js'
 </script>
 
-<style scoped>
+<style>
   #fade-top {
     grid-area: ft;
   }

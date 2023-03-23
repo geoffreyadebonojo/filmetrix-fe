@@ -18,8 +18,7 @@
 
 <script>
   export default {
-    name: "CommandsContainer",
-    props: {}
+    name: "CommandsContainer"
   }
 </script>
 

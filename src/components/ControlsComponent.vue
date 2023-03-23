@@ -20,6 +20,13 @@
   <div class='sel' id="clear">clear</div>
 </template>
 
+<script>
+  export default {
+    name: "ControlsComponent",
+    mixins: [helpers, graph]
+  }
+</script>
+
 <style>
   #controls {
     grid-area: controls;
@@ -45,10 +52,3 @@
     color: #222;
   }
 </style>
-
-<script>
-  export default {
-    name: "Controls",
-    props: {}
-  }
-</script>

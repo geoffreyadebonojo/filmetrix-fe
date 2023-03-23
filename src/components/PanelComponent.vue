@@ -1,14 +1,13 @@
 <script setup>
-  import NavBar from './NavBar.vue'
+  import NavBarComponent from './NavBarComponent.vue'
   import PanelCenter from './PanelCenter.vue'
-  import Controls from './Controls.vue'
+  import ControlsComponent from './ControlsComponent.vue'
   import { store } from '@/stores/store.js'
   import * as d3 from 'd3'
 </script>
 
 <template>
   <div id="panel-body">
-
     <!-- <div id="zoom-controls"> -->
       <!-- <img src="assets/square-plus.svg" class="zoom-button" id="plus-button" alt="minus button"> -->
       <img src="/center-graph-icon.svg" class="zoom-button" id="centering-button" alt="centering button">
@@ -16,20 +15,20 @@
     <!-- </div> -->
 
     <div id="resize-bar" class="main-panel-component">
-      <div class="vll"></div>
-      <div class="vlr"></div>
+      <div id="left-line"></div>
+      <div id="right-line"></div>
     </div>
 
     <div id="navbar">
-      <NavBar></NavBar>
+      <nav-bar-component></nav-bar-component>
     </div>
 
     <div id="panel-center" style="height:142%">
-      <PanelCenter></PanelCenter>
+      <panel-center></panel-center>
     </div>
 
     <div id="controls" class="main-panel-component" style="transform: scale(1, 0); bottom: -50%;">
-      <Controls></Controls>
+      <controls-component></controls-component>
     </div>
 
     <!-- <img v-if="store.showControls" src="assets/settings-white.svg" class="icon" id="settings-icon" @click="$event => this.toggleControls()">
@@ -37,90 +36,6 @@
 
   </div>
 </template>
-
-<style scoped>
-  #controls {
-     /* background: #555; */
-  }
-  
-  #settings-icon {
-    grid-area: setting;
-    height: 20px;
-    position: absolute;
-    top: 7vh;
-    right: -1px;
-  }
-
-  #settings-icon:hover {
-    cursor: pointer;
-  }
-  .vll, .vlr {
-    position: relative;
-    border-left: 2px solid black;
-    top: 300px;
-    left: 3px;
-    height: 50px;
-  }
-
-  .vlr {
-    left: 8px;
-    top: 250px;
-  }
-
-  .zoom-button {
-    background: none;
-    display: none;
-    color: white;
-    bottom: 10px;
-    width: 20px;
-    position: absolute;
-    z-index: 1;
-    cursor: pointer;
-  }
-
-  #panel-body {
-    height: 100vh;
-    width: 0px;
-    display: grid;
-    grid-template-columns: 30px 1fr 30px;
-    grid-template-rows: 2vh 1.8em 4vh 10fr 1vh 4fr 4vh;
-    grid-template-areas:
-      "resize-bar . ."
-      "resize-bar navbar navbar"
-      "resize-bar . settings"
-      "resize-bar panel-center ."
-      "resize-bar . ."
-      "resize-bar controls ."
-      "resize-bar . .";
-    background: #333333;
-    position: absolute;
-    top: 0px;
-    right: 0px;
-    z-index: 2;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  }
-
-  #navbar {
-    grid-area: navbar;
-    background: #333333;
-    display: flex;
-    margin: auto 0 auto auto;
-    height: 26px;
-    width: 100%;  
-  }
-
-  #resize-bar {
-    grid-area: resize-bar;
-    /* background: #444; */
-    width: 12px;
-  }
-
-  #panel-center {
-    grid-area: panel-center;
-    /* background: #444; */
-    overflow-y: auto;
-  }
-</style>
 
 <script>
   export default {
@@ -131,8 +46,9 @@
       }
     },
     components: {
-      NavBar,
-      PanelCenter
+      NavBarComponent,
+      PanelCenter,
+      ControlsComponent
     },
     methods: {
       toggleControls () {
@@ -198,3 +114,85 @@
     }
   }
 </script>
+
+
+<style scoped>
+  #settings-icon {
+    grid-area: setting;
+    height: 20px;
+    position: absolute;
+    top: 7vh;
+    right: -1px;
+  }
+
+  #settings-icon:hover {
+    cursor: pointer;
+  }
+
+  #left-line, #right-line {
+    position: relative;
+    border-left: 2px solid black;
+    top: 300px;
+    left: 3px;
+    height: 50px;
+  }
+
+  #right-line {
+    left: 8px;
+    top: 250px;
+  }
+
+  .zoom-button {
+    background: none;
+    display: none;
+    color: white;
+    bottom: 10px;
+    width: 20px;
+    position: absolute;
+    z-index: 1;
+    cursor: pointer;
+  }
+
+  #panel-body {
+    height: 100vh;
+    width: 0px;
+    display: grid;
+    grid-template-columns: 30px 1fr 30px;
+    grid-template-rows: 2vh 1.8em 4vh 10fr 1vh 4fr 4vh;
+    grid-template-areas:
+      "resize-bar . ."
+      "resize-bar navbar navbar"
+      "resize-bar . settings"
+      "resize-bar panel-center ."
+      "resize-bar . ."
+      "resize-bar controls ."
+      "resize-bar . .";
+    background: #333333;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    z-index: 2;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  }
+
+  #navbar {
+    grid-area: navbar;
+    background: #333333;
+    display: flex;
+    margin: auto 0 auto auto;
+    height: 26px;
+    width: 100%;  
+  }
+
+  #resize-bar {
+    grid-area: resize-bar;
+    /* background: #444; */
+    width: 12px;
+  }
+
+  #panel-center {
+    grid-area: panel-center;
+    /* background: #444; */
+    overflow-y: auto;
+  }
+</style>

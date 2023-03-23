@@ -1,18 +1,18 @@
 <script setup>
-  import SearchResult from './SearchResult.vue'
-  import Details from './Details.vue'
-  import CommandsContainer from './Commands.vue'
+  import SearchResultComponent from './SearchResultComponent.vue'
+  import DetailsComponent from './DetailsComponent.vue'
+  import CommandsComponent from './CommandsComponent.vue'
   import { store } from '@/stores/store.js'
 </script>
 
 <template>
   <div v-if="store.currentFocus === 'details' && store.currentDetailId !== false" class="details-component">
     <!-- use search result data? later -->
-    <Details></Details>
+    <details-component></details-component>
   </div>
   
   <div v-else-if="store.currentFocus === 'commands'" id="commands-container">
-    <CommandsContainer></CommandsContainer>
+    <commands-component></commands-component>
   </div>
   
   <div id="empty-field" v-else-if="store.currentFocus === 'empty'" @click="$event => focusSearchBar()">
@@ -23,9 +23,8 @@
   </div>
 
   <div v-else class="result-component">
-    <SearchResult></SearchResult>
+    <search-result-component></search-result-component>
   </div>
-  
 </template>
 
 <style>
@@ -53,6 +52,11 @@
 <script>
   export default {
     name: "PanelCenter",
+    components: {
+      SearchResultComponent,
+      DetailsComponent,
+      CommandsComponent
+    },
     data () {
       return {
         currentDetailSubjectId: ''

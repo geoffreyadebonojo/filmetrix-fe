@@ -1,6 +1,6 @@
 <script setup>
   import PanelComponent from '../components/PanelComponent.vue'
-  import Graph from '../components/Graph.vue'
+  import GraphComponent from '../components/GraphComponent.vue'
   // import AboutGraph from '../components/about/AboutGraph.vue'
   import { store } from '@/stores/store.js'
   import * as d3 from 'd3'
@@ -9,29 +9,17 @@
 <template>
   <div id="viewer-body">
     <!-- <div id="instructions">Instruction</div> -->
-    <Graph></Graph>
-    <PanelComponent></PanelComponent>
+    <graph-component></graph-component>
+    <panel-component></panel-component>
     <!-- <AboutGraph v-if="store.aboutUs"></AboutGraph> -->
   </div>
 </template>
 
-<style scoped>
-  #viewer-body {
-    height: 100vh;
-    overflow: hidden;
-  }
-  #instructions {
-    position : absolute;
-    top: 40%;
-    right: 0%;
-    z-index: 2
-  }
-</style>
-
 <script>
   export default {
+    name: 'GraphView',
     components: {
-      Graph,
+      GraphComponent,
       PanelComponent//,
       // AboutGraph
     },
@@ -54,3 +42,16 @@
     // }
   }
 </script>
+
+<style>
+  #viewer-body {
+    height: 100vh;
+    overflow: hidden;
+  }
+  #instructions {
+    position : absolute;
+    top: 40%;
+    right: 0%;
+    z-index: 2
+  }
+</style>

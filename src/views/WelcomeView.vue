@@ -8,19 +8,6 @@
   </div>
 </template>
 
-<style scoped>
-  .graph-wrapper {
-    color: #222222;
-    width: 100vw;
-    height: 100vh;
-  }
-  svg {
-    height: 100%;
-    width: 100%;
-    overflow: hidden;
-  }
-</style>
-
 <script>
   export default {
     data () {
@@ -231,8 +218,17 @@
       });
     }
   }
-
 </script>
 
-<style scoped>
+<style>
+  .graph-wrapper {
+    color: #222222;
+    width: 100vw;
+    height: 100vh;
+  }
+  svg {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+  }
 </style>

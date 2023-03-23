@@ -16,78 +16,9 @@
   </svg>
 </template>
 
-<style>
-  #about-graph-container {
-    background: #222222;
-    width: 100%;
-    height: 100vh;
-    display: flex;
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: -1
-  }
-
-  .details-container {
-    height: 100%;
-    width: 100%;
-    display: grid;
-    grid-template-columns: 175px 25px 1fr;
-    grid-template-rows: 200px 25px 1fr;
-    padding: 10px;
-    /* gap: 10px; */
-    grid-template-areas:
-    "about-poster . about-name"
-    ". . ."
-    "about-desc about-desc about-desc";
-
-    overflow: hidden;
-  }
-
-  #about-poster {
-    grid-area: about-poster;
-    width: 220px;
-    margin: auto;
-  }
-
-  #about-name {
-    grid-area: about-name;
-    position: relative;
-    left: -115px;
-    transform: scalex(0);
-    font-family: 'Dosis', sans-serif;
-    width: 100%;
-    margin: auto 0 10px 0;
-    font-size: 70px;
-    letter-spacing: 3px;
-    font-weight: 900;
-    text-transform: uppercase;
-    color: white;
-    text-shadow: 1px 0px black;
-    transform-origin: left;
-  }
-
-  #about-description {
-    grid-area: about-desc;
-    font-family: 'Dosis', sans-serif;
-    margin-top: 0px;
-    height: 100%;
-    width: 100%;
-    line-height: 26px;
-    letter-spacing: 0.07em;
-    color: white;
-    text-shadow: 1px 0px black;
-    overflow-y: auto;
-    font-size: 20px;
-    font-weight: 900;
-    line-height: 26px;
-    letter-spacing: 0.002em;
-  }
-</style>
-
 <script>
   export default {
-    name: "AboutContainer",
+    name: "AboutView",
     data () {
       return {
         detailsData: {
@@ -236,3 +167,73 @@
     }
   }
 </script>
+
+<style>
+  #about-graph-container {
+    background: #222222;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1
+  }
+
+  .details-container {
+    height: 100%;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 175px 25px 1fr;
+    grid-template-rows: 200px 25px 1fr;
+    padding: 10px;
+    /* gap: 10px; */
+    grid-template-areas:
+    "about-poster . about-name"
+    ". . ."
+    "about-desc about-desc about-desc";
+
+    overflow: hidden;
+  }
+
+  #about-poster {
+    grid-area: about-poster;
+    width: 220px;
+    margin: auto;
+  }
+
+  #about-name {
+    grid-area: about-name;
+    position: relative;
+    left: -115px;
+    transform: scalex(0);
+    font-family: 'Dosis', sans-serif;
+    width: 100%;
+    margin: auto 0 10px 0;
+    font-size: 70px;
+    letter-spacing: 3px;
+    font-weight: 900;
+    text-transform: uppercase;
+    color: white;
+    text-shadow: 1px 0px black;
+    transform-origin: left;
+  }
+
+  #about-description {
+    grid-area: about-desc;
+    font-family: 'Dosis', sans-serif;
+    margin-top: 0px;
+    height: 100%;
+    width: 100%;
+    line-height: 26px;
+    letter-spacing: 0.07em;
+    color: white;
+    text-shadow: 1px 0px black;
+    overflow-y: auto;
+    font-size: 20px;
+    font-weight: 900;
+    line-height: 26px;
+    letter-spacing: 0.002em;
+  }
+</style>
+
