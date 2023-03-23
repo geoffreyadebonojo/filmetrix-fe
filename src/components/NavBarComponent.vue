@@ -74,9 +74,6 @@ export default {
       searchOpen: true
     }
   },
-  mounted() {
-    document.querySelector("#search-text").focus()
-  },
   methods: {
     back () {
       const nav = d3.select("#navbar")
