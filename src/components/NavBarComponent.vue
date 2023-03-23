@@ -21,15 +21,15 @@
       <img src="/search-icon.png" class="icon" id="search-icon">
     </div>
 
-    <div 
-      class="nav-button"  id="person-button" v-if="this.displayResultIcon('person') === true" >
+    <!-- <div 
+      class="nav-button" id="person-button" v-if="this.displayResultIcon('person') === true" >
       <div @click="this.setCurrentFocus('person')">
         <img src="/person-icon.svg" class="icon" id="person-icon" >
       </div>
     </div>
     <div v-else></div>
 
-    <div class="nav-button"  id="movie-button" v-if="this.displayResultIcon('movie') === true">
+    <div class="nav-button" id="movie-button" v-if="this.displayResultIcon('movie') === true">
       <div @click="this.setCurrentFocus('movie')">
         <img src="/movie-icon.svg" class="icon" id="movie-icon">
       </div>
@@ -40,7 +40,7 @@
       <div @click="this.setCurrentFocus('tv')">
         <img src="/tv-icon.svg" class="icon" id="tv-icon">
       </div>
-    </div>
+    </div> -->
 
     <div class="nav-button" id="details-button" v-if="store.currentDetailId !== false" @click="this.setCurrentFocus('details')">
       <img src="/details-icon.svg" class="icon" id="details-icon">
