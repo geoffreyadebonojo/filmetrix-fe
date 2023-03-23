@@ -31,8 +31,8 @@
       <controls-component></controls-component>
     </div>
 
-    <img src="/settings-white.svg" class="icon" id="settings-icon" @click="$event => this.toggleControls()">
-    <!-- img v-else src="assets/settings-black.svg" class="icon" id="settings-icon" @click="$event => this.toggleControls()"-->
+    <!-- <img src="/settings-white.svg" class="icon" id="settings-icon" @click="this.toggleControls()"> -->
+    <!-- img v-else src="assets/settings-black.svg" class="icon" id="settings-icon" @click="this.toggleControls()"-->
 
   </div>
 </template>

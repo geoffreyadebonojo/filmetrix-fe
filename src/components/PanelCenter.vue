@@ -15,7 +15,7 @@
     <commands-component></commands-component>
   </div>
   
-  <div id="empty-field" v-else-if="store.currentFocus === 'empty'" @click="$event => focusSearchBar()">
+  <div id="empty-field" v-else-if="store.currentFocus === 'empty'" @click="this.focusSearchBar()">
     <div id="search-prompt">
       <p >search for a movie or actor.</p>
       <p style="margin-top:40px">please.</p>
