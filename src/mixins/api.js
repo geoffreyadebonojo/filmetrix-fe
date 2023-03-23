@@ -4,12 +4,12 @@ export default {
   data() {
     store
     return {
-      currentUrl: "http://localhost:3000",
       prodUrl: "https://enigmatic-wildwood-58151.herokuapp.com",
       localUrl: "http://localhost:3000",
       key: "6GzCesnexrzgnDv3FfxbHBrb",
     }
   },
+
   async fetchSearchData(term) {
     const API_URL =`${this.data().prodUrl}/graphql`
 
