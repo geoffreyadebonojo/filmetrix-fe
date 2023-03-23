@@ -13,8 +13,8 @@
         v-bind:id="result.id"
         v-for="result in store.searchResults.filter(r => r['id'].includes(store.currentFocus))" 
         :key="result.id"
-        @click="this.fetchNodesAndDetails(result.id)"
-        @keypress="this.fetchNodesAndDetails(result.id)">
+        @click="fetchNodesAndDetails(result.id)"
+        @keypress="fetchNodesAndDetails(result.id)">
 
         <img v-bind:src="result.poster"/>
         <div>{{result.name}}</div>
