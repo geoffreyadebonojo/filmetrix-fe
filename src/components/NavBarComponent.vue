@@ -11,43 +11,43 @@
     placeholder="Search" 
     id="search-text"
     tabindex="-1"
-    @keyup.enter="this.submitSearch($event.target.value)"
+    @keyup.enter="submitSearch($event.target.value)"
   >
   
   <div class="nav-button-container">
     <div id="highlight"></div>
  
-    <div id="search-button" @click="this.toggleOrSubmitOnClick()">
+    <div id="search-button" @click="toggleOrSubmitOnClick()">
       <img src="/search-icon.png" class="icon" id="search-icon">
     </div>
 
     <div 
       class="nav-button" id="person-button" v-if="displayPersonIcon() === true" >
-      <div @click="this.setCurrentFocus('person')">
+      <div @click="setCurrentFocus('person')">
         <img src="/person-icon.svg" class="icon" id="person-icon" >
       </div>
     </div>
     <div v-else></div>
 
     <div class="nav-button" id="movie-button" v-if="displayMovieIcon() === true">
-      <div @click="this.setCurrentFocus('movie')">
+      <div @click="setCurrentFocus('movie')">
         <img src="/movie-icon.svg" class="icon" id="movie-icon">
       </div>
     </div>
     <div v-else></div>
 
     <div class="nav-button" id="tv-button" v-if="displayTvIcon() === true">
-      <div @click="this.setCurrentFocus('tv')">
+      <div @click="setCurrentFocus('tv')">
         <img src="/tv-icon.svg" class="icon" id="tv-icon">
       </div>
     </div>
 
-    <div class="nav-button" id="details-button" v-if="store.currentDetailId !== false" @click="this.setCurrentFocus('details')">
+    <div class="nav-button" id="details-button" v-if="store.currentDetailId !== false" @click="setCurrentFocus('details')">
       <img src="/details-icon.svg" class="icon" id="details-icon">
     </div>
     <div v-else></div>
 
-    <div class="nav-button" id="commands-button" @click="this.setCurrentFocus('commands')">
+    <div class="nav-button" id="commands-button" @click="setCurrentFocus('commands')">
       <img src="/command-icon.svg" class="icon" id="commands-icon">
     </div>
 
@@ -59,7 +59,7 @@
       <!-- </div> -->
     </router-link>
 
-    <div class="icon" id="back-button" @click="this.back()">
+    <div class="icon" id="back-button" @click="back()">
       <img src="/back-icon.svg" id="back-icon">
     </div>
   </div>
