@@ -22,21 +22,21 @@
     </div>
 
     <div 
-      class="nav-button" id="person-button" v-if="this.displayPersonIcon === true" >
+      class="nav-button" id="person-button" v-if="this.displayPersonIcon() === true" >
       <div @click="this.setCurrentFocus('person')">
         <img src="/person-icon.svg" class="icon" id="person-icon" >
       </div>
     </div>
     <div v-else></div>
 
-    <div class="nav-button" id="movie-button" v-if="displayMovieIcon === true">
+    <div class="nav-button" id="movie-button" v-if="this.displayMovieIcon() === true">
       <div @click="this.setCurrentFocus('movie')">
         <img src="/movie-icon.svg" class="icon" id="movie-icon">
       </div>
     </div>
     <div v-else></div>
 
-    <div class="nav-button" id="tv-button" v-if="displayTvIcon === true">
+    <div class="nav-button" id="tv-button" v-if="this.displayTvIcon() === true">
       <div @click="this.setCurrentFocus('tv')">
         <img src="/tv-icon.svg" class="icon" id="tv-icon">
       </div>
@@ -74,7 +74,7 @@ export default {
       searchOpen: true
     }
   },
-  computed: {
+  methods: {
     displayPersonIcon() {
       const list = store.searchResults.map(r => r['id'].split("-")[0])
       return list.includes('person')
@@ -86,9 +86,7 @@ export default {
     displayTvIcon() {
       const list = store.searchResults.map(r => r['id'].split("-")[0])
       return list.includes('tv')
-    }
-  },
-  methods: {
+    },
     back () {
       const nav = d3.select("#navbar")
       store.aboutUs = false
