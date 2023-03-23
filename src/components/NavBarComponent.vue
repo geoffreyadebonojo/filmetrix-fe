@@ -22,21 +22,21 @@
     </div>
 
     <div 
-      class="nav-button" id="person-button" v-if="this.displayResultIcon('person') === true" >
+      class="nav-button" id="person-button" v-if="this.displayPersonIcon === true" >
       <div @click="this.setCurrentFocus('person')">
         <img src="/person-icon.svg" class="icon" id="person-icon" >
       </div>
     </div>
     <div v-else></div>
 
-    <div class="nav-button" id="movie-button" v-if="this.displayResultIcon('movie') === true">
+    <div class="nav-button" id="movie-button" v-if="displayMovieIcon === true">
       <div @click="this.setCurrentFocus('movie')">
         <img src="/movie-icon.svg" class="icon" id="movie-icon">
       </div>
     </div>
     <div v-else></div>
 
-    <div class="nav-button" id="tv-button" v-if="this.displayResultIcon('tv') === true">
+    <div class="nav-button" id="tv-button" v-if="displayTvIcon === true">
       <div @click="this.setCurrentFocus('tv')">
         <img src="/tv-icon.svg" class="icon" id="tv-icon">
       </div>
@@ -72,6 +72,20 @@ export default {
   data () {
     return {
       searchOpen: true
+    }
+  },
+  computed: {
+    displayPersonIcon() {
+      const list = store.searchResults.map(r => r['id'].split("-")[0])
+      return list.includes('person')
+    },
+    displayMovieIcon() {
+      const list = store.searchResults.map(r => r['id'].split("-")[0])
+      return list.includes('movie')
+    },
+    displayTvIcon() {
+      const list = store.searchResults.map(r => r['id'].split("-")[0])
+      return list.includes('tv')
     }
   },
   methods: {
@@ -161,10 +175,6 @@ export default {
       .style("bottom", "50px")
     },
 
-    displayResultIcon(resultType) {
-      const list = store.searchResults.map(r => r['id'].split("-")[0])
-      return list.includes(resultType)
-    },
 
     toggleOrSubmitOnClick() {
       const d = d3.select("#search-text") 
