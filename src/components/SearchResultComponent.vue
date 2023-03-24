@@ -37,8 +37,6 @@
     },
     methods: {
       async fetchNodesAndDetails(result_id) {
-        await api.fetchDetails(result_id)
-        await graph.methods.callForNodes(result_id, 7)
         let isMobile = /Android|iPhone/i.test(navigator.userAgent)
         if(isMobile) {
           d3.select("#panel-body")
@@ -46,6 +44,9 @@
           .style("width", "14px")
           .style("min-width", "0px")
         }
+        
+        await api.fetchDetails(result_id)
+        await graph.methods.callForNodes(result_id, 7)
       }
     }
   }
