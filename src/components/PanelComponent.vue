@@ -98,6 +98,24 @@
         .on("end", dragended)
       )
 
+      resizeBar.on("click", () => {
+        let panel = d3.select("#panel-body")
+
+        if (store.panelOpen) {
+          panel.transition().duration(100)
+          .style("width", "20px")
+          .style("min-width", "0px")
+          store.panelOpen = false
+        } else {
+          panel.transition()
+          .duration(80)
+          .ease(d3.easeBounceOut)
+          .style("width", "350px")
+          .style("min-width", "270px")
+          store.panelOpen = true
+        }
+      })
+
       function dragstarted() {
         d3.select(this).style("cursor", "col-resize")
       }

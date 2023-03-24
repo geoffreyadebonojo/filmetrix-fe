@@ -41,10 +41,10 @@
         if(isMobile) {
           d3.select("#panel-body")
           .transition().duration(100)
-          .style("width", "14px")
+          .style("width", "20px")
           .style("min-width", "0px")
         }
-        
+
         await api.fetchDetails(result_id)
         await graph.methods.callForNodes(result_id, 7)
       }
