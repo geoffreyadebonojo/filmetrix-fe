@@ -41,7 +41,7 @@
       async fetchNodesAndDetails(result_id) {
         await api.fetchDetails(result_id)
         await graph.methods.callForNodes(result_id, 7)
-        if(this.isMobile) {
+        if(isMobile) {
           d3.select("#panel-body")
           .transition().duration(100)
           .style("width", "14px")
