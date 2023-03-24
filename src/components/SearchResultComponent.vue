@@ -44,6 +44,9 @@
           .style("width", "20px")
           .style("min-width", "0px")
         }
+        d3.select("#zoom-buttons").style("display", "none")
+
+        store.panelOpen = false
 
         await api.fetchDetails(result_id)
         await graph.methods.callForNodes(result_id, 7)

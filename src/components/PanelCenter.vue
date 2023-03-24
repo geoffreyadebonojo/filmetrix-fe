@@ -47,6 +47,12 @@
     font-size: 2em;
     text-align: center;
   }
+
+  @media screen and (max-width: 400px) {
+    .details-component {
+      padding: 2%;
+    }
+  }
 </style>
 
 <script>

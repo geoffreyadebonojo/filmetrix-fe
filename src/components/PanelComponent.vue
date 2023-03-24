@@ -8,11 +8,7 @@
 
 <template>
   <div id="panel-body">
-    <!-- <div id="zoom-controls"> -->
-      <!-- <img src="assets/square-plus.svg" class="zoom-button" id="plus-button" alt="minus button"> -->
-      <img src="/center-graph-icon.svg" class="zoom-button" id="centering-button" alt="centering button">
-      <!-- <img src="assets/square-minus.svg" class="zoom-button" id="minus-button" alt="centering button"> -->
-    <!-- </div> -->
+    <img src="/center-graph-icon.svg" class="centering-button" id="centering-button" alt="centering button">
 
     <div id="resize-bar" class="main-panel-component">
       <div id="left-line"></div>
@@ -23,7 +19,7 @@
       <nav-bar-component></nav-bar-component>
     </div>
 
-    <div id="panel-center" style="height:142%">
+    <div id="panel-center" style="height:142%;zoom:100%">
       <panel-center></panel-center>
     </div>
 
@@ -98,23 +94,34 @@
         .on("end", dragended)
       )
 
-      resizeBar.on("click", () => {
-        let panel = d3.select("#panel-body")
+      let isMobile = /Android|iPhone/i.test(navigator.userAgent)
+      if (isMobile) {
+        resizeBar.on("click", () => {
+          let panel = d3.select("#panel-body")
+          let zoomButtons = d3.select("#zoom-buttons")
+          let centeringButton = d3.select("#centering-button")
+          
+          if (store.panelOpen) {
+            panel.transition().duration(100)
+            .style("width", "20px")
+            .style("min-width", "0px")
+            zoomButtons.style("display", "none")
+            centeringButton.style("display", "block")
+            store.panelOpen = false
+            
+          } else {
+            panel.transition()
+            .duration(80)
+            .ease(d3.easeBounceOut)
+            .style("width", "350px")
+            .style("min-width", "270px")
+            zoomButtons.style("display", "flex")
+            centeringButton.style("display", "none")
+            store.panelOpen = true
+          }
+        })
+      }
 
-        if (store.panelOpen) {
-          panel.transition().duration(100)
-          .style("width", "20px")
-          .style("min-width", "0px")
-          store.panelOpen = false
-        } else {
-          panel.transition()
-          .duration(80)
-          .ease(d3.easeBounceOut)
-          .style("width", "350px")
-          .style("min-width", "270px")
-          store.panelOpen = true
-        }
-      })
 
       function dragstarted() {
         d3.select(this).style("cursor", "col-resize")
@@ -159,7 +166,7 @@
     top: 250px;
   }
 
-  .zoom-button {
+  .centering-button {
     background: none;
     display: none;
     color: white;
@@ -190,7 +197,14 @@
     right: 0px;
     z-index: 2;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  }
+    }
+
+    @media screen and (max-width: 400px) {
+      #panel-body {
+        grid-template-columns: 10px 1fr 10px;
+        grid-template-rows: 2vh 1.8em 0vh 10fr 1vh 4fr 1vh;
+      }
+    }
 
   #navbar {
     grid-area: navbar;

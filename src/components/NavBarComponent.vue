@@ -75,14 +75,34 @@ export default {
     }
   },
   methods: {
+    async submitSearch(value) {
+      const val = value.toUpperCase()
+      if (val == '' || val == null) { 
+        // maybe a helpful tip?
+        return false
+      }
+      
+      await api.fetchSearchData(val)
+      
+      const tab = store.searchResults[0].id.split("-")[0]
+
+      //handle for no id
+
+      this.setCurrentFocus(tab)
+
+      document.querySelector("#search-text").value = ''
+    },
+    
     displayPersonIcon: function() {
       const list = store.searchResults.map(r => r['id'].split("-")[0])
       return list.includes('person')
     },
+
     displayMovieIcon: function() {
       const list = store.searchResults.map(r => r['id'].split("-")[0])
       return list.includes('movie')
     },
+
     displayTvIcon: function() {
       const list = store.searchResults.map(r => r['id'].split("-")[0])
       return list.includes('tv')
@@ -179,24 +199,6 @@ export default {
       this.openField(d)
       store.currentFocus = "search"
       this.submitSearch(d.node().value)
-    },
-      
-    async submitSearch(value) {
-      const val = value.toUpperCase()
-      if (val == '' || val == null) { 
-        // maybe a helpful tip?
-        return false
-      }
-      
-      await api.fetchSearchData(val)
-      
-      const tab = store.searchResults[0].id.split("-")[0]
-
-      //handle for no id
-
-      this.setCurrentFocus(tab)
-
-      document.querySelector("#search-text").value = ''
     },
 
     setCurrentFocus(focus) {

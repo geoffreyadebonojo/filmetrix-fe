@@ -114,6 +114,28 @@
     letter-spacing: 0.002em;
   }
 
+  @media screen and (max-width: 400px) {
+    .details-container {
+      grid-template-columns: 36% 10px 17% 17% 1fr;
+      grid-template-rows: 23% 5% 20px 1fr;
+      grid-template-areas:
+        "poster . name name name"
+        ". . . ."
+        "poster . birthday links links"
+        "desc desc desc desc desc"
+    }
+    #poster {
+      width: 100%;
+    }
+    #name {
+      font-size: 20px;
+      line-height: unset;
+    }
+
+    #imdb {
+      width: 22px;
+    }
+  }
   .details-container {
     height: 100%;
     width: 100%;
@@ -123,13 +145,12 @@
     padding: 10px;
     /* gap: 10px; */
     grid-template-areas:
-    "poster . name name name"
-    "poster . birthday links ."
-    ". . . . ." 
-    "ft ft ft ft ft"
-    "desc desc desc desc desc"
-    "fb fb fb fb fb";
-
+      "poster . name name name"
+      "poster . birthday links ."
+      ". . . . ." 
+      "ft ft ft ft ft"
+      "desc desc desc desc desc"
+      "fb fb fb fb fb";
     overflow: hidden;
   }
 
