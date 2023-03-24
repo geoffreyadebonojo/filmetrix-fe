@@ -2,6 +2,7 @@
   import graph from "../mixins/graph"
   import api from "../mixins/api"
   import { store } from '@/stores/store.js'
+  import * as d3 from 'd3'
 </script>
 
 <template>
@@ -32,12 +33,20 @@
     name: "SearchResultComponent",
     mixins: [graph, api],
     data () {
-      return {}
+      return {
+        isMobile: /Android|iPhone/i.test(navigator.userAgent)
+      }
     },
     methods: {
       async fetchNodesAndDetails(result_id) {
         await api.fetchDetails(result_id)
         await graph.methods.callForNodes(result_id, 7)
+        if(this.isMobile) {
+          d3.select("#panel-body")
+          .transition().duration(100)
+          .style("width", "14px")
+          .style("min-width", "0px")
+        }
       }
     }
   }

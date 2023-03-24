@@ -87,6 +87,7 @@ export default {
       const list = store.searchResults.map(r => r['id'].split("-")[0])
       return list.includes('tv')
     },
+    
     back () {
       const nav = d3.select("#navbar")
       store.aboutUs = false
@@ -172,7 +173,6 @@ export default {
       .duration(0)
       .style("bottom", "50px")
     },
-
 
     toggleOrSubmitOnClick() {
       const d = d3.select("#search-text") 
