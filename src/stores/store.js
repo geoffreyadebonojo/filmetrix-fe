@@ -19,6 +19,5 @@ export const store = reactive({
   },
   highlighted: [],
   showControls: false,
-  panelOpen: true,
-  agent: /Android|iPhone/i.test(navigator.userAgent) ? "mobile" : "desktop"
+  panelOpen: true
 })

@@ -1,15 +1,13 @@
 <script setup>
   import SearchResultComponent from './SearchResultComponent.vue'
   import DetailsComponent from './DetailsComponent.vue'
-  import MobileDetailsComponent from './MobileDetailsComponent.vue'
   import CommandsComponent from './CommandsComponent.vue'
   import { store } from '@/stores/store.js'
 </script>
 
 <template>
   <div v-if="store.currentFocus === 'details' && store.currentDetailId !== false" class="details-component">
-    <mobile-details-component v-if="this.isMobile"></mobile-details-component>
-    <details-component v-else></details-component>
+    <details-component></details-component>
   </div>
   
   <div v-else-if="store.currentFocus === 'commands'" id="commands-container">
@@ -58,7 +56,7 @@
 
 <script>
   export default {
-    name: "PanelContentsComponent",
+    name: "PanelCenter",
     components: {
       SearchResultComponent,
       DetailsComponent,
@@ -66,8 +64,7 @@
     },
     data () {
       return {
-        currentDetailSubjectId: '',
-        isMobile: /Android|iPhone/i.test(navigator.userAgent)
+        currentDetailSubjectId: ''
       }
     },
     methods: {

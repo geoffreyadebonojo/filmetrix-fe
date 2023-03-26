@@ -65,7 +65,7 @@
       const height = 1600
 
       simulation
-        .force("link", d3.forceLink(links).id(d => d.id))
+        .force("link", d3.forceLink(links).id(d => d.id)
         .distance(0)
         .force("charge", d3.forceManyBody().strength(-2000))
         .force('collide', d3.forceCollide(100))
