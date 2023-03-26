@@ -1,4 +1,5 @@
 import { settingsModule } from './settingsModule.js'
+import { store } from '@/stores/store.js'
 import * as d3 from 'd3'
 
 export default {
@@ -18,7 +19,7 @@ export default {
   },
 
   buildLinks(parent, links) {
-    const link = parent.append("g")
+    let link = parent.append("g")
       .attr("class", "links")
       .selectAll("g")
       .data(links)
@@ -27,11 +28,19 @@ export default {
       .attr("class", "link")
       .attr("source", (d => d.source.id))
       .attr("target", (d => d.target.id))
-      .append("path")
+      .append("line")
       .attr("class", "line")
       .attr("stroke", this.data().strokeColor)
       .attr("stroke-width", "1px")
       .attr("vector-effect", "non-scaling-stroke")
+
+    // link.append("rect")
+    //   .attr("height", "20")
+    //   .attr("width", "20")
+    //   .attr("x", "0")
+    //   .attr("y", "-150")
+    //   .attr("fill", "red")
+
     return link
   },
 
@@ -72,14 +81,32 @@ export default {
     return node
   },
 
+  // includedInAnchorsList(d) {
+  //   let sel = store.existing.filter((f) => {
+  //     return f[0] == d.id
+  //   })
+  //   if (sel.length > 0) {
+  //     return sel[0]
+  //   } else {
+  //     return []
+  //   }
+  // },
+
+  // calculateRadiusBasedOnNodeCount(d) {
+  //   if () {
+  //     return base + sel[0][1]
+  //   } else {
+  //     return base
+  //   }
+  // },
+
   appendCircle(node) {
     node.append("circle")
       .attr("class", "outline")
       .attr("stroke", this.data().strokeColor)
-      .attr("stroke-width", 1.5)
-      .attr("r", () => {
+      .attr("stroke-width", 1)
+      .attr("r", (d) => {
         return this.data().settings.defaults.node.circle.r
-        // return d.r
       })
       .attr('fill', this.data().bodyGrey)
       .attr("vector-effect", "non-scaling-stroke")
@@ -154,13 +181,81 @@ export default {
       node.on("mouseenter", (e) => {
         node.moveToFront()
         this.nodeTransformer(e.target, "scale(1.03)", "aliceblue", "white")
-        
-        // let conn = d3.selectAll(`.link[target=${d.id}]`)
+
+        if (!store.inMotion) {
+          this.linkHighlighter(e.target)
+        }
       })
       .on("mouseleave", (e) => {
         this.nodeTransformer(e.target, "scale(1)", this.data().strokeColor, "none")
+
+        if (!store.inMotion) {
+          d3.selectAll(".character-label").remove()
+        }
       })
     }
+  },
+  
+  linkHighlighter(node) {
+    let merged = d3.selectAll(`.link[target='${node.id}'], .link[source='${node.id}']`)
+    let linkholder = merged.append("g").attr("class", "character-label")
+    let start = 65
+    let fs = 10
+
+    linkholder.append("rect")
+    .attr('fill', this.data().bodyGrey)
+    .attr("x", -2)
+    .attr("y", start)
+    .attr("width", 4)
+    .attr("height", (d) => {
+      let c = d.roles.join().split("").length
+      return c*4
+    })
+    .attr("transform", (d) => {
+      let theta = this.angle360(
+        d.source.x,
+        d.source.y,
+        d.target.x,
+        d.target.y
+      )
+      return `translate(${d.source.x},${d.source.y})rotate(${theta-90})`
+    })
+
+    linkholder.append("text")
+    .text(d => d.roles.join(", "))
+    .attr("x", start)
+    .attr("y", 2)
+    .attr("stroke", "#FFF")
+    .style("font-family", "Dosis, sans-serif")
+    .style("font-size", (d) => {
+      return `${fs}px`
+    })
+    .attr("transform", (d) => {
+      let theta = this.angle360(
+        d.source.x,
+        d.source.y,
+        d.target.x,
+        d.target.y
+      )
+      return `translate(${d.source.x},${d.source.y})rotate(${theta})`
+    })
+    // .style("transform-origin", "center")
+    // .style("transform-box", "fill-box")
+    // .style("transform", "rotate(45deg")
+  },
+
+  angle(cx, cy, ex, ey) {
+    var dy = ey - cy;
+    var dx = ex - cx;
+    var theta = Math.atan2(dy, dx); // range (-PI, PI]
+    theta *= 180 / Math.PI; // rads to degs, range (-180, 180]
+    return theta;
+  },
+
+  angle360(cx, cy, ex, ey) {
+    var theta = this.angle(cx, cy, ex, ey); // range (-180, 180]
+    if (theta < 0) theta = 360 + theta; // range [0, 360)
+    return theta;
   },
 
   instructionLabel(node) {

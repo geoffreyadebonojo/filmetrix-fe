@@ -2,6 +2,7 @@ import { reactive } from 'vue'
 
 export const store = reactive({
   // these two clash
+  inMotion: false,
   currentFocus: 'empty',
   currentResultTab: '',
   // prev: '',

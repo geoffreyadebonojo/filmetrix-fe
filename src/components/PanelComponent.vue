@@ -115,7 +115,7 @@
             .ease(d3.easeBounceOut)
             .style("width", "350px")
             .style("min-width", "270px")
-            zoomButtons.style("display", "flex")
+            zoomButtons.style("display", "grid")
             centeringButton.style("display", "none")
             store.panelOpen = true
           }

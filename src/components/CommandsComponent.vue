@@ -39,13 +39,15 @@
     position: relative;
     border-left: 1px solid white;
     height: 100%;
+    bottom: 50px;
   }
   #commands-container {
     height: 100%;
     display: grid;
     grid-template-columns: 1fr 10px 1fr;
     grid-template-areas:
-      "commands centerline effects"
+      "commands centerline effects";
+    font-size: 20px;
   }
   .item {
     font-family: "Dosis", sans-serif;

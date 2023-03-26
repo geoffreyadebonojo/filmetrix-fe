@@ -10,8 +10,8 @@
     <graph-component></graph-component>
     <panel-component></panel-component>
     <div id="zoom-buttons">
-      <img src="/square-minus.svg" @click="incrementZoom(-1)">
       <img src="/square-plus.svg" @click="incrementZoom(1)">
+      <img src="/square-minus.svg" @click="incrementZoom(-1)">
     </div>
     <!-- <AboutGraph v-if="store.aboutUs"></AboutGraph> -->
   </div>
@@ -35,7 +35,7 @@
     mounted () {
       let isMobile = /Android|iPhone/i.test(navigator.userAgent)
       if (isMobile) {
-        d3.select('#zoom-buttons').style('display', 'flex')
+        d3.select('#zoom-buttons').style('display', 'grid')
       }
     },
     methods: {
@@ -55,10 +55,10 @@
   #zoom-buttons {
     display: none;
     position: absolute;
-    bottom: 10px;
+    bottom: 40px;
     right: 10px;
     z-index: 5;
-    width: 70px;
+    height: 80px;
     justify-content: space-between;
   }
 
