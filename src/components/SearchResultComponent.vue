@@ -38,7 +38,7 @@
     methods: {
       async fetchNodesAndDetails(result_id) {
         let isMobile = /Android|iPhone/i.test(navigator.userAgent)
-        if(isMobile) {
+        if (isMobile) {
           d3.select("#panel-body")
           .transition().duration(100)
           .style("width", "20px")
