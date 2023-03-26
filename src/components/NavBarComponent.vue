@@ -51,12 +51,8 @@
       <img src="/command-icon.svg" class="icon" id="commands-icon">
     </div>
 
-    <!-- <router-link to="/about" custom v-slot="{ navigate }"> -->
     <router-link class="nav-button" id="about-button" to="/about">
-      <!-- <div class="nav-button" id="about-button" @click="navigate"> -->
-      <!-- <div class="nav-button" id="about-button" @click="changeRoute('about')"> -->
-        <img src="/about-us-icon.svg" class="icon" id="about-us-icon">
-      <!-- </div> -->
+      <img src="/about-us-icon.svg" class="icon" id="about-us-icon">
     </router-link>
 
     <div class="icon" id="back-button" @click="back()">
@@ -85,8 +81,6 @@ export default {
       await api.fetchSearchData(val)
       
       const tab = store.searchResults[0].id.split("-")[0]
-
-      //handle for no id
 
       this.setCurrentFocus(tab)
 
@@ -264,16 +258,11 @@ export default {
   #search-icon {
     height: 17px;
     margin: 4.5px 5.5px;
-    /* top: 4px;
-    padding: 0 4px 0 6px; */
   }
 
   #about-us-icon {
     height: 17px;
     margin: 4px 6px;
-    /* width: 27px;
-    top: 4px;
-    left: 2px; */
   }
 
   #details-icon {
@@ -310,7 +299,6 @@ export default {
   #back-button {
     display: none;
     top: 50px;
-    /* right: 30px; */
     position: absolute;
     height: 16px;
     margin: 0px 10px 6px 10px;

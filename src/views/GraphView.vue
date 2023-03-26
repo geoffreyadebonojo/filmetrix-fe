@@ -6,14 +6,12 @@
 
 <template>
   <div id="viewer-body">
-    <!-- <div id="instructions">Instruction</div> -->
     <graph-component></graph-component>
     <panel-component></panel-component>
     <div id="zoom-buttons">
       <img src="/square-plus.svg" @click="incrementZoom(1)">
       <img src="/square-minus.svg" @click="incrementZoom(-1)">
     </div>
-    <!-- <AboutGraph v-if="store.aboutUs"></AboutGraph> -->
   </div>
 </template>
 

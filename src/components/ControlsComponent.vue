@@ -5,10 +5,6 @@
 </script>
 
 <template>
-    <!-- <div class="slidecontainer">
-      <input type="range" min="1" max="100" value="50" class="slider" id="myRange">
-    </div> -->
-
   <div v-if="store.graphTypes.length > 0">
     <div class="checkbox"
       v-for="genre in store.graphTypes"
@@ -30,7 +26,6 @@
 <style>
   #controls {
     grid-area: controls;
-    /* border: 3px dashed black; */
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     transform: scaleY(0);

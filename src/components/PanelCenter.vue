@@ -7,7 +7,6 @@
 
 <template>
   <div v-if="store.currentFocus === 'details' && store.currentDetailId !== false" class="details-component">
-    <!-- use search result data? later -->
     <details-component></details-component>
   </div>
   

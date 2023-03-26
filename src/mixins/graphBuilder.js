@@ -33,14 +33,6 @@ export default {
       .attr("stroke", this.data().strokeColor)
       .attr("stroke-width", "1px")
       .attr("vector-effect", "non-scaling-stroke")
-
-    // link.append("rect")
-    //   .attr("height", "20")
-    //   .attr("width", "20")
-    //   .attr("x", "0")
-    //   .attr("y", "-150")
-    //   .attr("fill", "red")
-
     return link
   },
 
@@ -50,7 +42,6 @@ export default {
     this.appendImage(node)
     this.appendActorLabel(node)
     this.attachMouseEvents(node)
-    // this.attachClickListeners(node)
     return node
   },
 
@@ -62,17 +53,6 @@ export default {
       .attr("stroke-linejoin", "round")
       .selectAll("g")
       .data(nodes)
-      // (d) => {
-      //   let def = this.data().settings.defaults.node.circle.r
-      //   store.existing.forEach((f) => {
-      //     if (f[0].includes(d.id)) {
-      //       d.r = def + f[1]
-      //     } else {
-      //       d.r = def
-      //     }
-      //   })
-      // return d
-      // })
       .join("g")
       .attr("class", (d) => {
         return 'node ' + d.type.join(" ")
@@ -80,25 +60,6 @@ export default {
       .attr("id", d => d.id)
     return node
   },
-
-  // includedInAnchorsList(d) {
-  //   let sel = store.existing.filter((f) => {
-  //     return f[0] == d.id
-  //   })
-  //   if (sel.length > 0) {
-  //     return sel[0]
-  //   } else {
-  //     return []
-  //   }
-  // },
-
-  // calculateRadiusBasedOnNodeCount(d) {
-  //   if () {
-  //     return base + sel[0][1]
-  //   } else {
-  //     return base
-  //   }
-  // },
 
   appendCircle(node) {
     node.append("circle")
@@ -239,9 +200,6 @@ export default {
       )
       return `translate(${d.source.x},${d.source.y})rotate(${theta})`
     })
-    // .style("transform-origin", "center")
-    // .style("transform-box", "fill-box")
-    // .style("transform", "rotate(45deg")
   },
 
   angle(cx, cy, ex, ey) {
@@ -301,7 +259,6 @@ export default {
         return `rotate(${theta}deg)translateY(${r+2}px)`
       })
 
-      // this.nodeTransformer(e.target, "scale(1.03)", "aliceblue", "white")
     })
     .on("mouseleave", (e, d) => {
       d3.selectAll(".instruction").remove()
@@ -391,38 +348,9 @@ export default {
       return viewerBody
     })
   
-    // args.plusButton.style("display", "block").transition().duration(30).style("left", "-30px")
-    // args.plusButton.on("click", (e) => {
-    //   var transform = d3.zoomIdentity
-    //     .translate(0,0)
-    //     .scale(0.5)
-    //   viewerBody.transition().duration(1000)
-    //     .call(zoom.transform, transform);
-    //   return viewerBody
-    // })
-  
-    // args.minusButton.style("display", "block").transition().duration(30).style("left", "-30px")
-    // args.minusButton.on("click", (e) => {
-    //   var transform = d3.zoomIdentity
-    //     .translate(0,0)
-    //     .scale(2)
-    //   viewerBody.transition().duration(1000)
-    //     .call(zoom.transform, transform);
-    //   return viewerBody
-    // })
-  
     viewerBody.call(zoom)
               .call(zoom).on("dblclick.zoom", null)
     
     return viewerBody
   } 
-
-  // onSingleClick () {
-  //   console.log('single');
-  // },
-
-  // onDoubleClick () {
-  //   console.log('double');
-  // }
-
 }

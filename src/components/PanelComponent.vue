@@ -122,7 +122,6 @@
         })
       }
 
-
       function dragstarted() {
         d3.select(this).style("cursor", "col-resize")
       }

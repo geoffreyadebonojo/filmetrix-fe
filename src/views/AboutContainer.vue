@@ -69,23 +69,6 @@
     border-radius: 8px;
   }
 
-  /* #name {
-    grid-area: name;
-    font-family: 'Dosis', sans-serif;
-    height: 100%;
-    width: 100%;
-    
-    line-height: 1em;
-    margin-top: 0px;
-    font-size: 24px;
-    line-height: 28px;
-    letter-spacing: 3px;
-    font-weight: 900;
-    text-transform: uppercase;
-    color: white;
-    text-shadow: 1px 0px black;
-  }
-   */
   #birthday {
     grid-area: birthday;
     font-family: 'Dosis', sans-serif;

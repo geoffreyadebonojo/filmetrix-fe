@@ -33,7 +33,6 @@ export default {
     
 
     store.searchResults = api_respsonse.data.search
-    // store.currentResultTab = store.searchResults[0].id.split("-")[0]
   },
 
   async fetchDetails(id) {

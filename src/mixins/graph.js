@@ -4,15 +4,12 @@ import helpers from './helpers.js'
 import graphBuilder from './graphBuilder.js'
 import Simulation from './Simulation.js'
 import { store } from '@/stores/store.js'
-// import Vue from 'vue'
-// import VueCookies from 'vue-cookies'
 
 let timer;
 let alreadyClicked = false
 // IGNORE THE LINTER
 let i = 0
       
-
 export default {
   created() {
     let x = localStorage.getItem("newHere")
@@ -25,7 +22,6 @@ export default {
     draw (responseData) {
       store.inMotion = true
       d3.select("#inner-wrapper").remove()
-      // var slider = document.getElementById("myRange");
       var links = responseData.links
       var nodes = responseData.nodes
       const width = window.innerWidth
@@ -107,17 +103,11 @@ export default {
           .attr("y1", d => d.source.y)
           .attr("x2", d => d.target.x)
           .attr("y2", d => d.target.y)
-        node.attr("transform", d => `translate(${d.x},${d.y})`); //scale(${(i/20)})`);
+        node.attr("transform", d => `translate(${d.x},${d.y})`);
       })
       .on("end", () => {
         store.inMotion = false
-        // node
 
-        // .transition().duration(500).delay(100).ease(d3.easeBounceOut)
-        // .attr("transform", (d) => {
-        //   return `translate(${d.x},${d.y})`//scale(0.9)`
-        // })
-        // this is where the control filters are
         d3.selectAll(".sel").on("click", (e) => {
           let data
           let nodes =[]
@@ -184,8 +174,6 @@ export default {
     },
 
     async callForNodes(id) {
-      // await api.fetchDetails(id)
-
       if (store.existing.map((d) => d[0]).excludes(id) ) {
         store.existing.push([id, 8])
         const ext = store.existing.unique().map((d) => d[0])

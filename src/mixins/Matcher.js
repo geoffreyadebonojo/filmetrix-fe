@@ -2,7 +2,6 @@ export default class Matcher {
   constructor(links, nodes) {
     this.links = links
     this.nodes = nodes
-
   }
 
   nodesOf(link) {
