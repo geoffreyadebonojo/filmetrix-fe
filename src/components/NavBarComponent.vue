@@ -216,34 +216,8 @@ export default {
 </script>
 
 <style lang="scss">
-  #panel-body__desktop {
-    #navbar {
-      grid-area: navbar;
-      background: #333333;
-      display: flex;
-      margin: auto 0 auto auto;
-      height: 26px;
-      width: 100%;
-
-      #search-text {
-        width: 100%;
-        padding: 0px;
-        position: relative;
-        left: 20px;
-        height: 26px;
-        border-radius: 15px 0 0 15px;
-        border: 7px solid white;
-        text-align: center;
-        font-size: 15px;
-        letter-spacing: 0.05em;
-        box-sizing: border-box;
-        text-transform: uppercase;
-        font-family: 'Dosis', sans-serif;
-
-        &:focus {
-          outline: none;
-        }
-      }
+  #panel-body {
+    &__desktop, &__mobile {
       .nav-button-container {
         grid-area: nav-button-container;
         height: 100%;
@@ -313,6 +287,7 @@ export default {
         .icon:hover {
           cursor: pointer;
         }
+
         // #back-button {
         //   display: none;
         //   top: 50px;
@@ -321,7 +296,37 @@ export default {
         //   margin: 0px 10px 6px 10px;
         //   transform: rotate(0deg);
         // }
+      }
+    }
 
+    &__desktop {
+      #navbar {
+        grid-area: navbar;
+        background: #333333;
+        display: flex;
+        margin: auto 0 auto auto;
+        height: 26px;
+        width: 100%;
+
+        #search-text {
+          width: 100%;
+          padding: 0px;
+          position: relative;
+          left: 20px;
+          height: 26px;
+          border-radius: 15px 0 0 15px;
+          border: 7px solid white;
+          text-align: center;
+          font-size: 15px;
+          letter-spacing: 0.05em;
+          box-sizing: border-box;
+          text-transform: uppercase;
+          font-family: 'Dosis', sans-serif;
+
+          &:focus {
+            outline: none;
+          }
+        }
       }
     }
   }

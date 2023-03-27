@@ -63,9 +63,7 @@
       CommandsComponent
     },
     data () {
-      return {
-        currentDetailSubjectId: ''
-      }
+      return {}
     },
     methods: {
       focusSearchBar() {

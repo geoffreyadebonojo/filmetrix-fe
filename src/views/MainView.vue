@@ -10,7 +10,7 @@
 
 <template>
   <div v-bind:id="'panel-body__' + store.agent">
-  <!-- <div v-bind:id="store.agent + '-panel-body'"> -->
+
     <img src="/center-graph-icon.svg" class="centering-button" id="centering-button" alt="centering button">
 
     <div id="resize-bar" class="main-panel-component">
@@ -38,44 +38,14 @@
 <script>
   export default {
     name: "MainView",
-    data () {
-      return {
-        transitionTimer: 500
-      }
-    },
     components: {
       NavBarComponent,
       PanelContentsComponent,
       ControlsComponent
     },
-    methods: {
-      toggleControls () {
-        if (store.showControls) {
-          //close
-          store.showControls = false
-
-          d3.select("#controls")
-          .transition().duration(this.transitionTimer)
-          .style("transform", "scaleY(0)")
-          .style("bottom", "-50%")
-
-          d3.select("#panel-center")
-          .transition().duration(this.transitionTimer)
-          .style("height", "142%")
-          
-        } else {
-          //open
-          store.showControls = true
-
-          d3.select("#controls")
-          .transition().duration(this.transitionTimer)
-          .style("transform", "scaleY(1)")
-          .style("bottom", "-0%")
-
-          d3.select("#panel-center")
-          .transition().duration(this.transitionTimer)
-          .style("height", "100%")
-        }
+    data () {
+      return {
+        transitionTimer: 500
       }
     },
     mounted () {
@@ -143,12 +113,41 @@
       function dragended() {
         store.panelWidth = window.innerWidth - event.x
       }
+    },
+    methods: {
+      toggleControls () {
+        if (store.showControls) {
+          //close
+          store.showControls = false
+
+          d3.select("#controls")
+          .transition().duration(this.transitionTimer)
+          .style("transform", "scaleY(0)")
+          .style("bottom", "-50%")
+
+          d3.select("#panel-center")
+          .transition().duration(this.transitionTimer)
+          .style("height", "142%")
+          
+        } else {
+          //open
+          store.showControls = true
+
+          d3.select("#controls")
+          .transition().duration(this.transitionTimer)
+          .style("transform", "scaleY(1)")
+          .style("bottom", "-0%")
+
+          d3.select("#panel-center")
+          .transition().duration(this.transitionTimer)
+          .style("height", "100%")
+        }
+      }
     }
   }
 </script>
 
 <style lang="scss">
-
   #panel-body {
     &__desktop {
       height: 100vh;
@@ -205,12 +204,37 @@
         grid-area: panel-center;
         overflow-y: auto;
       }
+    }
 
+    &__mobile {
+      height: 30vh;
+      width: 100vw;
+      display: grid;
+      grid-template-columns: 30px 1fr 30px;
+      grid-template-rows: 2vh 1.8em 4vh 10fr 1vh 4fr 4vh;
+      grid-template-areas:
+      "resize-bar . ."
+      "resize-bar navbar navbar"
+      "resize-bar . settings"
+      "resize-bar panel-center ."
+      "resize-bar . ."
+      "resize-bar controls ."
+      "resize-bar . .";
+      background: #333333;
+      position: absolute;
+      top: 0px;
+      right: 0px;
+      z-index: 2;
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+
+
+
+      .centering-button, #resize-bar, #controls {
+        display: none;
+      }
     }
   }
 
-
-  
   #zoom-buttons {
     display: none;
     position: absolute;
@@ -219,13 +243,13 @@
     z-index: 5;
     height: 80px;
     justify-content: space-between;
-  }
 
-  #zoom-buttons > img {
-    width: 30px;
-    height: 30px;
-    background: white;
-    border-radius: 21%;
+    img {
+      width: 30px;
+      height: 30px;
+      background: white;
+      border-radius: 21%;
+    }
   }
 
   #instructions {
@@ -234,10 +258,6 @@
     right: 0%;
     z-index: 2
   }
-
-
-
-
 
   #settings-icon {
     grid-area: setting;
