@@ -28,7 +28,7 @@ export default {
       const height = window.innerHeight
       const outerWrapper = d3.select("#outer-wrapper")
       const innerWrapper = outerWrapper.append("g").attr("id", "inner-wrapper")
-      const centeringButton = d3.select("#centering-button") 
+      const centeringButton = d3.selectAll(".graph-control-button") 
 
       const simulation = new Simulation({nodes, 
                                          links, 
@@ -51,6 +51,9 @@ export default {
               return y[0] === d.id
             })
             const t = c[0][1]
+
+            if (t > 28) { return }
+
             const n = t + 3
             c[0][1] = n
             let vals
@@ -107,67 +110,6 @@ export default {
       })
       .on("end", () => {
         store.inMotion = false
-
-        d3.selectAll(".sel").on("click", (e) => {
-          let data
-          let nodes =[]
-          let links =[]
-
-          elem = d3.select(`#${e.target.id}`)
-          if (elem.classed("on")) {
-            elem.classed("off", true)
-            elem.classed("on", false)
-          } else {
-            elem.classed("off", false)
-            elem.classed("on", true)
-          }
-
-          store.existing.forEach((d) => {
-            data = store.graphData[d[0]]
-            nodes = nodes.concat(data.nodes.slice(0,d[1]+1))
-            links = links.concat(data.links.slice(0,d[1]+1))
-          })
-          
-          store.graphTypes = helpers.getTypes(nodes)
-
-          if (e.target.id == "clear") {
-            store.appliedFilters = []
-            d3.selectAll(".sel").classed("off", true)
-            d3.selectAll(".sel").classed("on", false)
-          } else {
-            store.appliedFilters.togglePresence(e.target.id)
-          }
-          
-          nodes = nodes.uniqueById().filter((d) => {
-            if (d.type.overlapsWith(store.appliedFilters).length === 0) {
-              return d.type.excludes(e.target.id) 
-            } else {
-              return false
-            }
-          })
-          
-          links = links.filter((d) => {
-            let x = nodes.map((n) => {
-              return n.id == d.target.id
-            })
-            return x.includes(true)
-          })
-
-          // this.draw({
-          //   nodes: nodes,
-          //   links: links.unique()
-          // })
-        })
-        .on("mouseenter", (e, f) => {
-          d3.selectAll(`.${e.target.id}`).nodes().forEach((d) => {
-            helpers.nodeTransformer(`#${d.id}`, "scale(1.05)", "aliceblue", "white")
-          })
-          
-        }).on("mouseout", (e) => {
-          d3.selectAll(`.${e.target.id}`).nodes().forEach((d) => {
-            helpers.nodeTransformer(`#${d.id}`, "scale(1)", helpers.props().strokeColor, "none")
-          })
-        })
       })
       
       return innerWrapper.node();

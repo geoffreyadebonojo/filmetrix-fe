@@ -83,12 +83,14 @@ export default {
     .attr("text-anchor", "middle")
 
     actorLabel.append("path")
-    .attr("d", f => this.drawArc(f))
+    .attr("d", (f) => {
+     return this.drawArc(f)
+    })
     .attr("fill", this.data().bodyGrey)
 
     actorLabel.append("g").attr("class", "text-container").selectAll("text")
     .data((d) => {
-      return d.name.split("")
+      return d.name.split("").slice(0,50)
     })
     .enter()
     .append("text")
@@ -339,7 +341,8 @@ export default {
     })
   
     args.centeringButton.style("display", "block").transition().duration(30).style("left", "-30px")
-    args.centeringButton.on("click", () => {
+    args.centeringButton.on("click", (e) => {
+      debugger
       var transform = d3.zoomIdentity
         .translate(0,0)
         .scale(1)

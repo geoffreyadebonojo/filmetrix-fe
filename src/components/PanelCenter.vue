@@ -3,33 +3,35 @@
   import DetailsComponent from './DetailsComponent.vue'
   import CommandsComponent from './CommandsComponent.vue'
   import { store } from '@/stores/store.js'
+  import * as d3 from 'd3'
 </script>
 
 <template>
-  <div v-if="store.currentFocus === 'details' && store.currentDetailId !== false" class="details-component">
-    <!-- use search result data? later -->
-    <details-component></details-component>
-  </div>
-  
-  <div v-else-if="store.currentFocus === 'commands'" id="commands-container">
-    <commands-component></commands-component>
-  </div>
-  
-  <div id="empty-field" v-else-if="store.currentFocus === 'empty'" @click="focusSearchBar()">
-    <div id="search-prompt">
-      <p >search for a movie or actor.</p>
-      <p style="margin-top:40px">please.</p>
+  <div id="panel-center" style="height:142%;zoom:100%">
+    <div v-if="store.currentFocus === 'details' && store.currentDetailId !== false" class="details-component">
+      <!-- use search result data? later -->
+      <details-component></details-component>
     </div>
-  </div>
 
-  <div v-else class="result-component">
-    <search-result-component></search-result-component>
+    <commands-component v-else-if="store.currentFocus === 'commands'"></commands-component>
+    
+    <div id="empty-field" v-else-if="store.currentFocus === 'empty'" @click="focusSearchBar()">
+      <div id="search-prompt">
+        <p >search for a movie or actor.</p>
+        <p style="margin-top:40px">please.</p>
+      </div>
+    </div>
+
+    <div v-else class="result-component">
+      <search-result-component></search-result-component>
+    </div>
   </div>
 </template>
 
 <style>
   .result-component {
     height: 100%;
+    left: 100%;
   }  
   .details-component {
     height: 100%;
@@ -46,12 +48,18 @@
     font-weight: 600;
     font-size: 2em;
     text-align: center;
+    opacity: 0;
   }
 
   @media screen and (max-width: 400px) {
     .details-component {
       padding: 2%;
     }
+  }
+
+  #panel-center {
+    grid-area: panel-center;
+    overflow-y: auto;
   }
 </style>
 
@@ -67,6 +75,9 @@
       return {
         currentDetailSubjectId: ''
       }
+    },
+    mounted () {
+      d3.select("#search-prompt").transition().delay(200).duration(200).style("opacity", 1)
     },
     methods: {
       focusSearchBar() {

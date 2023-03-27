@@ -4,8 +4,6 @@
   import helpers from '../mixins/helpers'
   import graphBuilder from '../mixins/graphBuilder'
   import { settingsModule } from '../mixins/settingsModule'
-  import { store } from '@/stores/store.js'
-  import * as d3 from 'd3'
 </script>
 
 <template>
