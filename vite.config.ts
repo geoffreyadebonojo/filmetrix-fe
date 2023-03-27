@@ -9,7 +9,10 @@ export default defineConfig({
   plugins: [vue(), vueJsx()],
   resolve: {
     alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url))
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
+      '@mixins': fileURLToPath(new URL('./src/mixins', import.meta.url)),
+      '@components': fileURLToPath(new URL('./src/components', import.meta.url)),
+      '@panel': fileURLToPath(new URL('./src/components/panel', import.meta.url))
     }
   }
 })

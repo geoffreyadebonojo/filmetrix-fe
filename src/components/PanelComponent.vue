@@ -1,8 +1,8 @@
 <script setup>
-  import GraphButtonsComponent from './GraphButtonsComponent.vue'
-  import NavBarComponent from './NavBarComponent.vue'
-  import ResizeBarComponent from './ResizeBarComponent.vue'
-  import PanelCenter from './PanelCenter.vue'
+  import GraphButtonsComponent from '@panel/GraphButtonsComponent.vue'
+  import NavBarComponent from '@panel/NavBarComponent.vue'
+  import PanelCenter from '@panel/PanelCenter.vue'
+  import ResizeBarComponent from '@panel/ResizeBarComponent.vue'
   import * as d3 from 'd3'
 
   // import ControlsComponent from './ControlsComponent.vue'

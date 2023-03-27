@@ -1,3 +1,8 @@
+<script setup>
+  import { store } from '@/stores/store.js'
+  import * as d3 from 'd3'
+</script>
+
 <template>
   <div  id="commands-container">
     <div id="commands">

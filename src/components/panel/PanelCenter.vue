@@ -1,19 +1,19 @@
 <script setup>
-  import SearchResultComponent from './SearchResultComponent.vue'
-  import DetailsComponent from './DetailsComponent.vue'
-  import CommandsComponent from './CommandsComponent.vue'
+  import SearchResultComponent from '@panel/sections/SearchResultComponent.vue'
+  import DetailsComponent from '@panel/sections/DetailsComponent.vue'
+  import CommandsComponent from '@panel/sections/CommandsComponent.vue'
   import { store } from '@/stores/store.js'
   import * as d3 from 'd3'
 </script>
 
 <template>
   <div id="panel-center" style="height:142%;zoom:100%">
-    <div v-if="store.currentFocus === 'details' && store.currentDetailId !== false" class="details-component">
       <!-- use search result data? later -->
-      <details-component></details-component>
-    </div>
+    <details-component class="details-component" v-if="store.currentFocus === 'details' && store.currentDetailId !== false">
+    </details-component>
 
-    <commands-component v-else-if="store.currentFocus === 'commands'"></commands-component>
+    <commands-component v-else-if="store.currentFocus === 'commands'">
+    </commands-component>
     
     <div id="empty-field" v-else-if="store.currentFocus === 'empty'" @click="focusSearchBar()">
       <div id="search-prompt">
@@ -22,16 +22,15 @@
       </div>
     </div>
 
-    <div v-else class="result-component">
-      <search-result-component></search-result-component>
-    </div>
+    <search-result-component v-else class="result-component">
+    </search-result-component>
   </div>
 </template>
 
 <style>
   .result-component {
     height: 100%;
-    left: 100%;
+    right: 100%;
   }  
   .details-component {
     height: 100%;

@@ -1,6 +1,6 @@
 <script setup>
-  import graph from "../mixins/graph"
-  import api from "../mixins/api"
+  import graph from "@mixins/graph"
+  import api from "@mixins/api"
   import { store } from '@/stores/store.js'
   import * as d3 from 'd3'
 </script>
@@ -83,7 +83,7 @@
       return {}
     },
     mounted () {
-      d3.select(".result-component").transition().delay(100).duration(200).style("left", "0%")
+      d3.select(".result-component").transition().delay(0).duration(200).style("right", "0%")
     },
     methods: {
       async fetchNodesAndDetails(result_id) {

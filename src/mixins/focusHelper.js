@@ -9,19 +9,9 @@ export default {
   
   methods: {
     set(focus) {
-
-      // @media screen and (max-width: 900px) {
-      //   .nav-button-container {
-      //     display: block;
-      //   }
-
-      // store.prev = store.currentFocus
-
       const navButtons = d3.selectAll(".nav-button").nodes().reverse()
       navButtons.unshift()
-      const d = d3.select("#search-text")
-
-      this.closeField(d)
+      this.closeField( d3.select("#search-text") )
 
       const buttonMap = navButtons.map(x => x.id.split("-")[0]);
       const displaceRight = [
@@ -32,14 +22,13 @@ export default {
         112,
         141
       ]
-      
       // can be adjusted to be vertical
-      
       const index = buttonMap.indexOf(focus)
       this.moveHighlightCircle(displaceRight[index])
       
       store.currentFocus = focus
     },
+
     moveHighlightCircle(x) {
       d3.select("#highlight")
       .style("left", null)
@@ -47,9 +36,9 @@ export default {
       .duration(100)
       .style("right", `${x}px`)
     },
+
     closeField(d) {
       d.transition().duration(0)
-      // .style("width", "0%")
       .style("left", "100%")
     },
   }

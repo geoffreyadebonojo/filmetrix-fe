@@ -1,8 +1,8 @@
 <script setup>
-  import focusHelper from "../mixins/focusHelper"
-  import api from "../mixins/api"
-  import { store } from '@/stores/store.js'
-  import * as d3 from 'd3'
+  import focusHelper from "@/mixins/focusHelper"
+  import api from "@/mixins/api.js"
+  import { store } from "@/stores/store.js"
+  import * as d3 from "d3"
 </script>
 
 <style scoped>
@@ -217,6 +217,7 @@ export default {
 
     toggleOrSubmitOnClick() {
       const d = d3.select("#search-text") 
+
       this.openField(d)
       store.currentFocus = "search"
       this.submitSearch(d.node().value)
@@ -226,13 +227,9 @@ export default {
       focusHelper.methods.set(focus)
     },
 
-    openField(d) {
-      d.transition().duration(0).delay(100)
-      .style("width", "100%")
-      .style("left", "7%")
-
-      d3.select("#highlight").transition().duration(100)
-      .style("left", "-1px")
+    openField(searchField) {
+      searchField.transition().duration(0).delay(100).style("width", "100%").style("left", "7%")
+      d3.select("#highlight").transition().duration(100).style("left", "-1px")
     }
   }
 }
