@@ -78,6 +78,9 @@
     mounted () {
       d3.select("#graph-container")
       .attr("viewBox", `-${window.innerWidth*2/3} -${window.innerHeight} ${window.innerWidth*2} ${window.innerHeight*2}`)
+    },
+    unmounted () {
+      debugger
     }
   }
 </script>

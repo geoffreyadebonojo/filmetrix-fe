@@ -40,7 +40,7 @@
           flash.html("removed")
           .style("transform", "translateX(-20px)")
           .transition().duration(200).style("opacity", 1).style("color", "#72bcd4")
-          .transition().duration(500).style("color", "white").style("opacity", 0)
+          .transition().duration(800).style("color", "white").style("opacity", 0)
 
         } else {
           saveButton.classed("unlocked", false).classed("locked", true)
@@ -52,7 +52,7 @@
           flash.html("saved")
           .style("transform", "translateX(0px)")
           .transition().duration(200).style("opacity", 1).style("color", "#72bcd4")
-          .transition().duration(500).style("color", "white").style("opacity", 0)
+          .transition().duration(800).style("color", "white").style("opacity", 0)
         }
       }
     }

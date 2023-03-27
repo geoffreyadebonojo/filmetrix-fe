@@ -76,7 +76,7 @@
 
   #left-line, #right-line {
     position: relative;
-    border-left: 2px solid black;
+    border-left: 2px solid grey;
     top: 300px;
     left: 3px;
     height: 50px;
