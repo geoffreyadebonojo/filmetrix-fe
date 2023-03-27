@@ -13,12 +13,8 @@ export const store = reactive({
   graphTypes: [],
   appliedFilters: [], 
   detailsData: {},
-  graphSettings: {
-    a: 50,
-    b: 50
-  },
   highlighted: [],
   showControls: false,
   panelOpen: true,
-  savedGraphs: []
+  savedGraphs: {}
 })

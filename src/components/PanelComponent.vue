@@ -47,7 +47,7 @@
     grid-template-columns: 30px 1fr 30px;
     grid-template-rows: 2vh 1.8em 4vh 10fr 1vh 4fr 4vh;
     grid-template-areas:
-      "resize-bar . ."
+      "resize-bar flash ."
       "resize-bar navbar navbar"
       "resize-bar . settings"
       "resize-bar panel-center ."

@@ -21,6 +21,7 @@ export default {
   methods: {
     draw (responseData) {
       store.inMotion = true
+      
       d3.select("#inner-wrapper").remove()
       var links = responseData.links
       var nodes = responseData.nodes
@@ -28,10 +29,10 @@ export default {
       const height = window.innerHeight
       const outerWrapper = d3.select("#outer-wrapper")
       const innerWrapper = outerWrapper.append("g").attr("id", "inner-wrapper")
-      const centeringButton = d3.selectAll(".graph-control-button") 
-
+      const graphControlButtons = d3.selectAll(".graph-control-buttons")
+      
       const simulation = new Simulation({nodes, 
-                                         links, 
+        links, 
                                          width, 
                                          height}).body
 
@@ -39,9 +40,11 @@ export default {
       let node = graphBuilder.createNodes(innerWrapper, nodes)
 
       graphBuilder.createViewerBody({
-        centeringButton,
+        graphControlButtons,
         outerWrapper
       })
+      
+      d3.select("#save-button").classed("locked", false).classed("unlocked", true)
 
       node.on('click', async (e, d) => {
         const doubleClickDelay = 300
@@ -94,8 +97,6 @@ export default {
           alreadyClicked = true;
         }
       })
-
-      let elem;
 
       simulation
       .on("tick", () => {

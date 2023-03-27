@@ -339,10 +339,11 @@ export default {
     let zoom = d3.zoom().on('zoom', (e) => {
       args.outerWrapper.attr("transform", e.transform)
     })
-  
+
     // out of place here...
-    args.centeringButton.style("display", "block").transition().duration(30).style("left", "-30px")
-    args.centeringButton.on("click", (e) => {
+
+    args.graphControlButtons.style("display", "block").transition().duration(30).style("left", "-30px")
+    d3.select("#centering-button").on("click", (e) => {
       const duration = 1000
       
       d3.select(e.target).style("opacity", "1")
@@ -352,13 +353,14 @@ export default {
         .scale(1)
       
       d3.select(e.target).transition().duration(duration).style("opacity", "0.5")
-      
+      // #inner-wrapper & #outer-wrappers have a bbox size regardless of zoom and are always equal to eachother
+      // #graph-container bbox x,y,width,height is entirely reactive to zoom
+      // before zoom, #graph-container bbox is same as #inner-wrapper and #outer-wrapper
+      // after zoom, #graph-container bbox is that of #inner/#outer multiplied by #outer-wrapper transform
       viewerBody.transition().duration(duration)
         .call(zoom.transform, transform);
       return viewerBody
-      
     })
-  
     
     viewerBody.call(zoom)
               .call(zoom).on("dblclick.zoom", null)
