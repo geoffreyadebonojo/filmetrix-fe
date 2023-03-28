@@ -128,7 +128,7 @@
       <div id="highlight"></div>
   
       <div id="search-button" @click="toggleOrSubmitOnClick()">
-        <img src="/search-icon.png" class="icon" id="search-icon">
+        <img src="/search-icon.svg" class="icon" id="search-icon">
       </div>
 
       <div 
@@ -217,10 +217,15 @@ export default {
 
     toggleOrSubmitOnClick() {
       const d = d3.select("#search-text") 
-
+      const val = d.node().value
+      // clean up
+      if (val == '' || val == null) { 
+        // maybe a helpful tip?
+        return false
+      }
       focusHelper.methods.openField(d)
       store.currentFocus = "search"
-      this.submitSearch(d.node().value)
+      this.submitSearch(val)
     },
 
     setCurrentFocus(focus) {

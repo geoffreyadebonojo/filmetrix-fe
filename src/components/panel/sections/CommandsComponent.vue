@@ -6,40 +6,110 @@
 <template>
   <div  id="commands-container">
     <div id="commands" class="column">
-      <div class="header">Commands</div>
+      <div class="header">Cause</div>
       <hr class="line" style="margin:20px 0">
-      <div class="item">double click</div>
-      <div class="item">single click</div>
-      <div class="item search-info" style="height:3em"><img src="/search-icon.png" style="opacity:0.5"/></div>
-      <div class="item unlock" style="height:3em"><img src="/lock-open.svg" style="opacity:0.5"/></div>
-      <div class="item"><img src="/lock-closed.svg"/></div>
+      
+      <div class="item search-info" style="height:3.5em">
+        <img src="/search-icon-light.svg" style="opacity:0.5"/>
+      </div>
+
+      <div class="item double-click" style="display:flex; height:2.8em">
+        <img src="/cursor-finger.svg" style="opacity:0.5"/> <p id="superscript">x2</p>
+      </div>
+
+      <div class="item single-click" style="height:2.8em">
+        <img src="/cursor-finger.svg" style="opacity:0.5"/>
+      </div>
+
+      <div class="item unlock" style="height:3em">
+        <img src="/lock-open.svg" style="opacity:0.5"/>
+      </div>
+
+      <div class="item lock" style="height:3em">
+        <img src="/lock-closed.svg"/>
+      </div>
+
+      <div class="item centering" style="height:3em">
+        <img src="/center-graph-icon.svg"/>
+      </div>
     </div>
+
     <div id="centerline" class="line"></div>
+
     <div id="effects" class="column">
-      <div class="header">Effects</div>
+      <div class="header">Effect</div>
       <hr class="line" style="margin:20px 0">
-      <div class="item">add more nodes!</div>
-      <div class="item">view details</div>
-      <div class="item search-info" style="height:3em">
-        <div style="display:flex" @click="this.elaborateOn('search')">
-          search for actors, movies, or tv shows
+
+      <div class="item search-info" style="height:3.5em">
+        <div @click="this.elaborateOn('search-info')" style="display:flex">
+          <p>
+            search for actors, movies, or tv shows
+          </p>
           <img class="chevron" src="/chevron.svg"/>
         </div>
         <p class="elaboration" style="display:none">
           you can search and add nodes to an existing graph
         </p>
       </div>
-      <div class="item unlock" style="height:3em">
-        <div style="display:flex" @click="this.elaborateOn('unlock')">
-          unlock graph
+
+      <div class="item double-click" style="height:2.8em">
+        <div @click="this.elaborateOn('double-click')" style="display:flex">
+          <p>
+            add more nodes!
+          </p>
           <img class="chevron" src="/chevron.svg"/>
         </div>
         <p class="elaboration" style="display:none">
-          graph won't be saved if you navigate away
+          double click on any node to add more to the graph
         </p>
       </div>
-      <div class="item">
-        lock graph
+
+      <div class="item single-click" style="height:2.8em">
+        <div @click="this.elaborateOn('single-click')" style="display:flex">
+          <p>
+            get details
+          </p>
+          <img class="chevron" src="/chevron.svg"/>
+        </div>
+        <p class="elaboration" style="display:none">
+          single click on any node to view details for that person, movie or tv show
+        </p>
+      </div>
+
+      <div class="item unlock" style="height:3em">
+        <div @click="this.elaborateOn('unlock')" style="display:flex">
+          <p>
+            unlock graph
+          </p>
+          <img class="chevron" src="/chevron.svg"/>
+        </div>
+        <p class="elaboration" style="display:none">
+          graph won't be saved if you navigate away or refresh the page
+        </p>
+      </div>
+
+      <div class="item lock" style="height:3em">
+        <div @click="this.elaborateOn('lock')" style="display:flex">
+          <p>
+            lock graph
+          </p>
+          <img class="chevron" src="/chevron.svg"/>
+        </div>
+        <p class="elaboration" style="display:none">
+          graph will be saved if you navigate away or refresh
+        </p>
+      </div>
+
+      <div class="item centering" style="height:3em">
+        <div @click="this.elaborateOn('centering')" style="display:flex">
+          <p>
+            re-center graph
+          </p>
+          <img class="chevron" src="/chevron.svg"/>
+        </div>
+        <p class="elaboration" style="display:none">
+          this will reset the graph to its original zoom and scale, good for if you get lost
+        </p>
       </div>
     </div>
   </div>
@@ -48,42 +118,30 @@
 <script>
   export default {
     name: "CommandsContainer",
+    data () {
+      return {
+        sizeMatch: {
+          "search-info": "6.7em",
+          "double-click": "4.5em",
+          "single-click": "5.5em",
+          "unlock": "5.6em",
+          "lock": "4.7em",
+          "centering": "7em"
+        }
+      }
+    },
     mounted () {
       d3.select("#commands-container").transition().duration(200).style("left", "0%")
     },
     methods: {
       async elaborateOn(section) {
-        if (section == 'search') {
-          this.expandSearch()
-        } else if (section == 'unlock') {
-          this.expandUnlock()
-        }
-      },
-      expandUnlock() {
-        const si = d3.selectAll(".unlock")
-        const el = d3.select("#effects .unlock .elaboration")
-        const chev = d3.select("#effects .unlock .chevron")
+        const si = d3.selectAll(`.${section}`)
+        const el = d3.select(`#effects .${section} .elaboration`)
+        const chev = d3.select(`#effects .${section} .chevron`)
   
         el.style("display", () => {
           if (el.style("display") == "none"){
-            si.transition().duration(200).style("height", "7em")
-            chev.transition().duration(200).style("transform", "rotate(270deg)")
-            el.transition().delay(100).style("display", "block")
-          } else {
-            si.transition().duration(200).style("height", "3em")
-            chev.transition().duration(200).style("transform", "rotate(90deg)")
-            el.transition().delay(100).style("display", "none")
-          }
-        })
-      },
-      expandSearch() {
-        const si = d3.selectAll(".search-info")
-        const el = d3.select("#effects .search-info .elaboration")
-        const chev = d3.select("#effects .search-info .chevron")
-  
-        el.style("display", () => {
-          if (el.style("display") == "none"){
-            si.transition().duration(200).style("height", "7em")
+            si.transition().duration(200).style("height", this.$data.sizeMatch[section])
             chev.transition().duration(200).style("transform", "rotate(270deg)")
             el.transition().delay(100).style("display", "block")
           } else {
@@ -121,10 +179,6 @@
     left: 100%;
   }
 
-  .line {
-    opacity: 0.5;
-  }
-
   #commands {
     grid-area: commands;
     text-align: right;
@@ -135,6 +189,36 @@
       display: flex;
       margin: auto 0 auto auto;
     }
+
+    .double-click {
+      img {
+        margin-top: 0;
+      }
+      #superscript {
+        margin: 0;
+        font-size: 12px;
+        position: absolute;
+        right: -5px;
+        top: -7px;
+      }
+    }
+
+    .search-info > img {
+      top: 7px;
+      right: 5px;
+      height: 20px;
+    }
+
+    .centering > img {
+      height: 20px;
+      opacity: 0.5;
+      top: 2px;
+      right: 1px;
+    }
+
+    p {
+      margin: auto 0 auto auto
+    }
   }
 
   #effects {
@@ -142,31 +226,19 @@
     text-align: left;
     margin: 10px;
 
-    .search-info {
-      &:hover {
-        cursor: pointer;
-      }
+    .item:hover {
+      cursor: pointer;
+    }
+
+    p {
+      margin: auto auto auto 0
     }
   }
 
   .column {
     .item {
       height: 3em;
-      // &:nth-child(3) {
-      //   // height: 3em;
-      // }
-      // &:nth-child(4) {
-      //   // height: 3em;
-      // }
-      // &:nth-child(5) {
-      //   // height: 3em;
-      // }
-      // &:nth-child(6) {
-      //   // height: 3em;
-      // }
-      // &:nth-child(7) {
-      //   // height: 3em;
-      // }
+      display: block;
     }
   }
 
@@ -180,5 +252,9 @@
 
   .header, .item {
     font-family: "Dosis", sans-serif;
+  }
+
+  .line {
+    opacity: 0.5;
   }
 </style>
