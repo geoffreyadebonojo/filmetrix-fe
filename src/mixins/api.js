@@ -31,7 +31,6 @@ export default {
       })
     )
     
-
     store.searchResults = api_respsonse.data.search
     // store.currentResultTab = store.searchResults[0].id.split("-")[0]
   },
@@ -101,39 +100,39 @@ export default {
         nodes: d.nodes
       }
     })
-  },
-
-  async cacheRequest(id, count){
-    const API_URL = `${this.data().localUrl}/graphql`
-    
-    const resp = await (
-      fetch(API_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ query: `
-          query {
-            cacheRequest(id:"${id}",count:${count},graphId:"${store.gid}",key:"${this.data().key}") {
-              nodes {
-                id
-                name
-                poster
-                type
-                entity
-              }
-              links { 
-                source
-                target
-                roles
-              }
-            }    
-          }`
-        })
-      }).then((response) => {
-        return response.json()
-      })
-    )
-
-    store.graphData = resp.data.cacheRequest
   }
+
+  // async checkCache(gid){
+  //   const API_URL = `${this.data().localUrl}/graphql`
+    
+  //   const resp = await (
+  //     fetch(API_URL, {
+  //       method: 'POST',
+  //       headers: { 'Content-Type': 'application/json' },
+  //       body: JSON.stringify({ query: `
+  //         query {
+  //           checkCache(storedId:"${gid}",key:"${this.data().key}") {
+  //             nodes {
+  //               id
+  //               name
+  //               poster
+  //               type
+  //               entity
+  //             }
+  //             links { 
+  //               source
+  //               target
+  //               roles
+  //             }
+  //           }    
+  //         }`
+  //       })
+  //     }).then((response) => {
+  //       return response.json()
+  //     })
+  //   )
+
+  //   // store.graphData = resp.data.cacheRequest
+  // }
 
 }

@@ -1,4 +1,7 @@
 <script setup>
+  import { store } from '@/stores/store.js'
+  import api from "@mixins/api"
+  import graph from "@mixins/graph"
   import * as d3 from 'd3'
 </script>
 
@@ -34,53 +37,41 @@
       transform: rotate(360deg);
     }
   }
-  /* @keyframes rotateLabel {
-    0% {
-      transform: rotate(0deg) scale(1);
-    }
-    10% {
-      transform: rotate(36deg) scale(1.1);
-    }
-    20% {
-      transform: rotate(72deg) scale(1);
-    }
-    30% {
-      transform: rotate(108deg) scale(1.1);
-    }
-    40% {
-      transform: rotate(144deg) scale(1);
-    }
-    50% {
-      transform: rotate(180deg) scale(1.1);
-    }
-    60% {
-      transform: rotate(216deg) scale(1);
-    }
-    70% {
-      transform: rotate(252deg) scale(1.1);
-    }
-    80% {
-      transform: rotate(288deg) scale(1);
-    }
-    90% {
-      transform: rotate(324deg) scale(1.1);
-    }
-    100% {
-      transform: rotate(360deg) scale(1);
-    }
-  } */
-
 </style>
 
 <script>
   export default {
     name: "GraphComponent",
-    mounted () {
+    async mounted () {
       d3.select("#graph-container")
       .attr("viewBox", `-${window.innerWidth*2/3} -${window.innerHeight} ${window.innerWidth*2} ${window.innerHeight*2}`)
-    },
-    unmounted () {
-      debugger
+
+      const saved = localStorage.getItem("savedGraph")
+
+      if (saved !== null) {
+        store.existing = JSON.parse(saved)
+        await api.fetchGraphData(
+          store.existing.unique().map(d => d[0])
+        )
+
+        let data
+        let nodes = []
+        let links = []
+
+        store.existing.forEach((d) => {
+          data = store.graphData[d[0]]
+          nodes = nodes.concat(data.nodes.slice(0,d[1]+1))
+          links = links.concat(data.links.slice(0,d[1]))
+        })
+
+        // store.graphTypes =  helpers.getTypes(nodes)
+        // store.currentFocus = 'details'
+
+        graph.methods.draw({
+          nodes: nodes.uniqueById(),
+          links: links
+        })      
+      }
     }
   }
 </script>

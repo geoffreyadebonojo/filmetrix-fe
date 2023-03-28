@@ -1,5 +1,6 @@
 <script setup>
   import { store } from '@/stores/store.js'
+  import api from "@mixins/api"
   import * as d3 from 'd3'
 </script>
 
@@ -46,7 +47,7 @@
           saveButton.classed("unlocked", false).classed("locked", true)
           
           this.$data.attrs.isSaved = true
-          this.$data.attrs.existing = store.existing
+          this.$data.attrs.existing = store.existing.map(d => d[0])
           store.savedGraphs[id] = this.$data.attrs
 
           flash.html("saved")
@@ -54,6 +55,9 @@
           .transition().duration(200).style("opacity", 1).style("color", "#72bcd4")
           .transition().duration(800).style("color", "white").style("opacity", 0)
         }
+
+        // localStorage.setItem("savedGraph", store.savedGraphs[id].existing.join(","))
+        localStorage.setItem("savedGraph", JSON.stringify(store.existing))
       }
     }
   }
