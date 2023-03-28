@@ -3,6 +3,8 @@
   import NavBarComponent from '@panel/NavBarComponent.vue'
   import PanelCenter from '@panel/PanelCenter.vue'
   import ResizeBarComponent from '@panel/ResizeBarComponent.vue'
+  import focusHelper from "@/mixins/focusHelper"
+  import { store } from '@/stores/store.js'
   import * as d3 from 'd3'
 
   // import ControlsComponent from './ControlsComponent.vue'
@@ -35,6 +37,9 @@
     },
     mounted () {
       d3.select("#panel-body").transition().duration(200).ease(d3.easeLinear).style("width", "350px").style("min-width", "270px")
+      focusHelper.methods.set('search')
+      focusHelper.methods.openField()
+      store.currentFocus = 'empty'
     }
   }
 </script>

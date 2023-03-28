@@ -218,18 +218,13 @@ export default {
     toggleOrSubmitOnClick() {
       const d = d3.select("#search-text") 
 
-      this.openField(d)
+      focusHelper.methods.openField(d)
       store.currentFocus = "search"
       this.submitSearch(d.node().value)
     },
 
     setCurrentFocus(focus) {
       focusHelper.methods.set(focus)
-    },
-
-    openField(searchField) {
-      searchField.transition().duration(0).delay(100).style("width", "100%").style("left", "7%")
-      d3.select("#highlight").transition().duration(100).style("left", "-1px")
     }
   }
 }

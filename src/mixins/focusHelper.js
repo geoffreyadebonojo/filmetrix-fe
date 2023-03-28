@@ -41,5 +41,10 @@ export default {
       d.transition().duration(0)
       .style("left", "100%")
     },
+
+    openField(searchField) {
+      d3.select("#search-text").transition().duration(0).delay(100).style("width", "100%").style("left", "7%")
+      d3.select("#highlight").transition().duration(100).style("left", "-1px")
+    }
   }
 }

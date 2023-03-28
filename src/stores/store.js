@@ -16,5 +16,6 @@ export const store = reactive({
   highlighted: [],
   showControls: false,
   panelOpen: true,
-  savedGraphs: {}
+  savedGraphs: {},
+  isSaved: false
 })
