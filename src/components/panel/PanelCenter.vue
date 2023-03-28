@@ -140,6 +140,10 @@
         this.$data.hasSavedGraph = true
       }
     },
+    updated () {
+      // debugger
+      // oh nice
+    },
     methods: {
       focusSearchBar() {
         document.querySelector('#search-text').focus()

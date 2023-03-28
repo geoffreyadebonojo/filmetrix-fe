@@ -217,13 +217,17 @@ export default {
 
     toggleOrSubmitOnClick() {
       const d = d3.select("#search-text") 
+      focusHelper.methods.openField(d)
+      
       const val = d.node().value
       // clean up
       if (val == '' || val == null) { 
         // maybe a helpful tip?
+        store.currentFocus = "empty"
+        // still stuck with 'pick up where you left off' even after switching tabs
         return false
       }
-      focusHelper.methods.openField(d)
+
       store.currentFocus = "search"
       this.submitSearch(val)
     },
