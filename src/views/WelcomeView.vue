@@ -1,10 +1,15 @@
 <script setup>
-
+  import * as d3 from 'd3'
 </script>
 
 <template>
   <div class="graph-wrapper">
     <svg></svg>
+    <div id="start-button">
+      <router-link id="start-link" to="/graph">
+        START
+      </router-link>
+    </div>
   </div>
 </template>
 
@@ -131,7 +136,7 @@
           .attr("r", (d) => {
             return d.r
           })
-  
+          
       node.append("text")
           .text(function(d){return d.letter})
           .attr("fill", "#FFF")
@@ -212,15 +217,31 @@
   }
 </script>
 
-<style>
+<style lang="scss">
   .graph-wrapper {
     color: #222222;
     width: 100vw;
     height: 100vh;
+    display: grid;
   }
   svg {
     height: 100%;
     width: 100%;
     overflow: hidden;
+  }
+  #start-button {
+    height: 250px;
+    margin: auto;
+    
+    #start-link {      
+      color: white;
+      font-family: 'Dosis', sans-serif;
+      line-height: 1em;
+      font-weight: 900;
+      font-size: 50px;
+      color: white;
+      text-shadow: 1px 0px black;
+      text-decoration: none;
+    }
   }
 </style>

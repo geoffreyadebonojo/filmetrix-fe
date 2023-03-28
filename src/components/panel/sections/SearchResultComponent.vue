@@ -5,7 +5,6 @@
   import * as d3 from 'd3'
 </script>
 
-
 <style scoped lang="scss">
   #no-result {
     text-transform: uppercase;

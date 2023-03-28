@@ -41,7 +41,7 @@
           flash.html("removed")
           .style("transform", "translateX(-20px)")
           .transition().duration(200).style("opacity", 1).style("color", "#72bcd4")
-          .transition().duration(800).style("color", "white").style("opacity", 0)
+          .transition().duration(1000).style("color", "white").style("opacity", 0)
 
         } else {
           saveButton.classed("unlocked", false).classed("locked", true)
@@ -53,7 +53,7 @@
           flash.html("saved")
           .style("transform", "translateX(0px)")
           .transition().duration(200).style("opacity", 1).style("color", "#72bcd4")
-          .transition().duration(800).style("color", "white").style("opacity", 0)
+          .transition().duration(1000).style("color", "white").style("opacity", 0)
         }
 
         // localStorage.setItem("savedGraph", store.savedGraphs[id].existing.join(","))
@@ -93,7 +93,7 @@
   }
   
   #save-button {
-    top: 15px;
+    top: 2.9vh;
     transform: translateX(2px)
   }
 
@@ -107,7 +107,7 @@
     text-align: center;
     position: absolute;
     left: -105px;
-    top: 14px;
+    top: 2.9vh;
     color: white;
   }
 </style>

@@ -38,6 +38,8 @@
       if (isMobile) {
         d3.select('#zoom-buttons').style('display', 'flex')
       }
+
+      
     },
     methods: {
       // incrementZoom (i) {

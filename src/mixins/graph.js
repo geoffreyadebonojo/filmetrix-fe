@@ -11,13 +11,6 @@ let alreadyClicked = false
 let i = 0
       
 export default {
-  created() {
-    let x = localStorage.getItem("newHere")
-    if (x === undefined || x === null || x === '') {
-      localStorage.setItem("newHere", true)
-    }
-  },
-
   methods: {
     draw (responseData) {
       store.inMotion = true
@@ -32,7 +25,7 @@ export default {
       const graphControlButtons = d3.selectAll(".graph-control-buttons")
       
       const simulation = new Simulation({nodes, 
-        links, 
+                                         links, 
                                          width, 
                                          height}).body
 
@@ -49,6 +42,8 @@ export default {
       node.on('click', async (e, d) => {
         const doubleClickDelay = 300
         if (alreadyClicked) { 
+          localStorage.setItem("newHere", false)
+
           if (store.existing.map(x => x[0]).includes(d.id)){
             const c = store.existing.filter((y) => {
               return y[0] === d.id
@@ -83,19 +78,27 @@ export default {
             await this.callForNodes(d.id)
             return
           }
+
+          await api.fetchDetails(d.id)
+          store.currentDetailId = d.id
+
           alreadyClicked = false;
           clearTimeout(timer);
         } else {
           timer = setTimeout(async function () {
             alreadyClicked = false;
             // single click
-            if (store.currentDetailId !== d.id) {
-              await api.fetchDetails(d.id)
-              store.currentDetailId = d.id
-            }
+            // if (store.currentDetailId !== d.id) {
+            //   await api.fetchDetails(d.id)
+            //   store.currentDetailId = d.id
+            // }
           }, doubleClickDelay);
           alreadyClicked = true;
         }
+
+        // on every click
+        await api.fetchDetails(d.id)
+        store.currentDetailId = d.id
       })
 
       simulation
