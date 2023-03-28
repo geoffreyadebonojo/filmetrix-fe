@@ -35,14 +35,13 @@
           font-weight: 100;
           font-size: 2em;
           text-align: center;
-
-          &:hover {
-            cursor: pointer;
-            animation-name: pulsate;
-            animation-duration: 1.4s;
-            animation-iteration-count: infinite;
-            animation-timing-function: linear;
-          }
+        }
+        .apply-effect:hover {
+          cursor: pointer;
+          animation-name: pulsate;
+          animation-duration: 1.4s;
+          animation-iteration-count: infinite;
+          animation-timing-function: linear;
         }
     }
   }
@@ -87,20 +86,23 @@
     
     <div id="empty-field" v-else-if="store.currentFocus === 'empty'" @click="focusSearchBar()">
       <div id="search-prompt">
-        <p>search for a movie or actor.</p>
+        <p class="apply-effect">search for a movie or actor</p>
       </div>
 
       <div id="show-you-around-prompt" v-if="this.$data.newHere">
-        <p>
+        <p style="margin:5vh">
+          or
+        </p>
+        <p class="apply-effect">
           have a look around
         </p>
       </div>
 
       <div id="resume-prompt" v-else-if="this.$data.hasSavedGraph">
-        <!-- <p style="margin:15vh">
+        <p style="margin:5vh">
           or
-        </p> -->
-        <p @click="resume()">
+        </p>
+        <p class="apply-effect" @click="resume()">
           pick up where you left off
         </p>
         <!-- //maybe put saved graph names here -->
@@ -146,6 +148,8 @@
       async resume () {
         const saved = localStorage.getItem("savedGraph")
 
+        store.isSaved = true
+
         if (saved !== null) {
           store.existing = JSON.parse(saved)
           await api.fetchGraphData(
@@ -169,6 +173,9 @@
             nodes: nodes.uniqueById(),
             links: links
           })      
+
+          const savedButton = d3.select("#save-button")
+          savedButton.classed("unlocked", false).classed("locked", true)
         }
       }
     }

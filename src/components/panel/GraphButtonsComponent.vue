@@ -6,12 +6,11 @@
 
 <template>
   <p id="save-flash"></p>
-  <div 
-       v-bind:class="store.isSaved ? 'graph-control-buttons locked' : 'graph-control-buttons unlocked'" 
+  <div v-bind:class="store.isSaved ? 'graph-control-buttons locked' : 'graph-control-buttons unlocked'" 
        id="save-button"
        @click="this.saveGraph()"></div>
   <img src="/center-graph-icon.svg" 
-       class="graph-control-buttons unlocked" 
+       class="graph-control-buttons" 
        id="centering-button" >
 </template>
 
@@ -73,11 +72,6 @@
     z-index: 1;
     opacity: 0.5;
     cursor: pointer;
-  }
-
-  .unlocked {
-    background-image: url("/lock-open.svg");
-    background-size: contain;
 
     &:hover {
       opacity: 1;
@@ -86,6 +80,12 @@
     }
     transition-property: opacity;
     transition-duration: 0.25s;
+  }
+
+  .unlocked {
+    background-image: url("/lock-open.svg");
+    background-size: contain;
+
   }
 
   .locked {

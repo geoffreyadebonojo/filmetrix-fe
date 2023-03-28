@@ -33,8 +33,12 @@
         <img src="/youtube-icon.png">
       </a>
     </div>
-    <div id="description">
+    <div v-if="store.detailsData.summary != ''" id="description">
       {{  store.detailsData.summary }}
+    </div>
+    <div v-else id="no-summary-available">
+      <p style="letter-spacing:0.2em; margin-bottom:5vh">¯\_(ツ)_/¯</p>
+      no summary available
     </div>
     <div id="fade-top"></div>
     <div id="fade-bottom"></div>
@@ -95,23 +99,30 @@
     height: 15px;
   }
   
-  #description {
+  #description, #no-summary-available {
     grid-area: desc;
     font-family: 'Dosis', sans-serif;
     margin-top: 0px;
     height: 100%;
     width: 100%;
-
-    line-height: 26px;
-    letter-spacing: 0.07em;
-
     color: white;
     text-shadow: 1px 0px black;
     overflow-y: auto;
+  }
+
+  #description {
     font-size: 16px;
     font-weight: 300;
     line-height: 26px;
     letter-spacing: 0.002em;
+  }
+
+  #no-summary-available {
+    margin-top: 5vh;
+    font-size: 30px;
+    font-weight: 300;
+    letter-spacing: 0.002em;
+    text-transform: uppercase;
   }
 
   @media screen and (max-width: 400px) {
