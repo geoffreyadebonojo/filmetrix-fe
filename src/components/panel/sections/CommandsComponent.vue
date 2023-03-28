@@ -9,7 +9,7 @@
       <div class="header">Cause</div>
       <hr class="line" style="margin:20px 0">
       
-      <div class="item search-info" style="height:3.5em">
+      <div class="item search-info" style="height:3.8em">
         <img src="/search-icon-light.svg" style="opacity:0.5"/>
       </div>
 
@@ -40,7 +40,7 @@
       <div class="header">Effect</div>
       <hr class="line" style="margin:20px 0">
 
-      <div class="item search-info" style="height:3.5em">
+      <div class="item search-info" style="height:3.8em">
         <div @click="this.elaborateOn('search-info')" style="display:flex">
           <p>
             search for actors, movies, or tv shows
