@@ -85,7 +85,6 @@
   .unlocked {
     background-image: url("/lock-open.svg");
     background-size: contain;
-
   }
 
   .locked {

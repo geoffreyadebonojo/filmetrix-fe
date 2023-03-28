@@ -2,7 +2,7 @@
 
 <template>
   <div class="icon" id="back-button" @click="back()">
-    <img src="/back-icon.svg" id="back-icon">
+    <img src="/chevron.svg" id="chevron">
   </div>
 </template>
 
