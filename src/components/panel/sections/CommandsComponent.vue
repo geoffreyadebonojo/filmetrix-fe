@@ -156,24 +156,17 @@
 </script>
 
 <style scoped lang="scss">
-
-  .elaboration {
-    display: none;
-    font-style: italic;
-    font-size: 13px;
-    margin-top: 6px;
-  }
-
   .chevron {
-    height: 5px;
+    height: 10px;
     margin: auto 0 auto auto;
-    transform: rotate(90deg)
+    transform: rotate(90deg);
+    opacity: 0.5;
   }
 
   #commands-container {
     height: 100%;
     display: grid;
-    grid-template-columns: 1fr 10px 1fr;
+    grid-template-columns: 2fr 10px 3fr;
     grid-template-areas:
       "commands centerline effects";
     left: 100%;
@@ -226,8 +219,33 @@
     text-align: left;
     margin: 10px;
 
-    .item:hover {
-      cursor: pointer;
+    .item {
+      &:hover {
+        cursor: pointer;
+
+        p {
+          &:hover {
+            color: white
+          }
+        }
+        .chevron {
+          opacity: 1;
+          height: 13px;
+        }
+      }
+    }
+
+    .elaboration {
+      display: none;
+      font-style: italic;
+      font-size: 13px;
+      margin: 7px auto auto auto;
+
+      // it's FINE
+      // &:hover {
+      //   cursor: unset;
+      //   color: unset;
+      // }
     }
 
     p {
