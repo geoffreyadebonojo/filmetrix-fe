@@ -165,7 +165,7 @@
   }
 </script>
 
-<style>
+<style scoped lang="scss">
   #about-graph-container {
     background: $graph-body-grey;
     width: 100%;
