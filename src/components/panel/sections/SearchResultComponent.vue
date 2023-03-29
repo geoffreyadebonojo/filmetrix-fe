@@ -28,7 +28,7 @@
   }
 
   .result-tile:hover{
-    cursor: pointer;
+    cursor: $cursor;
     box-shadow: 0 14px 18px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     transform: scale(1.03)
   }

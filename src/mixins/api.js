@@ -61,6 +61,7 @@ export default {
     )
 
     store.detailsData = api_response.data.details
+    store.currentDetailId = api_response.data.details.id
   },
 
   async fetchGraphData(ids){

@@ -1,6 +1,7 @@
 import api from './api.js'
 import * as d3 from 'd3'
 import helpers from './helpers.js'
+import focusHelper from './focusHelper.js'
 import graphBuilder from './graphBuilder.js'
 import Simulation from './Simulation.js'
 import { store } from '@/stores/store.js'
@@ -95,9 +96,10 @@ export default {
           }, doubleClickDelay);
           alreadyClicked = true;
         }
-
+        
         // on every click
         await api.fetchDetails(d.id)
+
         store.currentDetailId = d.id
       })
 

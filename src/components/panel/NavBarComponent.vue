@@ -5,14 +5,18 @@
   import * as d3 from "d3"
 </script>
 
-<style scoped>
+<style scoped lang="scss">
   #navbar {
     grid-area: navbar;
     background: #333333;
     display: flex;
     margin: auto 0 auto auto;
     height: 26px;
-    width: 0%;  
+    width: 0%;
+
+    *:hover {
+      cursor: $cursor;
+    }
   }
   .nav-button-container {
     height: 100%;
@@ -96,9 +100,6 @@
     left: 6px;
   }
 
-  .icon:hover {
-    cursor: pointer;
-  }
   .nav-button, .result-button {
     width: 28px;
   }

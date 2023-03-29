@@ -221,7 +221,7 @@
 
     .item {
       &:hover {
-        cursor: pointer;
+        cursor: $cursor;
 
         p {
           &:hover {

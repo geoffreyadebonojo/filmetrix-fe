@@ -12,7 +12,7 @@
   </svg>
 </template>
 
-<style>
+<style lang="scss">
   #graph-container {
     background: #222222;
     width: 100%;
@@ -20,15 +20,15 @@
     display: flex;
   }
 
-  .nodes:hover {
-    cursor: pointer
-  }
-
   .inst {
     animation-name: rotateLabel;
     animation-duration: 8s;
     animation-iteration-count: infinite;
     animation-timing-function: linear;
+  }
+
+  .node:hover {
+    cursor: $cursor;
   }
 
   @keyframes rotateLabel {

@@ -6,7 +6,7 @@
   <RouterView></RouterView>
 </template>
 
-<style>
+<style lang="scss">
   body {
     background: #222222;
   }

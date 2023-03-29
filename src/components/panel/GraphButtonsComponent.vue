@@ -71,7 +71,7 @@
     position: absolute;
     z-index: 1;
     opacity: 0.5;
-    cursor: pointer;
+    cursor: $cursor;
 
     &:hover {
       opacity: 1;

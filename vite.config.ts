@@ -13,6 +13,13 @@ export default defineConfig({
       '@mixins': fileURLToPath(new URL('./src/mixins', import.meta.url)),
       '@components': fileURLToPath(new URL('./src/components', import.meta.url)),
       '@panel': fileURLToPath(new URL('./src/components/panel', import.meta.url))
+    },
+  },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        additionalData: `@import "public/_variables.scss";`
+      }
     }
   }
 })

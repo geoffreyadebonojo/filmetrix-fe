@@ -14,6 +14,14 @@ app.use(createPinia())
 app.use(router)
 app.mount('#app')
 
+Array.prototype.last = function() {
+  if (this.length > 0) {
+    return this[this.length- 1]
+  } else {
+    return []
+  }
+}
+
 Array.prototype.ids = function() {
   return this.map(d => d.id)
 }

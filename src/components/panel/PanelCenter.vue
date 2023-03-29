@@ -4,6 +4,7 @@
   import CommandsComponent from '@panel/sections/CommandsComponent.vue'
   import api from '@/mixins/api'
   import helpers from '@/mixins/helpers'
+  import focusHelper from '@/mixins/focusHelper'
   import graph from '@/mixins/graph'
   import { store } from '@/stores/store.js'
   import * as d3 from 'd3'
@@ -35,9 +36,12 @@
           font-weight: 100;
           font-size: 2em;
           text-align: center;
+          &:hover {
+            cursor:default
+          }
         }
         .apply-effect:hover {
-          cursor: pointer;
+          cursor: $cursor;
           animation-name: pulsate;
           animation-duration: 1.4s;
           animation-iteration-count: infinite;
@@ -160,6 +164,8 @@
             store.existing.unique().map(d => d[0])
           )
 
+          await api.fetchDetails(store.existing.last()[0])
+
           let data
           let nodes = []
           let links = []
@@ -180,6 +186,7 @@
 
           const savedButton = d3.select("#save-button")
           savedButton.classed("unlocked", false).classed("locked", true)
+          focusHelper.methods.set('details')
         }
       }
     }
