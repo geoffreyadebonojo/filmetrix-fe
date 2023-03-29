@@ -32,7 +32,7 @@
           opacity: 0.5;
           margin: 4vh 40px;
           text-transform: uppercase;
-          font-family: 'Dosis', sans-serif;
+          font-family: $global-font;
           font-weight: 100;
           font-size: 2em;
           text-align: center;
@@ -106,9 +106,11 @@
         <p style="margin:5vh">
           or
         </p>
-        <p class="apply-effect" @click="resume()">
-          pick up where you left off
-        </p>
+        <router-link to="#details">
+          <p class="apply-effect" @click="resume()">
+            pick up where you left off
+          </p>
+        </router-link> 
         <!-- //maybe put saved graph names here -->
       </div>
       <div v-else></div>

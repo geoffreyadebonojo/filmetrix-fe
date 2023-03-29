@@ -59,7 +59,7 @@
       "resize-bar . ."
       "resize-bar controls ."
       "resize-bar . .";
-    background: #333333;
+    background: $panel-body-grey;
     position: absolute;
     top: 0px;
     right: 0px;

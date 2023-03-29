@@ -8,7 +8,7 @@
 
 <style lang="scss">
   body {
-    background: #222222;
+    background: $graph-body-grey;
   }
 </style>
 

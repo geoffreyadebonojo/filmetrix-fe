@@ -107,7 +107,7 @@
     bottom: 0%;
   }
   .sel {
-    font-family: 'Dosis', sans-serif;
+    font-family: $global-font;
   }
   .sel, .off {
     border: solid 1px aliceblue;

@@ -68,7 +68,7 @@
   }
 </script>
 
-<style>
+<style scoped lang="scss">
   #resize-bar {
     grid-area: resize-bar;
     width: 12px;
@@ -76,7 +76,9 @@
 
   #left-line, #right-line {
     position: relative;
-    border-left: 2px solid grey;
+    border-left: 2px solid #555555;
+    /* broken? */
+    /* border-left: 2px solid $light-grey; */
     top: 300px;
     left: 3px;
     height: 50px;

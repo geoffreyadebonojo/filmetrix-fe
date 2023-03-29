@@ -121,7 +121,7 @@
           .attr("stroke", "#7A7978")
           .attr("stroke-width", 3)
           .attr("r", d => d.r)
-          .attr('fill', '#222222')
+          .attr('fill', '$graph-body-grey')
           .attr("vector-effect", "non-scaling-stroke")
   
       node.append("svg:image")
@@ -167,7 +167,7 @@
 
 <style>
   #about-graph-container {
-    background: #222222;
+    background: $graph-body-grey;
     width: 100%;
     height: 100vh;
     display: flex;
@@ -204,7 +204,7 @@
     position: relative;
     left: -115px;
     transform: scalex(0);
-    font-family: 'Dosis', sans-serif;
+    font-family: $global-font;
     width: 100%;
     margin: auto 0 10px 0;
     font-size: 70px;
@@ -218,7 +218,7 @@
 
   #about-description {
     grid-area: about-desc;
-    font-family: 'Dosis', sans-serif;
+    font-family: $global-font;
     margin-top: 0px;
     height: 100%;
     width: 100%;

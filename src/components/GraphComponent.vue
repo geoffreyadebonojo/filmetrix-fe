@@ -14,7 +14,7 @@
 
 <style lang="scss">
   #graph-container {
-    background: #222222;
+    background: $graph-body-grey;
     width: 100%;
     height: 100vh;
     display: flex;

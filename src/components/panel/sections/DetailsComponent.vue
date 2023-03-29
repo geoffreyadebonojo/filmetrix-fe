@@ -72,7 +72,7 @@
   }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
   #fade-top {
     grid-area: ft;
   }
@@ -101,7 +101,7 @@
   
   #description, #no-summary-available {
     grid-area: desc;
-    font-family: 'Dosis', sans-serif;
+    font-family: $global-font;
     margin-top: 0px;
     height: 100%;
     width: 100%;
@@ -111,6 +111,8 @@
   }
 
   #description {
+    padding-top: 5px;
+    padding-bottom: 20px;
     font-size: 16px;
     font-weight: 300;
     line-height: 26px;
@@ -178,7 +180,7 @@
 
   #name {
     grid-area: name;
-    font-family: 'Dosis', sans-serif;
+    font-family: $global-font;
     height: 100%;
     width: 100%;
     
@@ -195,7 +197,7 @@
   
   #birthday {
     grid-area: birthday;
-    font-family: 'Dosis', sans-serif;
+    font-family: $global-font;
     line-height: 1em;
     font-weight: 900;
     font-size: 24px;

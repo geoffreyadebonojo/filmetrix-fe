@@ -8,7 +8,7 @@
 <style scoped lang="scss">
   #no-result {
     text-transform: uppercase;
-    font-family: 'Dosis', sans-serif;
+    font-family: $global-font;
     font-weight: bold;
     font-size: 40px;
     text-align: center;
@@ -36,7 +36,7 @@
   .result-tile > div {
     font-size: 10px;
     text-transform: uppercase;
-    font-family: 'Dosis', sans-serif;
+    font-family: $global-font;
     font-weight: bold;
     text-align: center;
   }

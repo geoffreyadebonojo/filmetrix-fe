@@ -219,7 +219,7 @@
 
 <style lang="scss">
   .graph-wrapper {
-    color: #222222;
+    color: $graph-body-grey;
     width: 100vw;
     height: 100vh;
     display: grid;
@@ -235,7 +235,7 @@
     
     #start-link {      
       color: white;
-      font-family: 'Dosis', sans-serif;
+      font-family: $global-font;
       line-height: 1em;
       font-weight: 900;
       font-size: 50px;

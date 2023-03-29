@@ -107,7 +107,7 @@
     grid-area: flash;
     opacity: 0;
     text-transform: uppercase;
-    font-family: 'Dosis', sans-serif;
+    font-family: $global-font;
     font-weight: bold;
     // font-size: 40px;
     text-align: center;

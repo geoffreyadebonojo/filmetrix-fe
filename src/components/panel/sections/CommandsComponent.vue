@@ -79,7 +79,7 @@
       <div class="item unlock" style="height:3em">
         <div @click="this.elaborateOn('unlock')" style="display:flex">
           <p>
-            unlock graph
+            unlocked
           </p>
           <img class="chevron" src="/chevron.svg"/>
         </div>
@@ -91,7 +91,7 @@
       <div class="item lock" style="height:3em">
         <div @click="this.elaborateOn('lock')" style="display:flex">
           <p>
-            lock graph
+            locked
           </p>
           <img class="chevron" src="/chevron.svg"/>
         </div>
