@@ -9,19 +9,7 @@
 </script>
 
 <template>
-  <div 
-    class="details-container" 
-    v-bind:id="store.detailsData.id + '-details'">
-
-    <img id="left-arrow" 
-         v-if="store.existing.length > 1 && store.existing[0][0] !== store.currentDetailId"
-         src="/angle-double-small-left.svg" 
-          @click="adjustId(-1)">
-
-    <img id="right-arrow" 
-         v-if="store.existing.length > 1 && store.existing.last()[0] !== store.currentDetailId"
-         src="/angle-double-small-right.svg" 
-         @click="adjustId(1)">
+  <div v-bind:id="store.detailsData.id + '-details'">
     
     <img id="poster" 
       v-bind:src="store.detailsData.poster"
@@ -61,24 +49,10 @@
     mixins: [api, focusHelper, helpers, graphBuilder, settingsModule],
     mounted () {
       focusHelper.methods.set('details')
+      console.log('details component mounted')
+      d3.selectAll(".details-component").transition().delay(100).duration(500).style("left", "0%")
     },
     methods: {
-      async adjustId(i) {
-        let ids = store.existing.map(d => d[0])
-        let currentIndex = ids.indexOf(store.currentDetailId)
-        let changeId
-
-        // if (store.existing.last()[0] !== store.currentDetailId) {
-        //   changeId = ids[currentIndex + i]
-        //   await api.fetchDetails(changeId)
-        // } else if (store.existing[0][0] !== store.currentDetailId) {
-          changeId = ids[currentIndex + i]
-          await api.fetchDetails(changeId)
-        // } else {
-        //   return
-        // }
-
-      },
       highlightNodes(id) {
         let target= d3.select(`#${id}`).node()
 
@@ -154,60 +128,38 @@
     text-transform: uppercase;
   }
 
-  @media screen and (max-width: 400px) {
-    .details-container {
-      grid-template-columns: 36% 10px 17% 17% 1fr;
-      grid-template-rows: 23% 5% 20px 1fr;
-      grid-template-areas:
-        "poster . name name name"
-        ". . . ."
-        "poster . birthday links links"
-        "desc desc desc desc desc"
-    }
-    #poster {
-      width: 100%;
-    }
-    #name {
-      font-size: 20px;
-      line-height: unset;
-    }
+  // @media screen and (max-width: 400px) {
+  //   .details-container {
+  //     grid-template-columns: 36% 10px 17% 17% 1fr;
+  //     grid-template-rows: 23% 5% 20px 1fr;
+  //     grid-template-areas:
+  //       "poster . name name name"
+  //       ". . . ."
+  //       "poster . birthday links links"
+  //       "desc desc desc desc desc"
+  //   }
+  //   #poster {
+  //     width: 100%;
+  //   }
+  //   #name {
+  //     font-size: 20px;
+  //     line-height: unset;
+  //   }
 
-    #imdb {
-      width: 22px;
-    }
-  }
+  //   #imdb {
+  //     width: 22px;
+  //   }
+  // }
 
-  #left-arrow {
-    grid-area: left-arrow;
-    height: 25px;
-    opacity: 0.5;
-
-    &:hover {
-      cursor: $cursor;
-      opacity: 1;
-    }
-  } 
-  
-  #right-arrow {
-    grid-area: right-arrow;
-    height: 25px;
-    opacity: 0.5;
-
-    &:hover {
-      cursor: $cursor;
-      opacity: 1;
-    }
-  }
-  .details-container {
+  .details-component {
     height: 100%;
     width: 100%;
     display: grid;
     grid-template-columns: 79px 10px 55px 50px 1fr;
-    grid-template-rows: 25px 95px 21px 10px 1fr 17fr;
+    grid-template-rows: 95px 21px 10px 1fr 17fr;
     padding: 10px;
     /* gap: 10px; */
     grid-template-areas:
-      "left-arrow . . . right-arrow" 
       "poster . name name name"
       "poster . birthday links ."
       ". . . . ." 
@@ -215,6 +167,8 @@
       "desc desc desc desc desc"
       "fb fb fb fb fb";
     overflow: hidden;
+
+    left: 0%;
   }
 
   #poster {

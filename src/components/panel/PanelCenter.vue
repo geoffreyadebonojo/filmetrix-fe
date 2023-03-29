@@ -10,78 +10,24 @@
   import * as d3 from 'd3'
 </script>
 
-
-<style scoped lang="scss">
-  .result-component {
-    height: 100%;
-    right: 100%;
-  }  
-  .details-component {
-    height: 100%;
-    width: 100%;
-  }
-  #empty-field {
-    height: 100%;
-
-      #search-prompt, 
-      #show-you-around-prompt, 
-      #resume-prompt {
-        transform: scale(1);
-        
-        p {
-          opacity: 0.5;
-          margin: 4vh 40px;
-          text-transform: uppercase;
-          font-family: $global-font;
-          font-weight: 100;
-          font-size: 2em;
-          text-align: center;
-          &:hover {
-            cursor:default
-          }
-        }
-        .apply-effect:hover {
-          cursor: $cursor;
-          animation-name: pulsate;
-          animation-duration: 1.4s;
-          animation-iteration-count: infinite;
-          animation-timing-function: linear;
-        }
-    }
-  }
-
-  @keyframes pulsate {
-    0% {
-      transform: scale(1);
-      opacity: 0.5;
-
-    }
-    50% {
-      transform: scale(1.005);
-      opacity: 0.8;
-    }
-    100% {
-      transform: scale(1);
-      opacity: 0.5;
-    }
-  }
-
-
-  @media screen and (max-width: 400px) {
-    .details-component {
-      padding: 2%;
-    }
-  }
-
-  #panel-center {
-    grid-area: panel-center;
-    overflow-y: auto;
-  }
-</style>
-
 <template>
   <div id="panel-center" style="height:142%;zoom:100%">
       <!-- use search result data? later -->
+    <div id="nav-arrows">
+      <div id="left-arrow">
+        <img v-if="store.existing.length > 1 && store.existing[0][0] !== store.currentDetailId"
+        src="/angle-double-small-left.svg" 
+        @click="adjustId(-1)">
+      </div> 
+      
+      
+      <div id="right-arrow">
+        <img v-if="store.existing.length > 1 && store.existing.last()[0] !== store.currentDetailId"
+        src="/angle-double-small-right.svg" 
+        @click="adjustId(1)">
+      </div>
+    </div>
+
     <details-component class="details-component" v-if="store.currentFocus === 'details' && store.currentDetailId !== false">
     </details-component>
 
@@ -139,20 +85,41 @@
     mounted () {
       d3.select("#search-prompt").transition().delay(200).duration(200).style("opacity", 1)
       const saved = JSON.parse(localStorage.getItem("savedGraph"))
-
+      
       if (saved == null || saved.length == []) {
         this.$data.hasSavedGraph = false
       } else {
         this.$data.hasSavedGraph = true
       }
+      
     },
     updated () {
-      // debugger
-      // oh nice
     },
     methods: {
       focusSearchBar() {
         document.querySelector('#search-text').focus()
+      },
+      
+      async adjustId(i) {
+        const dc = d3.selectAll(".details-component")
+        
+        dc
+        .style("left", () => {
+          return `${i*100}%`
+        })
+        
+        let ids = store.existing.map(d => d[0])
+        let currentIndex = ids.indexOf(store.currentDetailId)
+        let changeId
+        
+        changeId = ids[currentIndex + i]
+        
+        await api.fetchDetails(changeId)
+        
+        dc.transition()
+        .duration(500)
+        .style("left", "0%")
+        console.log('updated')
       },
 
       async resume () {
@@ -194,3 +161,93 @@
     }
   }
 </script>
+
+
+<style scoped lang="scss">
+
+  #nav-arrows {
+    display: flex;
+    justify-content: space-between;
+
+    img {
+      height: 25px;
+    }
+    
+    #left-arrow, #right-arrow {
+      opacity: 0.5;
+      
+      &:hover {
+        cursor: $cursor;
+        opacity: 1;
+      }
+    } 
+  }
+  .result-component {
+    height: 100%;
+    right: 100%;
+  }  
+
+  // .details-component {
+  //   height: 100%;
+  //   width: 100%;
+  //   left: -100%
+  // }
+
+  #empty-field {
+    height: 100%;
+
+    #search-prompt, 
+    #show-you-around-prompt, 
+    #resume-prompt {
+      transform: scale(1);
+      
+      p {
+        opacity: 0.5;
+        margin: 4vh 40px;
+        text-transform: uppercase;
+        font-family: $global-font;
+        font-weight: 100;
+        font-size: 2em;
+        text-align: center;
+        &:hover {
+          cursor:default
+        }
+      }
+      .apply-effect:hover {
+        cursor: $cursor;
+        animation-name: pulsate;
+        animation-duration: 1.4s;
+        animation-iteration-count: infinite;
+        animation-timing-function: linear;
+      }
+    }
+  }
+
+  @keyframes pulsate {
+    0% {
+      transform: scale(1);
+      opacity: 0.5;
+
+    }
+    50% {
+      transform: scale(1.005);
+      opacity: 0.8;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 0.5;
+    }
+  }
+
+
+  @media screen and (max-width: 400px) {
+    .details-component {
+      padding: 2%;
+    }
+  }
+
+  #panel-center {
+    grid-area: panel-center;
+    overflow-y: auto;
+  }
+</style>
