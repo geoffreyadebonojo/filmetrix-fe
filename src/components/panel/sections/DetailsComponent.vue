@@ -11,8 +11,18 @@
 <template>
   <div 
     class="details-container" 
-    v-bind:id="store.detailsData.id + '-details'"
-  >
+    v-bind:id="store.detailsData.id + '-details'">
+
+    <img id="left-arrow" 
+         v-if="store.existing.length > 1 && store.existing[0][0] !== store.currentDetailId"
+         src="/angle-double-small-left.svg" 
+          @click="adjustId(-1)">
+
+    <img id="right-arrow" 
+         v-if="store.existing.length > 1 && store.existing.last()[0] !== store.currentDetailId"
+         src="/angle-double-small-right.svg" 
+         @click="adjustId(1)">
+    
     <img id="poster" 
       v-bind:src="store.detailsData.poster"
       @mouseenter="highlightNodes(store.detailsData.id)"
@@ -53,6 +63,22 @@
       focusHelper.methods.set('details')
     },
     methods: {
+      async adjustId(i) {
+        let ids = store.existing.map(d => d[0])
+        let currentIndex = ids.indexOf(store.currentDetailId)
+        let changeId
+
+        // if (store.existing.last()[0] !== store.currentDetailId) {
+        //   changeId = ids[currentIndex + i]
+        //   await api.fetchDetails(changeId)
+        // } else if (store.existing[0][0] !== store.currentDetailId) {
+          changeId = ids[currentIndex + i]
+          await api.fetchDetails(changeId)
+        // } else {
+        //   return
+        // }
+
+      },
       highlightNodes(id) {
         let target= d3.select(`#${id}`).node()
 
@@ -150,15 +176,38 @@
       width: 22px;
     }
   }
+
+  #left-arrow {
+    grid-area: left-arrow;
+    height: 25px;
+    opacity: 0.5;
+
+    &:hover {
+      cursor: $cursor;
+      opacity: 1;
+    }
+  } 
+  
+  #right-arrow {
+    grid-area: right-arrow;
+    height: 25px;
+    opacity: 0.5;
+
+    &:hover {
+      cursor: $cursor;
+      opacity: 1;
+    }
+  }
   .details-container {
     height: 100%;
     width: 100%;
     display: grid;
     grid-template-columns: 79px 10px 55px 50px 1fr;
-    grid-template-rows: 95px 21px 10px 1fr 17fr;
+    grid-template-rows: 25px 95px 21px 10px 1fr 17fr;
     padding: 10px;
     /* gap: 10px; */
     grid-template-areas:
+      "left-arrow . . . right-arrow" 
       "poster . name name name"
       "poster . birthday links ."
       ". . . . ." 
@@ -175,7 +224,7 @@
   }
 
   #poster:hover {
-    cursor: pointer;
+    cursor: $cursor;
     box-shadow: 0em 0em 5px 5px rgb(240 248 255 / 5%);
   }
 

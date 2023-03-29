@@ -132,21 +132,21 @@
         <img src="/search-icon.svg" class="icon" id="search-icon">
       </router-link>
 
-      <router-link class="nav-button" id="person-button" v-if="displayPersonIcon() === true" to="people">
+      <router-link class="nav-button" id="person-button" v-if="displayPersonIcon() === true" to="#people">
         <div @click="setCurrentFocus('person')">
           <img src="/person-icon.svg" class="icon" id="person-icon" >
         </div>
       </router-link>
       <div v-else></div>
 
-      <router-link class="nav-button" id="movie-button" v-if="displayMovieIcon() === true" to="movies">
+      <router-link class="nav-button" id="movie-button" v-if="displayMovieIcon() === true" to="#movies">
         <div @click="setCurrentFocus('movie')">
           <img src="/movie-icon.svg" class="icon" id="movie-icon">
         </div>
       </router-link>
       <div v-else></div>
 
-      <router-link class="nav-button" id="tv-button" v-if="displayTvIcon() === true" to="tv-shows">
+      <router-link class="nav-button" id="tv-button" v-if="displayTvIcon() === true" to="#tv-shows">
         <div @click="setCurrentFocus('tv')">
           <img src="/tv-icon.svg" class="icon" id="tv-icon">
         </div>
@@ -161,12 +161,8 @@
         <img src="/command-icon.svg" class="icon" id="commands-icon">
       </router-link>
 
-      <!-- <router-link to="/about" custom v-slot="{ navigate }"> -->
-      <router-link class="nav-button" id="about-button" to="#about">
-        <!-- <div class="nav-button" id="about-button" @click="navigate"> -->
-        <!-- <div class="nav-button" id="about-button" @click="changeRoute('about')"> -->
+      <router-link class="nav-button" id="about-button" @click="setCurrentFocus('about')" to="#about">
           <img src="/about-us-icon.svg" class="icon" id="about-us-icon">
-        <!-- </div> -->
       </router-link>
 
     </div>

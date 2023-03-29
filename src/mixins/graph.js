@@ -45,19 +45,25 @@ export default {
         if (alreadyClicked) { 
           localStorage.setItem("newHere", false)
 
+          // double-click existing node to
+          // add new nodes
           if (store.existing.map(x => x[0]).includes(d.id)){
             const c = store.existing.filter((y) => {
               return y[0] === d.id
             })
             const t = c[0][1]
-
+            
+            
             if (t > 28) { return }
-
+            
             const n = t + 3
             c[0][1] = n
             let vals
             let nodes = []
             let links = []
+            
+            // move to end of existing
+            
             store.existing.forEach(function(key) {
               vals = store.graphData[key[0]]
               vals.nodes.slice(0,key[1]+1).forEach((node) => {
@@ -66,9 +72,9 @@ export default {
                 }
               })
               links = links.concat(vals.links.slice(0,key[1]))
+
             })
-            // double-click existing node to
-            // add new nodes
+
             this.draw({
               nodes: nodes,
               links: links

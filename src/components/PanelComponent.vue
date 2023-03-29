@@ -54,10 +54,10 @@
     grid-template-areas:
       "resize-bar flash ."
       "resize-bar navbar navbar"
-      "resize-bar . settings"
+      "resize-bar . ."
       "resize-bar panel-center ."
       "resize-bar . ."
-      "resize-bar controls ."
+      "resize-bar . ."
       "resize-bar . .";
     background: $panel-body-grey;
     position: absolute;

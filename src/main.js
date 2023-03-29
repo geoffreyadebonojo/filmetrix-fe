@@ -67,6 +67,13 @@ Array.prototype.remove = function(elem) {
   return this
 }
 
+Array.prototype.moveToEnd = function(elem) {
+  this.remove(elem)
+  this.push(elem)
+
+  return this
+}
+
 Array.prototype.togglePresence = function(elem) {
   if (this.includes(elem)) {
     this.remove(elem)
