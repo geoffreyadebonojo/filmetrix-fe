@@ -13,20 +13,20 @@
 <template>
   <div id="panel-center" style="height:142%;zoom:100%">
       <!-- use search result data? later -->
-    <div id="nav-arrows">
+      
+    <div id="nav-arrows" v-if="store.currentFocus === 'details' && store.currentDetailId !== false">
       <div id="left-arrow">
         <img v-if="store.existing.length > 1 && store.existing[0][0] !== store.currentDetailId"
         src="/angle-double-small-left.svg" 
         @click="adjustId(-1)">
       </div> 
-      
-      
       <div id="right-arrow">
         <img v-if="store.existing.length > 1 && store.existing.last()[0] !== store.currentDetailId"
         src="/angle-double-small-right.svg" 
         @click="adjustId(1)">
       </div>
     </div>
+    <div v-else></div>
 
     <details-component class="details-component" v-if="store.currentFocus === 'details' && store.currentDetailId !== false">
     </details-component>
@@ -99,7 +99,8 @@
       focusSearchBar() {
         document.querySelector('#search-text').focus()
       },
-      
+
+            
       async adjustId(i) {
         const dc = d3.selectAll(".details-component")
         
@@ -164,8 +165,9 @@
 
 
 <style scoped lang="scss">
-
   #nav-arrows {
+    grid-area: arrows;
+
     display: flex;
     justify-content: space-between;
 
@@ -182,6 +184,7 @@
       }
     } 
   }
+
   .result-component {
     height: 100%;
     right: 100%;

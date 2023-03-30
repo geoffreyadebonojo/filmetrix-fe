@@ -13,6 +13,7 @@
     
     <img id="poster" 
       v-bind:src="store.detailsData.poster"
+      @click="lockHighlight(store.detailsData.id)"
       @mouseenter="highlightNodes(store.detailsData.id)"
       @mouseleave="unhighlightNodes(store.detailsData.id)"
     >
@@ -31,6 +32,7 @@
         <img src="/youtube-icon.png">
       </a>
     </div>
+    
     <div v-if="store.detailsData.summary != ''" id="description">
       {{  store.detailsData.summary }}
     </div>
@@ -47,12 +49,25 @@
   export default {
     name: "DetailsComponent",
     mixins: [api, focusHelper, helpers, graphBuilder, settingsModule],
+    data () {
+      return {
+        highlightLocked: false,
+      }
+    },
     mounted () {
       focusHelper.methods.set('details')
       console.log('details component mounted')
       d3.selectAll(".details-component").transition().delay(100).duration(500).style("left", "0%")
     },
     methods: {
+      lockHighlight() {
+        if (this.$data.highlightLocked) {
+          this.$data.highlightLocked = false
+        } else {
+          this.$data.highlightLocked = true
+        }
+        console.log(this.$data.highlightLocked)
+      },
       highlightNodes(id) {
         let target= d3.select(`#${id}`).node()
 
@@ -65,6 +80,7 @@
 
         if (target == undefined) { return }
 
+        if (this.$data.highlightLocked) { return }
         //??
         let defaultColor = settingsModule.strokeColor
         graphBuilder.nodeTransformer(target, "scale(1)", defaultColor, "none")
@@ -152,7 +168,7 @@
   // }
 
   .details-component {
-    height: 100%;
+    height: 80vh;
     width: 100%;
     display: grid;
     grid-template-columns: 79px 10px 55px 50px 1fr;
@@ -162,10 +178,9 @@
     grid-template-areas:
       "poster . name name name"
       "poster . birthday links ."
-      ". . . . ." 
+      ". . . . ."
       "ft ft ft ft ft"
-      "desc desc desc desc desc"
-      "fb fb fb fb fb";
+      "desc desc desc desc desc";
     overflow: hidden;
 
     left: 0%;
