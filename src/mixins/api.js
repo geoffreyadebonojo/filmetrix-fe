@@ -101,39 +101,52 @@ export default {
         nodes: d.nodes
       }
     })
-  }
+  },
 
-  // async checkCache(gid){
-  //   const API_URL = `${this.data().localUrl}/graphql`
+  async findBySlug(slug){
+    const API_URL = `${this.data().localUrl}/graphql`
+
+    const resp = await (
+      fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query: `
+          query {
+            findBySlug(slug:"${slug}") {
+              existing
+              data {
+                nodes {
+                  id
+                  name
+                  poster
+                  type
+                  entity
+                }
+                links {
+                  source
+                  target
+                  roles
+                }
+              }
+            }    
+          }`
+        })
+      }).then((response) => {
+        return response.json()
+      })
+    )
+
+    if (resp.data.findBySlug == false) { return }
     
-  //   const resp = await (
-  //     fetch(API_URL, {
-  //       method: 'POST',
-  //       headers: { 'Content-Type': 'application/json' },
-  //       body: JSON.stringify({ query: `
-  //         query {
-  //           checkCache(storedId:"${gid}",key:"${this.data().key}") {
-  //             nodes {
-  //               id
-  //               name
-  //               poster
-  //               type
-  //               entity
-  //             }
-  //             links { 
-  //               source
-  //               target
-  //               roles
-  //             }
-  //           }    
-  //         }`
-  //       })
-  //     }).then((response) => {
-  //       return response.json()
-  //     })
-  //   )
-
-  //   // store.graphData = resp.data.cacheRequest
-  // }
-
+    const d = resp.data.findBySlug
+    
+    store.existing = d.existing.map(d => [d[0], +d[1]])
+    d.data.forEach((d, i) => {
+      let key = store.existing[i][0]
+      store.graphData[key] = {
+        links: d.links,
+        nodes: d.nodes
+      }
+    })
+  }
 }

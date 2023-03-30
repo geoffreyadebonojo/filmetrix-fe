@@ -5,11 +5,13 @@
   import graphBuilder from '@mixins/graphBuilder'
   import { settingsModule } from '@mixins/settingsModule'
   import { store } from '@/stores/store.js'
+  import NodeElem from '@mixins/NodeElem'
   import * as d3 from 'd3'
 </script>
 
 <template>
-  <div v-bind:id="store.detailsData.id + '-details'">
+  <div v-bind:id="store.detailsData.id + '-details'"
+       v-if="store.detailsData.id != null">
     
     <img id="poster" 
       v-bind:src="store.detailsData.poster"
@@ -43,47 +45,42 @@
     <div id="fade-top"></div>
     <div id="fade-bottom"></div>
   </div>
+  <div v-else></div>
 </template>
 
 <script>
   export default {
     name: "DetailsComponent",
     mixins: [api, focusHelper, helpers, graphBuilder, settingsModule],
-    data () {
-      return {
-        highlightLocked: false,
-      }
-    },
     mounted () {
       focusHelper.methods.set('details')
-      console.log('details component mounted')
       d3.selectAll(".details-component").transition().delay(100).duration(500).style("left", "0%")
     },
     methods: {
-      lockHighlight() {
-        if (this.$data.highlightLocked) {
-          this.$data.highlightLocked = false
-        } else {
-          this.$data.highlightLocked = true
-        }
-        console.log(this.$data.highlightLocked)
+      lockHighlight(id) {
+        store.lockedHighlights.togglePresence(id)
+        const d = d3.select(`#${id}`).node()
+        const n  = new NodeElem(d)
+        n.connections.classed("locked", true)
+        console.log(store.lockedHighlights)
       },
       highlightNodes(id) {
-        let target= d3.select(`#${id}`).node()
+        const target = d3.select(`#${id}`)
+        const tNode = target.node()
+        if (tNode == undefined) { return }
 
-        if (target == undefined) { return }
-
-        graphBuilder.nodeTransformer(target, "scale(1.05)", "aliceblue", "white")
+        graphBuilder.nodeTransformer(tTnode, "scale(1.05)", "aliceblue", "white")
       },
       unhighlightNodes(id) {
-        let target= d3.select(`#${id}`).node()
+        const target = d3.select(`#${id}`)
+        const tNode = d3.select(`#${id}`)
 
-        if (target == undefined) { return }
-
-        if (this.$data.highlightLocked) { return }
+        if (tNode == undefined) { return }
+        // if (this.$data.highlightLocked) { return }
+        if (target.classed("locked")) { return }
         //??
-        let defaultColor = settingsModule.strokeColor
-        graphBuilder.nodeTransformer(target, "scale(1)", defaultColor, "none")
+        const defaultColor = settingsModule.strokeColor
+        graphBuilder.nodeTransformer(tNode, "scale(1)", defaultColor, "none")
       }
     }
   }

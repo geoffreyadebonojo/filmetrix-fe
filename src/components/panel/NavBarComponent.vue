@@ -5,6 +5,134 @@
   import * as d3 from "d3"
 </script>
 
+<template>
+  <div id="navbar">
+    <input 
+      type="text" 
+      placeholder="Search" 
+      id="search-text"
+      tabindex="-1"
+      @keyup.enter="submitSearch($event.target.value)"
+    >
+    
+    <div class="nav-button-container">
+      <div id="highlight"></div>
+  
+      <router-link id="search-button" @click="toggleOrSubmitOnClick()" to="#search">
+        <img src="/search-icon.svg" class="icon" id="search-icon">
+      </router-link>
+
+      <router-link class="nav-button" id="person-button" v-if="displayPersonIcon() === true" to="#people">
+        <div @click="setCurrentFocus('person')">
+          <img src="/person-icon.svg" class="icon" id="person-icon" >
+        </div>
+      </router-link>
+      <div v-else></div>
+
+      <router-link class="nav-button" id="movie-button" v-if="displayMovieIcon() === true" to="#movies">
+        <div @click="setCurrentFocus('movie')">
+          <img src="/movie-icon.svg" class="icon" id="movie-icon">
+        </div>
+      </router-link>
+      <div v-else></div>
+
+      <router-link class="nav-button" id="tv-button" v-if="displayTvIcon() === true" to="#tv-shows">
+        <div @click="setCurrentFocus('tv')">
+          <img src="/tv-icon.svg" class="icon" id="tv-icon">
+        </div>
+      </router-link>
+
+      <router-link class="nav-button" id="details-button" v-if="store.currentDetailId !== false" @click="setCurrentFocus('details')" to="#details">
+        <img src="/details-icon.svg" class="icon" id="details-icon">
+      </router-link>
+      <div v-else></div>
+
+      <router-link class="nav-button" id="commands-button" @click="setCurrentFocus('commands')" to="#commands">
+        <img src="/command-icon.svg" class="icon" id="commands-icon">
+      </router-link>
+
+      <!-- <router-link class="nav-button" id="about-button" @click="transitionToAbout()" to="/about"> -->
+      <router-link class="nav-button" id="about-button" to="/about">
+        <img src="/about-us-icon.svg" class="icon" id="about-us-icon">
+      </router-link>
+
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  name: "NavBarComponent",
+  mixins: [focusHelper, api],
+  data () {
+    return {
+      searchOpen: true
+    }
+  },
+  mounted () {
+    d3.select("#navbar").transition().delay(300).duration(200).style("width", "100%")
+  },
+  methods: {
+    async submitSearch(value) {
+      const val = value.toUpperCase()
+      if (val == '' || val == null) { 
+        // maybe a helpful tip?
+        return false
+      }
+      await api.fetchSearchData(val)
+      
+      const tab = store.searchResults[0].id.split("-")[0]
+      //handle for no id
+      this.setCurrentFocus(tab)
+      document.querySelector("#search-text").value = ''
+    },
+    
+    displayPersonIcon: function() {
+      const list = store.searchResults.map(r => r['id'].split("-")[0])
+      return list.includes('person')
+    },
+
+    displayMovieIcon: function() {
+      const list = store.searchResults.map(r => r['id'].split("-")[0])
+      return list.includes('movie')
+    },
+
+    displayTvIcon: function() {
+      const list = store.searchResults.map(r => r['id'].split("-")[0])
+      return list.includes('tv')
+    },
+
+    toggleOrSubmitOnClick() {
+      const d = d3.select("#search-text") 
+      focusHelper.methods.openField(d)
+      
+      const val = d.node().value
+      // clean up
+      if (val == '' || val == null) { 
+        // maybe a helpful tip?
+        store.currentFocus = "empty"
+        // still stuck with 'pick up where you left off' even after switching tabs
+        return false
+      }
+
+      store.currentFocus = "search"
+      this.submitSearch(val)
+    },
+
+    setCurrentFocus(focus) {
+      focusHelper.methods.set(focus)
+    },
+
+    // transitionToAbout() {
+    //   focusHelper.methods.set('about')
+    //   d3.select("#navbar").transition().delay(0).duration(1000).style("display", "none")
+    //   d3.select("#panel-body").transition().delay(0).duration(1000).style("left", "0px").style("right", "null")
+    //   d3.select("#resize-bar").transition().delay(1000).style("opacity", "0")
+    // }
+  }
+}
+</script>
+
 <style scoped lang="scss">
   #navbar {
     grid-area: navbar;
@@ -114,123 +242,3 @@
     transform: rotate(0deg);
   }
 </style>
-
-<template>
-  <div id="navbar">
-    <input 
-      type="text" 
-      placeholder="Search" 
-      id="search-text"
-      tabindex="-1"
-      @keyup.enter="submitSearch($event.target.value)"
-    >
-    
-    <div class="nav-button-container">
-      <div id="highlight"></div>
-  
-      <router-link id="search-button" @click="toggleOrSubmitOnClick()" to="#search">
-        <img src="/search-icon.svg" class="icon" id="search-icon">
-      </router-link>
-
-      <router-link class="nav-button" id="person-button" v-if="displayPersonIcon() === true" to="#people">
-        <div @click="setCurrentFocus('person')">
-          <img src="/person-icon.svg" class="icon" id="person-icon" >
-        </div>
-      </router-link>
-      <div v-else></div>
-
-      <router-link class="nav-button" id="movie-button" v-if="displayMovieIcon() === true" to="#movies">
-        <div @click="setCurrentFocus('movie')">
-          <img src="/movie-icon.svg" class="icon" id="movie-icon">
-        </div>
-      </router-link>
-      <div v-else></div>
-
-      <router-link class="nav-button" id="tv-button" v-if="displayTvIcon() === true" to="#tv-shows">
-        <div @click="setCurrentFocus('tv')">
-          <img src="/tv-icon.svg" class="icon" id="tv-icon">
-        </div>
-      </router-link>
-
-      <router-link class="nav-button" id="details-button" v-if="store.currentDetailId !== false" @click="setCurrentFocus('details')" to="#details">
-        <img src="/details-icon.svg" class="icon" id="details-icon">
-      </router-link>
-      <div v-else></div>
-
-      <router-link class="nav-button" id="commands-button" @click="setCurrentFocus('commands')" to="#commands">
-        <img src="/command-icon.svg" class="icon" id="commands-icon">
-      </router-link>
-
-      <router-link class="nav-button" id="about-button" @click="setCurrentFocus('about')" to="#about">
-          <img src="/about-us-icon.svg" class="icon" id="about-us-icon">
-      </router-link>
-
-    </div>
-  </div>
-</template>
-
-<script>
-export default {
-  name: "NavBarComponent",
-  mixins: [focusHelper, api],
-  data () {
-    return {
-      searchOpen: true
-    }
-  },
-  mounted () {
-    d3.select("#navbar").transition().delay(300).duration(200).style("width", "100%")
-  },
-  methods: {
-    async submitSearch(value) {
-      const val = value.toUpperCase()
-      if (val == '' || val == null) { 
-        // maybe a helpful tip?
-        return false
-      }
-      await api.fetchSearchData(val)
-      
-      const tab = store.searchResults[0].id.split("-")[0]
-      //handle for no id
-      this.setCurrentFocus(tab)
-      document.querySelector("#search-text").value = ''
-    },
-    
-    displayPersonIcon: function() {
-      const list = store.searchResults.map(r => r['id'].split("-")[0])
-      return list.includes('person')
-    },
-
-    displayMovieIcon: function() {
-      const list = store.searchResults.map(r => r['id'].split("-")[0])
-      return list.includes('movie')
-    },
-
-    displayTvIcon: function() {
-      const list = store.searchResults.map(r => r['id'].split("-")[0])
-      return list.includes('tv')
-    },
-
-    toggleOrSubmitOnClick() {
-      const d = d3.select("#search-text") 
-      focusHelper.methods.openField(d)
-      
-      const val = d.node().value
-      // clean up
-      if (val == '' || val == null) { 
-        // maybe a helpful tip?
-        store.currentFocus = "empty"
-        // still stuck with 'pick up where you left off' even after switching tabs
-        return false
-      }
-
-      store.currentFocus = "search"
-      this.submitSearch(val)
-    },
-
-    setCurrentFocus(focus) {
-      focusHelper.methods.set(focus)
-    }
-  }
-}
-</script>

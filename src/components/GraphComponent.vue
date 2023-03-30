@@ -44,6 +44,35 @@
 <script>
   export default {
     name: "GraphComponent",
+    async created () {
+      const gid = this.$route.query.gid
+
+      if (gid == null) { return }
+      
+      await api.findBySlug(gid)
+
+
+      store.currentDetailId = store.existing.last()[0]
+
+      // debugger
+      let data
+      let nodes = []
+      let links = []
+
+      store.existing.forEach((d) => {
+        data = store.graphData[d[0]]
+        nodes = nodes.concat(data.nodes.slice(0,d[1]+1))
+        links = links.concat(data.links.slice(0,d[1]))
+      })
+
+      store.graphTypes =  helpers.getTypes(nodes)
+      // store.currentFocus = 'details'
+
+      graph.methods.draw({
+        nodes: nodes.uniqueById(),
+        links: links
+      })
+    },
     mounted () {
       d3.select("#graph-container")
       .attr("viewBox", `-${window.innerWidth*2/3} -${window.innerHeight} ${window.innerWidth*2} ${window.innerHeight*2}`)

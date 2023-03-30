@@ -1,6 +1,7 @@
 import { settingsModule } from './settingsModule.js'
 import { store } from '@/stores/store.js'
 import * as d3 from 'd3'
+import NodeElem from '@mixins/NodeElem'
 
 export default {
   data () {
@@ -271,22 +272,53 @@ export default {
     })
   },
 
+  nodeConnections(target) {
+    // let node = d3.select(target)
+
+    // let elems = {
+    //   circle: node.select('circle'),
+    //   label: node.select('.node-label'),
+    //   poster: node.select('.poster'),
+    //   sources: d3.selectAll(`.link[source='${target.id}']`),
+    //   targets: d3.selectAll(`.link[target='${target.id}']`)
+    // }
+
+    // let x = elems.sources.nodes().map((d)=>d.__data__.target.id)
+    // let z = elems.targets.nodes().map((d)=>d.__data__.source.id)
+    // let connections = d3.selectAll('.node').filter((d) => {
+    //   return x.includes(d.id) || z.includes(d.id)
+    // })
+
+    // const v = { 
+    //   elems, 
+    //   connections
+    // }
+
+    const v = new NodeElem(target)
+
+    return v
+  },
+
   nodeTransformer(target, scale, highlightColor, textStroke) {
-    let node = d3.select(target)
+    // let node = d3.select(target)
 
-    let elems = {
-      circle: node.select('circle'),
-      label: node.select('.node-label'),
-      poster: node.select('.poster'),
-      sources: d3.selectAll(`.link[source='${target.id}']`),
-      targets: d3.selectAll(`.link[target='${target.id}']`)
-    }
+    // let elems = {
+    //   circle: node.select('circle'),
+    //   label: node.select('.node-label'),
+    //   poster: node.select('.poster'),
+    //   sources: d3.selectAll(`.link[source='${target.id}']`),
+    //   targets: d3.selectAll(`.link[target='${target.id}']`)
+    // }
 
-    let x = elems.sources.nodes().map((d)=>d.__data__.target.id)
-    let z = elems.targets.nodes().map((d)=>d.__data__.source.id)
-    let y = d3.selectAll('.node').filter((d) => {
-      return x.includes(d.id) || z.includes(d.id)
-    })
+    // let x = elems.sources.nodes().map((d)=>d.__data__.target.id)
+    // let z = elems.targets.nodes().map((d)=>d.__data__.source.id)
+    // let y = d3.selectAll('.node').filter((d) => {
+    //   return x.includes(d.id) || z.includes(d.id)
+    // })
+
+    const n = new NodeElem(target)
+    const elems  = n.elems
+    const y = n.connections
 
     y.select('circle').style("stroke", highlightColor)
     y.selectAll("text").style("stroke", highlightColor)

@@ -36,6 +36,9 @@
       }
     },
     mounted () {
+
+      //check prefs
+
       d3.select("#panel-body").transition().duration(200).ease(d3.easeLinear).style("width", "350px").style("min-width", "270px")
       focusHelper.methods.set('search')
       focusHelper.methods.openField()
@@ -63,14 +66,15 @@
     position: absolute;
     top: 0px;
     right: 0px;
+    left: null;
     z-index: 2;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   }
 
-  @media screen and (max-width: 400px) {
-    #panel-body {
-      grid-template-columns: 10px 1fr 10px;
-      grid-template-rows: 2vh 1.8em 0vh 10fr 1vh 4fr 1vh;
-    }
-  }
+  // @media screen and (max-width: 400px) {
+  //   #panel-body {
+  //     grid-template-columns: 10px 1fr 10px;
+  //     grid-template-rows: 2vh 1.8em 0vh 10fr 1vh 4fr 1vh;
+  //   }
+  // }
 </style>

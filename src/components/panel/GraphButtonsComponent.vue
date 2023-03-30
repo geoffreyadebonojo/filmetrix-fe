@@ -100,7 +100,7 @@
   #save-button {
     top: 2.9vh;
     width: 25px;
-    height: 25px;
+    height: 24px;
   }
 
   #save-flash {

@@ -11,7 +11,7 @@ export default {
     set(focus) {
       const navButtons = d3.selectAll(".nav-button").nodes().reverse()
       navButtons.unshift()
-      this.closeField( d3.select("#search-text") )
+      this.closeField()
 
       const buttonMap = navButtons.map(x => x.id.split("-")[0]);
       const displaceRight = [
@@ -37,12 +37,11 @@ export default {
       .style("right", `${x}px`)
     },
 
-    closeField(d) {
-      d.transition().duration(0)
-      .style("left", "100%")
+    closeField() {
+      d3.select("#search-text").transition().duration(0).style("left", "100%")
     },
 
-    openField(searchField) {
+    openField() {
       d3.select("#search-text").transition().duration(0).delay(100).style("width", "100%").style("left", "7%")
       d3.select("#highlight").transition().duration(100).style("left", "-1px")
     }
