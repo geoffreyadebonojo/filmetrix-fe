@@ -84,7 +84,7 @@
     },
     mounted () {
       d3.select("#search-prompt").transition().delay(200).duration(200).style("opacity", 1)
-      const saved = JSON.parse(localStorage.getItem("savedGraph"))
+      const saved = JSON.parse(localStorage.getItem("lockedGraph"))
       
       if (saved == null || saved.length == []) {
         this.$data.hasSavedGraph = false
@@ -124,9 +124,9 @@
       },
 
       async resume () {
-        const saved = localStorage.getItem("savedGraph")
+        const saved = localStorage.getItem("lockedGraph")
 
-        store.isSaved = true
+        store.isLocked = true
 
         if (saved !== null) {
           store.existing = JSON.parse(saved)
@@ -154,8 +154,8 @@
             links: links
           })      
 
-          const savedButton = d3.select("#save-button")
-          savedButton.classed("unlocked", false).classed("locked", true)
+          const lockButton = d3.select("#lock-button")
+          lockButton.classed("unlocked", false).classed("locked", true)
           focusHelper.methods.set('details')
         }
       }

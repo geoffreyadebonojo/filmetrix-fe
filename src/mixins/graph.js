@@ -53,7 +53,7 @@ export default {
             })
             const t = c[0][1]
             
-            
+
             if (t > 28) { return }
             
             const n = t + 3

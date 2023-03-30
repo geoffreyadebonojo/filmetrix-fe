@@ -190,7 +190,7 @@ export default {
   }
 
   #search-icon {
-    height: 14px;
+    height: 16px;
     margin: 4.5px 5.5px;
     /* top: 4px;
     padding: 0 4px 0 6px; */

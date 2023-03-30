@@ -6,12 +6,18 @@
 
 <template>
   <p id="save-flash"></p>
-  <div v-bind:class="store.isSaved ? 'graph-control-buttons locked' : 'graph-control-buttons unlocked'" 
+  
+  <div v-bind:class="store.isLocked ? 'graph-control-buttons locked' : 'graph-control-buttons unlocked'" 
+       id="lock-button"
+       @click="this.lockGraph()"></div>
+
+  <div class="graph-control-buttons"
        id="save-button"
        @click="this.saveGraph()"></div>
-  <img src="/center-graph-icon.svg" 
+
+  <div 
        class="graph-control-buttons" 
-       id="centering-button" >
+       id="centering-button"></div>
 </template>
 
 <script>
@@ -27,14 +33,17 @@
     },
     methods: {
       saveGraph () {
+        api.saveGraph(store.existing)
+      },
+      lockGraph () {
         const id = this.$data.attrs.id  
-        const saveButton = d3.select("#save-button")
+        const lockButton = d3.select("#lock-button")
         const flash = d3.select("#save-flash")
 
-        if (saveButton.classed("locked")) {
-          saveButton.classed("locked", false).classed("unlocked", true)
+        if (lockButton.classed("locked")) {
+          lockButton.classed("locked", false).classed("unlocked", true)
 
-          store.isSaved = false
+          store.isLocked = false
           
           delete store.savedGraphs[id]
 
@@ -42,12 +51,12 @@
           .style("transform", "translateX(-20px)")
           .transition().duration(200).style("opacity", 1).style("color", "#72bcd4")
           .transition().duration(1000).style("color", "white").style("opacity", 0)
-          localStorage.setItem("savedGraph", JSON.stringify([]))
+          localStorage.setItem("lockedGraph", JSON.stringify([]))
           
         } else {
-          saveButton.classed("unlocked", false).classed("locked", true)
+          lockButton.classed("unlocked", false).classed("locked", true)
           
-          store.isSaved = true
+          store.isLocked = true
 
           this.$data.attrs.existing = store.existing.map(d => d[0])
           store.savedGraphs[id] = this.$data.attrs
@@ -56,7 +65,7 @@
           .style("transform", "translateX(0px)")
           .transition().duration(200).style("opacity", 1).style("color", "#72bcd4")
           .transition().duration(1000).style("color", "white").style("opacity", 0)
-          localStorage.setItem("savedGraph", JSON.stringify(store.existing))
+          localStorage.setItem("lockedGraph", JSON.stringify(store.existing))
         }
       }
     }
@@ -93,16 +102,26 @@
     opacity: 1;
   }
   
-  #centering-button {
-    bottom: 10px;
-  }
-  
-  #save-button {
+  #lock-button {
     top: 2.9vh;
     width: 25px;
     height: 24px;
   }
-
+  
+  #save-button {
+    background-image: url("/disk-empty-white.svg");
+    top: 7.9vh;
+    left: -28px !important;
+    width: 21px;
+    height: 21px;
+    opacity: 0.5;
+    
+    &:hover {
+      opacity: 1;
+      background-image: url("/disk-empty-blue.svg");
+    }
+  }
+  
   #save-flash {
     grid-area: flash;
     opacity: 0;
@@ -115,5 +134,13 @@
     left: -112px;
     top: 3.3vh;
     color: white;
+  }
+
+  #centering-button {
+    background-image: url("/center-graph-icon.svg");
+    background-size: contain;
+    bottom: 10px;
+    width: 21px;
+    height: 21px;
   }
 </style>

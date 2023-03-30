@@ -103,6 +103,38 @@ export default {
     })
   },
 
+  async saveGraph(existing) {
+    const ids = []
+    const count = []
+    
+    existing.forEach((d) => {
+      ids.push(d[0])
+      count.push(d[1])
+    })
+    
+    const API_URL =`${this.data().localUrl}/graphql`
+    const api_respsonse = await (
+      fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query:
+          `query {
+            saveGraph(ids:"${ids}",counts:"${count}") {
+              status
+              msg
+              resourceId
+              resourceSlug
+            }
+          }`
+        })
+      }).then((response) => {
+        return response.json()
+      })
+    )
+    
+    // store.searchResults = api_respsonse.data.search
+  },
+
   async findBySlug(slug){
     const API_URL = `${this.data().localUrl}/graphql`
 
