@@ -18,12 +18,12 @@
       <div id="left-arrow">
         <img v-if="store.existing.length > 1 && store.existing[0][0] !== store.currentDetailId"
         src="/angle-double-small-left.svg" 
-        @click="adjustId(-1)">
+        @click="this.adjustId(-1)">
       </div> 
       <div id="right-arrow">
         <img v-if="store.existing.length > 1 && store.existing.last()[0] !== store.currentDetailId"
         src="/angle-double-small-right.svg" 
-        @click="adjustId(1)">
+        @click="this.adjustId(1)">
       </div>
     </div>
     <div v-else></div>
@@ -34,7 +34,7 @@
     <commands-component v-else-if="store.currentFocus === 'commands'">
     </commands-component>
     
-    <div id="empty-field" v-else-if="store.currentFocus === 'empty'" @click="focusSearchBar()">
+    <div id="empty-field" v-else-if="store.currentFocus === 'empty'" @click="this.focusSearchBar()">
       <div id="search-prompt">
         <p class="apply-effect">search for a movie or actor</p>
       </div>
@@ -53,11 +53,10 @@
           or
         </p>
         <router-link to="#details">
-          <p class="apply-effect" @click="resume()">
+          <p class="apply-effect" @click="this.resume()">
             pick up where you left off
           </p>
         </router-link> 
-        <!-- //maybe put saved graph names here -->
       </div>
       <div v-else></div>
     </div>
@@ -189,12 +188,6 @@
     height: 100%;
     right: 100%;
   }  
-
-  // .details-component {
-  //   height: 100%;
-  //   width: 100%;
-  //   left: -100%
-  // }
 
   #empty-field {
     height: 100%;

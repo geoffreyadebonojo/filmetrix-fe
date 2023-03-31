@@ -7,14 +7,8 @@
 
 <template>
   <div id="viewer-body">
-    <!-- <div id="instructions">Instruction</div> -->
     <graph-component></graph-component>
     <panel-component></panel-component>
-    <!-- <div id="zoom-buttons">
-      <img src="/square-minus.svg" @click="incrementZoom(-1)">
-      <img src="/square-plus.svg" @click="incrementZoom(1)">
-    </div> -->
-    <!-- <AboutGraph v-if="store.aboutUs"></AboutGraph> -->
   </div>
 </template>
 
@@ -37,20 +31,8 @@
       let isMobile = /Android|iPhone/i.test(navigator.userAgent)
       if (isMobile) {
         d3.select('#zoom-buttons').style('display', 'flex')
-      }
-
-      
-    },
-    methods: {
-      // incrementZoom (i) {
-      //   if (this.increment+i > 5 || this.increment+i < -2) {
-      //     this.increment = this.increment
-      //   } else {
-      //     this.increment += i
-      //     document.querySelector("#panel-center").style.zoom = `${this.currentZoom+(this.increment*10)}%`;
-      //   }
-      // }
-    },
+      } 
+    }
   }
 </script>
 

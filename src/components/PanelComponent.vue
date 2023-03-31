@@ -6,8 +6,6 @@
   import focusHelper from "@/mixins/focusHelper"
   import { store } from '@/stores/store.js'
   import * as d3 from 'd3'
-
-  // import ControlsComponent from './ControlsComponent.vue'
 </script>
 
 <template>
@@ -16,7 +14,6 @@
     <resize-bar-component></resize-bar-component>
     <nav-bar-component></nav-bar-component>
     <panel-center></panel-center>
-    <!-- <controls-component></controls-component> -->
   </div>
 </template>
 
@@ -27,8 +24,7 @@
       GraphButtonsComponent,
       ResizeBarComponent,
       NavBarComponent,
-      PanelCenter,
-      // ControlsComponent
+      PanelCenter
     },
     data () {
       return {
@@ -36,9 +32,6 @@
       }
     },
     mounted () {
-
-      //check prefs
-
       d3.select("#panel-body").transition().duration(200).ease(d3.easeLinear).style("width", "350px").style("min-width", "270px")
       focusHelper.methods.set('search')
       focusHelper.methods.openField()
@@ -70,11 +63,4 @@
     z-index: 2;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   }
-
-  // @media screen and (max-width: 400px) {
-  //   #panel-body {
-  //     grid-template-columns: 10px 1fr 10px;
-  //     grid-template-rows: 2vh 1.8em 0vh 10fr 1vh 4fr 1vh;
-  //   }
-  // }
 </style>

@@ -12,42 +12,42 @@
       placeholder="Search" 
       id="search-text"
       tabindex="-1"
-      @keyup.enter="submitSearch($event.target.value)"
+      @keyup.enter="this.submitSearch($event.target.value)"
     >
     
     <div class="nav-button-container">
       <div id="highlight"></div>
   
-      <router-link id="search-button" @click="toggleOrSubmitOnClick()" to="#search">
+      <router-link id="search-button" @click="this.toggleOrSubmitOnClick()" to="#search">
         <img src="/search-icon.svg" class="icon" id="search-icon">
       </router-link>
 
-      <router-link class="nav-button" id="person-button" v-if="displayPersonIcon() === true" to="#people">
-        <div @click="setCurrentFocus('person')">
+      <router-link class="nav-button" id="person-button" v-if="this.displayPersonIcon() === true" to="#people">
+        <div @click="this.setCurrentFocus('person')">
           <img src="/person-icon.svg" class="icon" id="person-icon" >
         </div>
       </router-link>
       <div v-else></div>
 
-      <router-link class="nav-button" id="movie-button" v-if="displayMovieIcon() === true" to="#movies">
-        <div @click="setCurrentFocus('movie')">
+      <router-link class="nav-button" id="movie-button" v-if="this.displayMovieIcon() === true" to="#movies">
+        <div @click="this.setCurrentFocus('movie')">
           <img src="/movie-icon.svg" class="icon" id="movie-icon">
         </div>
       </router-link>
       <div v-else></div>
 
-      <router-link class="nav-button" id="tv-button" v-if="displayTvIcon() === true" to="#tv-shows">
-        <div @click="setCurrentFocus('tv')">
+      <router-link class="nav-button" id="tv-button" v-if="this.displayTvIcon() === true" to="#tv-shows">
+        <div @click="this.setCurrentFocus('tv')">
           <img src="/tv-icon.svg" class="icon" id="tv-icon">
         </div>
       </router-link>
 
-      <router-link class="nav-button" id="details-button" v-if="store.currentDetailId !== false" @click="setCurrentFocus('details')" to="#details">
+      <router-link class="nav-button" id="details-button" v-if="store.currentDetailId !== false" @click="this.setCurrentFocus('details')" to="#details">
         <img src="/details-icon.svg" class="icon" id="details-icon">
       </router-link>
       <div v-else></div>
 
-      <router-link class="nav-button" id="commands-button" @click="setCurrentFocus('commands')" to="#commands">
+      <router-link class="nav-button" id="commands-button" @click="this.setCurrentFocus('commands')" to="#commands">
         <img src="/command-icon.svg" class="icon" id="commands-icon">
       </router-link>
 
@@ -121,14 +121,7 @@ export default {
 
     setCurrentFocus(focus) {
       focusHelper.methods.set(focus)
-    },
-
-    // transitionToAbout() {
-    //   focusHelper.methods.set('about')
-    //   d3.select("#navbar").transition().delay(0).duration(1000).style("display", "none")
-    //   d3.select("#panel-body").transition().delay(0).duration(1000).style("left", "0px").style("right", "null")
-    //   d3.select("#resize-bar").transition().delay(1000).style("opacity", "0")
-    // }
+    }
   }
 }
 </script>
@@ -192,16 +185,11 @@ export default {
   #search-icon {
     height: 16px;
     margin: 4.5px 5.5px;
-    /* top: 4px;
-    padding: 0 4px 0 6px; */
   }
 
   #about-us-icon {
     height: 17px;
     margin: 4px 6px;
-    /* width: 27px;
-    top: 4px;
-    left: 2px; */
   }
 
   #details-icon {
@@ -235,7 +223,6 @@ export default {
   #back-button {
     display: none;
     top: 50px;
-    /* right: 30px; */
     position: absolute;
     height: 16px;
     margin: 0px 10px 6px 10px;

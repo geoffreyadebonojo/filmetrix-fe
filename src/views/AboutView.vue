@@ -5,7 +5,7 @@
 
 <template>
   <div class="details-container" id="about-us-details">
-    <img id="about-poster" class="">
+    <img id="about-poster">
     <div id="about-name"></div>
     <div id="about-description"></div>
   </div>

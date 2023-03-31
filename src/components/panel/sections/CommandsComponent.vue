@@ -262,12 +262,6 @@
       font-style: italic;
       font-size: 13px;
       margin: 7px auto auto auto;
-
-      // it's FINE
-      // &:hover {
-      //   cursor: unset;
-      //   color: unset;
-      // }
     }
 
     p {

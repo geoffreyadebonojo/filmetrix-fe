@@ -15,9 +15,9 @@
     
     <img id="poster" 
       v-bind:src="store.detailsData.poster"
-      @click="lockHighlight(store.detailsData.id)"
-      @mouseenter="highlightNodes(store.detailsData.id)"
-      @mouseleave="unhighlightNodes(store.detailsData.id)"
+      @click="this.lockHighlight(store.detailsData.id)"
+      @mouseenter="this.highlightNodes(store.detailsData.id)"
+      @mouseleave="this.unhighlightNodes(store.detailsData.id)"
     >
     <div id="name">{{ store.detailsData.name }}</div>
     <div id="birthday">{{ store.detailsData.year }}</div>
@@ -140,29 +140,6 @@
     letter-spacing: 0.002em;
     text-transform: uppercase;
   }
-
-  // @media screen and (max-width: 400px) {
-  //   .details-container {
-  //     grid-template-columns: 36% 10px 17% 17% 1fr;
-  //     grid-template-rows: 23% 5% 20px 1fr;
-  //     grid-template-areas:
-  //       "poster . name name name"
-  //       ". . . ."
-  //       "poster . birthday links links"
-  //       "desc desc desc desc desc"
-  //   }
-  //   #poster {
-  //     width: 100%;
-  //   }
-  //   #name {
-  //     font-size: 20px;
-  //     line-height: unset;
-  //   }
-
-  //   #imdb {
-  //     width: 22px;
-  //   }
-  // }
 
   .details-component {
     height: 80vh;
