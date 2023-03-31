@@ -1,5 +1,4 @@
 <script setup>
-  import { store } from '@/stores/store.js'
   import * as d3 from 'd3'
 </script>
 
@@ -27,6 +26,10 @@
 
       <div class="item lock" style="height:3em">
         <img src="/lock-closed.svg"/>
+      </div>
+
+      <div class="item save" style="height:3em">
+        <img src="/disk-empty-white.svg"/>
       </div>
 
       <div class="item centering" style="height:3em">
@@ -100,6 +103,18 @@
         </p>
       </div>
 
+      <div class="item save" style="height:3em">
+        <div @click="this.elaborateOn('save')" style="display:flex">
+          <p>
+            save
+          </p>
+          <img class="chevron" src="/chevron.svg"/>
+        </div>
+        <p class="elaboration" style="display:none">
+          you can save graphs and share them with your friends!
+        </p>
+      </div>
+
       <div class="item centering" style="height:3em">
         <div @click="this.elaborateOn('centering')" style="display:flex">
           <p>
@@ -126,6 +141,7 @@
           "single-click": "5.5em",
           "unlock": "5.6em",
           "lock": "4.7em",
+          "save": "4.7em",
           "centering": "7em"
         }
       }
@@ -198,7 +214,7 @@
 
     .search-info > img {
       top: 7px;
-      right: 5px;
+      right: 3px;
       height: 20px;
     }
 
@@ -206,11 +222,17 @@
       height: 20px;
       opacity: 0.5;
       top: 2px;
-      right: 1px;
+      right: 2px;
     }
 
     p {
       margin: auto 0 auto auto
+    }
+
+    .save > img {
+      right: 2px;
+      height: 21px;
+      opacity: 0.5;
     }
   }
 

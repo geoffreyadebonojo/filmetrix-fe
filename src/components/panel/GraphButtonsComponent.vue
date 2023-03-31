@@ -5,18 +5,19 @@
 </script>
 
 <template>
-  <p id="save-flash"></p>
-  
   <div v-bind:class="store.isLocked ? 'graph-control-buttons locked' : 'graph-control-buttons unlocked'" 
        id="lock-button"
-       @click="this.lockGraph()"></div>
-
+       @click="this.lockGraph()">
+    <p id="lock-flash"></p>
+  </div>
+  
   <div class="graph-control-buttons"
        id="save-button"
-       @click="this.saveGraph()"></div>
+       @click="this.save()"> 
+    <p id="save-flash"></p>
+  </div>
 
-  <div 
-       class="graph-control-buttons" 
+  <div class="graph-control-buttons" 
        id="centering-button"></div>
 </template>
 
@@ -32,41 +33,53 @@
       }
     },
     methods: {
-      saveGraph () {
-        api.saveGraph(store.existing)
-      },
       lockGraph () {
         const id = this.$data.attrs.id  
         const lockButton = d3.select("#lock-button")
-        const flash = d3.select("#save-flash")
+        const flash = d3.select("#lock-flash")
 
         if (lockButton.classed("locked")) {
           lockButton.classed("locked", false).classed("unlocked", true)
-
           store.isLocked = false
-          
           delete store.savedGraphs[id]
-
           flash.html("unlocked")
-          .style("transform", "translateX(-20px)")
-          .transition().duration(200).style("opacity", 1).style("color", "#72bcd4")
-          .transition().duration(1000).style("color", "white").style("opacity", 0)
+            .transition().duration(200).style("opacity", 1).style("color", "#72bcd4")
+            .transition().duration(1000).style("color", "white").style("opacity", 0)
           localStorage.setItem("lockedGraph", JSON.stringify([]))
           
         } else {
           lockButton.classed("unlocked", false).classed("locked", true)
-          
           store.isLocked = true
-
           this.$data.attrs.existing = store.existing.map(d => d[0])
           store.savedGraphs[id] = this.$data.attrs
-          
           flash.html("locked")
-          .style("transform", "translateX(0px)")
-          .transition().duration(200).style("opacity", 1).style("color", "#72bcd4")
-          .transition().duration(1000).style("color", "white").style("opacity", 0)
+            .transition().duration(200).style("opacity", 1).style("color", "#72bcd4")
+            .transition().duration(1000).style("color", "white").style("opacity", 0)
           localStorage.setItem("lockedGraph", JSON.stringify(store.existing))
         }
+      },
+      
+      async save () {
+        const saveButton = d3.select("#save-button")
+        const flash = d3.select("#save-flash")
+        
+        // flash.html('')
+
+        const response = await api.saveGraph(store.existing)
+
+        flash
+        // .attr('xlink:href', response.data.saveGraph.shareUrl)
+        .html('copied!')
+        .on("click", async (d) => {
+          try {
+            await navigator.clipboard.writeText(response.data.saveGraph.shareUrl);
+            console.log('Content copied to clipboard');
+          } catch (err) {
+            console.error('Failed to copy: ', err);
+          }
+        })
+        .transition().duration(200).style("opacity", 1).style("color", "#72bcd4")
+        .transition().duration(1000).style("color", "white").style("opacity", 0)
       }
     }
   }
@@ -112,8 +125,8 @@
     background-image: url("/disk-empty-white.svg");
     top: 7.9vh;
     left: -28px !important;
-    width: 21px;
-    height: 21px;
+    width: 20px;
+    height: 20px;
     opacity: 0.5;
     
     &:hover {
@@ -121,19 +134,20 @@
       background-image: url("/disk-empty-blue.svg");
     }
   }
-  
-  #save-flash {
-    grid-area: flash;
-    opacity: 0;
+
+  #lock-flash, #save-flash {
+    opacity: 1;
     text-transform: uppercase;
     font-family: $global-font;
     font-weight: bold;
-    // font-size: 40px;
     text-align: center;
     position: absolute;
-    left: -112px;
-    top: 3.3vh;
+    right: 30px;
     color: white;
+  }
+
+  #lock-flash {
+    top: 3px;
   }
 
   #centering-button {

@@ -113,7 +113,7 @@ export default {
     })
     
     const API_URL =`${this.data().localUrl}/graphql`
-    const api_respsonse = await (
+    return await (
       fetch(API_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -123,7 +123,7 @@ export default {
               status
               msg
               resourceId
-              resourceSlug
+              shareUrl
             }
           }`
         })
@@ -131,8 +131,6 @@ export default {
         return response.json()
       })
     )
-    
-    // store.searchResults = api_respsonse.data.search
   },
 
   async findBySlug(slug){
