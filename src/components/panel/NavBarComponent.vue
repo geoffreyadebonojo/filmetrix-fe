@@ -12,42 +12,42 @@
       placeholder="Search" 
       id="search-text"
       tabindex="-1"
-      @keyup.enter="this.submitSearch($event.target.value)"
+      @keyup.enter="submitSearch($event.target.value)"
     >
     
     <div class="nav-button-container">
       <div id="highlight"></div>
   
-      <router-link id="search-button" @click="this.toggleOrSubmitOnClick()" to="#search">
+      <router-link id="search-button" @click="toggleOrSubmitOnClick()" to="#search">
         <img src="/search-icon.svg" class="icon" id="search-icon">
       </router-link>
 
-      <router-link class="nav-button" id="person-button" v-if="this.displayPersonIcon() === true" to="#people">
-        <div @click="this.setCurrentFocus('person')">
+      <router-link class="nav-button" id="person-button" v-if="displayPersonIcon() === true" to="#people">
+        <div @click="setCurrentFocus('person')">
           <img src="/person-icon.svg" class="icon" id="person-icon" >
         </div>
       </router-link>
       <div v-else></div>
 
-      <router-link class="nav-button" id="movie-button" v-if="this.displayMovieIcon() === true" to="#movies">
-        <div @click="this.setCurrentFocus('movie')">
+      <router-link class="nav-button" id="movie-button" v-if="displayMovieIcon() === true" to="#movies">
+        <div @click="setCurrentFocus('movie')">
           <img src="/movie-icon.svg" class="icon" id="movie-icon">
         </div>
       </router-link>
       <div v-else></div>
 
-      <router-link class="nav-button" id="tv-button" v-if="this.displayTvIcon() === true" to="#tv-shows">
-        <div @click="this.setCurrentFocus('tv')">
+      <router-link class="nav-button" id="tv-button" v-if="displayTvIcon() === true" to="#tv-shows">
+        <div @click="setCurrentFocus('tv')">
           <img src="/tv-icon.svg" class="icon" id="tv-icon">
         </div>
       </router-link>
 
-      <router-link class="nav-button" id="details-button" v-if="store.currentDetailId !== false" @click="this.setCurrentFocus('details')" to="#details">
+      <router-link class="nav-button" id="details-button" v-if="store.currentDetailId !== false" @click="setCurrentFocus('details')" to="#details">
         <img src="/details-icon.svg" class="icon" id="details-icon">
       </router-link>
       <div v-else></div>
 
-      <router-link class="nav-button" id="commands-button" @click="this.setCurrentFocus('commands')" to="#commands">
+      <router-link class="nav-button" id="commands-button" @click="setCurrentFocus('commands')" to="#commands">
         <img src="/command-icon.svg" class="icon" id="commands-icon">
       </router-link>
 

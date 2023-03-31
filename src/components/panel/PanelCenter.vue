@@ -18,12 +18,12 @@
       <div id="left-arrow">
         <img v-if="store.existing.length > 1 && store.existing[0][0] !== store.currentDetailId"
         src="/angle-double-small-left.svg" 
-        @click="this.adjustId(-1)">
+        @click="adjustId(-1)">
       </div> 
       <div id="right-arrow">
         <img v-if="store.existing.length > 1 && store.existing.last()[0] !== store.currentDetailId"
         src="/angle-double-small-right.svg" 
-        @click="this.adjustId(1)">
+        @click="adjustId(1)">
       </div>
     </div>
     <div v-else></div>
@@ -34,12 +34,12 @@
     <commands-component v-else-if="store.currentFocus === 'commands'">
     </commands-component>
     
-    <div id="empty-field" v-else-if="store.currentFocus === 'empty'" @click="this.focusSearchBar()">
+    <div id="empty-field" v-else-if="store.currentFocus === 'empty'" @click="focusSearchBar()">
       <div id="search-prompt">
         <p class="apply-effect">search for a movie or actor</p>
       </div>
 
-      <div id="show-you-around-prompt" v-if="this.$data.newHere">
+      <div id="show-you-around-prompt" v-if="$data.newHere">
         <p style="margin:5vh">
           or
         </p>
@@ -48,12 +48,12 @@
         </p>
       </div>
 
-      <div id="resume-prompt" v-else-if="this.$data.hasSavedGraph">
+      <div id="resume-prompt" v-else-if="$data.hasSavedGraph">
         <p style="margin:5vh">
           or
         </p>
         <router-link to="#details">
-          <p class="apply-effect" @click="this.resume()">
+          <p class="apply-effect" @click="resume()">
             pick up where you left off
           </p>
         </router-link> 

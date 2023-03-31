@@ -44,7 +44,7 @@
       <hr class="line" style="margin:20px 0">
 
       <div class="item search-info" style="height:3.8em">
-        <div @click="this.elaborateOn('search-info')" style="display:flex">
+        <div @click="elaborateOn('search-info')" style="display:flex">
           <p>
             search for actors, movies, or tv shows
           </p>
@@ -56,7 +56,7 @@
       </div>
 
       <div class="item double-click" style="height:2.8em">
-        <div @click="this.elaborateOn('double-click')" style="display:flex">
+        <div @click="elaborateOn('double-click')" style="display:flex">
           <p>
             add more nodes!
           </p>
@@ -68,7 +68,7 @@
       </div>
 
       <div class="item single-click" style="height:2.8em">
-        <div @click="this.elaborateOn('single-click')" style="display:flex">
+        <div @click="elaborateOn('single-click')" style="display:flex">
           <p>
             get details
           </p>
@@ -80,7 +80,7 @@
       </div>
 
       <div class="item unlock" style="height:3em">
-        <div @click="this.elaborateOn('unlock')" style="display:flex">
+        <div @click="elaborateOn('unlock')" style="display:flex">
           <p>
             unlocked
           </p>
@@ -92,7 +92,7 @@
       </div>
 
       <div class="item lock" style="height:3em">
-        <div @click="this.elaborateOn('lock')" style="display:flex">
+        <div @click="elaborateOn('lock')" style="display:flex">
           <p>
             locked
           </p>
@@ -104,7 +104,7 @@
       </div>
 
       <div class="item save" style="height:3em">
-        <div @click="this.elaborateOn('save')" style="display:flex">
+        <div @click="elaborateOn('save')" style="display:flex">
           <p>
             save
           </p>
@@ -116,7 +116,7 @@
       </div>
 
       <div class="item centering" style="height:3em">
-        <div @click="this.elaborateOn('centering')" style="display:flex">
+        <div @click="elaborateOn('centering')" style="display:flex">
           <p>
             re-center graph
           </p>

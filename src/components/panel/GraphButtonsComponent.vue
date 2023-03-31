@@ -7,13 +7,13 @@
 <template>
   <div v-bind:class="store.isLocked ? 'graph-control-buttons locked' : 'graph-control-buttons unlocked'" 
        id="lock-button"
-       @click="this.lockGraph()">
+       @click="lockGraph()">
     <p id="lock-flash"></p>
   </div>
   
   <div class="graph-control-buttons"
        id="save-button"
-       @click="this.save()"> 
+       @click="save()"> 
     <p id="save-flash"></p>
   </div>
 

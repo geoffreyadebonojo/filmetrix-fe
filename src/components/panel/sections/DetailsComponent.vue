@@ -15,9 +15,9 @@
     
     <img id="poster" 
       v-bind:src="store.detailsData.poster"
-      @click="this.lockHighlight(store.detailsData.id)"
-      @mouseenter="this.highlightNodes(store.detailsData.id)"
-      @mouseleave="this.unhighlightNodes(store.detailsData.id)"
+      @click="lockHighlight(store.detailsData.id)"
+      @mouseenter="highlightNodes(store.detailsData.id)"
+      @mouseleave="unhighlightNodes(store.detailsData.id)"
     >
     <div id="name">{{ store.detailsData.name }}</div>
     <div id="birthday">{{ store.detailsData.year }}</div>
