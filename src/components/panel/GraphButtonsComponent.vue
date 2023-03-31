@@ -17,8 +17,7 @@
     <p id="save-flash"></p>
   </div>
 
-  <div class="graph-control-buttons" 
-       id="centering-button"></div>
+  <div class="graph-control-buttons" id="centering-button"></div>
 </template>
 
 <script>
@@ -67,17 +66,14 @@
 
         const response = await api.saveGraph(store.existing)
 
+        saveButton.on("click", (d) => {
+          navigator.clipboard.writeText(response.data.saveGraph.shareUrl);
+          console.log('Content copied ', response.data.saveGraph.shareUrl, ' to clipboard');
+        })
+        
         flash
         // .attr('xlink:href', response.data.saveGraph.shareUrl)
         .html('copied!')
-        .on("click", async (d) => {
-          try {
-            await navigator.clipboard.writeText(response.data.saveGraph.shareUrl);
-            console.log('Content copied to clipboard');
-          } catch (err) {
-            console.error('Failed to copy: ', err);
-          }
-        })
         .transition().duration(200).style("opacity", 1).style("color", "#72bcd4")
         .transition().duration(1000).style("color", "white").style("opacity", 0)
       }

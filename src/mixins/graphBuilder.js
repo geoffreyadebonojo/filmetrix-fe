@@ -369,7 +369,9 @@ export default {
     const viewerBody = d3.select("#graph-container")
   
     let zoom = d3.zoom().on('zoom', (e) => {
-      args.outerWrapper.attr("transform", e.transform)
+      args.outerWrapper
+      // .transition().duration(500) may be useful later
+      .attr("transform", e.transform)
     })
 
     // out of place here...
