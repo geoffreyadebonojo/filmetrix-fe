@@ -273,48 +273,13 @@ export default {
   },
 
   nodeConnections(target) {
-    // let node = d3.select(target)
-
-    // let elems = {
-    //   circle: node.select('circle'),
-    //   label: node.select('.node-label'),
-    //   poster: node.select('.poster'),
-    //   sources: d3.selectAll(`.link[source='${target.id}']`),
-    //   targets: d3.selectAll(`.link[target='${target.id}']`)
-    // }
-
-    // let x = elems.sources.nodes().map((d)=>d.__data__.target.id)
-    // let z = elems.targets.nodes().map((d)=>d.__data__.source.id)
-    // let connections = d3.selectAll('.node').filter((d) => {
-    //   return x.includes(d.id) || z.includes(d.id)
-    // })
-
-    // const v = { 
-    //   elems, 
-    //   connections
-    // }
-
     const v = new NodeElem(target)
 
     return v
   },
 
   nodeTransformer(target, scale, highlightColor, textStroke) {
-    // let node = d3.select(target)
-
-    // let elems = {
-    //   circle: node.select('circle'),
-    //   label: node.select('.node-label'),
-    //   poster: node.select('.poster'),
-    //   sources: d3.selectAll(`.link[source='${target.id}']`),
-    //   targets: d3.selectAll(`.link[target='${target.id}']`)
-    // }
-
-    // let x = elems.sources.nodes().map((d)=>d.__data__.target.id)
-    // let z = elems.targets.nodes().map((d)=>d.__data__.source.id)
-    // let y = d3.selectAll('.node').filter((d) => {
-    //   return x.includes(d.id) || z.includes(d.id)
-    // })
+    // if (target.classList.contains('locked')) { return }
 
     const n = new NodeElem(target)
     const elems  = n.elems

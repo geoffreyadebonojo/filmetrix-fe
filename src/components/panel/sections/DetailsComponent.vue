@@ -13,9 +13,10 @@
   <div v-bind:id="store.detailsData.id + '-details'"
        v-if="store.detailsData.id != null">
     
-    <img id="poster" 
+    <img id="poster"
+      v-bind:class="store.lockedHighlights.includes(store.detailsData.id) ? 'poster-locked' : 'poster-unlocked'"
       v-bind:src="store.detailsData.poster"
-      @click="lockHighlight(store.detailsData.id)"
+      @click="toggleHighlightLock($event, store.detailsData.id)"
       @mouseenter="highlightNodes(store.detailsData.id)"
       @mouseleave="unhighlightNodes(store.detailsData.id)"
     >
@@ -57,28 +58,37 @@
       d3.selectAll(".details-component").transition().delay(100).duration(500).style("left", "0%")
     },
     methods: {
-      lockHighlight(id) {
+      toggleHighlightLock(e, id) {
         store.lockedHighlights.togglePresence(id)
-        const d = d3.select(`#${id}`).node()
+        const t = d3.select(`#${id}`)
+
+        const d = t.node()
         const n  = new NodeElem(d)
-        n.connections.classed("locked", true)
-        console.log(store.lockedHighlights)
+
+        if (n.connections.classed("locked")) {
+          n.connections.classed("locked", false)
+        } else {
+          n.connections.classed("locked", true)
+        }
       },
+
       highlightNodes(id) {
         const target = d3.select(`#${id}`)
         const tNode = target.node()
+
         if (tNode == undefined) { return }
 
-        graphBuilder.nodeTransformer(tTnode, "scale(1.05)", "aliceblue", "white")
+        graphBuilder.nodeTransformer(tNode, "scale(1.05)", "aliceblue", "white")
       },
+
       unhighlightNodes(id) {
         const target = d3.select(`#${id}`)
-        const tNode = d3.select(`#${id}`)
+        const tNode = target.node()
 
         if (tNode == undefined) { return }
-        // if (this.$data.highlightLocked) { return }
         if (target.classed("locked")) { return }
-        //??
+        if (store.lockedHighlights.includes(id)) { return }
+
         const defaultColor = settingsModule.strokeColor
         graphBuilder.nodeTransformer(tNode, "scale(1)", defaultColor, "none")
       }
@@ -165,10 +175,19 @@
     width: 79px;
     border-radius: 8px;
   }
-
-  #poster:hover {
-    cursor: $cursor;
-    box-shadow: 0em 0em 5px 5px rgb(240 248 255 / 5%);
+  
+  .poster-unlocked {
+    &:hover {
+      box-shadow: 0em 0em 5px 5px rgb(240 248 255 / 5%);
+      cursor: $cursor;
+    }
+  }  
+  
+  .poster-locked {
+    box-shadow: 0em 0em 5px 5px rgba(240, 248, 255, 0.35);
+    &:hover {
+      cursor: $cursor;
+    }
   }
 
   #name {
@@ -206,6 +225,10 @@
     display: flex;
     justify-content: space-between;
     margin: auto 0 0 0;
+
+    a:hover {
+      cursor: $cursor;
+    }
   }
 
   #imdb {

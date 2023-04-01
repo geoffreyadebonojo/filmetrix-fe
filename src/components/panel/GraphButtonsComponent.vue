@@ -43,7 +43,7 @@
           delete store.savedGraphs[id]
           flash.html("unlocked")
             .transition().duration(200).style("opacity", 1).style("color", "#72bcd4")
-            .transition().duration(1000).style("color", "white").style("opacity", 0)
+            .transition().duration(1000).style("opacity", 0).style("color", "white")
           localStorage.setItem("lockedGraph", JSON.stringify([]))
           
         } else {
@@ -53,7 +53,7 @@
           store.savedGraphs[id] = this.$data.attrs
           flash.html("locked")
             .transition().duration(200).style("opacity", 1).style("color", "#72bcd4")
-            .transition().duration(1000).style("color", "white").style("opacity", 0)
+            .transition().duration(1000).style("opacity", 0).style("color", "white")
           localStorage.setItem("lockedGraph", JSON.stringify(store.existing))
         }
       },
@@ -61,20 +61,14 @@
       async save () {
         const saveButton = d3.select("#save-button")
         const flash = d3.select("#save-flash")
-        
-        // flash.html('')
-        const response = await api.saveGraph(store.existing)
 
-        saveButton.on("click", (d) => {
-          navigator.clipboard.writeText(response.data.saveGraph.shareUrl);
-          console.log('Content copied ', response.data.saveGraph.shareUrl, ' to clipboard');
-        })
+        const response = await api.saveGraph(store.existing)
+        navigator.clipboard.writeText( response.data.saveGraph.shareUrl );
+        console.log('Content copied ', response.data.saveGraph.shareUrl, ' to clipboard');
         
-        flash
-        // .attr('xlink:href', response.data.saveGraph.shareUrl)
-        .html('copied!')
-        .transition().duration(200).style("opacity", 1).style("color", "#72bcd4")
-        .transition().duration(1000).style("color", "white").style("opacity", 0)
+        flash.html('copied!')
+          .transition().duration(200).style("opacity", 1).style("color", "#72bcd4")
+          .transition().duration(1000).style("opacity", 0).style("color", "white")
       }
     }
   }

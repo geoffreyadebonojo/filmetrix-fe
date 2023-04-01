@@ -11,7 +11,7 @@ export default {
   },
 
   async fetchSearchData(term) {
-    const API_URL =`${this.data().prodUrl}/graphql`
+    const API_URL =`${this.data().localUrl}/graphql`
 
     const api_respsonse = await (
       fetch(API_URL, {
@@ -36,7 +36,7 @@ export default {
   },
 
   async fetchDetails(id) {
-    const API_URL =`${this.data().prodUrl}/graphql`
+    const API_URL =`${this.data().localUrl}/graphql`
 
     const api_response = await (
       fetch(API_URL, {
@@ -65,7 +65,7 @@ export default {
   },
 
   async fetchGraphData(ids){
-    const API_URL = `${this.data().prodUrl}/graphql`
+    const API_URL = `${this.data().localUrl}/graphql`
 
     const resp = await (
       fetch(API_URL, {
@@ -112,7 +112,7 @@ export default {
       count.push(d[1])
     })
     
-    const API_URL =`${this.data().prodUrl}/graphql`
+    const API_URL =`${this.data().localUrl}/graphql`
     return await (
       fetch(API_URL, {
         method: 'POST',
@@ -134,7 +134,7 @@ export default {
   },
 
   async findBySlug(slug){
-    const API_URL = `${this.data().prodUrl}/graphql`
+    const API_URL = `${this.data().localUrl}/graphql`
 
     const resp = await (
       fetch(API_URL, {
