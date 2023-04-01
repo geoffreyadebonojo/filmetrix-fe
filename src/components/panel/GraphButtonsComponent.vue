@@ -10,12 +10,13 @@
        @click="lockGraph()">
     <p id="lock-flash"></p>
   </div>
-  
-  <div class="graph-control-buttons"
+
+  <!-- hide until DB maintenance is complete -->
+  <!-- <div class="graph-control-buttons"
        id="save-button"
        @click="save()"> 
     <p id="save-flash"></p>
-  </div>
+  </div> -->
 
   <div class="graph-control-buttons" id="centering-button"></div>
 </template>

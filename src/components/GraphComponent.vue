@@ -51,10 +51,8 @@
       
       await api.findBySlug(gid)
 
-
       store.currentDetailId = store.existing.last()[0]
 
-      // debugger
       let data
       let nodes = []
       let links = []
