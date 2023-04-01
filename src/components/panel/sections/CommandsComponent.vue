@@ -28,9 +28,9 @@
         <img src="/lock-closed.svg"/>
       </div>
 
-      <div class="item save" style="height:3em">
+      <!-- <div class="item save" style="height:3em">
         <img src="/disk-empty-white.svg"/>
-      </div>
+      </div> -->
 
       <div class="item centering" style="height:3em">
         <img src="/center-graph-icon.svg"/>
@@ -103,7 +103,7 @@
         </p>
       </div>
 
-      <div class="item save" style="height:3em">
+      <!-- <div class="item save" style="height:3em">
         <div @click="elaborateOn('save')" style="display:flex">
           <p>
             save
@@ -113,7 +113,7 @@
         <p class="elaboration" style="display:none">
           you can save graphs and share them with your friends!
         </p>
-      </div>
+      </div> -->
 
       <div class="item centering" style="height:3em">
         <div @click="elaborateOn('centering')" style="display:flex">
