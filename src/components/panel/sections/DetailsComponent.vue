@@ -164,7 +164,8 @@
       "poster . birthday links ."
       ". . . . ."
       "ft ft ft ft ft"
-      "desc desc desc desc desc";
+      "desc desc desc desc desc"
+      "fb fb fb fb fb";
     overflow: hidden;
 
     left: 0%;
