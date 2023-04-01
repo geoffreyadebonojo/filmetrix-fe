@@ -7,10 +7,11 @@
 
 <template>
   <div id="navbar">
-    <input 
+    <input
       type="text" 
       placeholder="Search" 
       id="search-text"
+      class="primary-nav"
       tabindex="-1"
       @keyup.enter="submitSearch($event.target.value)"
     >
@@ -18,44 +19,51 @@
     <div class="nav-button-container">
       <div id="highlight"></div>
   
-      <router-link id="search-button" @click="toggleOrSubmitOnClick()" to="#search">
+      <router-link id="search-button" class="primary-nav" @click="toggleOrSubmitOnClick()" to="#search">
         <img src="/search-icon.svg" class="icon" id="search-icon">
       </router-link>
 
-      <router-link class="nav-button" id="person-button" v-if="displayPersonIcon() === true" to="#people">
+      <router-link class="nav-button primary-nav" id="person-button" v-if="displayPersonIcon() === true" to="#people">
         <div @click="setCurrentFocus('person')">
           <img src="/person-icon.svg" class="icon" id="person-icon" >
         </div>
       </router-link>
       <div v-else></div>
 
-      <router-link class="nav-button" id="movie-button" v-if="displayMovieIcon() === true" to="#movies">
+      <router-link class="nav-button primary-nav" id="movie-button" v-if="displayMovieIcon() === true" to="#movies">
         <div @click="setCurrentFocus('movie')">
           <img src="/movie-icon.svg" class="icon" id="movie-icon">
         </div>
       </router-link>
       <div v-else></div>
 
-      <router-link class="nav-button" id="tv-button" v-if="displayTvIcon() === true" to="#tv-shows">
+      <router-link class="nav-button primary-nav" id="tv-button" v-if="displayTvIcon() === true" to="#tv-shows">
         <div @click="setCurrentFocus('tv')">
           <img src="/tv-icon.svg" class="icon" id="tv-icon">
         </div>
       </router-link>
 
-      <router-link class="nav-button" id="details-button" v-if="store.currentDetailId !== false" @click="setCurrentFocus('details')" to="#details">
+      <router-link class="nav-button primary-nav" id="details-button" v-if="store.currentDetailId !== false" @click="setCurrentFocus('details')" to="#details">
         <img src="/details-icon.svg" class="icon" id="details-icon">
       </router-link>
       <div v-else></div>
 
-      <router-link class="nav-button" id="commands-button" @click="setCurrentFocus('commands')" to="#commands">
+      <router-link class="nav-button primary-nav" id="commands-button" @click="setCurrentFocus('commands')" to="#commands">
         <img src="/command-icon.svg" class="icon" id="commands-icon">
       </router-link>
 
-      <!-- <router-link class="nav-button" id="about-button" @click="transitionToAbout()" to="/about"> -->
-      <router-link class="nav-button" id="about-button" to="/about">
-        <img src="/about-us-icon.svg" class="icon" id="about-us-icon">
+      <router-link class="nav-button" id="about-us-transition-button" to="#about">
+        <div v-if="!$data.displayingAbout" style="height:100%" @click="transitionAbout('to')">
+          <img class="icon" 
+            id="about-us-icon"
+            src="/about-us-icon.svg"/>
+        </div>
+        <div v-else style="height:100%; transform:rotate(180deg)" @click="transitionAbout('back')">
+          <img class="icon" 
+            id="back-icon"
+            src="/chevron-black.svg"/>
+        </div>
       </router-link>
-
     </div>
   </div>
 </template>
@@ -66,7 +74,8 @@ export default {
   mixins: [focusHelper, api],
   data () {
     return {
-      searchOpen: true
+      searchOpen: true,
+      displayingAbout: false
     }
   },
   mounted () {
@@ -117,6 +126,43 @@ export default {
 
       store.currentFocus = "search"
       this.submitSearch(val)
+    },
+
+    transitionAbout(setting) {
+      if (setting == "to") {
+        this.$data.displayingAbout = true
+
+        d3.select("#panel-body")
+        .transition().duration(200).style("left", "0%")
+        .transition().duration(50).style("width", "250px")
+        .transition().delay(50).style("right", "null")
+
+        d3.select("#navbar").transition().duration(200).style("width", "5%").style("right", "30px")
+        d3.select("#resize-bar").style("opacity", "0")
+
+        d3.selectAll(".primary-nav").style("display", "none")
+        d3.select(".nav-button-container").style("background", "none")
+        
+        focusHelper.methods.set('about')
+        
+      } else {
+        // focusHelper.methods.set('search')
+        
+        d3.select("#resize-bar").style("opacity", "1")
+
+        d3.selectAll(".primary-nav").style("display", "block")
+
+        d3.select(".nav-button-container").style("background", "#6e6e6e")
+        
+        this.$data.displayingAbout = false
+        
+        d3.select("#navbar").transition().duration(200).style("width", "100%").style("right", "0px")
+        d3.select("#panel-body")
+        .transition().delay(0).duration(200).style("left", "100%").style("width", "20%")
+        .transition().delay(100).style("left", "unset").style("width", `${store.panelWidth}px`)
+
+        focusHelper.methods.set('search')
+      }
     },
 
     setCurrentFocus(focus) {
@@ -187,9 +233,16 @@ export default {
     margin: 4.5px 5.5px;
   }
 
-  #about-us-icon {
-    height: 17px;
-    margin: 4px 6px;
+  #about-us-transition-button {
+    #about-us-icon {
+      height: 17px;
+      margin: 4px 6px;
+    }
+
+    #back-icon {
+      height: 13px;
+      margin: 7px 10px;
+    }
   }
 
   #details-icon {
