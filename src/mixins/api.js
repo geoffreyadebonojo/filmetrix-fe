@@ -1,17 +1,16 @@
 import { store } from '@/stores/store.js'
 
 export default {
-  data() {
+  data () {
     store
     return {
-      prodUrl: "https://enigmatic-wildwood-58151.herokuapp.com",
-      localUrl: "http://localhost:3000",
       key: "6GzCesnexrzgnDv3FfxbHBrb",
+      base_url: import.meta.env.DEV ? import.meta.env.VITE_DEV_URL : import.meta.env.VITE_PROD_URL
     }
   },
 
   async fetchSearchData(term) {
-    const API_URL =`${this.data().prodUrl}/graphql`
+    const API_URL =`${this.data().base_url}/graphql`
 
     const api_respsonse = await (
       fetch(API_URL, {
@@ -36,7 +35,7 @@ export default {
   },
 
   async fetchDetails(id) {
-    const API_URL =`${this.data().prodUrl}/graphql`
+    const API_URL =`${this.data().base_url}/graphql`
 
     const api_response = await (
       fetch(API_URL, {
@@ -65,7 +64,7 @@ export default {
   },
 
   async fetchGraphData(ids){
-    const API_URL = `${this.data().prodUrl}/graphql`
+    const API_URL = `${this.data().base_url}/graphql`
 
     const resp = await (
       fetch(API_URL, {
@@ -112,7 +111,7 @@ export default {
       count.push(d[1])
     })
     
-    const API_URL =`${this.data().prodUrl}/graphql`
+    const API_URL =`${this.data().base_url}/graphql`
     return await (
       fetch(API_URL, {
         method: 'POST',
@@ -134,7 +133,7 @@ export default {
   },
 
   async findBySlug(slug){
-    const API_URL = `${this.data().prodUrl}/graphql`
+    const API_URL = `${this.data().base_url}/graphql`
 
     const resp = await (
       fetch(API_URL, {

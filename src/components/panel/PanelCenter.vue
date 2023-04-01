@@ -119,7 +119,6 @@
         dc.transition()
         .duration(500)
         .style("left", "0%")
-        console.log('updated')
       },
 
       async resume () {
