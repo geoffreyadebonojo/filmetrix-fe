@@ -133,35 +133,41 @@ export default {
         this.$data.displayingAbout = true
 
         d3.select("#panel-body")
-        .transition().duration(200).style("left", "0%")
-        .transition().duration(50).style("width", "250px")
-        .transition().delay(50).style("right", "null")
+        .transition().duration(1000).style("right", () => {
+          return `${window.innerWidth - store.panelWidth}px`
+        })
+
+        d3.select("#about-graph-container")
+        .transition().duration(1000).style("width", () => {
+          return `${window.innerWidth - store.panelWidth}px`
+        })
 
         d3.select("#navbar").transition().duration(200).style("width", "5%").style("right", "30px")
         d3.select("#resize-bar").style("opacity", "0")
-
         d3.selectAll(".primary-nav").style("display", "none")
+        // d3.selectAll(".graph-control-buttons").style("left", "0px")
         d3.select(".nav-button-container").style("background", "none")
         
         focusHelper.methods.set('about')
         
-      } else {
-        // focusHelper.methods.set('search')
-        
-        d3.select("#resize-bar").style("opacity", "1")
-
-        d3.selectAll(".primary-nav").style("display", "block")
-
-        d3.select(".nav-button-container").style("background", "#6e6e6e")
-        
-        this.$data.displayingAbout = false
-        
-        d3.select("#navbar").transition().duration(200).style("width", "100%").style("right", "0px")
+      } else {        
         d3.select("#panel-body")
-        .transition().delay(0).duration(200).style("left", "100%").style("width", "20%")
-        .transition().delay(100).style("left", "unset").style("width", `${store.panelWidth}px`)
+        .transition().delay(0).duration(0).style("left", "0px")
+        .transition().delay(0).duration(1000).style("left", "unset").style("width", `${store.panelWidth}px`).style("right", "0px")
 
-        focusHelper.methods.set('search')
+        d3.select("#about-graph-container")
+        .transition().duration(1000).style("width", "0px")
+        
+        d3.select("#resize-bar").transition().delay(1000).duration(0).style("opacity", "1")
+        d3.selectAll(".primary-nav").transition().delay(1000).duration(0).style("display", "block")
+        // d3.selectAll(".graph-control-buttons").transition().duration(200).style("left", "-30px")
+        d3.select(".nav-button-container").transition().delay(1000).duration(0).style("background", "#6e6e6e")
+        d3.select("#navbar").transition().delay(1000).duration(0).style("right", "unset").style("width", "100%")
+
+        setTimeout(() => {
+          this.$data.displayingAbout = false
+          focusHelper.methods.set('search')
+        }, 1000)
       }
     },
 

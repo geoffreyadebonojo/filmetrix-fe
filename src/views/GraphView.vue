@@ -9,6 +9,7 @@
   <div id="viewer-body">
     <graph-component></graph-component>
     <panel-component></panel-component>
+    <div id="about-graph-container"></div>
   </div>
 </template>
 
@@ -36,8 +37,17 @@
   }
 </script>
 
-<style>
-  #zoom-buttons {
+<style scoped lang="scss">
+  #about-graph-container {
+    width: 0px;
+    height: 100vh;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    background: $graph-body-grey;
+  }
+
+  /* #zoom-buttons {
     display: none;
     position: absolute;
     bottom: 10px;
@@ -45,7 +55,7 @@
     z-index: 5;
     width: 70px;
     justify-content: space-between;
-  }
+  } */
 
   #zoom-buttons > img {
     width: 30px;
