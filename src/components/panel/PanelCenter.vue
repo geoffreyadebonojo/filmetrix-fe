@@ -151,6 +151,7 @@
             nodes: nodes.uniqueById(),
             links: links,
             settings: {
+              containerId: "main-graph-container",
               outerWrapperId: "main-outer-wrapper",
               innerWrapperId: "main-inner-wrapper"
             }

@@ -49,15 +49,15 @@ export default {
   buildNode(parent, nodes) {
     let node = parent.append("g")
       .attr("class", "nodes")
-      .attr("fill", "currentColor")
-      .attr("stroke-linecap", "round")
-      .attr("stroke-linejoin", "round")
       .selectAll("g")
       .data(nodes)
       .join("g")
       .attr("class", (d) => {
         return 'node ' + d.type.join(" ")
       })
+      .attr("fill", "currentColor")
+      .attr("stroke-linecap", "round")
+      .attr("stroke-linejoin", "round")
       .attr("id", d => d.id)
     return node
   },
@@ -331,35 +331,38 @@ export default {
   },
   
   createViewerBody(args) {
-    const viewerBody = d3.select("#main-graph-container")
+    const viewerBody = d3.select(`#${args.containerId}`)
   
     let zoom = d3.zoom().on('zoom', (e) => {
       args.outerWrapper
       // .transition().duration(500) may be useful later
       .attr("transform", e.transform)
     })
-
+    
     // out of place here...
 
-    args.graphControlButtons.style("display", "block").transition().duration(30).style("left", "-30px")
-    d3.select("#centering-button").on("click", (e) => {
-      const duration = 1000
+    if (args.graphControlButtons) {
+      args.graphControlButtons.style("display", "block").transition().duration(30).style("left", "-30px")
       
-      d3.select(e.target).style("opacity", "1")
-
-      var transform = d3.zoomIdentity
-        .translate(0,0)
-        .scale(1)
-      
-      d3.select(e.target).transition().duration(duration).style("opacity", "0.5")
-      // #main-inner-wrapper & #outer-wrappers have a bbox size regardless of zoom and are always equal to eachother
-      // #main-graph-container bbox x,y,width,height is entirely reactive to zoom
-      // before zoom, #main-graph-container bbox is same as #main-inner-wrapper and #main-outer-wrapper
-      // after zoom, #main-graph-container bbox is that of #inner/#outer multiplied by #main-outer-wrapper transform
-      viewerBody.transition().duration(duration)
-        .call(zoom.transform, transform);
-      return viewerBody
-    })
+      d3.select("#centering-button").on("click", (e) => {
+        const duration = 1000
+        
+        d3.select(e.target).style("opacity", "1")
+  
+        var transform = d3.zoomIdentity
+          .translate(0,0)
+          .scale(1)
+        
+        d3.select(e.target).transition().duration(duration).style("opacity", "0.5")
+        // #main-inner-wrapper & #outer-wrappers have a bbox size regardless of zoom and are always equal to eachother
+        // #main-graph-container bbox x,y,width,height is entirely reactive to zoom
+        // before zoom, #main-graph-container bbox is same as #main-inner-wrapper and #main-outer-wrapper
+        // after zoom, #main-graph-container bbox is that of #inner/#outer multiplied by #main-outer-wrapper transform
+        viewerBody.transition().duration(duration)
+          .call(zoom.transform, transform);
+        return viewerBody
+      })
+    }
     
     viewerBody.call(zoom)
               .call(zoom).on("dblclick.zoom", null)

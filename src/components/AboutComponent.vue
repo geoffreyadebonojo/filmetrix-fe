@@ -5,8 +5,8 @@
 </script>
 
 <template>
-  <div class="graph-container" id="about-component">
-    <svg id="about-graph-container" viewBox="-200 -200 400 400">
+  <div class="graph-container" id="about-graph-component">
+    <svg id="about-graph-container">
       <g id="about-outer-wrapper" class="outer-wrapper"></g>
     </svg>
   </div>
@@ -17,15 +17,3 @@
     name: "AboutComponent"
   }
 </script>
-
-<style scoped lang="scss">
-  #about-graph-container {
-    width: 0px;
-    // width:100%;
-    height: 100vh;
-    position: absolute;
-    top: 0px;
-    right: 0px;
-    background: $graph-body-grey;
-  }
-</style>

@@ -44,6 +44,7 @@ export const aboutUsData = {
     }
   ],
   settings: {
+    containerId: "about-graph-container",
     outerWrapperId: "about-outer-wrapper",
     innerWrapperId: "about-inner-wrapper"
   }

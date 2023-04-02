@@ -36,6 +36,7 @@
     display: flex;
     height: 100vh;
     overflow: hidden;
+    background: $graph-body-grey;
   }
   #instructions {
     position : absolute;

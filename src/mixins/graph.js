@@ -11,11 +11,21 @@ let alreadyClicked = false
 let i = 0
       
 export default {
+  data () {
+    return {
+      settings: {
+        containerId: "main-graph-container",
+        outerWrapperId: "main-outer-wrapper",
+        innerWrapperId: "main-inner-wrapper"
+      }
+    }
+  },
   methods: {
     draw (responseData) {
       store.inMotion = true
       var links = responseData.links
       var nodes = responseData.nodes
+      const containerId = responseData.settings.containerId
       const outerWrapperId = responseData.settings.outerWrapperId
       const innerWrapperId = responseData.settings.innerWrapperId
 
@@ -39,6 +49,7 @@ export default {
       let node = graphBuilder.createNodes(innerWrapper, nodes)
 
       graphBuilder.createViewerBody({
+        containerId,
         graphControlButtons,
         outerWrapper
       })
@@ -77,10 +88,7 @@ export default {
             this.draw({
               nodes: nodes,
               links: links,
-              settings: {
-                outerWrapperId: "main-outer-wrapper",
-                innerWrapperId: "main-inner-wrapper"
-              }
+              settings: this.$data.settings
             })
           } else {
             // double-click on new node
@@ -152,10 +160,7 @@ export default {
       this.draw({
         nodes: nodes.uniqueById(),
         links: links,
-        settings: {
-          outerWrapperId: "main-outer-wrapper",
-          innerWrapperId: "main-inner-wrapper"
-        }
+        settings: this.$data.settings
       })
     }
   }

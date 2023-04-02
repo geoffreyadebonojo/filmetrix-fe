@@ -2,7 +2,6 @@
   import focusHelper from "@/mixins/focusHelper"
   import api from "@/mixins/api.js"
   import { store } from "@/stores/store.js"
-
   import { aboutUsData } from "@/mixins/aboutUsData"
   import graph from "@/mixins/graph"
   import * as d3 from "d3"
@@ -131,29 +130,69 @@ export default {
 
     transitionAbout(setting) {
       if (setting == "to") {
-        d3.select("#graph-component")
+
+        graph.methods.draw(aboutUsData)
+        d3.select("#about-inner-wrapper").style("transform", () => {
+          return `translate(-${(window.innerWidth-store.panelWidth)+70}px, 0)`
+        })
+
+        d3.select("#main-graph-component")
         .transition().duration(1000).style("width", "0%")
 
-        d3.select("#about-component")
+        d3.select("#about-graph-component")
         .transition().duration(1000).style("width", "100%")
+
+
+        // let zoom = d3.zoom().on('zoom', (e) => {
+        //   d3.select('#about-outer-wrapper')
+        //   .attr("transform", e.transform)
+        // })
+
+        // d3.select("#about-graph-container").transition().duration(1000)
+        // .call(zoom.transform, () => {
+        //   return d3.zoomIdentity
+        //   .translate(-100,0)
+        //   .scale(1)
+        //   }
+        // );
+
+        
+        d3.select("#about-inner-wrapper")
+        .transition().duration(1000).style("transform", "translate(0, 0)")
 
         d3.select("#navbar").transition().duration(200).style("width", "5%").style("right", "30px")
         d3.select("#resize-bar").style("opacity", "0").style("display", "none")
         d3.selectAll(".primary-nav").style("display", "none")
-        // d3.selectAll(".graph-control-buttons").style("left", "0px")
+
         d3.select(".nav-button-container").style("background", "none")
         
         store.displayingAbout = true
         focusHelper.methods.set('about')
 
-        graph.methods.draw(aboutUsData)
-        
       } else {
-        d3.select("#graph-component")
+        d3.select("#main-graph-component")
         .transition().duration(1000).style("width", "100%")
 
-        d3.select("#about-component")
+        d3.select("#about-graph-component")
         .transition().duration(1000).style("width", "0%")
+
+        let zoom = d3.zoom().on('zoom', (e) => {
+          d3.select('#about-outer-wrapper')
+          .attr("transform", e.transform)
+        })
+
+        d3.select("#about-graph-container").transition().duration(500)
+        .call(zoom.transform, () => {
+          return d3.zoomIdentity
+          .translate(-100,0)
+          .scale(1)
+          }
+        );
+
+        d3.select("#about-inner-wrapper")
+        .transition().duration(1000).style("transform", () => {
+          return `translate(-${(window.innerWidth-store.panelWidth)+70}px, 0)`
+        })
 
         d3.select("#about-inner-wrapper")
         .transition().duration(0).delay(1000).remove()
