@@ -24,9 +24,9 @@ export default class Simulation {
     .force('collide', d3.forceCollide(() => {
       return settingsModule.defaults.node.collide
     }))
-    .force("center", d3.forceCenter(0, 0))
-    .force('x', d3.forceX().x(this.width * 0.3))
-    .force('y', d3.forceY().y(this.height * 0.5))
+    .force("center", d3.forceCenter(this.width * 0.5, this.height * 0.5))
+    // .force('x', d3.forceX().x(this.width * 0.5))
+    // .force('y', d3.forceY().y(this.height * 0.5))
     .alpha(1)
     .alphaMin(0.2)
     .alphaTarget(0.01)

@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import AboutView from '../views/AboutView.vue'
 import WelcomeView from '../views/WelcomeView.vue'
 import GraphView from '../views/GraphView.vue'
 
@@ -10,11 +9,6 @@ const router = createRouter({
       path: '/',
       name: 'welcome',
       component: WelcomeView
-    },
-    {
-      path: '/about',
-      name: 'about',
-      component: AboutView
     },
     {
       path: '/graph',

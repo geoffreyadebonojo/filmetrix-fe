@@ -144,7 +144,7 @@
     background-image: url("/center-graph-icon.svg");
     background-size: contain;
     bottom: 10px;
-    width: 21px;
-    height: 21px;
+    width: 20px;
+    height: 20px;
   }
 </style>

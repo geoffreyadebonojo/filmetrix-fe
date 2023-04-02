@@ -56,8 +56,10 @@
       "resize-bar . ."
       "resize-bar . .";
     background: $panel-body-grey;
-    position: absolute;
+    // position: absolute;
     top: 0px;
+    // simply by turning this off, we can float the panel to the left
+    // still have to account for everything else though...
     right: 0px;
     left: null;
     z-index: 2;

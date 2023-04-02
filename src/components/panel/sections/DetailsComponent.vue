@@ -10,8 +10,35 @@
 </script>
 
 <template>
-  <div v-bind:id="store.detailsData.id + '-details'"
-       v-if="store.detailsData.id != null">
+  <!-- do focus about -->
+  <div v-if="store.displayingAbout"
+       id="about-details">
+    
+    <img id="poster" v-bind:src="store.detailsData.poster"/>
+    <div id="name">{{ store.detailsData.name }}</div>
+    
+    <div id="links">
+      <a id="linked-in"
+        v-if="store.detailsData.name == 'geoff'"
+        href="https://www.linkedin.com/in/geoffrey-adebonojo/"
+        target="_blank">
+        <img src="/linkedin-icon.png">
+      </a>
+      <a id="linked-in"
+        v-else-if="store.detailsData.name == 'pierce'"
+        href="https://www.linkedin.com/in/piercesiebers/"
+        target="_blank">
+        <img src="/linkedin-icon.png">
+      </a>
+    </div>
+    
+    <div v-if="store.detailsData.summary != ''" id="description">
+      {{  store.detailsData.summary }}
+    </div>
+  </div>
+
+  <div v-else-if="store.detailsData.id != null"
+       v-bind:id="store.detailsData.id + '-details'">
     
     <img id="poster"
       v-bind:class="store.lockedHighlights.includes(store.detailsData.id) ? 'poster-locked' : 'poster-unlocked'"
@@ -97,6 +124,11 @@
 </script>
 
 <style scoped lang="scss">
+
+  #about-details {
+    
+  }
+
   #fade-top {
     grid-area: ft;
   }

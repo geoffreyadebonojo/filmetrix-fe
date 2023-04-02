@@ -7,17 +7,20 @@
 </script>
 
 <template>
-  <svg id="graph-container">
-    <g id="outer-wrapper"></g>
-  </svg>
+  <div class="graph-container" id="graph-component">
+    <svg id="main-graph-container">
+      <g id="main-outer-wrapper" class="outer-wrapper"></g>
+    </svg>
+  </div>
 </template>
 
 <style lang="scss">
-  #graph-container {
+  #main-graph-container {
     background: $graph-body-grey;
+    display: block;
     width: 100%;
-    height: 100vh;
-    display: flex;
+    // height: 100vh;
+    // display: flex;
   }
 
   .inst {
@@ -44,6 +47,14 @@
 <script>
   export default {
     name: "GraphComponent",
+    data () {
+      return {
+        settings: {
+          outerWrapperId: "main-outer-wrapper",
+          innerWrapperId: "main-inner-wrapper"
+        }
+      }
+    },
     async created () {
       const gid = this.$route.query.gid
 
@@ -68,12 +79,13 @@
 
       graph.methods.draw({
         nodes: nodes.uniqueById(),
-        links: links
+        links: links,
+        settings: this.$data.settings
       })
     },
     mounted () {
-      d3.select("#graph-container")
-      .attr("viewBox", `-${window.innerWidth*2/3} -${window.innerHeight} ${window.innerWidth*2} ${window.innerHeight*2}`)
+      // d3.select("#main-graph-container")
+      // .attr("viewBox", `-${window.innerWidth*2/3} -${window.innerHeight} ${window.innerWidth*2} ${window.innerHeight*2}`)
     }
   }
 </script>

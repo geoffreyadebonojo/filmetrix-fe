@@ -22,7 +22,7 @@
     //   .style("right", "0px")
     //   .style("width", `${store.panelWidth}px`)
       
-    //   d3.select("#graph-container")
+    //   d3.select("#main-graph-container")
     //   .transition().duration(100).delay(120)
     //   .style("width", "100%")
 
@@ -75,7 +75,7 @@
   //   .style("width", "350px")
   //   // .style("width", "350px")
     
-  //   d3.select("#graph-container")
+  //   d3.select("#main-graph-container")
   //   .transition().duration(100).delay(120)
   //   .style("width", "0%")
 

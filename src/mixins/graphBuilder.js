@@ -10,7 +10,7 @@ export default {
       doubleClickInterval: 300,
       strokeColor: "#7A7978",
       bodyGrey: "#222222",
-      first: false //
+      first: false
     }
   },
 
@@ -331,7 +331,7 @@ export default {
   },
   
   createViewerBody(args) {
-    const viewerBody = d3.select("#graph-container")
+    const viewerBody = d3.select("#main-graph-container")
   
     let zoom = d3.zoom().on('zoom', (e) => {
       args.outerWrapper
@@ -352,10 +352,10 @@ export default {
         .scale(1)
       
       d3.select(e.target).transition().duration(duration).style("opacity", "0.5")
-      // #inner-wrapper & #outer-wrappers have a bbox size regardless of zoom and are always equal to eachother
-      // #graph-container bbox x,y,width,height is entirely reactive to zoom
-      // before zoom, #graph-container bbox is same as #inner-wrapper and #outer-wrapper
-      // after zoom, #graph-container bbox is that of #inner/#outer multiplied by #outer-wrapper transform
+      // #main-inner-wrapper & #outer-wrappers have a bbox size regardless of zoom and are always equal to eachother
+      // #main-graph-container bbox x,y,width,height is entirely reactive to zoom
+      // before zoom, #main-graph-container bbox is same as #main-inner-wrapper and #main-outer-wrapper
+      // after zoom, #main-graph-container bbox is that of #inner/#outer multiplied by #main-outer-wrapper transform
       viewerBody.transition().duration(duration)
         .call(zoom.transform, transform);
       return viewerBody

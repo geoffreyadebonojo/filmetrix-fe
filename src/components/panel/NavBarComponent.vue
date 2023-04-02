@@ -2,6 +2,9 @@
   import focusHelper from "@/mixins/focusHelper"
   import api from "@/mixins/api.js"
   import { store } from "@/stores/store.js"
+
+  import { aboutUsData } from "@/mixins/aboutUsData"
+  import graph from "@/mixins/graph"
   import * as d3 from "d3"
 </script>
 
@@ -13,8 +16,7 @@
       id="search-text"
       class="primary-nav"
       tabindex="-1"
-      @keyup.enter="submitSearch($event.target.value)"
-    >
+      @keyup.enter="submitSearch($event.target.value)">
     
     <div class="nav-button-container">
       <div id="highlight"></div>
@@ -53,7 +55,7 @@
       </router-link>
 
       <router-link class="nav-button" id="about-us-transition-button" to="#about">
-        <div v-if="!$data.displayingAbout" style="height:100%" @click="transitionAbout('to')">
+        <div v-if="!store.displayingAbout" style="height:100%" @click="transitionAbout('to')">
           <img class="icon" 
             id="about-us-icon"
             src="/about-us-icon.svg"/>
@@ -74,8 +76,7 @@ export default {
   mixins: [focusHelper, api],
   data () {
     return {
-      searchOpen: true,
-      displayingAbout: false
+      searchOpen: true
     }
   },
   mounted () {
@@ -130,42 +131,41 @@ export default {
 
     transitionAbout(setting) {
       if (setting == "to") {
-        this.$data.displayingAbout = true
+        d3.select("#graph-component")
+        .transition().duration(1000).style("width", "0%")
 
-        d3.select("#panel-body")
-        .transition().duration(1000).style("right", () => {
-          return `${window.innerWidth - store.panelWidth}px`
-        })
-
-        d3.select("#about-graph-container")
-        .transition().duration(1000).style("width", () => {
-          return `${window.innerWidth - store.panelWidth}px`
-        })
+        d3.select("#about-component")
+        .transition().duration(1000).style("width", "100%")
 
         d3.select("#navbar").transition().duration(200).style("width", "5%").style("right", "30px")
-        d3.select("#resize-bar").style("opacity", "0")
+        d3.select("#resize-bar").style("opacity", "0").style("display", "none")
         d3.selectAll(".primary-nav").style("display", "none")
         // d3.selectAll(".graph-control-buttons").style("left", "0px")
         d3.select(".nav-button-container").style("background", "none")
         
+        store.displayingAbout = true
         focusHelper.methods.set('about')
-        
-      } else {        
-        d3.select("#panel-body")
-        .transition().delay(0).duration(0).style("left", "0px")
-        .transition().delay(0).duration(1000).style("left", "unset").style("width", `${store.panelWidth}px`).style("right", "0px")
 
-        d3.select("#about-graph-container")
-        .transition().duration(1000).style("width", "0px")
+        graph.methods.draw(aboutUsData)
         
-        d3.select("#resize-bar").transition().delay(1000).duration(0).style("opacity", "1")
+      } else {
+        d3.select("#graph-component")
+        .transition().duration(1000).style("width", "100%")
+
+        d3.select("#about-component")
+        .transition().duration(1000).style("width", "0%")
+
+        d3.select("#about-inner-wrapper")
+        .transition().duration(0).delay(1000).remove()
+        
+        d3.select("#resize-bar").transition().delay(1000).duration(0).style("opacity", "1").style("display", "block")
         d3.selectAll(".primary-nav").transition().delay(1000).duration(0).style("display", "block")
         // d3.selectAll(".graph-control-buttons").transition().duration(200).style("left", "-30px")
         d3.select(".nav-button-container").transition().delay(1000).duration(0).style("background", "#6e6e6e")
         d3.select("#navbar").transition().delay(1000).duration(0).style("right", "unset").style("width", "100%")
 
         setTimeout(() => {
-          this.$data.displayingAbout = false
+          store.displayingAbout = false
           focusHelper.methods.set('search')
         }, 1000)
       }

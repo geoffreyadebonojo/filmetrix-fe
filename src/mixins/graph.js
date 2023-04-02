@@ -1,7 +1,6 @@
 import api from './api.js'
 import * as d3 from 'd3'
 import helpers from './helpers.js'
-import focusHelper from './focusHelper.js'
 import graphBuilder from './graphBuilder.js'
 import Simulation from './Simulation.js'
 import { store } from '@/stores/store.js'
@@ -15,16 +14,22 @@ export default {
   methods: {
     draw (responseData) {
       store.inMotion = true
-      
-      d3.select("#inner-wrapper").remove()
       var links = responseData.links
       var nodes = responseData.nodes
+      const outerWrapperId = responseData.settings.outerWrapperId
+      const innerWrapperId = responseData.settings.innerWrapperId
+
+      const outerWrapper = d3.select(`#${outerWrapperId}`)
+      
+      d3.select(`#${innerWrapperId}`).remove()
+      
+      const innerWrapper = outerWrapper.append("g").attr("id", innerWrapperId)
+
       const width = window.innerWidth
       const height = window.innerHeight
-      const outerWrapper = d3.select("#outer-wrapper")
-      const innerWrapper = outerWrapper.append("g").attr("id", "inner-wrapper")
+
       const graphControlButtons = d3.selectAll(".graph-control-buttons")
-      
+
       const simulation = new Simulation({nodes, 
                                          links, 
                                          width, 
@@ -44,7 +49,6 @@ export default {
         const doubleClickDelay = 300
         if (alreadyClicked) { 
           localStorage.setItem("newHere", false)
-
           // double-click existing node to
           // add new nodes
           if (store.existing.map(x => x[0]).includes(d.id)){
@@ -52,18 +56,13 @@ export default {
               return y[0] === d.id
             })
             const t = c[0][1]
-            
-
             if (t > 28) { return }
-            
             const n = t + 3
             c[0][1] = n
             let vals
             let nodes = []
             let links = []
-            
             // move to end of existing
-            
             store.existing.forEach(function(key) {
               vals = store.graphData[key[0]]
               vals.nodes.slice(0,key[1]+1).forEach((node) => {
@@ -77,7 +76,11 @@ export default {
 
             this.draw({
               nodes: nodes,
-              links: links
+              links: links,
+              settings: {
+                outerWrapperId: "main-outer-wrapper",
+                innerWrapperId: "main-inner-wrapper"
+              }
             })
           } else {
             // double-click on new node
@@ -88,7 +91,6 @@ export default {
 
           await api.fetchDetails(d.id)
           store.currentDetailId = d.id
-
           alreadyClicked = false;
           clearTimeout(timer);
         } else {
@@ -105,7 +107,6 @@ export default {
         
         // on every click
         await api.fetchDetails(d.id)
-
         store.currentDetailId = d.id
       })
 
@@ -150,7 +151,11 @@ export default {
 
       this.draw({
         nodes: nodes.uniqueById(),
-        links: links
+        links: links,
+        settings: {
+          outerWrapperId: "main-outer-wrapper",
+          innerWrapperId: "main-inner-wrapper"
+        }
       })
     }
   }
