@@ -11,11 +11,20 @@
 
 <template>
   <!-- do focus about -->
-  <div v-if="store.displayingAbout"
-       id="about-details">
+  <div v-if="store.displayingAbout" class="about-details" v-bind:id="'about-'+ store.detailsData.name.toLowerCase()">
     
     <img id="poster" v-bind:src="store.detailsData.poster"/>
-    <div id="name">{{ store.detailsData.name }}</div>
+
+    <div id="name">
+      {{ store.detailsData.name }}
+      <div id="job" v-if="store.detailsData.name == 'geoff'">
+        software engineer
+      </div>
+      <div id="job" v-else-if="store.detailsData.name == 'pierce'">
+        product designer
+      </div>
+      <div v-else></div>
+    </div>
     
     <div id="links">
       <a id="linked-in"
@@ -31,7 +40,7 @@
         <img src="/linkedin-icon.png">
       </a>
     </div>
-    
+
     <div v-if="store.detailsData.summary != ''" id="description">
       {{  store.detailsData.summary }}
     </div>
@@ -41,7 +50,7 @@
        v-bind:id="store.detailsData.id + '-details'">
     
     <img id="poster"
-      v-bind:class="store.lockedHighlights.includes(store.detailsData.id) ? 'poster-locked' : 'poster-unlocked'"
+      v-bind:id="store.lockedHighlights.includes(store.detailsData.id) ? 'poster-locked' : 'poster-unlocked'"
       v-bind:src="store.detailsData.poster"
       @click="toggleHighlightLock($event, store.detailsData.id)"
       @mouseenter="highlightNodes(store.detailsData.id)"
@@ -125,25 +134,44 @@
 
 <style scoped lang="scss">
 
-  #about-details {
+  #about-filmetrix {
     #poster {
-      width: 160px;
-      right: 30px;
-      bottom: 20px;
+      width: 108px;
+      left: -3px;
+      bottom: 8px;
+    }
+    #name {
+      margin: 100px 0px 0px -14px;
+    }
+  }
+
+  #about-geoff, #about-pierce {
+    #poster {
+      width: 168px;
+      right: 37px;
+      bottom: 7px;
+    }
+
+    #job {
+      // font-family: $global-font;
+      font-size: 12px;
+      line-height: 12px;
+      margin-top: 12px;
     }
 
     #name {
-      margin: 23px;
+      left: 20px;
+      top: 25px;
     }
-    
+  }
+
+  .about-details {
     #links {
       right: 30px;
       top: 10px;
 
-      #linked-in {
-        img {
-          width: 20px;
-        }
+      #linked-in > img {
+        width: 20px;
       }
     }
   }

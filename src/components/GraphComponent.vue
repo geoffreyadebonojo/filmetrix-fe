@@ -7,7 +7,7 @@
 </script>
 
 <template>
-  <div class="graph-container" id="graph-component">
+  <div class="graph-container" id="main-graph-component">
     <svg id="main-graph-container">
       <g id="main-outer-wrapper" class="outer-wrapper"></g>
     </svg>

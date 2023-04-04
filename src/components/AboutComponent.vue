@@ -8,7 +8,7 @@
 
 <template>
   <div class="graph-container" id="about-graph-component">
-    <svg v-if="store.displayingAbout" id="about-graph-container" viewBox="190 120 400 400">
+    <svg v-if="store.displayingAbout" id="about-graph-container" viewBox="255 350 400 400">
       <g id="about-outer-wrapper" class="outer-wrapper"></g>
     </svg>
   </div>
@@ -28,7 +28,7 @@
 
 <style scoped lang="scss">
   #about-graph-container {
-    width: 0px;
+    // width: 0px;
     // width:100%;
     height: 100vh;
     position: absolute;

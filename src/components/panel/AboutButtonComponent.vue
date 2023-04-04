@@ -62,14 +62,13 @@
 
 
           store.displayingAbout = false
-          // setTimeout(async () => {
-          // }, 200)
-          if (store.existing.length > 0) {
-            await api.fetchDetails(store.existing.last()[0])
-          } else {
-            focusHelper.methods.set('search')
-            focusHelper.methods.openField()
-          }
+
+          // if (store.existing.length > 0) {
+          //   await api.fetchDetails(store.existing.last()[0])
+          // } else {
+          //   focusHelper.methods.set('search')
+          //   focusHelper.methods.openField()
+          // }
         }
       }
     }
