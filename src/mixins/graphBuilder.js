@@ -51,15 +51,15 @@ export default {
   buildNode(parent, nodes) {
     let node = parent.append("g")
       .attr("class", "nodes")
+      .attr("fill", "currentColor")
+      .attr("stroke-linecap", "round")
+      .attr("stroke-linejoin", "round")
       .selectAll("g")
       .data(nodes)
       .join("g")
       .attr("class", (d) => {
         return 'node ' + d.type.join(" ")
       })
-      .attr("fill", "currentColor")
-      .attr("stroke-linecap", "round")
-      .attr("stroke-linejoin", "round")
       .attr("id", d => d.id)
     return node
   },

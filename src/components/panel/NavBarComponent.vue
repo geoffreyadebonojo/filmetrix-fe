@@ -2,6 +2,7 @@
   import focusHelper from "@/mixins/focusHelper"
   import api from "@/mixins/api.js"
   import { store } from "@/stores/store.js"
+
   import { aboutUsData } from "@/mixins/aboutUsData"
   import graph from "@/mixins/graph"
   import aboutGraph from "@/mixins/aboutGraph"

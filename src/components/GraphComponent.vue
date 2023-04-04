@@ -7,7 +7,7 @@
 </script>
 
 <template>
-  <div class="graph-container" id="main-graph-component">
+  <div class="graph-container" id="graph-component">
     <svg id="main-graph-container">
       <g id="main-outer-wrapper" class="outer-wrapper"></g>
     </svg>
@@ -15,6 +15,14 @@
 </template>
 
 <style lang="scss">
+  #main-graph-container {
+    background: $graph-body-grey;
+    display: block;
+    width: 100%;
+    // height: 100vh;
+    // display: flex;
+  }
+
   .inst {
     animation-name: rotateLabel;
     animation-duration: 8s;

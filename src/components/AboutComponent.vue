@@ -25,3 +25,15 @@
     }
   }
 </script>
+
+<style scoped lang="scss">
+  #about-graph-container {
+    width: 0px;
+    // width:100%;
+    height: 100vh;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    background: $graph-body-grey;
+  }
+</style>
