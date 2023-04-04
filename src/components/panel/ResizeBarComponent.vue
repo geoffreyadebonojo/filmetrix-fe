@@ -17,52 +17,58 @@
       const resizeBar = d3.select("#resize-bar")
       
       resizeBar.call(
-      d3.drag()
-      .on("start", dragstarted)
-      .on("drag", dragged)
-      .on("end", dragended)
+        d3.drag()
+        .on("start", dragstarted)
+        .on("drag", dragged)
+        .on("end", dragended)
       )
       
       let isMobile = /Android|iPhone/i.test(navigator.userAgent)
       if (isMobile) {
-      resizeBar.on("click", () => {
-      let panel = d3.select("#panel-body")
-      let zoomButtons = d3.select("#zoom-buttons")
-      let centeringButton = d3.select(".centering-button")
-      
-      if (store.panelOpen) {
-        panel.transition().duration(100)
-        .style("width", "20px")
-        .style("min-width", "0px")
-        zoomButtons.style("display", "none")
-        centeringButton.style("display", "block")
-        store.panelOpen = false
-        
-      } else {
-        panel.transition()
-        .duration(80)
-        .ease(d3.easeBounceOut)
-        .style("width", "350px")
-        .style("min-width", "270px")
-        zoomButtons.style("display", "flex")
-        centeringButton.style("display", "none")
-        store.panelOpen = true
-      }
-      })
+        resizeBar.on("click", () => {
+          let panel = d3.select("#panel-body")
+          let zoomButtons = d3.select("#zoom-buttons")
+          let centeringButton = d3.select(".centering-button")
+          
+          if (store.panelOpen) {
+            panel.transition().duration(100)
+            .style("width", "20px")
+            .style("min-width", "0px")
+            zoomButtons.style("display", "none")
+            centeringButton.style("display", "block")
+            store.panelOpen = false
+            
+          } else {
+            panel.transition()
+            .duration(80)
+            .ease(d3.easeBounceOut)
+            .style("width", "350px")
+            .style("min-width", "270px")
+            zoomButtons.style("display", "flex")
+            centeringButton.style("display", "none")
+            store.panelOpen = true
+          }
+        })
       }
       
       function dragstarted() {
-      d3.select(this).style("cursor", "col-resize")
+        d3.select(this).style("cursor", "col-resize")
       }
       
       function dragged() {
-      d3.select(this).style("cursor", "col-resize")
-      let panel = this.parentElement
-      panel.style.width = `${window.innerWidth - event.x}px`
+        d3.select(this).style("cursor", "col-resize")
+        let panel = this.parentElement
+        let pw = window.innerWidth - event.x
+        // if (pw < 220) {
+        //   d3.select("#search-text").style("left", "167px").style("top", "27px")
+        // } else {
+        //   d3.select("#search-text").style("left", "20px").style("top", "0px")
+        // }
+        panel.style.width = `${(pw)}px`
       }
       
       function dragended() {
-      store.panelWidth = window.innerWidth - event.x
+        store.panelWidth = (window.innerWidth - event.x)
       }
     }
   }

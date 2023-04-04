@@ -5,7 +5,7 @@
   import graphBuilder from '@mixins/graphBuilder'
   import { settingsModule } from '@mixins/settingsModule'
   import { store } from '@/stores/store.js'
-  import NodeElem from '@mixins/NodeElem'
+  import NodeElem from '@models/NodeElem'
   import * as d3 from 'd3'
 </script>
 
@@ -126,7 +126,26 @@
 <style scoped lang="scss">
 
   #about-details {
+    #poster {
+      width: 160px;
+      right: 30px;
+      bottom: 20px;
+    }
+
+    #name {
+      margin: 23px;
+    }
     
+    #links {
+      right: 30px;
+      top: 10px;
+
+      #linked-in {
+        img {
+          width: 20px;
+        }
+      }
+    }
   }
 
   #fade-top {

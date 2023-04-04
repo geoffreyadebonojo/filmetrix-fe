@@ -1,7 +1,7 @@
 import { settingsModule } from './settingsModule.js'
 import { store } from '@/stores/store.js'
 import * as d3 from 'd3'
-import NodeElem from '@mixins/NodeElem'
+import NodeElem from '@models/NodeElem'
 
 export default {
   data () {
@@ -19,6 +19,17 @@ export default {
     return link
   },
 
+  createNodes(parent, nodes) {
+    const node = this.buildNode(parent, nodes)
+    this.appendCircle(node)
+    this.appendImage(node)
+    this.appendActorLabel(node)
+    this.attachMouseEvents(node)
+    return node
+  },
+
+  /////////////////////////////
+
   buildLinks(parent, links) {
     let link = parent.append("g")
       .attr("class", "links")
@@ -35,15 +46,6 @@ export default {
       .attr("stroke-width", "1px")
       .attr("vector-effect", "non-scaling-stroke")
     return link
-  },
-
-  createNodes(parent, nodes) {
-    const node = this.buildNode(parent, nodes)
-    this.appendCircle(node)
-    this.appendImage(node)
-    this.appendActorLabel(node)
-    this.attachMouseEvents(node)
-    return node
   },
 
   buildNode(parent, nodes) {
@@ -67,7 +69,7 @@ export default {
       .attr("class", "outline")
       .attr("stroke", this.data().strokeColor)
       .attr("stroke-width", 1)
-      .attr("r", (d) => {
+      .attr("r", () => {
         return this.data().settings.defaults.node.circle.r
       })
       .attr('fill', this.data().bodyGrey)
@@ -105,17 +107,6 @@ export default {
     })
   },
 
-  drawArc(d){
-    const degrees = d.name.length * 7
-    const arc = d3.arc()
-      .innerRadius(44)
-      .outerRadius(64)
-      .startAngle((-degrees -12 )* Math.PI/180 / 2) //converting from degs to radians
-      .endAngle(degrees * Math.PI/180 / 2) //just radians
-
-    return arc()
-  },
-
   appendImage(node) {
     node.append("svg:image")
       .attr("class", "poster")
@@ -136,6 +127,59 @@ export default {
         return `inset(${this.data().settings.defaults.image.clipPath})`
       })
     return node
+  },
+
+  instructionLabel(node) {
+    node.on("mouseenter", (e, d) => {
+      let letters = "Double click me  double click me  double click me  "
+      let r = -50
+
+      let label = d3.select(`#${d.id}`).select(".node-label")
+  
+      label.attr("class", "node-label inst")
+      label.select("path").style("display", "none")
+      label.select(".text-container").style("display", "none")
+
+      function tempArc() {
+        const arc = d3.arc()
+        .innerRadius(44)
+        .outerRadius(64)
+        .startAngle(0) //converting from degs to radians
+        .endAngle(Math.PI * 2) //just radians
+
+        return arc()
+      }
+      label.append("path")
+      .attr("class", "instruction")
+      .attr("d", f => tempArc(f))
+      .attr("fill", this.data().bodyGrey)
+
+      label.selectAll("text")
+      .exit()
+      .data(letters.split(""))
+      .enter()
+      .append("text")
+      .attr("class", "instruction")
+      .text((d) => {
+        return d
+      })
+      .style("font-size", "12px")
+      .style("font-family", "Dosis, sans-serif")
+      .style("font-weight", "900")
+      .style("text-transform", "uppercase")
+      .style("transform", (d, i, a) => {
+        let theta = (i- (a.length/2))* 7.1
+        return `rotate(${theta}deg)translateY(${r+2}px)`
+      })
+
+    })
+    .on("mouseleave", (e, d) => {
+      d3.selectAll(".instruction").remove()
+      let n = d3.select(`#${d.id}`).select('.node-label').classed("inst", false)
+      n.select("path").style("display", "block")
+      n.select(".text-container").style("display", "block")
+      this.nodeTransformer(e.target, "scale(1)", this.data().strokeColor, "none")
+    })
   },
 
   attachMouseEvents(node) {
@@ -205,6 +249,24 @@ export default {
     })
   },
 
+  ///////////////////////////////////
+
+  nodeTransformer(target, scale, highlightColor, textStroke) {
+    const n = new NodeElem(target)
+    n.nodeTransformer(target, scale, highlightColor, textStroke)
+  },
+
+  drawArc(d){
+    const degrees = d.name.length * 7
+    const arc = d3.arc()
+      .innerRadius(44)
+      .outerRadius(64)
+      .startAngle((-degrees -12 )* Math.PI/180 / 2) //converting from degs to radians
+      .endAngle(degrees * Math.PI/180 / 2) //just radians
+
+    return arc()
+  },
+  
   angle(cx, cy, ex, ey) {
     var dy = ey - cy;
     var dx = ex - cx;
@@ -217,156 +279,5 @@ export default {
     var theta = this.angle(cx, cy, ex, ey); // range (-180, 180]
     if (theta < 0) theta = 360 + theta; // range [0, 360)
     return theta;
-  },
-
-  instructionLabel(node) {
-    node.on("mouseenter", (e, d) => {
-      let letters = "Double click me  double click me  double click me  "
-      let r = -50
-
-      let label = d3.select(`#${d.id}`).select(".node-label")
-  
-      label.attr("class", "node-label inst")
-      label.select("path").style("display", "none")
-      label.select(".text-container").style("display", "none")
-
-      function tempArc() {
-        const arc = d3.arc()
-        .innerRadius(44)
-        .outerRadius(64)
-        .startAngle(0) //converting from degs to radians
-        .endAngle(Math.PI * 2) //just radians
-
-        return arc()
-      }
-      label.append("path")
-      .attr("class", "instruction")
-      .attr("d", f => tempArc(f))
-      .attr("fill", this.data().bodyGrey)
-
-      label.selectAll("text")
-      .exit()
-      .data(letters.split(""))
-      .enter()
-      .append("text")
-      .attr("class", "instruction")
-      .text((d) => {
-        return d
-      })
-      .style("font-size", "12px")
-      .style("font-family", "Dosis, sans-serif")
-      .style("font-weight", "900")
-      .style("text-transform", "uppercase")
-      .style("transform", (d, i, a) => {
-        let theta = (i- (a.length/2))* 7.1
-        return `rotate(${theta}deg)translateY(${r+2}px)`
-      })
-
-    })
-    .on("mouseleave", (e, d) => {
-      d3.selectAll(".instruction").remove()
-      let n = d3.select(`#${d.id}`).select('.node-label').classed("inst", false)
-      n.select("path").style("display", "block")
-      n.select(".text-container").style("display", "block")
-      this.nodeTransformer(e.target, "scale(1)", this.data().strokeColor, "none")
-    })
-  },
-
-  nodeConnections(target) {
-    const v = new NodeElem(target)
-
-    return v
-  },
-
-  nodeTransformer(target, scale, highlightColor, textStroke) {
-    // if (target.classList.contains('locked')) { return }
-
-    const n = new NodeElem(target)
-    const elems  = n.elems
-    const y = n.connections
-
-    y.select('circle').style("stroke", highlightColor)
-    y.selectAll("text").style("stroke", highlightColor)
-    y.select(".poster").attr("transform", scale)
-
-    let scaleElem = [elems.circle, elems.label, elems.poster]
-    scaleElem.forEach((d) => {
-      d.attr("transform", scale)
-    })
-
-    let highlightElems = [
-      elems.circle, 
-      elems.sources.select(".line"), 
-      elems.targets.select(".line")
-    ]
-    highlightElems.forEach((d) => {
-      d.style("stroke", highlightColor)
-    })
-
-    elems.label.selectAll("text").style("stroke", textStroke)
-  },
-
-  attachClickListeners(node) {
-    const onSingleClick = this.onSingleClick
-    let alreadyClicked = false
-    let timer = null
-
-    node.on('click', async () => {
-      if (alreadyClicked) { 
-
-        this.onDoubleClick()
-
-        alreadyClicked = false;
-        clearTimeout(timer);
-      } else {
-        timer = setTimeout(async function () {
-          alreadyClicked = false;
-
-          onSingleClick()
-
-        }, 200)
-        alreadyClicked = true;
-      }
-    })
-  },
-  
-  createViewerBody(args) {
-    const viewerBody = d3.select(`#${args.containerId}`)
-  
-    let zoom = d3.zoom().on('zoom', (e) => {
-      args.outerWrapper
-      // .transition().duration(500) may be useful later
-      .attr("transform", e.transform)
-    })
-    
-    // out of place here...
-
-    if (args.graphControlButtons) {
-      args.graphControlButtons.style("display", "block").transition().duration(30).style("left", "-30px")
-      
-      d3.select("#centering-button").on("click", (e) => {
-        const duration = 1000
-        
-        d3.select(e.target).style("opacity", "1")
-  
-        var transform = d3.zoomIdentity
-          .translate(0,0)
-          .scale(1)
-        
-        d3.select(e.target).transition().duration(duration).style("opacity", "0.5")
-        // #main-inner-wrapper & #outer-wrappers have a bbox size regardless of zoom and are always equal to eachother
-        // #main-graph-container bbox x,y,width,height is entirely reactive to zoom
-        // before zoom, #main-graph-container bbox is same as #main-inner-wrapper and #main-outer-wrapper
-        // after zoom, #main-graph-container bbox is that of #inner/#outer multiplied by #main-outer-wrapper transform
-        viewerBody.transition().duration(duration)
-          .call(zoom.transform, transform);
-        return viewerBody
-      })
-    }
-    
-    viewerBody.call(zoom)
-              .call(zoom).on("dblclick.zoom", null)
-    
-    return viewerBody
-  } 
+  }
 }

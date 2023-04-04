@@ -32,7 +32,7 @@
       }
     },
     mounted () {
-      d3.select("#panel-body").transition().duration(200).ease(d3.easeLinear).style("width", "350px").style("min-width", "270px")
+      d3.select("#panel-body").transition().duration(200).ease(d3.easeLinear).style("width", "350px")//.style("min-width", "270px")
       focusHelper.methods.set('search')
       focusHelper.methods.openField()
       store.currentFocus = 'empty'
@@ -44,6 +44,7 @@
   #panel-body {
     height: 100vh;
     width: 0px;
+    min-width: 15px;
     display: grid;
     grid-template-columns: 30px 1fr 30px;
     grid-template-rows: 2vh 1.8em 4vh 10fr 1vh 4fr 4vh;
@@ -56,7 +57,11 @@
       "resize-bar . ."
       "resize-bar . .";
     background: $panel-body-grey;
-    // position: absolute;
+
+    
+    position: absolute;
+
+    
     top: 0px;
     // simply by turning this off, we can float the panel to the left
     // still have to account for everything else though...

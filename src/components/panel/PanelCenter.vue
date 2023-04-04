@@ -14,14 +14,14 @@
   <div id="panel-center" style="height:142%;zoom:100%">
       <!-- use search result data? later -->
       
-    <div id="nav-arrows" v-if="store.currentFocus === 'details' && store.currentDetailId !== false">
+    <div id="nav-arrows" v-if="showNavArrows">
       <div id="left-arrow">
-        <img v-if="store.existing.length > 1 && store.existing[0][0] !== store.currentDetailId"
+        <img v-if="showLeftArrow"
         src="/angle-double-small-left.svg" 
         @click="adjustId(-1)">
       </div> 
       <div id="right-arrow">
-        <img v-if="store.existing.length > 1 && store.existing.last()[0] !== store.currentDetailId"
+        <img v-if="showRightArrow"
         src="/angle-double-small-right.svg" 
         @click="adjustId(1)">
       </div>
@@ -81,6 +81,17 @@
         newHere: JSON.parse(localStorage.getItem("newHere"))
       }
     },
+    computed: {
+      showNavArrows: () => {
+        return store.currentFocus === 'details' && store.currentDetailId !== false && store.displayingAbout == false
+      },
+      showLeftArrow: () => {
+        return store.existing.length > 1 && store.existing[0][0] !== store.currentDetailId
+      },
+      showRightArrow: () => {
+        return store.existing.length > 1 && store.existing.last()[0] !== store.currentDetailId
+      }
+    },
     mounted () {
       d3.select("#search-prompt").transition().delay(200).duration(200).style("opacity", 1)
       const saved = JSON.parse(localStorage.getItem("lockedGraph"))
@@ -91,8 +102,6 @@
         this.$data.hasSavedGraph = true
       }
       
-    },
-    updated () {
     },
     methods: {
       focusSearchBar() {
@@ -147,10 +156,11 @@
           store.graphTypes =  helpers.getTypes(nodes)
           store.currentFocus = 'search'
 
-          graph.methods.draw({
+          graph.draw({
             nodes: nodes.uniqueById(),
             links: links,
             settings: {
+              graphType: "mainGraphType",
               containerId: "main-graph-container",
               outerWrapperId: "main-outer-wrapper",
               innerWrapperId: "main-inner-wrapper"

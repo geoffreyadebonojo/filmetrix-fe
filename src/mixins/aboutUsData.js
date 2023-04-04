@@ -42,10 +42,5 @@ export const aboutUsData = {
       target: "pierce",
       roles: ['Product Designer']
     }
-  ],
-  settings: {
-    containerId: "about-graph-container",
-    outerWrapperId: "about-outer-wrapper",
-    innerWrapperId: "about-inner-wrapper"
-  }
+  ]
 }

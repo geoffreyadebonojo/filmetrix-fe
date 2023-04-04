@@ -42,6 +42,7 @@
     data () {
       return {
         settings: {
+          graphType: "mainGraphType",
           containerId: "main-graph-container",
           outerWrapperId: "main-outer-wrapper",
           innerWrapperId: "main-inner-wrapper"
@@ -70,7 +71,7 @@
       store.graphTypes =  helpers.getTypes(nodes)
       // store.currentFocus = 'details'
 
-      graph.methods.draw({
+      graph.draw({
         nodes: nodes.uniqueById(),
         links: links,
         settings: this.$data.settings

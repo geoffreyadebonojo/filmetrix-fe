@@ -14,7 +14,7 @@ export default {
       this.closeField()
 
       const buttonMap = navButtons.map(x => x.id.split("-")[0]);
-      const displaceRight = [
+      const displacement = [
         1,
         27,
         56,
@@ -24,17 +24,18 @@ export default {
       ]
       // can be adjusted to be vertical
       const index = buttonMap.indexOf(focus)
-      this.moveHighlightCircle(displaceRight[index])
-      
+      this.moveHighlightCircle(displacement[index], "right")
+
       store.currentFocus = focus
     },
 
-    moveHighlightCircle(x) {
-      d3.select("#highlight")
+    moveHighlightCircle(x, direction) {
+      let d = direction == "bottom" ? x-113 : x
+      const circle = d3.select("#highlight")
       .style("left", null)
       .transition()
       .duration(100)
-      .style("right", `${x}px`)
+      .style(direction, `${d}px`)
     },
 
     closeField() {
@@ -42,7 +43,7 @@ export default {
     },
 
     openField() {
-      d3.select("#search-text").transition().duration(0).delay(100).style("width", "100%").style("left", "7%")
+      d3.select("#search-text").transition().duration(0).delay(100).style("width", "100%").style("left", "15px")
       d3.select("#highlight").transition().duration(100).style("left", "-1px")
     }
   }
