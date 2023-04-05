@@ -14,8 +14,8 @@
         v-bind:id="result.id"
         v-for="result in store.searchResults.filter(r => r['id'].includes(store.currentFocus))" 
         :key="result.id"
-        @click="fetchNodesAndDetails(result.id)"
-        @keypress="fetchNodesAndDetails(result.id)">
+        @click="fetchNodesAndDetails(result)"
+        @keypress="fetchNodesAndDetails(result)">
       <img v-bind:src="result.poster"/>
       <div>{{result.name}}</div>
     </div>
@@ -38,7 +38,7 @@
       d3.select(".result-component").transition().delay(0).duration(200).style("right", "0%")
     },
     methods: {
-      async fetchNodesAndDetails(result_id) {
+      async fetchNodesAndDetails(result) {
         let isMobile = /Android|iPhone/i.test(navigator.userAgent)
         if(isMobile) {
           d3.select("#panel-body")
@@ -50,8 +50,8 @@
 
         store.panelOpen = false
 
-        await api.fetchDetails(result_id)
-        await graph.callForNodes(result_id, 7)
+        await api.fetchDetails(result.id)
+        await graph.callForNodes(result.id, "main")
       }
     }
   }

@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import WelcomeView from '../views/WelcomeView.vue'
-import GraphView from '../views/GraphView.vue'
+import MainView from '../views/MainView.vue'
 import GameView from '../views/GameView.vue'
 
 const router = createRouter({
@@ -14,7 +14,7 @@ const router = createRouter({
     {
       path: '/graph',
       name: 'graph',
-      component: GraphView
+      component: MainView
     },
     {
       path: '/game',

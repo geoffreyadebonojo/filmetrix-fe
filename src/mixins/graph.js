@@ -44,7 +44,7 @@ export default {
     
     d3.select("#save-button").classed("locked", false).classed("unlocked", true)
 
-    this.attachNodeClickActions(node, responseData)
+    this.attachNodeClickActions(node, graphType)
 
     simulation.on("tick", () => {
       link.attr("x1", d => d.source.x)
@@ -61,7 +61,7 @@ export default {
     return innerWrapper.node();
   },
 
-  attachNodeClickActions(node, responseData) {
+  attachNodeClickActions(node, graphType) {
     node.on('click', async (_e, d) => {
       const doubleClickDelay = 300
       
@@ -73,10 +73,10 @@ export default {
         localStorage.setItem("newHere", false)
 
         if (store.existing.map(x => x[0]).includes(d.id)){
-          this.addToExistingNodes(d, responseData)
+          this.addToExistingNodes(d, graphType)
         } else {
           localStorage.setItem("newHere", false)
-          return await this.callForNodes(d.id)
+          return await this.callForNodes(d, graphType)
         }
 
         await api.fetchDetails(d.id)
@@ -93,7 +93,7 @@ export default {
     })
   },
 
-  async addToExistingNodes (d, responseData) {
+  async addToExistingNodes (d, graphType) {
     const c = store.existing.filter((y) => {
       return y[0] === d.id
     })
@@ -118,18 +118,20 @@ export default {
     this.draw({
       nodes: nodes,
       links: links,
-      type: "main"
+      type: graphType
     })
   },
 
-  async callForNodes(id) {
-    if (store.existing.map((d) => d[0]).excludes(id) ) {
-      store.existing.push([id, 8])
+  // async callForNodes(id, graphType) {
+  async callForNodes(d, graphType) {
+
+    if (store.existing.map((f) => f[0]).excludes(d.id) ) {
+      store.existing.push([d.id, 8])
       const ext = store.existing.unique().map((d) => d[0])
       await api.fetchGraphData(ext)
     }
 
-    store.currentDetailId = id
+    store.currentDetailId = d.id
     let data
     let nodes = []
     let links = []
@@ -146,7 +148,7 @@ export default {
     this.draw({
       nodes: nodes.uniqueById(),
       links: links,
-      type: "main"
+      type: graphType
     })
   }
 }

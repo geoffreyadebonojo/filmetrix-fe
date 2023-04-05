@@ -34,30 +34,44 @@
     </commands-component>
     
     <div id="empty-field" v-else-if="store.currentFocus === 'empty'" @click="focusSearchBar()">
-      <div id="search-prompt">
-        <p class="apply-effect">search for a movie or actor</p>
-      </div>
+      <div v-if="this.type == 'main'">
+        <div id="search-prompt">
+          <p class="apply-effect">search for a movie or actor</p>
+        </div>
 
-      <div id="show-you-around-prompt" v-if="$data.newHere">
-        <p style="margin:5vh">
-          or
-        </p>
-        <p class="apply-effect">
-          have a look around
-        </p>
-      </div>
-
-      <div id="resume-prompt" v-else-if="$data.hasSavedGraph">
-        <p style="margin:5vh">
-          or
-        </p>
-        <router-link to="#details">
-          <p class="apply-effect" @click="resume()">
-            pick up where you left off
+        <div id="show-you-around-prompt" v-if="$data.newHere">
+          <p style="margin:5vh">
+            or
           </p>
-        </router-link> 
+          <p class="apply-effect">
+            have a look around
+          </p>
+        </div>
+
+        <div id="resume-prompt" v-else-if="$data.hasSavedGraph">
+          <p style="margin:5vh">
+            or
+          </p>
+          <router-link to="#details">
+            <p class="apply-effect" @click="resume()">
+              pick up where you left off
+            </p>
+          </router-link> 
+        </div>
+        <div v-else></div>
       </div>
-      <div v-else></div>
+
+      <div v-else id="game-prompt">
+        <p>
+          you are about to begin a fantastic journey into the bowels of cinema.
+          <br><br>
+          are you ready?
+        </p>
+      </div>
+      <div id="reply">
+        <p id="no" @click="reply('no')">N-no. I'm not ready.</p>
+        <p id="yes" @click="reply('yes')">You bet your bacon!</p>
+      </div>
     </div>
 
     <search-result-component v-else class="result-component">
@@ -89,6 +103,7 @@
     },
     data () {
       return {
+        type: '',
         currentDetailSubjectId: '',
         hasSavedGraph: false,
         newHere: JSON.parse(localStorage.getItem("newHere"))
@@ -117,6 +132,27 @@
       
     },
     methods: {
+      reply(t) {
+        const affirmatives = [
+          "i honor your courage. <br><br> let's begin",
+          "you have the heart of a warrior. <br><br> let's begin",
+        ]
+        const negatives = [
+          "coward",
+          "if not now, <br> then when?",
+          "kevin bacon forgives your cowardice",
+          "if you will not help him, who will? did you know he never won an oscar? I know, crazy",
+          "very well. you may return to the graph page if you wish"
+        ]
+        if (t == 'yes') {
+          d3.select("#game-prompt p").html(affirmatives.random(1))
+        } else if (t == 'no') {
+          d3.select("#game-prompt p").html(negatives.random(1))
+        }
+
+        d3.select("#reply").remove()
+      },
+
       focusSearchBar() {
         document.querySelector('#search-text').focus()
       },
@@ -186,8 +222,6 @@
 
 
 <style scoped lang="scss">
-
-
   #filmetrix {
     #poster {
       width: 108px;
@@ -237,7 +271,6 @@
 
     display: flex;
     justify-content: space-between;
-
     // top: 175px;
     z-index: 7;
 
@@ -264,6 +297,8 @@
   #empty-field {
     height: 100%;
 
+    #game-prompt,
+    #reply,
     #search-prompt, 
     #show-you-around-prompt, 
     #resume-prompt {
@@ -287,6 +322,28 @@
         animation-duration: 1.4s;
         animation-iteration-count: infinite;
         animation-timing-function: linear;
+      }
+    }
+
+    #reply {
+      font-size: 10px;
+      display: flex;
+      margin: 10px;
+      justify-content: space-around;
+
+      p {
+        margin: 5px;
+        padding: 10px;
+        border: grey solid 1px;
+        border-radius: 8px;
+
+        &:hover {
+          cursor: $cursor;
+          font-weight: 900;
+          background: grey;
+          border: $panel-body-grey solid 1px;
+          color: $panel-body-grey;
+        }
       }
     }
   }

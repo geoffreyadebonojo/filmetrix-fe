@@ -9,14 +9,14 @@
 <template>
   <div id="viewer-body">
     <graph-component :type="this.$data.type"></graph-component>
-    <panel-component></panel-component>
+    <panel-component :type="this.$data.type"></panel-component>
     <about-component></about-component>
   </div>
 </template>
 
 <script>
   export default {
-    name: 'GraphView',
+    name: 'MainView',
     data () {
       return {
         type: 'main'

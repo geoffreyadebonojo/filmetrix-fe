@@ -1,5 +1,6 @@
 <script setup>
   import GraphComponent from '@components/GraphComponent.vue'
+  import PanelComponent from '@components/PanelComponent.vue'
   import { store } from '@/stores/store.js'
   import graph from "@mixins/graph"
   import api from "@mixins/api"
@@ -10,6 +11,7 @@
 <template>
   <div id="viewer-body">
     <graph-component :type="this.$data.type"></graph-component>
+    <panel-component :type="this.$data.type"></panel-component>
   </div>
 </template>
 
