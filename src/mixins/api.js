@@ -5,7 +5,7 @@ export default {
     store
     return {
       key: "6GzCesnexrzgnDv3FfxbHBrb",
-      base_url: import.meta.env.DEV ? import.meta.env.VITE_DEV_URL : import.meta.env.VITE_PROD_URL
+      base_url: import.meta.env.VITE_API_URL
     }
   },
 
