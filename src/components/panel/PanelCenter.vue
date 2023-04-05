@@ -62,15 +62,11 @@
       </div>
 
       <div v-else id="game-prompt">
-        <p>
-          you are about to begin a fantastic journey into the bowels of cinema.
-          <br><br>
-          are you ready?
-        </p>
+        <p></p>
       </div>
       <div id="reply">
-        <p id="no" @click="reply('no')">N-no. I'm not ready.</p>
-        <p id="yes" @click="reply('yes')">You bet your bacon!</p>
+        <p id="no" @click="reply('no')"></p>
+        <p id="yes" @click="reply('yes')"></p>
       </div>
     </div>
 
@@ -129,7 +125,30 @@
       } else {
         this.$data.hasSavedGraph = true
       }
-      
+
+      const gamePrompts = [
+        {
+          prompt: "you are about to begin a fantastic journey into the bowels of cinema.<br><br>are you ready?",
+          no: "n-no. I'm not ready",
+          yes: "you bet your bacon!"
+        },
+        {
+          prompt: "kevin bacon's fate is in your hands.<br><br>he will fade into obscurity-<br>unless you can save him!",
+          no: "I don't really care about the fate of kevin bacon",
+          yes: "I care very much about the fate of kevin bacon"
+        },
+        {
+          prompt: "if you do not act, the name <br><br> kevin bacon <br><br> will be buried under the sands of time",
+          no: "all things must pass",
+          yes: "not if i have anything to say about it!"
+        }
+      ]
+
+      const opts = gamePrompts.random(1)[0]
+
+      d3.select("#game-prompt p").html(opts.prompt)
+      d3.select("#no").html(opts.no)
+      d3.select("#yes").html(opts.yes)
     },
     methods: {
       reply(t) {

@@ -12,7 +12,7 @@
   <div id="panel-body">
     <graph-buttons-component v-if="this.type == 'main'"></graph-buttons-component>
     <resize-bar-component></resize-bar-component>
-    <nav-bar-component></nav-bar-component>
+    <nav-bar-component v-if="this.type == 'main'"></nav-bar-component>
     <panel-center :type="this.type"></panel-center>
   </div>
 </template>
