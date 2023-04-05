@@ -8,7 +8,7 @@
 
 <template>
   <div id="viewer-body">
-    <graph-component></graph-component>
+    <graph-component :type="this.$data.type"></graph-component>
     <panel-component></panel-component>
     <about-component></about-component>
   </div>
@@ -17,6 +17,11 @@
 <script>
   export default {
     name: 'GraphView',
+    data () {
+      return {
+        type: 'main'
+      }
+    },
     components: {
       GraphComponent,
       PanelComponent,
@@ -31,7 +36,7 @@
   }
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
   #viewer-body {
     display: flex;
     height: 100vh;

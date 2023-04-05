@@ -172,12 +172,7 @@
           graph.draw({
             nodes: nodes.uniqueById(),
             links: links,
-            settings: {
-              graphType: "mainGraphType",
-              containerId: "main-graph-container",
-              outerWrapperId: "main-outer-wrapper",
-              innerWrapperId: "main-inner-wrapper"
-            }
+            type: "main"
           })      
 
           const lockButton = d3.select("#lock-button")

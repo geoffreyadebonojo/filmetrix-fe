@@ -4,6 +4,7 @@ import Graph from '@models/Graph.js'
 import Simulation from '@models/Simulation.js'
 import { store } from '@/stores/store.js'
 import focusHelper from "@/mixins/focusHelper"
+import helpers from "@/mixins/helpers"
 
 export default {
   name: "aboutGraph",
@@ -59,25 +60,27 @@ export default {
     store.detailsData = {}
     const links = aboutUsData.links
     const nodes = aboutUsData.nodes
-    const graphType = "aboutGraphType"
-    const containerId = "about-graph-container"
-    const outerWrapperId = "about-outer-wrapper"
-    const innerWrapperId = "about-inner-wrapper"
+    const settings = helpers.settings("about")
+
+    const graphType = settings.graphType
+    const containerId = settings.containerId
+    const outerWrapperId = settings.outerWrapperId
+    const innerWrapperId = settings.innerWrapperId
 
     d3.select(`#${innerWrapperId}`).remove()
     
     const outerWrapper = d3.select(`#${outerWrapperId}`)
     const innerWrapper = outerWrapper.append("g").attr("id", innerWrapperId)
 
-    const simulation = new Simulation({nodes, 
+    const simulation = new Simulation({ nodes, 
                                         links,
-                                        graphType}).body
+                                        graphType }).body
 
     const [link, node] = new Graph({links, 
                                     nodes,
                                     containerId,
                                     innerWrapper,
-                                    outerWrapper}).build()
+                                    outerWrapper }).build()
     
     d3.select("#save-button").classed("locked", false).classed("unlocked", true)
 
@@ -105,7 +108,6 @@ export default {
       const aboutContainer = d3.selectAll(".about-details")
 
       aboutContainer.attr("id", details.name)
-
       aboutContainer.select("#poster").attr("src", details.poster)
       aboutContainer.select("#name").html(details.name)
       aboutContainer.select("#job").html(details.role)

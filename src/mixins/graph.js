@@ -20,27 +20,27 @@ export default {
     var links = responseData.links
     var nodes = responseData.nodes
 
-    const graphType =      responseData.settings.graphType
-    const containerId =    responseData.settings.containerId
-    const outerWrapperId = responseData.settings.outerWrapperId
-    const innerWrapperId = responseData.settings.innerWrapperId
+    const settings = helpers.settings(responseData.type)
+
+    const graphType =      settings.graphType
+    const containerId =    settings.containerId
+    const outerWrapperId = settings.outerWrapperId
+    const innerWrapperId = settings.innerWrapperId
 
     d3.select(`#${innerWrapperId}`).remove()
     
     const outerWrapper = d3.select(`#${outerWrapperId}`)
     const innerWrapper = outerWrapper.append("g").attr("id", innerWrapperId)
 
-    const simulation = new Simulation({nodes, 
+    const simulation = new Simulation({ nodes, 
                                         links,
-                                        graphType
-                                      }).body
+                                        graphType }).body
 
-    const [link, node] = new Graph({links, 
-                                    nodes,
-                                    containerId,
-                                    innerWrapper,
-                                    outerWrapper
-                                  }).build()
+    const [link, node] = new Graph({ links, 
+                                      nodes,
+                                      containerId,
+                                      innerWrapper,
+                                      outerWrapper }).build()
     
     d3.select("#save-button").classed("locked", false).classed("unlocked", true)
 
@@ -118,7 +118,7 @@ export default {
     this.draw({
       nodes: nodes,
       links: links,
-      settings: responseData.settings
+      type: "main"
     })
   },
 
@@ -146,12 +146,7 @@ export default {
     this.draw({
       nodes: nodes.uniqueById(),
       links: links,
-      settings: {
-        graphType: "mainGraphType",
-        containerId: "main-graph-container",
-        outerWrapperId: "main-outer-wrapper",
-        innerWrapperId: "main-inner-wrapper"
-      }
+      type: "main"
     })
   }
 }

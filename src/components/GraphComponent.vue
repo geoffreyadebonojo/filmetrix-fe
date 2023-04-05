@@ -7,15 +7,15 @@
 </script>
 
 <template>
-  <div class="graph-container" id="main-graph-component">
-    <svg id="main-graph-container">
-      <g id="main-outer-wrapper" class="outer-wrapper"></g>
+  <div class="graph-container" v-bind:id="this.type + '-graph-component'">
+    <svg class="graph-container" v-bind:id="this.type + '-graph-container'">
+      <g class="outer-wrapper" v-bind:id="this.type + '-outer-wrapper'"></g>
     </svg>
   </div>
 </template>
 
 <style lang="scss">
-  #main-graph-container {
+  .graph-container {
     background: $graph-body-grey;
     display: block;
     width: 100%;
@@ -47,16 +47,7 @@
 <script>
   export default {
     name: "GraphComponent",
-    data () {
-      return {
-        settings: {
-          graphType: "mainGraphType",
-          containerId: "main-graph-container",
-          outerWrapperId: "main-outer-wrapper",
-          innerWrapperId: "main-inner-wrapper"
-        }
-      }
-    },
+    props: ['type'],
     async created () {
       const gid = this.$route.query.gid
 
@@ -82,7 +73,7 @@
       graph.draw({
         nodes: nodes.uniqueById(),
         links: links,
-        settings: this.$data.settings
+        type: "main"
       })
     },
     mounted () {

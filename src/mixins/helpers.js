@@ -14,5 +14,14 @@ export default {
     })
 
     return types
+  },
+
+  settings(type) {
+    return {
+      graphType: type,
+      containerId: `${type}-graph-container`,
+      outerWrapperId: `${type}-outer-wrapper`,
+      innerWrapperId: `${type}-inner-wrapper`
+    }
   }
 }
