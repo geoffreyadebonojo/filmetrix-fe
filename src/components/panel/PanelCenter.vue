@@ -13,22 +13,21 @@
 <template>
   <div id="panel-center" style="height:142%;zoom:100%">
       <!-- use search result data? later -->
-      
-    <div id="nav-arrows" v-if="showNavArrows">
-      <div id="left-arrow">
-        <img v-if="showLeftArrow"
-        src="/angle-double-small-left.svg" 
-        @click="adjustId(-1)">
-      </div> 
-      <div id="right-arrow">
-        <img v-if="showRightArrow"
-        src="/angle-double-small-right.svg" 
-        @click="adjustId(1)">
+    <div v-if="store.displayingAbout" class="about-details">
+      <img id="poster" src=""/>
+      <div id="name-container">
+        <div id="name"></div>
+        <div id="job"></div>
       </div>
+      <div id="links">
+        <a id="linked-in" href="" target="_blank">
+          <!-- img -->
+        </a>
+      </div>
+      <div id="description"></div>
     </div>
-    <div v-else></div>
 
-    <details-component class="details-component" v-if="store.currentFocus === 'details' && store.currentDetailId !== false">
+    <details-component class="details-component" v-else-if="store.currentFocus === 'details' && store.currentDetailId !== false">
     </details-component>
 
     <commands-component v-else-if="store.currentFocus === 'commands'">
@@ -63,6 +62,20 @@
 
     <search-result-component v-else class="result-component">
     </search-result-component>
+
+    <div id="nav-arrows" v-if="showNavArrows">
+      <div id="left-arrow">
+        <img v-if="showLeftArrow"
+        src="/angle-double-small-left.svg" 
+        @click="adjustId(-1)">
+      </div> 
+      <div id="right-arrow">
+        <img v-if="showRightArrow"
+        src="/angle-double-small-right.svg" 
+        @click="adjustId(1)">
+      </div>
+    </div>
+    <div v-else></div>
   </div>
 </template>
 
@@ -178,11 +191,60 @@
 
 
 <style scoped lang="scss">
+
+
+  #filmetrix {
+    #poster {
+      width: 108px;
+      left: -3px;
+      bottom: 8px;
+    }
+    #name {
+      margin: 100px 0px 0px -14px;
+    }
+  }
+
+  #geoff, #pierce {
+    #poster {
+      width: 168px;
+      right: 37px;
+      bottom: 7px;
+    }
+
+    #job {
+      // font-family: $global-font;
+      font-size: 12px;
+      line-height: 12px;
+      margin-top: 12px;
+    }
+
+    #name {
+      left: 20px;
+      top: 25px;
+    }
+  }
+
+  .about-details {
+    font-family: $global-font;
+    
+    #links {
+      right: 30px;
+      top: 10px;
+
+      #linked-in > img {
+        width: 20px;
+      }
+    }
+  }
+
   #nav-arrows {
     grid-area: arrows;
 
     display: flex;
     justify-content: space-between;
+
+    // top: 175px;
+    z-index: 7;
 
     img {
       height: 25px;
@@ -197,6 +259,7 @@
       }
     } 
   }
+  
 
   .result-component {
     height: 100%;
@@ -260,4 +323,5 @@
     grid-area: panel-center;
     overflow-y: auto;
   }
+
 </style>

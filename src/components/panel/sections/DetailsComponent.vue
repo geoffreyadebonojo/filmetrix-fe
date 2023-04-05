@@ -10,11 +10,8 @@
 </script>
 
 <template>
-  <!-- do focus about -->
-  <div v-if="store.displayingAbout" class="about-details" v-bind:id="'about-'+ store.detailsData.name.toLowerCase()">
-    
-    <img id="poster" v-bind:src="store.detailsData.poster"/>
-
+  <!-- <div v-if="store.displayingAbout" class="about-details">
+    <img id="poster" src=""/>
     <div id="name">
       {{ store.detailsData.name }}
       <div id="job" v-if="store.detailsData.name == 'geoff'">
@@ -25,7 +22,6 @@
       </div>
       <div v-else></div>
     </div>
-    
     <div id="links">
       <a id="linked-in"
         v-if="store.detailsData.name == 'geoff'"
@@ -40,22 +36,18 @@
         <img src="/linkedin-icon.png">
       </a>
     </div>
-
-    <div v-if="store.detailsData.summary != ''" id="description">
+    <div id="description">
       {{  store.detailsData.summary }}
     </div>
-  </div>
+  </div> -->
 
-  <div v-else-if="store.detailsData.id != null"
-       v-bind:id="store.detailsData.id + '-details'">
-    
+  <div v-if="store.detailsData.id != null" v-bind:id="store.detailsData.id + '-details'">
     <img id="poster"
       v-bind:id="store.lockedHighlights.includes(store.detailsData.id) ? 'poster-locked' : 'poster-unlocked'"
       v-bind:src="store.detailsData.poster"
       @click="toggleHighlightLock($event, store.detailsData.id)"
       @mouseenter="highlightNodes(store.detailsData.id)"
-      @mouseleave="unhighlightNodes(store.detailsData.id)"
-    >
+      @mouseleave="unhighlightNodes(store.detailsData.id)">
     <div id="name">{{ store.detailsData.name }}</div>
     <div id="birthday">{{ store.detailsData.year }}</div>
     <div id="links">
@@ -133,49 +125,6 @@
 </script>
 
 <style scoped lang="scss">
-
-  #about-filmetrix {
-    #poster {
-      width: 108px;
-      left: -3px;
-      bottom: 8px;
-    }
-    #name {
-      margin: 100px 0px 0px -14px;
-    }
-  }
-
-  #about-geoff, #about-pierce {
-    #poster {
-      width: 168px;
-      right: 37px;
-      bottom: 7px;
-    }
-
-    #job {
-      // font-family: $global-font;
-      font-size: 12px;
-      line-height: 12px;
-      margin-top: 12px;
-    }
-
-    #name {
-      left: 20px;
-      top: 25px;
-    }
-  }
-
-  .about-details {
-    #links {
-      right: 30px;
-      top: 10px;
-
-      #linked-in > img {
-        width: 20px;
-      }
-    }
-  }
-
   #fade-top {
     grid-area: ft;
   }
@@ -231,11 +180,11 @@
   }
 
   .details-component {
-    height: 80vh;
+    height: 83vh;
     width: 100%;
     display: grid;
     grid-template-columns: 79px 10px 55px 50px 1fr;
-    grid-template-rows: 95px 21px 10px 1fr 17fr;
+    grid-template-rows: 95px 21px 10px 30px 17fr;
     padding: 10px;
     /* gap: 10px; */
     grid-template-areas:

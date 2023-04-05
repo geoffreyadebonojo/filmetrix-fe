@@ -8,7 +8,7 @@
 
 <template>
   <div class="graph-container" id="about-graph-component">
-    <svg v-if="store.displayingAbout" id="about-graph-container" viewBox="255 350 400 400">
+    <svg v-if="store.displayingAbout" id="about-graph-container" viewBox="205 280 400 400">
       <g id="about-outer-wrapper" class="outer-wrapper"></g>
     </svg>
   </div>

@@ -61,6 +61,12 @@ export default {
         return 'node ' + d.type.join(" ")
       })
       .attr("id", d => d.id)
+      // .attr("r", (d) => {
+      //   if (store.existing.map(d => {d[0]).includes(node.id)) {
+      //     return this.data().settings.defaults.node.circle.r
+      //   }
+      // })
+
     return node
   },
 
@@ -69,8 +75,9 @@ export default {
       .attr("class", "outline")
       .attr("stroke", this.data().strokeColor)
       .attr("stroke-width", 1)
-      .attr("r", () => {
+      .attr("r", (d) => {
         return this.data().settings.defaults.node.circle.r
+        // return d.r
       })
       .attr('fill', this.data().bodyGrey)
       .attr("vector-effect", "non-scaling-stroke")

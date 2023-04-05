@@ -44,7 +44,7 @@
   #panel-body {
     height: 100vh;
     width: 0px;
-    min-width: 15px;
+    min-width: 300px;
     display: grid;
     grid-template-columns: 30px 1fr 30px;
     grid-template-rows: 2vh 1.8em 4vh 10fr 1vh 4fr 4vh;

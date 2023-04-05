@@ -1,4 +1,5 @@
 import * as d3 from 'd3'
+import { store } from '@/stores/store.js'
 
 export default class Simulation {
   constructor({nodes, links, width, height, graphType}) {
@@ -16,10 +17,13 @@ export default class Simulation {
   }
 
   generateMainGraph() { 
+
+    const posterOffset = 25
+
     const settings = {
       node: {
         collide: 60,
-        charge: -1700,
+        charge: -1000,
         circle: {
           r: 50
         }
@@ -29,12 +33,12 @@ export default class Simulation {
       },
       image: {
         offset: {
-          x: -35,
-          y: -35
+          x: -posterOffset,
+          y: -posterOffset
         },
         position: {
-          x: 70,
-          y: 70
+          x: posterOffset*2,
+          y: posterOffset*2
         },
         clipPath: '0% 12px round 5px',
       }
@@ -48,8 +52,14 @@ export default class Simulation {
     .force("charge", d3.forceManyBody().strength(() => {
       return settings.node.charge
     }))
-    .force('collide', d3.forceCollide(() => {
-      return settings.node.collide
+    .force('collide', d3.forceCollide((d) => {
+      let col = settings.node.collide
+      return col
+      // if (store.existing.map((f) => f[0]).includes(d.id)) {
+      //   return col * 1.2
+      // } else {
+      //   return col * 0.8
+      // }
     }))
     .force("center", d3.forceCenter(this.width * 0.5, this.height * 0.5))
     // .force('x', d3.forceX().x(this.width * 0.5))

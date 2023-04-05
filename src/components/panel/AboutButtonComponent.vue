@@ -36,11 +36,9 @@
           })
 
           d3.select("#panel-body").style("position", "unset").transition().duration(0).style("width", `${store.panelWidth}`).style("min-width", "275px")
-
           d3.select("#main-graph-component").transition().duration(this.$data.transition).style("width", "0%")
           d3.select("#about-graph-component").transition().duration(this.$data.transition).style("width", "100%")
           d3.select("#about-inner-wrapper").transition().duration(this.$data.transition).style("transform", "translate(0, 0)")
-
           d3.select("#navbar").transition().duration(200).style("width", "5%").style("right", "30px")
           d3.select("#resize-bar").style("opacity", "0").style("display", "none")
           d3.selectAll(".primary-nav").style("display", "none")
@@ -53,22 +51,20 @@
           focusHelper.methods.set('details') 
           d3.select("#main-graph-component").transition().duration(this.$data.transition).style("width", "100%")
           d3.select("#about-graph-component").transition().duration(this.$data.transition).style("width", "0%")
-
           d3.select("#resize-bar").transition().delay(this.$data.transition).duration(0).style("opacity", "1").style("display", "block")
           d3.selectAll(".primary-nav").transition().delay(this.$data.transition).duration(0).style("display", "block")
           d3.select(".nav-button-container").transition().delay(this.$data.transition).duration(0).style("background", "#6e6e6e")
           d3.select("#navbar").transition().delay(this.$data.transition).duration(0).style("right", "unset").style("width", "100%")
           d3.select("#panel-body").transition().delay(this.$data.transition).duration(0).style("position", "absolute")
-
+          d3.selectAll("#search-text").transition().delay(this.$data.transition).duration(0).style("display", "block")
 
           store.displayingAbout = false
 
-          // if (store.existing.length > 0) {
-          //   await api.fetchDetails(store.existing.last()[0])
-          // } else {
-          //   focusHelper.methods.set('search')
-          //   focusHelper.methods.openField()
-          // }
+          if (store.detailsData != null || store.detailsData != {}) {
+            store.detailsData = {}
+          }
+          // debugger
+          // api.fetchDetails
         }
       }
     }
