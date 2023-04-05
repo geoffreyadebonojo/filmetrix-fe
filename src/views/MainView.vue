@@ -8,8 +8,8 @@
 
 <template>
   <div id="viewer-body">
-    <graph-component :type="this.$data.type"></graph-component>
-    <panel-component :type="this.$data.type"></panel-component>
+    <graph-component :type="'main'"></graph-component>
+    <panel-component :type="'main'"></panel-component>
     <about-component></about-component>
   </div>
 </template>

@@ -10,10 +10,10 @@
 
 <template>
   <div id="panel-body">
-    <graph-buttons-component v-if="this.type == 'main'"></graph-buttons-component>
+    <graph-buttons-component v-if="this.$attrs.type == 'main'"></graph-buttons-component>
     <resize-bar-component></resize-bar-component>
-    <nav-bar-component v-if="this.type == 'main'"></nav-bar-component>
-    <panel-center :type="this.type"></panel-center>
+    <nav-bar-component></nav-bar-component>
+    <panel-center :type="this.$attrs.type"></panel-center>
   </div>
 </template>
 
@@ -28,7 +28,6 @@
     },
     data () {
       return {
-        type: this.type,
         transitionTimer: 500
       }
     },

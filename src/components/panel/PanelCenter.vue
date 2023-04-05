@@ -12,7 +12,6 @@
 
 <template>
   <div id="panel-center" style="height:142%;zoom:100%">
-      <!-- use search result data? later -->
     <div v-if="store.displayingAbout" class="about-details">
       <img id="poster" src=""/>
       <div id="name-container">
@@ -27,14 +26,31 @@
       <div id="description"></div>
     </div>
 
-    <details-component class="details-component" v-else-if="store.currentFocus === 'details' && store.currentDetailId !== false">
+    <details-component 
+      class="details-component" 
+      v-else-if="store.currentFocus === 'details' && 
+      store.currentDetailId !== false">
     </details-component>
 
-    <commands-component v-else-if="store.currentFocus === 'commands'">
+    <commands-component 
+      v-else-if="store.currentFocus === 'commands'">
     </commands-component>
     
     <div id="empty-field" v-else-if="store.currentFocus === 'empty'" @click="focusSearchBar()">
-      <div v-if="this.type == 'main'">
+      <div v-if="this.$attrs.type == 'game'">
+        <div id="game-prompt">
+          <p></p>
+        </div>
+        <div id="reply">
+          <p class="button" id="no" @click="reply('no')"></p>
+          <p class="button" id="yes" @click="reply('yes')"></p>
+        </div>
+        <router-link id="back-to-graphs-link" to="/graph" style="display:none">
+          <p class="button">back to graphs</p>
+        </router-link>
+      </div>
+
+      <div v-else-if="this.$attrs.type == 'main'">
         <div id="search-prompt">
           <p class="apply-effect">search for a movie or actor</p>
         </div>
@@ -58,22 +74,19 @@
             </p>
           </router-link> 
         </div>
+
         <div v-else></div>
       </div>
 
-      <div v-else id="game-prompt">
-        <p></p>
-      </div>
-      <div id="reply">
-        <p id="no" @click="reply('no')"></p>
-        <p id="yes" @click="reply('yes')"></p>
-      </div>
+      <div v-else></div>
     </div>
 
-    <search-result-component v-else class="result-component">
+    <search-result-component v-else 
+      class="result-component">
     </search-result-component>
 
-    <div id="nav-arrows" v-if="showNavArrows">
+    <!-- <nav-arrows-component  v-if="this.type == 'main'"></nav-arrows-component> -->
+    <div id="nav-arrows" v-if="showNavArrows && this.$attrs.type == 'main'">
       <div id="left-arrow">
         <img v-if="showLeftArrow"
         src="/angle-double-small-left.svg" 
@@ -99,7 +112,6 @@
     },
     data () {
       return {
-        type: '',
         currentDetailSubjectId: '',
         hasSavedGraph: false,
         newHere: JSON.parse(localStorage.getItem("newHere"))
@@ -160,9 +172,10 @@
           "coward",
           "if not now, <br> then when?",
           "kevin bacon forgives your cowardice",
-          "if you will not help him, who will? did you know he never won an oscar? I know, crazy",
+          "if you will not help him, who will? <br><br> also, did you know he never won an oscar? I know, crazy",
           "very well. you may return to the graph page if you wish"
         ]
+
         if (t == 'yes') {
           d3.select("#game-prompt p").html(affirmatives.random(1))
         } else if (t == 'no') {
@@ -170,18 +183,45 @@
         }
 
         d3.select("#reply").remove()
+
+        if (t == 'no') { 
+          d3.select("#back-to-graphs-link").style("display", "block")
+          return
+        }
+
+        const baseDelay = 100;
+
+        // d3.select("#guesses").transition().duration(baseDelay).style("left", "0px")
+
+        const gt = d3.selectAll(".guess-tile")
+        gt.each(function(d, i) {
+          d3.select(this).transition().duration(() => {
+            return i * 100
+          }).delay(() => {
+            return  baseDelay + (i * 100)
+          }).style("left", (d) => {
+            return `${100 + (80 * i)}px`
+          })
+
+          // stable, even
+          // d3.select(this).transition().duration(() => {
+          //   return 1000
+          // }).delay(() => {
+          //   return 100
+          // }).style("left", (d) => {
+          //   return `${i*50}px`
+          // })
+        })
       },
 
       focusSearchBar() {
         document.querySelector('#search-text').focus()
       },
 
-            
       async adjustId(i) {
         const dc = d3.selectAll(".details-component")
         
-        dc
-        .style("left", () => {
+        dc.style("left", () => {
           return `${i*100}%`
         })
         
@@ -316,9 +356,23 @@
   #empty-field {
     height: 100%;
 
+    // .button {
+    //   opacity: 0.5;
+    //   margin: 4vh 40px;
+    //   text-transform: uppercase;
+    //   font-family: $global-font;
+    //   font-weight: 100;
+    //   font-size: 2em;
+    //   text-align: center;
+    //   &:hover {
+    //     cursor:$cursor
+    //   }
+    // }
+
+    #back-to-graphs-link,
     #game-prompt,
     #reply,
-    #search-prompt, 
+    #search-prompt,
     #show-you-around-prompt, 
     #resume-prompt {
       transform: scale(1);
@@ -344,6 +398,7 @@
       }
     }
 
+    #back-to-graphs-link,
     #reply {
       font-size: 10px;
       display: flex;

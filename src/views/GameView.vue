@@ -10,21 +10,23 @@
 
 <template>
   <div id="viewer-body">
-    <graph-component :type="this.$data.type"></graph-component>
-    <panel-component :type="this.$data.type"></panel-component>
+    <div id="guesses">
+      <div class="guess-tile" v-for="i in 6" :key="i">
+        <p>{{ i }}</p>
+      </div>
+      <div class="guess-tile" id="target-tile">
+        <img src=""/>
+        <!-- <p>KB</p> -->
+      </div>
+    </div>
+    <graph-component :type="'game'"></graph-component>
+    <panel-component :type="'game'"></panel-component>
   </div>
 </template>
 
 <script>
   export default {
     name: 'GameView',
-    data () {
-      return {
-        type: 'game'
-      }
-    },
-    components: {
-    },
     async mounted () {
       await api.fetchGraphData('person-4724')
 
@@ -33,8 +35,10 @@
       graph.draw({
         nodes: [kevinNode],
         links: [],
-        type: this.$data.type
+        type: "game"
       })
+
+      d3.select("#target-tile img").attr("src", kevinNode.poster)
     }
   }
 </script>
@@ -44,5 +48,41 @@
     display: flex;
     height: 100vh;
     overflow: hidden;
+  }
+
+  #guesses {
+    position: absolute;
+    z-index: 5;
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    left: -100px;
+    
+    .guess-tile {
+      width: 73px;
+      height: 109px;
+      border-radius: 8px;
+      border: 1px solid;
+      margin: 0 10px;
+      background: $graph-body-grey;
+      position: absolute;
+      left: 0px;
+
+      p {
+        font-size: 50px;
+        line-height: 100px;
+        text-transform: uppercase;
+        font-family: $global-font;
+        font-weight: bold;
+        text-align: center;
+        margin: auto auto;
+      }   
+    }
+    
+    #target-tile > img{
+      width: 100%;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    }
   }
 </style>

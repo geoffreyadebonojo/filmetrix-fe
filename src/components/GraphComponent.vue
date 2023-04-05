@@ -7,9 +7,9 @@
 </script>
 
 <template>
-  <div class="graph-container" v-bind:id="this.type + '-graph-component'">
-    <svg class="graph-container" v-bind:id="this.type + '-graph-container'">
-      <g class="outer-wrapper" v-bind:id="this.type + '-outer-wrapper'"></g>
+  <div class="graph-container" v-bind:id="this.$attrs.type + '-graph-component'">
+    <svg class="graph-container" v-bind:id="this.$attrs.type + '-graph-container'">
+      <g class="outer-wrapper" v-bind:id="this.$attrs.type + '-outer-wrapper'"></g>
     </svg>
   </div>
 </template>
@@ -47,7 +47,6 @@
 <script>
   export default {
     name: "GraphComponent",
-    props: ['type'],
     async created () {
       const gid = this.$route.query.gid
 
@@ -73,7 +72,7 @@
       graph.draw({
         nodes: nodes.uniqueById(),
         links: links,
-        type: "main"
+        type: this.$attrs.type
       })
     },
     mounted () {

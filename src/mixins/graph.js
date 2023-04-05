@@ -136,6 +136,8 @@ export default {
     let nodes = []
     let links = []
 
+    debugger
+
     store.existing.forEach((d) => {
       data = store.graphData[d[0]]
       nodes = nodes.concat(data.nodes.slice(0,d[1]+1))
