@@ -1,7 +1,7 @@
 import * as d3 from 'd3'
 import Graph from '@models/Graph.js'
 import Simulation from '@models/Simulation.js'
-import { store } from '@/stores/store.js'
+import { graphStates } from '@/stores/store.js'
 import focusSetter from "@/mixins/focusSetter"
 import { settings } from "@/mixins/helpers"
 
@@ -102,7 +102,7 @@ export default {
     }
   },
   draw () {
-    store.detailsData = {}
+    graphStates.detailsData = {}
     const links = this.data().graphData.links
     const nodes = this.data().graphData.nodes
     const s = settings("about")
@@ -146,9 +146,6 @@ export default {
   attachNodeClickActions(node) {
     node.on('click', async (_e, d) => {
       const details = this.data().details[d.id]
-
-      // store.detailsData = details
-      // store.currentDetailId = details.id
 
       const aboutContainer = d3.selectAll(".about-details")
 

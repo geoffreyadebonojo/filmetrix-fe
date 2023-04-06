@@ -1,5 +1,9 @@
 <script setup>
-  import { store } from "@/stores/store.js"
+  import { 
+    appStates,
+    graphStates, 
+    store 
+  } from "@/stores/store.js"
   import focusSetter from "@/mixins/focusSetter"
   import api from "@/mixins/api.js"
   import AboutButtonComponent from '@about/AboutButtonComponent.vue'
@@ -34,7 +38,7 @@
         </div>
       </router-link>
 
-      <router-link v-if="store.currentDetailId !== false && store.displayingAbout === false" 
+      <router-link v-if="graphStates.currentDetailId !== false && appStates.displayingAbout === false" 
                    class="nav-button primary-nav" 
                    id="details-button" 
                    @click="setCurrentFocus('details')" to="#details">
@@ -96,10 +100,10 @@ export default {
       focusSetter.methods.openField(d)
       const val = d.node().value
       if (val == '' || val == null) { 
-        store.currentFocus = "empty"
+        panelStates.currentFocus = "empty"
         return false
       }
-      store.currentFocus = "search"
+      panelStates.currentFocus = "search"
       this.submitSearch(val)
     }
   }

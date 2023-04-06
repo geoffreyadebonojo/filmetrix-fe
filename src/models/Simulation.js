@@ -55,7 +55,7 @@ export default class Simulation {
     .force('collide', d3.forceCollide(() => {
       let col = settings.node.collide
       return col
-      // if (store.existing.map((f) => f[0]).includes(d.id)) {
+      // if (graphStates.existing.map((f) => f[0]).includes(d.id)) {
       //   return col * 1.2
       // } else {
       //   return col * 0.8
@@ -131,7 +131,7 @@ export default class Simulation {
     .force('collide', d3.forceCollide(() => {
       let col = settings.node.collide
       return col
-      // if (store.existing.map((f) => f[0]).includes(d.id)) {
+      // if (graphStates.existing.map((f) => f[0]).includes(d.id)) {
       //   return col * 1.2
       // } else {
       //   return col * 0.8

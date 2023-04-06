@@ -1,5 +1,10 @@
 <script setup>
-  import { store } from '@/stores/store.js'
+  import { 
+    appStates,
+    graphStates, 
+    panelStates,
+    store 
+  } from '@/stores/store.js'
   import api from '@/mixins/api'
   import * as d3 from 'd3'
 </script>
@@ -24,13 +29,13 @@
     name: "MainNavArrowsComponent",
     computed: {
       showNavArrows: () => {
-        return store.currentFocus === 'details' && store.currentDetailId !== false && store.displayingAbout == false
+        return panelStates.currentFocus === 'details' && graphStates.currentDetailId !== false && appStates.displayingAbout == false
       },
       showLeftArrow: () => {
-        return store.existing.length > 1 && store.existing[0][0] !== store.currentDetailId
+        return graphStates.existing.length > 1 && graphStates.existing[0][0] !== graphStates.currentDetailId
       },
       showRightArrow: () => {
-        return store.existing.length > 1 && store.existing.last()[0] !== store.currentDetailId
+        return graphStates.existing.length > 1 && graphStates.existing.last()[0] !== graphStates.currentDetailId
       }
     },
     methods: {
@@ -41,17 +46,15 @@
           return `${i*100}%`
         })
         
-        let ids = store.existing.map(d => d[0])
-        let currentIndex = ids.indexOf(store.currentDetailId)
+        let ids = graphStates.existing.map(d => d[0])
+        let currentIndex = ids.indexOf(graphStates.currentDetailId)
         let changeId
         
         changeId = ids[currentIndex + i]
         
         await api.fetchDetails(changeId)
         
-        dc.transition()
-        .duration(500)
-        .style("left", "0%")
+        dc.transition().duration(500).style("left", "0%")
       }
     }
   }

@@ -1,4 +1,7 @@
-import { store } from '@/stores/store.js'
+import { 
+  panelStates,
+  store 
+} from '@/stores/store.js'
 import * as d3 from 'd3'
 
 export default {
@@ -26,7 +29,7 @@ export default {
       const index = buttonMap.indexOf(focus)
       this.moveHighlightCircle(displacement[index], "right")
 
-      store.currentFocus = focus
+      panelStates.currentFocus = focus
     },
 
     moveHighlightCircle(x, direction) {

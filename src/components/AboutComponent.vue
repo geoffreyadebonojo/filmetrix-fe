@@ -1,11 +1,14 @@
 <script setup>
-  import { store } from "@/stores/store.js"
+  import { 
+    appStates,
+    store 
+  } from "@/stores/store.js"
   import aboutGraph from "@/mixins/aboutGraph"
 </script>
 
 <template>
   <div class="graph-container" id="about-graph-component">
-    <svg v-if="store.displayingAbout" id="about-graph-container" viewBox="350 300 400 400">
+    <svg v-if="appStates.displayingAbout" id="about-graph-container" viewBox="350 300 400 400">
       <g id="about-outer-wrapper" class="outer-wrapper"></g>
     </svg>
   </div>

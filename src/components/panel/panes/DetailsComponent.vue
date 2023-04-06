@@ -1,5 +1,8 @@
 <script setup>
-  import { store } from '@/stores/store.js'
+  import { 
+    graphStates, 
+    store 
+  } from '@/stores/store.js'
   import { settingsModule } from '@mixins/settingsModule'
   import focusSetter from '@mixins/focusSetter'
   import NodeElem from '@models/NodeElem'
@@ -7,31 +10,33 @@
 </script>
 
 <template>
-  <div v-if="store.detailsData.id != null" v-bind:id="store.detailsData.id + '-details'">
+  <div v-if="graphStates.detailsData.id != null" v-bind:id="graphStates.detailsData.id + '-details'">
     <img class="poster"
-      v-bind:id="store.lockedHighlights.includes(store.detailsData.id) ? 'poster-locked' : 'poster-unlocked'"
-      v-bind:src="store.detailsData.poster"
-      @click="toggleHighlightLock($event, store.detailsData.id)"
-      @mouseenter="highlightNodes(store.detailsData.id)"
-      @mouseleave="unhighlightNodes(store.detailsData.id)">
-    <div id="name">{{ store.detailsData.name }}</div>
-    <div id="birthday">{{ store.detailsData.year }}</div>
+
+      v-bind:id="graphStates.lockedHighlights.includes(graphStates.detailsData.id) ? 'poster-locked' : 'poster-unlocked'"
+
+      v-bind:src="graphStates.detailsData.poster"
+      @click="toggleHighlightLock($event, graphStates.detailsData.id)"
+      @mouseenter="highlightNodes(graphStates.detailsData.id)"
+      @mouseleave="unhighlightNodes(graphStates.detailsData.id)">
+    <div id="name">{{ graphStates.detailsData.name }}</div>
+    <div id="birthday">{{ graphStates.detailsData.year }}</div>
     <div id="links">
       <a id="imdb" 
-        v-bind:href="store.detailsData.imdbId"
+        v-bind:href="graphStates.detailsData.imdbId"
         target="_blank">
         <img src="/imdb-icon.png">
       </a>
       <a id="youtube"
-        v-if="store.detailsData.id.split('-')[0] !== 'person'"
-        v-bind:href="'https://www.youtube.com/results?search_query=' + store.detailsData.name.split(' ').join('+') + ' ' + store.detailsData.year"
+        v-if="graphStates.detailsData.id.split('-')[0] !== 'person'"
+        v-bind:href="'https://www.youtube.com/results?search_query=' + graphStates.detailsData.name.split(' ').join('+') + ' ' + graphStates.detailsData.year"
         target="_blank">
         <img src="/youtube-icon.png">
       </a>
     </div>
     
-    <div v-if="store.detailsData.summary != ''" id="description">
-      {{  store.detailsData.summary }}
+    <div v-if="graphStates.detailsData.summary != ''" id="description">
+      {{  graphStates.detailsData.summary }}
     </div>
     <div v-else id="no-summary-available">
       <p style="letter-spacing:0.2em; margin-bottom:5vh">¯\_(ツ)_/¯</p>
@@ -52,7 +57,7 @@
     },
     methods: {
       toggleHighlightLock(e, id) {
-        store.lockedHighlights.togglePresence(id)
+        graphStates.lockedHighlights.togglePresence(id)
 
         const n  = new NodeElem(id)
 
@@ -79,7 +84,7 @@
 
         if (tNode == undefined) { return }
         if (target.classed("locked")) { return }
-        if (store.lockedHighlights.includes(id)) { return }
+        if (graphStates.lockedHighlights.includes(id)) { return }
 
         const defaultColor = settingsModule.strokeColor
 

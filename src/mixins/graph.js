@@ -1,4 +1,7 @@
-import { store } from '@/stores/store.js'
+import { 
+  graphStates, 
+  store 
+} from '@/stores/store.js'
 import { settings, getTypes } from './helpers.js'
 import api from './api.js'
 import * as d3 from 'd3'
@@ -14,7 +17,7 @@ let alreadyClicked = false
 export default {
   name: "graph",
   draw (responseData) {
-    store.inMotion = true
+    graphStates.inMotion = true
     var links = responseData.links
     var nodes = responseData.nodes
 
@@ -53,7 +56,7 @@ export default {
       node.attr("transform", d => `translate(${d.x},${d.y})`);
     })
     .on("end", () => {
-      store.inMotion = false
+      graphStates.inMotion = false
     })
     
     return innerWrapper.node();
@@ -64,13 +67,13 @@ export default {
       const doubleClickDelay = 300
       
       await api.fetchDetails(d.id)
-      store.currentDetailId = d.id
+      graphStates.currentDetailId = d.id
       focusSetter.methods.set('details')
 
       if (alreadyClicked) { 
         localStorage.setItem("newHere", false)
 
-        if (store.existing.map(x => x[0]).includes(d.id)){
+        if (graphStates.existing.map(x => x[0]).includes(d.id)){
           this.addToExistingNodes(d, graphType)
         } else {
           localStorage.setItem("newHere", false)
@@ -78,7 +81,7 @@ export default {
         }
 
         await api.fetchDetails(d.id)
-        store.currentDetailId = d.id
+        graphStates.currentDetailId = d.id
         alreadyClicked = false;
         clearTimeout(timer);
 
@@ -92,7 +95,7 @@ export default {
   },
 
   async addToExistingNodes (d, graphType) {
-    const c = store.existing.filter((y) => {
+    const c = graphStates.existing.filter((y) => {
       return y[0] === d.id
     })
     const t = c[0][1]
@@ -103,8 +106,8 @@ export default {
     let nodes = []
     let links = []
     // move to end of existing
-    store.existing.forEach(function(key) {
-      vals = store.graphData[key[0]]
+    graphStates.existing.forEach(function(key) {
+      vals = graphStates.graphData[key[0]]
       vals.nodes.slice(0,key[1]+1).forEach((node) => {
         if (nodes.map(d => d.id).excludes(node.id)){
           nodes.push(node)
@@ -121,25 +124,25 @@ export default {
   },
 
   async callForNodes(d, graphType) {
-    if (store.existing.map((f) => f[0]).excludes(d.id) ) {
-      store.existing.push([d.id, 8])
-      const ext = store.existing.unique().map((d) => d[0])
+    if (graphStates.existing.map((f) => f[0]).excludes(d.id) ) {
+      graphStates.existing.push([d.id, 8])
+      const ext = graphStates.existing.unique().map((d) => d[0])
       await api.fetchGraphData(ext)
     }
 
-    store.currentDetailId = d.id
+    graphStates.currentDetailId = d.id
     let data
     let nodes = []
     let links = []
     
-    store.existing.forEach((d) => {
-      data = store.graphData[d[0]]
+    graphStates.existing.forEach((d) => {
+      data = graphStates.graphData[d[0]]
       nodes = nodes.concat(data.nodes.slice(0,d[1]+1))
       links = links.concat(data.links.slice(0,d[1]))
     })
     
     store.graphTypes =  getTypes(nodes)
-    store.currentFocus = 'details'
+    panelStates.currentFocus = 'details'
 
     this.draw({
       nodes: nodes.uniqueById(),

@@ -1,5 +1,9 @@
 <script setup>
-  import { store } from '@/stores/store.js'
+  import { 
+    appStates,
+    graphStates,
+    store
+  } from '@/stores/store.js'
   import { getTypes } from "@mixins/helpers"
   import api from "@mixins/api"
   import graph from "@mixins/graph"
@@ -51,20 +55,20 @@
       
       await api.findBySlug(gid)
 
-      store.currentDetailId = store.existing.last()[0]
+      graphStates.currentDetailId = graphStates.existing.last()[0]
 
       let data
       let nodes = []
       let links = []
 
-      store.existing.forEach((d) => {
-        data = store.graphData[d[0]]
+      graphStates.existing.forEach((d) => {
+        data = graphStates.graphData[d[0]]
         nodes = nodes.concat(data.nodes.slice(0,d[1]+1))
         links = links.concat(data.links.slice(0,d[1]))
       })
 
       store.graphTypes = getTypes(nodes)
-      // store.currentFocus = 'details'
+      // panelStates.currentFocus = 'details'
 
       graph.draw({
         nodes: nodes.uniqueById(),

@@ -1,5 +1,8 @@
 <script setup>
-  import { store } from '@/stores/store.js'
+  import {
+    panelStates,
+    store
+  } from '@/stores/store.js'
   import * as d3 from 'd3'
 </script>
 
@@ -30,13 +33,13 @@
           let zoomButtons = d3.select("#zoom-buttons")
           let centeringButton = d3.select(".centering-button")
           
-          if (store.panelOpen) {
+          if (panelStates.isOpen) {
             panel.transition().duration(100)
             .style("width", "20px")
             .style("min-width", "0px")
             zoomButtons.style("display", "none")
             centeringButton.style("display", "block")
-            store.panelOpen = false
+            panelStates.isOpen = false
             
           } else {
             panel.transition()
@@ -46,7 +49,7 @@
             .style("min-width", "270px")
             zoomButtons.style("display", "flex")
             centeringButton.style("display", "none")
-            store.panelOpen = true
+            panelStates.isOpen = true
           }
         })
       }
@@ -68,7 +71,7 @@
       }
       
       function dragended() {
-        store.panelWidth = (window.innerWidth - event.x)
+        panelStates.width = (window.innerWidth - event.x)
       }
     }
   }

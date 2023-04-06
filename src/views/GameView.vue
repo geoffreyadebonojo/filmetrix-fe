@@ -1,7 +1,7 @@
 <script setup>
   import GraphComponent from '@components/GraphComponent.vue'
   import PanelComponent from '@components/PanelComponent.vue'
-  import { store } from '@/stores/store.js'
+  import { graphStates, gameStates, store } from '@/stores/store.js'
   import graph from "@mixins/graph"
   import api from "@mixins/api"
   import * as d3 from 'd3'
@@ -27,13 +27,13 @@
   export default {
     name: 'GameView',
     async mounted () {
-      d3.select(`#card-${store.turn}`).classed("active", "true")
+      d3.select(`#card-${gameStates.turn}`).classed("active", "true")
 
       const mainTargetId = "person-4724"
       await api.fetchGraphData(mainTargetId)
 
-      store.existing.push([mainTargetId, 0])
-      const kevinNode = store.graphData[mainTargetId].nodes[0]
+      graphStates.existing.push([mainTargetId, 0])
+      const kevinNode = graphStates.graphData[mainTargetId].nodes[0]
 
       graph.draw({
         nodes: [kevinNode],

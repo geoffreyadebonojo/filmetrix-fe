@@ -1,5 +1,10 @@
 <script setup>
-  import { store } from '@/stores/store.js'
+  import { 
+    appStates,
+    graphStates,
+    panelStates,
+    store 
+  } from '@/stores/store.js'
 
   import DetailsComponent from '@panes/DetailsComponent.vue'
   import CommandsComponent from '@panes/CommandsComponent.vue'
@@ -13,11 +18,11 @@
 <template>
   <div id="panel-panes" style="height:142%;zoom:100%">
    
-    <about-details-component v-if="store.displayingAbout" class="about-details"></about-details-component>
-    <details-component v-else-if="store.currentFocus === 'details' && store.currentDetailId !== false" class="details-component"></details-component>
-    <commands-component v-else-if="store.currentFocus === 'commands'"></commands-component>
+    <about-details-component v-if="appStates.displayingAbout" class="about-details"></about-details-component>
+    <details-component v-else-if="panelStates.currentFocus === 'details' && graphStates.currentDetailId !== false" class="details-component"></details-component>
+    <commands-component v-else-if="panelStates.currentFocus === 'commands'"></commands-component>
     
-    <div id="empty-field" v-else-if="store.currentFocus === 'empty'">
+    <div id="empty-field" v-else-if="panelStates.currentFocus === 'empty'">
       <game-prompt-component v-if="this.$attrs.type == 'game'"></game-prompt-component>
       <main-prompt-component v-else-if="this.$attrs.type == 'main'"></main-prompt-component>
     </div>

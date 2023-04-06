@@ -1,5 +1,7 @@
 import { settingsModule } from './settingsModule.js'
-import { store } from '@/stores/store.js'
+import { 
+  graphStates 
+} from '@/stores/store.js'
 import * as d3 from 'd3'
 import NodeElem from '@models/NodeElem'
 import { drawArc } from '@mixins/helpers'
@@ -63,7 +65,7 @@ export default {
       })
       .attr("id", d => d.id)
       // .attr("r", (d) => {
-      //   if (store.existing.map(d => {d[0]).includes(node.id)) {
+      //   if (graphStates.existing.map(d => {d[0]).includes(node.id)) {
       //     return this.data().settings.defaults.node.circle.r
       //   }
       // })
@@ -199,7 +201,7 @@ export default {
         const nodeElem = new NodeElem(d.id)
         nodeElem.nodeTransformer("scale(1.03)", "aliceblue", "white")
 
-        if (!store.inMotion) {
+        if (!graphStates.inMotion) {
           nodeElem.linkHighlighter()
         }
       })
@@ -208,7 +210,7 @@ export default {
         const nodeElem = new NodeElem(d.id)
         nodeElem.nodeTransformer("scale(1)", this.data().strokeColor, "none")
 
-        if (!store.inMotion) {
+        if (!graphStates.inMotion) {
           d3.selectAll(".character-label").remove()
         }
       })

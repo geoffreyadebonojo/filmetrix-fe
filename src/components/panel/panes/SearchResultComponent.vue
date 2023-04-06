@@ -1,18 +1,22 @@
 <script setup>
   import graph from "@mixins/graph"
   import api from "@mixins/api"
-  import { store } from '@/stores/store.js'
+  import { 
+    appStates,
+    panelStates,
+    store
+  } from '@/stores/store.js'
   import * as d3 from 'd3'
 </script>
 
 <template>
   <div class="result-container" 
-    v-bind:id="store.currentFocus + '-results'"
-    v-if="store.currentFocus !== 'noResult'">
+    v-bind:id="panelStates.currentFocus + '-results'"
+    v-if="panelStates.currentFocus !== 'noResult'">
       <div class="result-tile"
         tabindex="0"
         v-bind:id="result.id"
-        v-for="result in store.searchResults.filter(r => r['id'].includes(store.currentFocus))" 
+        v-for="result in store.searchResults.filter(r => r['id'].includes(panelStates.currentFocus))" 
         :key="result.id"
         @click="fetchNodesAndDetails(result)"
         @keypress="fetchNodesAndDetails(result)">
@@ -47,7 +51,7 @@
         }
         d3.select("#zoom-buttons").style("display", "none")
 
-        store.panelOpen = false
+        panelStates.isOpen = false
 
         await api.fetchDetails(result.id)
         await graph.callForNodes(result, "main")

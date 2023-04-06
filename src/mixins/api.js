@@ -1,8 +1,8 @@
-import { store } from '@/stores/store.js'
+import { graphStates, store } from '@/stores/store.js'
 
 export default {
   data () {
-    store
+    graphStates
     return {
       key: "6GzCesnexrzgnDv3FfxbHBrb",
       base_url: import.meta.env.VITE_API_URL
@@ -31,7 +31,6 @@ export default {
     )
     
     store.searchResults = api_respsonse.data.search
-    // store.currentResultTab = store.searchResults[0].id.split("-")[0]
   },
 
   async fetchDetails(id) {
@@ -59,8 +58,8 @@ export default {
       })
     )
 
-    store.detailsData = api_response.data.details
-    store.currentDetailId = api_response.data.details.id
+    graphStates.detailsData = api_response.data.details
+    graphStates.currentDetailId = api_response.data.details.id
   },
 
   async fetchGraphData(ids){
@@ -95,7 +94,7 @@ export default {
     )
 
     resp.data.graphData.forEach((d) => {
-      store.graphData[d.id] = {
+      graphStates.graphData[d.id] = {
         links: d.links,
         nodes: d.nodes
       }
@@ -169,10 +168,10 @@ export default {
     
     const d = resp.data.findBySlug
     
-    store.existing = d.existing.map(d => [d[0], +d[1]])
+    graphStates.existing = d.existing.map(d => [d[0], +d[1]])
     d.data.forEach((d, i) => {
-      let key = store.existing[i][0]
-      store.graphData[key] = {
+      let key = graphStates.existing[i][0]
+      graphStates.graphData[key] = {
         links: d.links,
         nodes: d.nodes
       }

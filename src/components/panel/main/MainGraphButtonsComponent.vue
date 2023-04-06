@@ -49,19 +49,19 @@
         } else {
           lockButton.classed("unlocked", false).classed("locked", true)
           store.isLocked = true
-          this.$data.attrs.existing = store.existing.map(d => d[0])
+          this.$data.attrs.existing = graphStates.existing.map(d => d[0])
           store.savedGraphs[id] = this.$data.attrs
           flash.html("locked")
             .transition().duration(200).style("opacity", 1).style("color", "#72bcd4")
             .transition().duration(1000).style("opacity", 0).style("color", "white")
-          localStorage.setItem("lockedGraph", JSON.stringify(store.existing))
+          localStorage.setItem("lockedGraph", JSON.stringify(graphStates.existing))
         }
       },
       
       async save () {
         const flash = d3.select("#save-flash")
 
-        const response = await api.saveGraph(store.existing)
+        const response = await api.saveGraph(graphStates.existing)
         navigator.clipboard.writeText( response.data.saveGraph.shareUrl );
         console.log('Content copied ', response.data.saveGraph.shareUrl, ' to clipboard');
         

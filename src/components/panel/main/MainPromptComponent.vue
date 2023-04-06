@@ -1,6 +1,11 @@
 <script setup>
   import api from '@/mixins/api'
-  import { store } from '@/stores/store.js'
+  import { 
+    appStates,
+    graphStates, 
+    panelStates,
+    store 
+  } from '@/stores/store.js'
   import graph from '@/mixins/graph'
   import focusSetter from '@/mixins/focusSetter'
   import { getTypes } from '@/mixins/helpers'
@@ -65,25 +70,25 @@
         store.isLocked = true
 
         if (saved !== null) {
-          store.existing = JSON.parse(saved)
+          graphStates.existing = JSON.parse(saved)
           await api.fetchGraphData(
-            store.existing.unique().map(d => d[0])
+            graphStates.existing.unique().map(d => d[0])
           )
 
-          await api.fetchDetails(store.existing.last()[0])
+          await api.fetchDetails(graphStates.existing.last()[0])
 
           let data
           let nodes = []
           let links = []
 
-          store.existing.forEach((d) => {
-            data = store.graphData[d[0]]
+          graphStates.existing.forEach((d) => {
+            data = graphStates.graphData[d[0]]
             nodes = nodes.concat(data.nodes.slice(0,d[1]+1))
             links = links.concat(data.links.slice(0,d[1]))
           })
 
           store.graphTypes = getTypes(nodes)
-          store.currentFocus = 'search'
+          panelStates.currentFocus = 'search'
 
           graph.draw({
             nodes: nodes.uniqueById(),
