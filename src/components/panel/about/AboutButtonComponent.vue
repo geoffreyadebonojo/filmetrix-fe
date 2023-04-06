@@ -6,7 +6,8 @@
     store 
   } from '@/stores/store.js'
   import * as d3 from 'd3'
-  import focusSetter from "@/mixins/focusSetter"
+  import { setFocus } from '@mixins/helpers'
+
 </script>
 
 <template>
@@ -49,10 +50,9 @@
           d3.select(".nav-button-container").style("background", "none")
           
           appStates.displayingAbout = true
-          focusSetter.methods.set('about')
+          setFocus('about')
 
         } else {
-          focusSetter.methods.set('details') 
           d3.select("#main-graph-component").transition().duration(this.$data.transition).style("width", "100%")
           d3.select("#about-graph-component").transition().duration(this.$data.transition).style("width", "0%")
           d3.select("#resize-bar").transition().delay(this.$data.transition).duration(0).style("opacity", "1").style("display", "block")
@@ -60,7 +60,9 @@
           d3.select(".nav-button-container").transition().delay(this.$data.transition).duration(0).style("background", "#6e6e6e")
           d3.select("#navbar").transition().delay(this.$data.transition).duration(0).style("right", "unset").style("width", "100%")
           d3.select("#panel-body").transition().delay(this.$data.transition).duration(0).style("position", "absolute")
-          d3.selectAll("#search-text").transition().delay(this.$data.transition).duration(0).style("display", "block")
+          d3.selectAll("#search-text").transition().delay(0).duration(0).style("display", "block")
+
+          setFocus('search') 
 
           appStates.displayingAbout = false
 

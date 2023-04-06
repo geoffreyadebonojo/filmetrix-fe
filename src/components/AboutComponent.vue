@@ -6,9 +6,8 @@
   import * as d3 from 'd3'
   import Graph from '@models/Graph.js'
   import Simulation from '@models/Simulation.js'
-  import { settings } from "@/mixins/helpers"
+  import { settings, setFocus } from "@/mixins/helpers"
   import { graphStates } from '@/stores/store.js'
-  import focusSetter from "@/mixins/focusSetter"
 </script>
 
 <template>
@@ -176,7 +175,7 @@
           aboutContainer.select("#linked-in").attr("xlink:href", details.linkedIn)
           aboutContainer.select("#description").html(details.description)
 
-          focusSetter.methods.set('details')
+          setFocus('details')
         })
       }
     }

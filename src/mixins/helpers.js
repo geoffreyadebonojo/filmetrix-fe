@@ -1,3 +1,7 @@
+import { 
+  panelStates,
+  store 
+} from '@/stores/store.js'
 import * as d3 from 'd3'
 
 export function getTypes(nodes) {
@@ -50,3 +54,46 @@ export function angle360(cx, cy, ex, ey) {
   if (theta < 0) theta = 360 + theta; // range [0, 360)
   return theta;
 } 
+
+export function setFocus(focus) {
+  const navButtons = d3.selectAll(".nav-button").nodes().reverse()
+  navButtons.unshift()
+  closeField()
+
+  const buttonMap = navButtons.map(x => x.id.split("-")[0]);
+  const displacement = [
+    1,
+    27,
+    56,
+    85,
+    112,
+    141
+  ]
+  // can be adjusted to be vertical
+  const index = buttonMap.indexOf(focus)
+  moveHighlightCircle(displacement[index], "right")
+
+  panelStates.currentFocus = focus
+
+  if (focus == 'search') {
+    openField()
+  }
+}
+
+export function openField() {
+  d3.select("#search-text").transition().duration(0).delay(100).style("width", "100%").style("left", "15px")
+  d3.select("#highlight").transition().duration(100).style("left", "-1px")
+}
+
+function moveHighlightCircle(x, direction) {
+  let d = direction == "bottom" ? x-113 : x
+  d3.select("#highlight")
+    .style("left", null)
+    .transition()
+    .duration(100)
+    .style(direction, `${d}px`)
+}
+
+function closeField() {
+  d3.select("#search-text").transition().duration(0).style("left", "100%")
+}

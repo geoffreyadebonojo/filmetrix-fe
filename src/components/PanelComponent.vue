@@ -1,15 +1,14 @@
 <script setup>
   import MainGraphButtonsComponent from '@main/MainGraphButtonsComponent.vue'
   import MainResizeBarComponent from '@main/MainResizeBarComponent.vue'
-  
   import NavBarComponent from '@panel/NavBarComponent.vue'
   import PanelPanes from '@panel/PanelPanes.vue'
-  import focusSetter from "@/mixins/focusSetter"
   import { 
     appStates,
     panelStates,
     store 
   } from '@/stores/store.js'
+  import { setFocus, openField } from '@mixins/helpers'
   import * as d3 from 'd3'
 </script>
 
@@ -44,8 +43,8 @@
     },
     mounted () {
       d3.select("#panel-body").transition().duration(200).ease(d3.easeLinear).style("width", "350px")//.style("min-width", "270px")
-      focusSetter.methods.set('search')
-      focusSetter.methods.openField()
+      setFocus('search')
+      // helpers.openField()
       panelStates.currentFocus = 'empty'
     }
   }

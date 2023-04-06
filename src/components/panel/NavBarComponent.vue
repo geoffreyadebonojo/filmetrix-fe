@@ -5,7 +5,7 @@
     panelStates,
     store 
   } from "@/stores/store.js"
-  import focusSetter from "@/mixins/focusSetter"
+  import { setFocus, openField } from '@mixins/helpers'
   import api from "@/mixins/api.js"
   import AboutButtonComponent from '@about/AboutButtonComponent.vue'
   import * as d3 from "d3"
@@ -89,7 +89,7 @@ export default {
     },
 
     setCurrentFocus(focus) {
-      focusSetter.methods.set(focus)
+      setFocus(focus)
     },
     
     displayIcons() {
@@ -98,7 +98,7 @@ export default {
     
     toggleOrSubmitOnClick() {
       const d = d3.select("#search-text") 
-      focusSetter.methods.openField(d)
+      openField(d)
       const val = d.node().value
       if (val == '' || val == null) { 
         panelStates.currentFocus = "empty"

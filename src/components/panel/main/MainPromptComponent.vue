@@ -7,8 +7,7 @@
     store 
   } from '@/stores/store.js'
   import graph from '@/mixins/graph'
-  import focusSetter from '@/mixins/focusSetter'
-  import { getTypes } from '@/mixins/helpers'
+  import { getTypes, setFocus } from '@/mixins/helpers'
   import * as d3 from 'd3'
 </script>
 
@@ -98,7 +97,7 @@
 
           const lockButton = d3.select("#lock-button")
           lockButton.classed("unlocked", false).classed("locked", true)
-          focusSetter.methods.set('details')
+          setFocus('details')
         }
       }
     }

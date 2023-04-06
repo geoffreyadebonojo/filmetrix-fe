@@ -3,7 +3,7 @@
     graphStates, 
     store 
   } from '@/stores/store.js'
-  import focusSetter from '@mixins/focusSetter'
+  import { setFocus } from '@mixins/helpers'
   import GraphNode from '@models/GraphNode'
   import * as d3 from 'd3'
 </script>
@@ -51,7 +51,7 @@
   export default {
     name: "DetailsComponent",
     mounted () {
-      focusSetter.methods.set('details')
+      setFocus('details')
       d3.selectAll(".details-component").transition().delay(100).duration(500).style("left", "0%")
     },
     methods: {

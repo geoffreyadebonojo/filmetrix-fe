@@ -3,12 +3,11 @@ import {
   panelStates,
   store 
 } from '@/stores/store.js'
-import { settings, getTypes } from './helpers.js'
+import { settings, getTypes, setFocus } from './helpers.js'
 import api from './api.js'
 import * as d3 from 'd3'
 import Graph from '@models/Graph.js'
 import Simulation from '@models/Simulation.js'
-import focusSetter from '@mixins/focusSetter'
 
 let timer;
 let alreadyClicked = false
@@ -69,7 +68,7 @@ export default {
       
       await api.fetchDetails(d.id)
       graphStates.currentDetailId = d.id
-      focusSetter.methods.set('details')
+      setFocus('details')
 
       if (alreadyClicked) { 
         localStorage.setItem("newHere", false)
