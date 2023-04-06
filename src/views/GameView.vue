@@ -28,9 +28,14 @@
   export default {
     name: 'GameView',
     async mounted () {
-      await api.fetchGraphData('person-4724')
 
-      const kevinNode = store.graphData['person-4724'].nodes[0]
+      const mainTargetId = "person-4724"
+
+      await api.fetchGraphData(mainTargetId)
+
+      store.existing.push([mainTargetId, 0])
+
+      const kevinNode = store.graphData[mainTargetId].nodes[0]
 
       graph.draw({
         nodes: [kevinNode],

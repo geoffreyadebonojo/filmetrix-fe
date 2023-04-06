@@ -1,7 +1,14 @@
 <script setup>
-  import SearchResultComponent from '@panel/sections/SearchResultComponent.vue'
+  import AboutDetailsComponent from '@panel/AboutDetailsComponent.vue'
   import DetailsComponent from '@panel/sections/DetailsComponent.vue'
   import CommandsComponent from '@panel/sections/CommandsComponent.vue'
+  
+  import GamePromptComponent from '@panel/GamePromptComponent.vue'
+  import MainPromptComponent from '@panel/MainPromptComponent.vue'
+  
+  import SearchResultComponent from '@panel/sections/SearchResultComponent.vue'
+  import NavArrowsComponent from '@panel/NavArrowsComponent.vue'
+
   import api from '@/mixins/api'
   import helpers from '@/mixins/helpers'
   import focusHelper from '@/mixins/focusHelper'
@@ -12,93 +19,19 @@
 
 <template>
   <div id="panel-center" style="height:142%;zoom:100%">
-    <div v-if="store.displayingAbout" class="about-details">
-      <img id="poster" src=""/>
-      <div id="name-container">
-        <div id="name"></div>
-        <div id="job"></div>
-      </div>
-      <div id="links">
-        <a id="linked-in" href="" target="_blank">
-          <!-- img -->
-        </a>
-      </div>
-      <div id="description"></div>
-    </div>
-
-    <details-component 
-      class="details-component" 
-      v-else-if="store.currentFocus === 'details' && 
-      store.currentDetailId !== false">
-    </details-component>
-
-    <commands-component 
-      v-else-if="store.currentFocus === 'commands'">
-    </commands-component>
+   
+    <about-details-component v-if="store.displayingAbout" class="about-details"></about-details-component>
+    <details-component v-else-if="store.currentFocus === 'details' && store.currentDetailId !== false" class="details-component"></details-component>
+    <commands-component v-else-if="store.currentFocus === 'commands'"></commands-component>
     
-    <div id="empty-field" v-else-if="store.currentFocus === 'empty'" @click="focusSearchBar()">
-      <div v-if="this.$attrs.type == 'game'">
-        <div id="game-prompt">
-          <p></p>
-        </div>
-        <div id="reply">
-          <p class="button" id="no" @click="reply('no')"></p>
-          <p class="button" id="yes" @click="reply('yes')"></p>
-        </div>
-        <router-link id="back-to-graphs-link" to="/graph" style="display:none">
-          <p class="button">back to graphs</p>
-        </router-link>
-      </div>
-
-      <div v-else-if="this.$attrs.type == 'main'">
-        <div id="search-prompt">
-          <p class="apply-effect">search for a movie or actor</p>
-        </div>
-
-        <div id="show-you-around-prompt" v-if="$data.newHere">
-          <p style="margin:5vh">
-            or
-          </p>
-          <p class="apply-effect">
-            have a look around
-          </p>
-        </div>
-
-        <div id="resume-prompt" v-else-if="$data.hasSavedGraph">
-          <p style="margin:5vh">
-            or
-          </p>
-          <router-link to="#details">
-            <p class="apply-effect" @click="resume()">
-              pick up where you left off
-            </p>
-          </router-link> 
-        </div>
-
-        <div v-else></div>
-      </div>
-
-      <div v-else></div>
+    <div id="empty-field" v-else-if="store.currentFocus === 'empty'">
+      <game-prompt-component v-if="this.$attrs.type == 'game'"></game-prompt-component>
+      <main-prompt-component v-else-if="this.$attrs.type == 'main'"></main-prompt-component>
     </div>
 
-    <search-result-component v-else 
-      class="result-component">
-    </search-result-component>
+    <search-result-component v-else class="result-component"></search-result-component>
+    <nav-arrows-component v-if="this.$attrs.type == 'main'"></nav-arrows-component>
 
-    <!-- <nav-arrows-component  v-if="this.type == 'main'"></nav-arrows-component> -->
-    <div id="nav-arrows" v-if="showNavArrows && this.$attrs.type == 'main'">
-      <div id="left-arrow">
-        <img v-if="showLeftArrow"
-        src="/angle-double-small-left.svg" 
-        @click="adjustId(-1)">
-      </div> 
-      <div id="right-arrow">
-        <img v-if="showRightArrow"
-        src="/angle-double-small-right.svg" 
-        @click="adjustId(1)">
-      </div>
-    </div>
-    <div v-else></div>
   </div>
 </template>
 
@@ -106,348 +39,29 @@
   export default {
     name: "PanelCenter",
     components: {
-      SearchResultComponent,
+      AboutDetailsComponent,
       DetailsComponent,
-      CommandsComponent
-    },
-    data () {
-      return {
-        currentDetailSubjectId: '',
-        hasSavedGraph: false,
-        newHere: JSON.parse(localStorage.getItem("newHere"))
-      }
-    },
-    computed: {
-      showNavArrows: () => {
-        return store.currentFocus === 'details' && store.currentDetailId !== false && store.displayingAbout == false
-      },
-      showLeftArrow: () => {
-        return store.existing.length > 1 && store.existing[0][0] !== store.currentDetailId
-      },
-      showRightArrow: () => {
-        return store.existing.length > 1 && store.existing.last()[0] !== store.currentDetailId
-      }
-    },
-    mounted () {
-      d3.select("#search-prompt").transition().delay(200).duration(200).style("opacity", 1)
-      const saved = JSON.parse(localStorage.getItem("lockedGraph"))
-      
-      if (saved == null || saved.length == []) {
-        this.$data.hasSavedGraph = false
-      } else {
-        this.$data.hasSavedGraph = true
-      }
-
-      const gamePrompts = [
-        {
-          prompt: "you are about to begin a fantastic journey into the bowels of cinema.<br><br>are you ready?",
-          no: "n-no. I'm not ready",
-          yes: "you bet your bacon!"
-        },
-        {
-          prompt: "kevin bacon's fate is in your hands.<br><br>he will fade into obscurity-<br>unless you can save him!",
-          no: "I don't really care about the fate of kevin bacon",
-          yes: "I care very much about the fate of kevin bacon"
-        },
-        {
-          prompt: "if you do not act, the name <br><br> kevin bacon <br><br> will be buried under the sands of time",
-          no: "all things must pass",
-          yes: "not if i have anything to say about it!"
-        }
-      ]
-
-      const opts = gamePrompts.random(1)[0]
-
-      d3.select("#game-prompt p").html(opts.prompt)
-      d3.select("#no").html(opts.no)
-      d3.select("#yes").html(opts.yes)
-    },
-    methods: {
-      reply(t) {
-        const affirmatives = [
-          "i honor your courage. <br><br> let's begin",
-          "you have the heart of a warrior. <br><br> let's begin",
-        ]
-        const negatives = [
-          "coward",
-          "if not now, <br> then when?",
-          "kevin bacon forgives your cowardice",
-          "if you will not help him, who will? <br><br> also, did you know he never won an oscar? I know, crazy",
-          "very well. you may return to the graph page if you wish"
-        ]
-
-        if (t == 'yes') {
-          d3.select("#game-prompt p").html(affirmatives.random(1))
-        } else if (t == 'no') {
-          d3.select("#game-prompt p").html(negatives.random(1))
-        }
-
-        d3.select("#reply").remove()
-
-        if (t == 'no') { 
-          d3.select("#back-to-graphs-link").style("display", "block")
-          return
-        }
-
-        const baseDelay = 100;
-
-        // d3.select("#guesses").transition().duration(baseDelay).style("left", "0px")
-
-        const gt = d3.selectAll(".guess-tile")
-        gt.each(function(d, i) {
-          d3.select(this).transition().duration(() => {
-            return i * 100
-          }).delay(() => {
-            return  baseDelay + (i * 100)
-          }).style("left", (d) => {
-            return `${100 + (80 * i)}px`
-          })
-
-          // stable, even
-          // d3.select(this).transition().duration(() => {
-          //   return 1000
-          // }).delay(() => {
-          //   return 100
-          // }).style("left", (d) => {
-          //   return `${i*50}px`
-          // })
-        })
-      },
-
-      focusSearchBar() {
-        document.querySelector('#search-text').focus()
-      },
-
-      async adjustId(i) {
-        const dc = d3.selectAll(".details-component")
-        
-        dc.style("left", () => {
-          return `${i*100}%`
-        })
-        
-        let ids = store.existing.map(d => d[0])
-        let currentIndex = ids.indexOf(store.currentDetailId)
-        let changeId
-        
-        changeId = ids[currentIndex + i]
-        
-        await api.fetchDetails(changeId)
-        
-        dc.transition()
-        .duration(500)
-        .style("left", "0%")
-      },
-
-      async resume () {
-        const saved = localStorage.getItem("lockedGraph")
-
-        store.isLocked = true
-
-        if (saved !== null) {
-          store.existing = JSON.parse(saved)
-          await api.fetchGraphData(
-            store.existing.unique().map(d => d[0])
-          )
-
-          await api.fetchDetails(store.existing.last()[0])
-
-          let data
-          let nodes = []
-          let links = []
-
-          store.existing.forEach((d) => {
-            data = store.graphData[d[0]]
-            nodes = nodes.concat(data.nodes.slice(0,d[1]+1))
-            links = links.concat(data.links.slice(0,d[1]))
-          })
-
-          store.graphTypes =  helpers.getTypes(nodes)
-          store.currentFocus = 'search'
-
-          graph.draw({
-            nodes: nodes.uniqueById(),
-            links: links,
-            type: "main"
-          })      
-
-          const lockButton = d3.select("#lock-button")
-          lockButton.classed("unlocked", false).classed("locked", true)
-          focusHelper.methods.set('details')
-        }
-      }
+      CommandsComponent,
+      GamePromptComponent,
+      MainPromptComponent,
+      SearchResultComponent,
+      NavArrowsComponent
     }
   }
 </script>
 
-
 <style scoped lang="scss">
-  #filmetrix {
-    #poster {
-      width: 108px;
-      left: -3px;
-      bottom: 8px;
-    }
-    #name {
-      margin: 100px 0px 0px -14px;
-    }
-  }
-
-  #geoff, #pierce {
-    #poster {
-      width: 168px;
-      right: 37px;
-      bottom: 7px;
-    }
-
-    #job {
-      // font-family: $global-font;
-      font-size: 12px;
-      line-height: 12px;
-      margin-top: 12px;
-    }
-
-    #name {
-      left: 20px;
-      top: 25px;
-    }
-  }
-
-  .about-details {
-    font-family: $global-font;
-    
-    #links {
-      right: 30px;
-      top: 10px;
-
-      #linked-in > img {
-        width: 20px;
-      }
-    }
-  }
-
-  #nav-arrows {
-    grid-area: arrows;
-
-    display: flex;
-    justify-content: space-between;
-    // top: 175px;
-    z-index: 7;
-
-    img {
-      height: 25px;
-    }
-    
-    #left-arrow, #right-arrow {
-      opacity: 0.5;
-      
-      &:hover {
-        cursor: $cursor;
-        opacity: 1;
-      }
-    } 
-  }
-  
-
-  .result-component {
-    height: 100%;
-    right: 100%;
-  }  
-
-  #empty-field {
-    height: 100%;
-
-    // .button {
-    //   opacity: 0.5;
-    //   margin: 4vh 40px;
-    //   text-transform: uppercase;
-    //   font-family: $global-font;
-    //   font-weight: 100;
-    //   font-size: 2em;
-    //   text-align: center;
-    //   &:hover {
-    //     cursor:$cursor
-    //   }
-    // }
-
-    #back-to-graphs-link,
-    #game-prompt,
-    #reply,
-    #search-prompt,
-    #show-you-around-prompt, 
-    #resume-prompt {
-      transform: scale(1);
-      
-      p {
-        opacity: 0.5;
-        margin: 4vh 40px;
-        text-transform: uppercase;
-        font-family: $global-font;
-        font-weight: 100;
-        font-size: 2em;
-        text-align: center;
-        &:hover {
-          cursor:default
-        }
-      }
-      .apply-effect:hover {
-        cursor: $cursor;
-        animation-name: pulsate;
-        animation-duration: 1.4s;
-        animation-iteration-count: infinite;
-        animation-timing-function: linear;
-      }
-    }
-
-    #back-to-graphs-link,
-    #reply {
-      font-size: 10px;
-      display: flex;
-      margin: 10px;
-      justify-content: space-around;
-
-      p {
-        margin: 5px;
-        padding: 10px;
-        border: grey solid 1px;
-        border-radius: 8px;
-
-        &:hover {
-          cursor: $cursor;
-          font-weight: 900;
-          background: grey;
-          border: $panel-body-grey solid 1px;
-          color: $panel-body-grey;
-        }
-      }
-    }
-  }
-
-  @keyframes pulsate {
-    0% {
-      transform: scale(1);
-      opacity: 0.5;
-
-    }
-    50% {
-      transform: scale(1.005);
-      opacity: 0.8;
-    }
-    100% {
-      transform: scale(1);
-      opacity: 0.5;
-    }
-  }
-
-
-  @media screen and (max-width: 400px) {
-    .details-component {
-      padding: 2%;
-    }
-  }
-
   #panel-center {
     grid-area: panel-center;
     overflow-y: auto;
+    
+    #empty-field {
+      height: 100%;
+    }
+    
+    .result-component {
+      height: 100%;
+      right: 100%;
+    }  
   }
-
 </style>

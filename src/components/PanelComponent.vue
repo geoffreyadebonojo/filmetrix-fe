@@ -9,12 +9,18 @@
 </script>
 
 <template>
+
   <div id="panel-body">
-    <graph-buttons-component v-if="this.$attrs.type == 'main'"></graph-buttons-component>
-    <resize-bar-component></resize-bar-component>
-    <nav-bar-component></nav-bar-component>
+    <graph-buttons-component 
+      v-if="this.$attrs.type == 'main'"></graph-buttons-component>
+    <resize-bar-component 
+      v-if="this.$attrs.type == 'main'"></resize-bar-component>
+    <nav-bar-component 
+      v-if="this.$attrs.type == 'main'"></nav-bar-component>
+
     <panel-center :type="this.$attrs.type"></panel-center>
   </div>
+
 </template>
 
 <script>
@@ -25,11 +31,6 @@
       ResizeBarComponent,
       NavBarComponent,
       PanelCenter
-    },
-    data () {
-      return {
-        transitionTimer: 500
-      }
     },
     mounted () {
       d3.select("#panel-body").transition().duration(200).ease(d3.easeLinear).style("width", "350px")//.style("min-width", "270px")

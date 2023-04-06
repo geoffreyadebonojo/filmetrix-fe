@@ -122,9 +122,7 @@ export default {
     })
   },
 
-  // async callForNodes(id, graphType) {
   async callForNodes(d, graphType) {
-
     if (store.existing.map((f) => f[0]).excludes(d.id) ) {
       store.existing.push([d.id, 8])
       const ext = store.existing.unique().map((d) => d[0])
@@ -135,15 +133,13 @@ export default {
     let data
     let nodes = []
     let links = []
-
-    debugger
-
+    
     store.existing.forEach((d) => {
       data = store.graphData[d[0]]
       nodes = nodes.concat(data.nodes.slice(0,d[1]+1))
       links = links.concat(data.links.slice(0,d[1]))
     })
-
+    
     store.graphTypes =  helpers.getTypes(nodes)
     store.currentFocus = 'details'
 

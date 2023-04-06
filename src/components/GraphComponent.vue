@@ -19,8 +19,6 @@
     background: $graph-body-grey;
     display: block;
     width: 100%;
-    // height: 100vh;
-    // display: flex;
   }
 
   .inst {

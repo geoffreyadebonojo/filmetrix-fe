@@ -51,7 +51,7 @@
         store.panelOpen = false
 
         await api.fetchDetails(result.id)
-        await graph.callForNodes(result.id, "main")
+        await graph.callForNodes(result, "main")
       }
     }
   }

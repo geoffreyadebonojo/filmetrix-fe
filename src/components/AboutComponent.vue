@@ -17,9 +17,6 @@
 <script>
   export default {
     name: "AboutComponent",
-    data () {
-      return {}
-    },
     updated () {
       aboutGraph.draw()
     }
@@ -28,8 +25,6 @@
 
 <style scoped lang="scss">
   #about-graph-container {
-    // width: 0px;
-    // width:100%;
     height: 100vh;
     position: absolute;
     top: 0px;

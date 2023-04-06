@@ -62,7 +62,6 @@
 <script>
 export default {
   name: "NavBarComponent",
-  mixins: [focusHelper, api],
   data () {
     return {
       searchOpen: true
