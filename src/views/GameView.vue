@@ -10,8 +10,9 @@
 <template>
   <div id="viewer-body">
     <div id="guesses">
-      <div class="guess-tile" v-for="i in 6" :key="i" :id="'card-' + i">
+      <div class="guess-tile" v-for="i in 6" :key="i" :id="'card-' + i" :number="i">
         <p>{{ i }}</p>
+        <img src=""/>
       </div>
       <div class="guess-tile" id="target-tile">
         <img src=""/>
@@ -49,6 +50,10 @@
 </script>
 
 <style scoped lang="scss">
+  .active {
+    color: red;
+  }
+  
   #viewer-body {
     display: flex;
     height: 100vh;
@@ -62,10 +67,6 @@
     justify-content: space-between;
     padding: 10px;
     left: -100px;
-
-    .active {
-      color: red;
-    }
     
     .guess-tile {
       width: 73px;
@@ -86,12 +87,12 @@
         text-align: center;
         margin: auto auto;
       }   
-    }
-    
-    #target-tile > img{
+
+      img {
       width: 100%;
-      border-radius: 8px;
-      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        border-radius: 8px;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+      }
     }
   }
 </style>

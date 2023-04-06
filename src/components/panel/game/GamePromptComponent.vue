@@ -1,12 +1,15 @@
 <script setup>
   import * as d3 from 'd3'
   import api from "@/mixins/api.js"
-  import { store } from '@/stores/store.js'
+  import { 
+    gameStates,
+    store 
+  } from '@/stores/store.js'
 </script>
 
 <template>
   <div id="game-prompt">
-    <p></p>
+    <p style="height:90px"></p>
     <input id="game-search-bar"
            style="display:none"
            type="text"
@@ -14,8 +17,10 @@
            tabindex="-1"
            @keyup.enter="submitSearch($event.target.value)">
     
-    <div id="result-tile">
-      <img src=""/>
+    <div id="choice-container" style="display:none">
+      <div v-for="result in withPoster" class="choice-tile">
+        <img v-bind:src="result.poster" @click="submitChoice(result)"/>
+      </div>
     </div>
   </div>
   <div id="reply">
@@ -32,7 +37,12 @@
     name: "GamePromptComponent",
     data () {
       return {
-        latestResult: {}
+        latestChoice: {}
+      }
+    },
+    computed: {
+      withPoster () {
+        return store.searchResults.filter(d => d.poster != '')
       }
     },
     mounted () {
@@ -55,21 +65,33 @@
       ]
 
       const opts = gamePrompts.random(1)[0]
-      d3.select("#game-prompt p").html(opts.prompt)
+      d3.select("#game-prompt p").html(opts.progitmpt)
       d3.select("#no").html(opts.no)
       d3.select("#yes").html(opts.yes)
     },
     
     methods: {
+      async submitChoice(d) {
+        const turnElem = d3.select(`#card-${gameStates.turn}`) 
+
+        d3.selectAll(".guess-tile").classed("active", false)
+        turnElem.classed("active", true)
+        turnElem.select("p").remove()
+        turnElem.select("img").attr("src", d.poster)
+
+        gameStates.turn += 1
+      },
+
       async submitSearch(value) {
         const val = value.toUpperCase()
         if (val == '' || val == null) { 
           return false
         }
         await api.fetchSearchData(val)
+        d3.select("#game-prompt p").transition().duration(500).style("opacity", "0").remove()
 
-        this.$data.latestResult = store.searchResults[0]
-        d3.select("#result-tile img").attr("src", this.$data.latestResult.poster)
+        this.$data.latestChoice = store.searchResults[0]
+        d3.select("#choice-tile img").attr("src", this.$data.latestChoice.poster)
       },
 
       reply(t) {
@@ -86,8 +108,18 @@
         ]
 
         if (t == 'yes') {
-          d3.select("#game-prompt p").html(affirmatives.random(1))
+          let promptText = d3.select("#game-prompt p")
+          promptText.html(affirmatives.random(1))
+          promptText.transition().duration(1000).delay(500).style("opacity", 0)
+
+          setTimeout(() => {
+          promptText.html("Now choose")
+          },1500)
+
+          promptText.transition().duration(1000).delay(1500).style("opacity", 0.75)
+
           d3.select("#game-search-bar").style("display", "block")
+          d3.select("#choice-container").style("display", "block")
         } else if (t == 'no') {
           d3.select("#game-prompt p").html(negatives.random(1))
         }
@@ -141,6 +173,10 @@
     border: none;
     border-radius: 16px;
 
+    position: sticky;
+    top: 0px;
+    z-index: 100;
+
     &:focus {
       animation-name: none;
       outline: none;
@@ -159,7 +195,6 @@
     animation-duration: 1.4s;
     animation-iteration-count: infinite;
     animation-timing-function: linear;
-    
   }
 
   @keyframes pulsate {
@@ -188,7 +223,7 @@
       
     p {
       opacity: 0.5;
-      margin: 4vh 40px;
+      // margin: 4vh 40px;
       text-transform: uppercase;
       font-family: $global-font;
       font-weight: 100;
@@ -198,6 +233,10 @@
         cursor:default
       }
     }
+  }
+
+  #reply {
+    top: 250px;
   }
 
   #back-to-graphs-link,
@@ -226,4 +265,25 @@
       }
     }
   }
+
+  #choice-container {
+    display: block;
+
+    .choice-tile {
+      width: 140px;
+      height: 210px;
+      border-radius: 8px;
+      border: 1px solid;
+      margin: 40px auto;
+      background: $graph-body-grey;
+      
+      img {
+        cursor: $cursor;
+        width: 100%;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+      }
+    }
+  }
+
 </style>
