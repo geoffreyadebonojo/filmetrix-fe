@@ -52,7 +52,7 @@ export default class Simulation {
     .force("charge", d3.forceManyBody().strength(() => {
       return settings.node.charge
     }))
-    .force('collide', d3.forceCollide((d) => {
+    .force('collide', d3.forceCollide(() => {
       let col = settings.node.collide
       return col
       // if (store.existing.map((f) => f[0]).includes(d.id)) {
@@ -128,7 +128,7 @@ export default class Simulation {
     .force("charge", d3.forceManyBody().strength(() => {
       return settings.node.charge
     }))
-    .force('collide', d3.forceCollide((d) => {
+    .force('collide', d3.forceCollide(() => {
       let col = settings.node.collide
       return col
       // if (store.existing.map((f) => f[0]).includes(d.id)) {

@@ -1,9 +1,8 @@
 <script setup>
   import { store } from '@/stores/store.js'
+  import { getTypes } from "@mixins/helpers"
   import api from "@mixins/api"
   import graph from "@mixins/graph"
-  import helpers from "@mixins/helpers"
-  import * as d3 from 'd3'
 </script>
 
 <template>
@@ -64,7 +63,7 @@
         links = links.concat(data.links.slice(0,d[1]))
       })
 
-      store.graphTypes =  helpers.getTypes(nodes)
+      store.graphTypes = getTypes(nodes)
       // store.currentFocus = 'details'
 
       graph.draw({

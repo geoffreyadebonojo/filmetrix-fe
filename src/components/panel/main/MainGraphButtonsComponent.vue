@@ -22,7 +22,7 @@
 
 <script>
   export default {
-    name: "GraphButtonsComponent",
+    name: "MainGraphButtonsComponent",
     data () {
       return {
         attrs: {
@@ -59,7 +59,6 @@
       },
       
       async save () {
-        const saveButton = d3.select("#save-button")
         const flash = d3.select("#save-flash")
 
         const response = await api.saveGraph(store.existing)

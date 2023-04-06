@@ -51,7 +51,7 @@ export default class Graph {
     }
     
     this.viewerBody.call(zoom)
-              .call(zoom).on("dblclick.zoom", null)
+                   .call(zoom).on("dblclick.zoom", null)
     
     return this.viewerBody
   } 

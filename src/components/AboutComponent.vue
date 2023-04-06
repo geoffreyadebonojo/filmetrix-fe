@@ -1,8 +1,5 @@
 <script setup>
-  import api from '@mixins/api.js'
-  import graph from "@/mixins/graph.js"
   import { store } from "@/stores/store.js"
-  import * as d3 from "d3"
   import aboutGraph from "@/mixins/aboutGraph"
 </script>
 

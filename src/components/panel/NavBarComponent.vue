@@ -1,12 +1,8 @@
 <script setup>
-  import focusHelper from "@/mixins/focusHelper"
-  import api from "@/mixins/api.js"
   import { store } from "@/stores/store.js"
-
-  import { aboutUsData } from "@/mixins/aboutUsData"
-  import graph from "@/mixins/graph"
-  import aboutGraph from "@/mixins/aboutGraph"
-  import AboutButtonComponent from '@panel/AboutButtonComponent.vue'
+  import focusSetter from "@/mixins/focusSetter"
+  import api from "@/mixins/api.js"
+  import AboutButtonComponent from '@about/AboutButtonComponent.vue'
   import * as d3 from "d3"
 </script>
 
@@ -31,7 +27,8 @@
       <router-link v-for="focus in displayIcons()"
                    class="nav-button primary-nav"
                    v-bind:id="focus+ '-button'"
-                   v-bind:to="'#' +focus">
+                   v-bind:to="'#' +focus"
+                   v-bind:key="focus">
         <div @click="setCurrentFocus(focus)">
           <img v-bind:src="'/' +focus+ '-icon.svg'" class="icon" v-bind:id="focus + '-icon'" >
         </div>
@@ -87,7 +84,7 @@ export default {
     },
 
     setCurrentFocus(focus) {
-      focusHelper.methods.set(focus)
+      focusSetter.methods.set(focus)
     },
     
     displayIcons() {
@@ -96,7 +93,7 @@ export default {
     
     toggleOrSubmitOnClick() {
       const d = d3.select("#search-text") 
-      focusHelper.methods.openField(d)
+      focusSetter.methods.openField(d)
       const val = d.node().value
       if (val == '' || val == null) { 
         store.currentFocus = "empty"

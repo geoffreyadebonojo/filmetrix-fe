@@ -1,10 +1,22 @@
 <script setup>
   import * as d3 from 'd3'
+  import api from "@/mixins/api.js"
+  import { store } from '@/stores/store.js'
 </script>
 
 <template>
   <div id="game-prompt">
     <p></p>
+    <input id="game-search-bar"
+           style="display:none"
+           type="text"
+           placeholder="start"
+           tabindex="-1"
+           @keyup.enter="submitSearch($event.target.value)">
+    
+    <div class="result-tile">
+      <img src=""/>
+    </div>
   </div>
   <div id="reply">
     <p class="button" id="no" @click="reply('no')"></p>
@@ -18,6 +30,11 @@
 <script>
   export default {
     name: "GamePromptComponent",
+    data () {
+      return {
+        latestResult: {}
+      }
+    },
     mounted () {
       const gamePrompts = [
         {
@@ -44,10 +61,21 @@
     },
     
     methods: {
+      async submitSearch(value) {
+        const val = value.toUpperCase()
+        if (val == '' || val == null) { 
+          return false
+        }
+        await api.fetchSearchData(val)
+
+        this.$data.latestResult = store.searchResults[0]
+        d3.select("#result-tile").attr("src", this.$data.latestResult.poster)
+      },
+
       reply(t) {
         const affirmatives = [
-          "i honor your courage. <br><br> let's begin",
-          "you have the heart of a warrior. <br><br> let's begin",
+          "i honor your courage. <br><br>",
+          "you have the heart of a warrior. <br><br>",
         ]
         const negatives = [
           "coward",
@@ -59,6 +87,7 @@
 
         if (t == 'yes') {
           d3.select("#game-prompt p").html(affirmatives.random(1))
+          d3.select("#game-search-bar").style("display", "block")
         } else if (t == 'no') {
           d3.select("#game-prompt p").html(negatives.random(1))
         }
@@ -80,7 +109,7 @@
             return i * 100
           }).delay(() => {
             return  baseDelay + (i * 100)
-          }).style("left", (d) => {
+          }).style("left", () => {
             return `${100 + (80 * i)}px`
           })
 
@@ -99,6 +128,59 @@
 </script>
 
 <style scoped lang="scss">
+  #game-search-bar {
+    width: 100%;
+    height: 55px;
+    text-transform: uppercase;
+    font-family: $global-font;
+    color: white;
+    font-weight: 100;
+    font-size: 2em;
+    text-align: center;
+    background: $panel-body-grey;
+    border: none;
+    border-radius: 16px;
+
+    &:focus {
+      animation-name: none;
+      outline: none;
+      color: black;
+      background: #EEE;
+    }
+    
+    &:hover {
+      animation-name: none;
+      background: #EEE;
+      cursor: $cursor;
+      // transform: scale(1.2);
+    }
+    
+    animation-name: pulsate;
+    animation-duration: 1.4s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+    
+  }
+
+  @keyframes pulsate {
+    0% {
+      // transform: scale(1);
+      font-size: 2em;
+      // opacity: 0.5;
+      
+    }
+    50% {
+      // transform: scale(1.1);
+      font-size: 2.2em;
+      // opacity: 0.8;
+    }
+    100% {
+      // transform: scale(1);
+      font-size: 2em;
+      // opacity: 0.5;
+    }
+  }
+
   #back-to-graphs-link,
   #game-prompt,
   #reply {

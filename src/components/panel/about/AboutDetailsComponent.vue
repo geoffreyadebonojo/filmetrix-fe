@@ -1,7 +1,3 @@
-<script setup>
-  import { store } from '@/stores/store.js'
-</script>
-
 <template>
   <div>
     <img id="poster" src=""/>

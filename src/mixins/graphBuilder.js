@@ -2,6 +2,7 @@ import { settingsModule } from './settingsModule.js'
 import { store } from '@/stores/store.js'
 import * as d3 from 'd3'
 import NodeElem from '@models/NodeElem'
+import { drawArc } from '@mixins/helpers'
 
 export default {
   data () {
@@ -75,9 +76,8 @@ export default {
       .attr("class", "outline")
       .attr("stroke", this.data().strokeColor)
       .attr("stroke-width", 1)
-      .attr("r", (d) => {
+      .attr("r", () => {
         return this.data().settings.defaults.node.circle.r
-        // return d.r
       })
       .attr('fill', this.data().bodyGrey)
       .attr("vector-effect", "non-scaling-stroke")
@@ -94,7 +94,7 @@ export default {
 
     actorLabel.append("path")
     .attr("d", (f) => {
-     return this.drawArc(f)
+     return drawArc(f)
     })
     .attr("fill", this.data().bodyGrey)
 
@@ -193,98 +193,25 @@ export default {
     if (localStorage.getItem("newHere") === "true" || localStorage.getItem("newHere") === undefined) {
       this.instructionLabel(node)
     } else {
-      node.on("mouseenter", (e) => {
+      node.on("mouseenter", (e, d) => {
         node.moveToFront()
-        this.nodeTransformer(e.target, "scale(1.03)", "aliceblue", "white")
+        
+        const nodeElem = new NodeElem(d.id)
+        nodeElem.nodeTransformer("scale(1.03)", "aliceblue", "white")
 
         if (!store.inMotion) {
-          this.linkHighlighter(e.target)
+          nodeElem.linkHighlighter()
         }
       })
-      .on("mouseleave", (e) => {
-        this.nodeTransformer(e.target, "scale(1)", this.data().strokeColor, "none")
+      .on("mouseleave", (e, d) => {
+        
+        const nodeElem = new NodeElem(d.id)
+        nodeElem.nodeTransformer("scale(1)", this.data().strokeColor, "none")
 
         if (!store.inMotion) {
           d3.selectAll(".character-label").remove()
         }
       })
     }
-  },
-  
-  linkHighlighter(node) {
-    let merged = d3.selectAll(`.link[target='${node.id}'], .link[source='${node.id}']`)
-    let linkholder = merged.append("g").attr("class", "character-label")
-    let start = 65
-    let fs = 10
-
-    linkholder.append("rect")
-    .attr('fill', this.data().bodyGrey)
-    .attr("x", -2)
-    .attr("y", start)
-    .attr("width", 4)
-    .attr("height", (d) => {
-      let c = d.roles.join().split("").length
-      return c*4
-    })
-    .attr("transform", (d) => {
-      let theta = this.angle360(
-        d.source.x,
-        d.source.y,
-        d.target.x,
-        d.target.y
-      )
-      return `translate(${d.source.x},${d.source.y})rotate(${theta-90})`
-    })
-
-    linkholder.append("text")
-    .text(d => d.roles.join(", "))
-    .attr("x", start)
-    .attr("y", 2)
-    .attr("stroke", "#FFF")
-    .style("font-family", "Dosis, sans-serif")
-    .style("font-size", (d) => {
-      return `${fs}px`
-    })
-    .attr("transform", (d) => {
-      let theta = this.angle360(
-        d.source.x,
-        d.source.y,
-        d.target.x,
-        d.target.y
-      )
-      return `translate(${d.source.x},${d.source.y})rotate(${theta})`
-    })
-  },
-
-  ///////////////////////////////////
-
-  nodeTransformer(target, scale, highlightColor, textStroke) {
-    const n = new NodeElem(target)
-    n.nodeTransformer(target, scale, highlightColor, textStroke)
-  },
-
-  drawArc(d){
-    const degrees = d.name.length * 7
-    const arc = d3.arc()
-      .innerRadius(44)
-      .outerRadius(64)
-      .startAngle((-degrees -12 )* Math.PI/180 / 2) //converting from degs to radians
-      .endAngle(degrees * Math.PI/180 / 2) //just radians
-
-    return arc()
-  },
-  
-  angle(cx, cy, ex, ey) {
-    var dy = ey - cy;
-    var dx = ex - cx;
-    var theta = Math.atan2(dy, dx); // range (-PI, PI]
-    theta *= 180 / Math.PI; // rads to degs, range (-180, 180]
-    return theta;
-  },
-
-  angle360(cx, cy, ex, ey) {
-    var theta = this.angle(cx, cy, ex, ey); // range (-180, 180]
-    if (theta < 0) theta = 360 + theta; // range [0, 360)
-    return theta;
   }
 }

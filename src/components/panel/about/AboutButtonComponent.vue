@@ -1,8 +1,7 @@
 <script setup>
   import { store } from '@/stores/store.js'
   import * as d3 from 'd3'
-  import focusHelper from "@/mixins/focusHelper"
-  import api from "@/mixins/api.js"
+  import focusSetter from "@/mixins/focusSetter"
 </script>
 
 <template>
@@ -45,10 +44,10 @@
           d3.select(".nav-button-container").style("background", "none")
           
           store.displayingAbout = true
-          focusHelper.methods.set('about')
+          focusSetter.methods.set('about')
 
         } else {
-          focusHelper.methods.set('details') 
+          focusSetter.methods.set('details') 
           d3.select("#main-graph-component").transition().duration(this.$data.transition).style("width", "100%")
           d3.select("#about-graph-component").transition().duration(this.$data.transition).style("width", "0%")
           d3.select("#resize-bar").transition().delay(this.$data.transition).duration(0).style("opacity", "1").style("display", "block")
@@ -63,8 +62,6 @@
           if (store.detailsData != null || store.detailsData != {}) {
             store.detailsData = {}
           }
-          // debugger
-          // api.fetchDetails
         }
       }
     }

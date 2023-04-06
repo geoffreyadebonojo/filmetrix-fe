@@ -1,12 +1,10 @@
+import { store } from '@/stores/store.js'
+import { settings, getTypes } from './helpers.js'
 import api from './api.js'
 import * as d3 from 'd3'
-import helpers from './helpers.js'
 import Graph from '@models/Graph.js'
 import Simulation from '@models/Simulation.js'
-import { store } from '@/stores/store.js'
-import focusHelper from '@mixins/focusHelper'
-// import graphBuilder from '@mixins/graphBuilder.js'
-
+import focusSetter from '@mixins/focusSetter'
 
 let timer;
 let alreadyClicked = false
@@ -20,12 +18,12 @@ export default {
     var links = responseData.links
     var nodes = responseData.nodes
 
-    const settings = helpers.settings(responseData.type)
+    const s = settings(responseData.type)
 
-    const graphType =      settings.graphType
-    const containerId =    settings.containerId
-    const outerWrapperId = settings.outerWrapperId
-    const innerWrapperId = settings.innerWrapperId
+    const graphType =      s.graphType
+    const containerId =    s.containerId
+    const outerWrapperId = s.outerWrapperId
+    const innerWrapperId = s.innerWrapperId
 
     d3.select(`#${innerWrapperId}`).remove()
     
@@ -37,10 +35,10 @@ export default {
                                         graphType }).body
 
     const [link, node] = new Graph({ links, 
-                                      nodes,
-                                      containerId,
-                                      innerWrapper,
-                                      outerWrapper }).build()
+                                     nodes,
+                                     containerId,
+                                     innerWrapper,
+                                     outerWrapper }).build()
     
     d3.select("#save-button").classed("locked", false).classed("unlocked", true)
 
@@ -67,7 +65,7 @@ export default {
       
       await api.fetchDetails(d.id)
       store.currentDetailId = d.id
-      focusHelper.methods.set('details')
+      focusSetter.methods.set('details')
 
       if (alreadyClicked) { 
         localStorage.setItem("newHere", false)
@@ -140,7 +138,7 @@ export default {
       links = links.concat(data.links.slice(0,d[1]))
     })
     
-    store.graphTypes =  helpers.getTypes(nodes)
+    store.graphTypes =  getTypes(nodes)
     store.currentFocus = 'details'
 
     this.draw({

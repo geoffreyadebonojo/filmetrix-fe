@@ -31,11 +31,11 @@ export default {
 
     moveHighlightCircle(x, direction) {
       let d = direction == "bottom" ? x-113 : x
-      const circle = d3.select("#highlight")
-      .style("left", null)
-      .transition()
-      .duration(100)
-      .style(direction, `${d}px`)
+      d3.select("#highlight")
+        .style("left", null)
+        .transition()
+        .duration(100)
+        .style(direction, `${d}px`)
     },
 
     closeField() {

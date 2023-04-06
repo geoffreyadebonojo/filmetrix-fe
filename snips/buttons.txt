@@ -1,5 +1,0 @@
-  <!-- <div class="result-buttons" v-if="props.searchOpen === false">
-    <button @click="setFocus('person')">P</button>
-    <button @click="setFocus('movie')">M</button>
-    <button @click="setFocus('tv')">TV</button>
-  </div> -->

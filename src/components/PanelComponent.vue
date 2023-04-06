@@ -1,9 +1,10 @@
 <script setup>
-  import GraphButtonsComponent from '@panel/GraphButtonsComponent.vue'
+  import MainGraphButtonsComponent from '@main/MainGraphButtonsComponent.vue'
+  import MainResizeBarComponent from '@main/MainResizeBarComponent.vue'
+  
   import NavBarComponent from '@panel/NavBarComponent.vue'
-  import PanelCenter from '@panel/PanelCenter.vue'
-  import ResizeBarComponent from '@panel/ResizeBarComponent.vue'
-  import focusHelper from "@/mixins/focusHelper"
+  import PanelPanes from '@panel/PanelPanes.vue'
+  import focusSetter from "@/mixins/focusSetter"
   import { store } from '@/stores/store.js'
   import * as d3 from 'd3'
 </script>
@@ -11,14 +12,19 @@
 <template>
 
   <div id="panel-body">
-    <graph-buttons-component 
-      v-if="this.$attrs.type == 'main'"></graph-buttons-component>
-    <resize-bar-component 
-      v-if="this.$attrs.type == 'main'"></resize-bar-component>
-    <nav-bar-component 
-      v-if="this.$attrs.type == 'main'"></nav-bar-component>
+    <main-graph-buttons-component 
+      v-if="this.$attrs.type == 'main'">
+    </main-graph-buttons-component>
 
-    <panel-center :type="this.$attrs.type"></panel-center>
+    <main-resize-bar-component 
+      v-if="this.$attrs.type == 'main'">
+    </main-resize-bar-component>
+
+    <nav-bar-component
+      v-if="this.$attrs.type == 'main'">
+    </nav-bar-component>
+
+    <panel-panes :type="this.$attrs.type"></panel-panes>
   </div>
 
 </template>
@@ -27,15 +33,15 @@
   export default {
     name: "PanelComponent",
     components: {
-      GraphButtonsComponent,
-      ResizeBarComponent,
+      MainGraphButtonsComponent,
+      MainResizeBarComponent,
       NavBarComponent,
-      PanelCenter
+      PanelPanes
     },
     mounted () {
       d3.select("#panel-body").transition().duration(200).ease(d3.easeLinear).style("width", "350px")//.style("min-width", "270px")
-      focusHelper.methods.set('search')
-      focusHelper.methods.openField()
+      focusSetter.methods.set('search')
+      focusSetter.methods.openField()
       store.currentFocus = 'empty'
     }
   }
@@ -53,7 +59,7 @@
       "resize-bar flash ."
       "resize-bar navbar navbar"
       "resize-bar . ."
-      "resize-bar panel-center ."
+      "resize-bar panel-panes ."
       "resize-bar . ."
       "resize-bar . ."
       "resize-bar . .";

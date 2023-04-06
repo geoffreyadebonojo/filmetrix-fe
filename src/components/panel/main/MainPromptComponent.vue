@@ -2,8 +2,8 @@
   import api from '@/mixins/api'
   import { store } from '@/stores/store.js'
   import graph from '@/mixins/graph'
-  import focusHelper from '@/mixins/focusHelper'
-  import helpers from '@/mixins/helpers'
+  import focusSetter from '@/mixins/focusSetter'
+  import { getTypes } from '@/mixins/helpers'
   import * as d3 from 'd3'
 </script>
 
@@ -82,7 +82,7 @@
             links = links.concat(data.links.slice(0,d[1]))
           })
 
-          store.graphTypes =  helpers.getTypes(nodes)
+          store.graphTypes = getTypes(nodes)
           store.currentFocus = 'search'
 
           graph.draw({
@@ -93,7 +93,7 @@
 
           const lockButton = d3.select("#lock-button")
           lockButton.classed("unlocked", false).classed("locked", true)
-          focusHelper.methods.set('details')
+          focusSetter.methods.set('details')
         }
       }
     }

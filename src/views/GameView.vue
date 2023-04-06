@@ -4,22 +4,21 @@
   import { store } from '@/stores/store.js'
   import graph from "@mixins/graph"
   import api from "@mixins/api"
-
   import * as d3 from 'd3'
 </script>
 
 <template>
   <div id="viewer-body">
     <div id="guesses">
-      <div class="guess-tile" v-for="i in 6" :key="i">
+      <div class="guess-tile" v-for="i in 6" :key="i" :id="'card-' + i">
         <p>{{ i }}</p>
       </div>
       <div class="guess-tile" id="target-tile">
         <img src=""/>
-        <!-- <p>KB</p> -->
       </div>
     </div>
-    <graph-component :type="'game'"></graph-component>
+    <graph-component :type="'main'"></graph-component>
+<!--<graph-component :type="'game'"></graph-component>-->
     <panel-component :type="'game'"></panel-component>
   </div>
 </template>
@@ -28,22 +27,23 @@
   export default {
     name: 'GameView',
     async mounted () {
+      d3.select(`#card-${store.turn}`).classed("active", "true")
 
       const mainTargetId = "person-4724"
-
       await api.fetchGraphData(mainTargetId)
 
       store.existing.push([mainTargetId, 0])
-
       const kevinNode = store.graphData[mainTargetId].nodes[0]
 
       graph.draw({
         nodes: [kevinNode],
         links: [],
-        type: "game"
+        type: "main"
       })
 
-      d3.select("#target-tile img").attr("src", kevinNode.poster)
+      const k = "https://image.tmdb.org/t/p/w185_and_h278_bestv2/rjX2Oz3tCZMfSwOoIAyEhdtXnTE.jpg"
+
+      d3.select("#target-tile img").attr("src", k)
     }
   }
 </script>
@@ -62,6 +62,10 @@
     justify-content: space-between;
     padding: 10px;
     left: -100px;
+
+    .active {
+      color: red;
+    }
     
     .guess-tile {
       width: 73px;

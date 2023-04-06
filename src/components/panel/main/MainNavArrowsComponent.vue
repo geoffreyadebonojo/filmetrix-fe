@@ -21,6 +21,7 @@
 
 <script>
   export default {
+    name: "MainNavArrowsComponent",
     computed: {
       showNavArrows: () => {
         return store.currentFocus === 'details' && store.currentDetailId !== false && store.displayingAbout == false

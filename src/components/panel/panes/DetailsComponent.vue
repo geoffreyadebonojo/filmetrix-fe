@@ -1,48 +1,14 @@
 <script setup>
-  import api from "@mixins/api"
-  import focusHelper from '@mixins/focusHelper'
-  import helpers from '@mixins/helpers'
-  import graphBuilder from '@mixins/graphBuilder'
-  import { settingsModule } from '@mixins/settingsModule'
   import { store } from '@/stores/store.js'
+  import { settingsModule } from '@mixins/settingsModule'
+  import focusSetter from '@mixins/focusSetter'
   import NodeElem from '@models/NodeElem'
   import * as d3 from 'd3'
 </script>
 
 <template>
-  <!-- <div v-if="store.displayingAbout" class="about-details">
-    <img id="poster" src=""/>
-    <div id="name">
-      {{ store.detailsData.name }}
-      <div id="job" v-if="store.detailsData.name == 'geoff'">
-        software engineer
-      </div>
-      <div id="job" v-else-if="store.detailsData.name == 'pierce'">
-        product designer
-      </div>
-      <div v-else></div>
-    </div>
-    <div id="links">
-      <a id="linked-in"
-        v-if="store.detailsData.name == 'geoff'"
-        href="https://www.linkedin.com/in/geoffrey-adebonojo/"
-        target="_blank">
-        <img src="/linkedin-icon.png">
-      </a>
-      <a id="linked-in"
-        v-else-if="store.detailsData.name == 'pierce'"
-        href="https://www.linkedin.com/in/piercesiebers/"
-        target="_blank">
-        <img src="/linkedin-icon.png">
-      </a>
-    </div>
-    <div id="description">
-      {{  store.detailsData.summary }}
-    </div>
-  </div> -->
-
   <div v-if="store.detailsData.id != null" v-bind:id="store.detailsData.id + '-details'">
-    <img id="poster"
+    <img class="poster"
       v-bind:id="store.lockedHighlights.includes(store.detailsData.id) ? 'poster-locked' : 'poster-unlocked'"
       v-bind:src="store.detailsData.poster"
       @click="toggleHighlightLock($event, store.detailsData.id)"
@@ -80,18 +46,15 @@
 <script>
   export default {
     name: "DetailsComponent",
-    mixins: [api, focusHelper, helpers, graphBuilder, settingsModule],
     mounted () {
-      focusHelper.methods.set('details')
+      focusSetter.methods.set('details')
       d3.selectAll(".details-component").transition().delay(100).duration(500).style("left", "0%")
     },
     methods: {
       toggleHighlightLock(e, id) {
         store.lockedHighlights.togglePresence(id)
-        const t = d3.select(`#${id}`)
 
-        const d = t.node()
-        const n  = new NodeElem(d)
+        const n  = new NodeElem(id)
 
         if (n.connections.classed("locked")) {
           n.connections.classed("locked", false)
@@ -106,7 +69,8 @@
 
         if (tNode == undefined) { return }
 
-        graphBuilder.nodeTransformer(tNode, "scale(1.05)", "aliceblue", "white")
+        const d = new NodeElem(id)
+        d.nodeTransformer("scale(1.05)", "aliceblue", "white")
       },
 
       unhighlightNodes(id) {
@@ -118,7 +82,10 @@
         if (store.lockedHighlights.includes(id)) { return }
 
         const defaultColor = settingsModule.strokeColor
-        graphBuilder.nodeTransformer(tNode, "scale(1)", defaultColor, "none")
+
+        const d = new NodeElem(id)
+
+        d.nodeTransformer("scale(1)", defaultColor, "none")
       }
     }
   }
@@ -199,7 +166,7 @@
     left: 0%;
   }
 
-  #poster {
+  .poster {
     grid-area: poster;
     width: 79px;
     border-radius: 8px;
