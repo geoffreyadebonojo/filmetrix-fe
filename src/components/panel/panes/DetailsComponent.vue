@@ -153,7 +153,6 @@
     grid-template-columns: 79px 10px 55px 50px 1fr;
     grid-template-rows: 95px 21px 10px 30px 17fr;
     padding: 10px;
-    /* gap: 10px; */
     grid-template-areas:
       "poster . name name name"
       "poster . birthday links ."
