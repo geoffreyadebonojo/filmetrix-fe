@@ -1,7 +1,8 @@
 <script setup>
   import { 
     appStates,
-    graphStates, 
+    graphStates,
+    panelStates,
     store 
   } from "@/stores/store.js"
   import focusSetter from "@/mixins/focusSetter"

@@ -14,7 +14,7 @@
            tabindex="-1"
            @keyup.enter="submitSearch($event.target.value)">
     
-    <div class="result-tile">
+    <div id="result-tile">
       <img src=""/>
     </div>
   </div>
@@ -69,7 +69,7 @@
         await api.fetchSearchData(val)
 
         this.$data.latestResult = store.searchResults[0]
-        d3.select("#result-tile").attr("src", this.$data.latestResult.poster)
+        d3.select("#result-tile img").attr("src", this.$data.latestResult.poster)
       },
 
       reply(t) {

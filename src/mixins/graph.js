@@ -1,5 +1,6 @@
 import { 
   graphStates, 
+  panelStates,
   store 
 } from '@/stores/store.js'
 import { settings, getTypes } from './helpers.js'

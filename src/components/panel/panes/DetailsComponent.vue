@@ -3,9 +3,8 @@
     graphStates, 
     store 
   } from '@/stores/store.js'
-  import { settingsModule } from '@mixins/settingsModule'
   import focusSetter from '@mixins/focusSetter'
-  import NodeElem from '@models/NodeElem'
+  import GraphNode from '@models/GraphNode'
   import * as d3 from 'd3'
 </script>
 
@@ -59,7 +58,7 @@
       toggleHighlightLock(e, id) {
         graphStates.lockedHighlights.togglePresence(id)
 
-        const n  = new NodeElem(id)
+        const n  = new GraphNode(id)
 
         if (n.connections.classed("locked")) {
           n.connections.classed("locked", false)
@@ -74,8 +73,9 @@
 
         if (tNode == undefined) { return }
 
-        const d = new NodeElem(id)
+        const d = new GraphNode(id)
         d.nodeTransformer("scale(1.05)", "aliceblue", "white")
+        d.linkHighlighter()
       },
 
       unhighlightNodes(id) {
@@ -86,11 +86,9 @@
         if (target.classed("locked")) { return }
         if (graphStates.lockedHighlights.includes(id)) { return }
 
-        const defaultColor = settingsModule.strokeColor
-
-        const d = new NodeElem(id)
-
-        d.nodeTransformer("scale(1)", defaultColor, "none")
+        const d = new GraphNode(id)
+        d.nodeTransformer("scale(1)", "#7A7978", "none")
+        d.linkUnhighlighter()
       }
     }
   }

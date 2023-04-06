@@ -1,7 +1,7 @@
 import { angle360 } from '@mixins/helpers'
 import * as d3 from 'd3'
 
-export default class NodeElem {
+export default class GraphNode {
   constructor(nodeId) {
     this.id = nodeId
     this.node = d3.select(`#${nodeId}`)
@@ -47,6 +47,11 @@ export default class NodeElem {
     })
 
     elems.label.selectAll("text").style("stroke", textStroke)
+  }
+
+  linkUnhighlighter() {
+    let merged = d3.selectAll(`.link[target='${this.id}'], .link[source='${this.id}']`)
+    merged.selectAll(".character-label").remove()
   }
 
   linkHighlighter() {

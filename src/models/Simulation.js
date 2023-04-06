@@ -72,12 +72,9 @@ export default class Simulation {
   generateAboutGraph() { 
     this.body = d3.forceSimulation(this.nodes, this.links)
     .force("link", d3.forceLink(this.links).id(d => d.id).distance(() => {
-      // by popularity?
-      // return settingsModule.defaults.link.length
       return 200
     }))
     .force("charge", d3.forceManyBody().strength(() => {
-      // return settingsModule.defaults.node.charge
       return 700
     }))
     .force('collide', d3.forceCollide(() => {
