@@ -16,6 +16,11 @@ let alreadyClicked = false
 
 export default {
   name: "graph",
+  data () {
+    return {
+      nodeCount: 50
+    }
+  },
   draw (responseData) {
     graphStates.inMotion = true
     var links = responseData.links
@@ -99,7 +104,7 @@ export default {
       return y[0] === d.id
     })
     const t = c[0][1]
-    if (t > 28) { return }
+    if (t > this.data().nodeCount) { return }
     const n = t + 3
     c[0][1] = n
     let vals
@@ -131,6 +136,7 @@ export default {
     }
 
     graphStates.currentDetailId = d.id
+
     let data
     let nodes = []
     let links = []

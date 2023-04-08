@@ -39,7 +39,9 @@
         </div>
       </router-link>
 
-      <router-link v-if="graphStates.currentDetailId !== false && appStates.displayingAbout === false" 
+      <router-link v-if="graphStates.currentDetailId !== false 
+                          && appStates.displayingAbout === false
+                          && this.$attrs.type == 'main'" 
                    class="nav-button primary-nav" 
                    id="details-button" 
                    @click="setCurrentFocus('details')" to="#details">
@@ -47,14 +49,18 @@
       </router-link>
       <div v-else></div>
 
-      <router-link class="nav-button primary-nav" 
+      <router-link v-if="this.$attrs.type == 'main'"
+                   class="nav-button primary-nav" 
                    id="commands-button" 
                    to="#commands"
-                   @click="setCurrentFocus('commands')" >
+                   @click="setCurrentFocus('commands')">
         <img src="/command-icon.svg" class="icon" id="commands-icon">
       </router-link>
 
-      <router-link class="nav-button" id="about-us-transition-button" to="#about">
+      <router-link v-if="this.$attrs.type == 'main'"
+                   class="nav-button" 
+                   id="about-us-transition-button" 
+                   to="#about">
         <about-button-component></about-button-component>
       </router-link>
     </div>

@@ -67,7 +67,7 @@
         links = links.concat(data.links.slice(0,d[1]))
       })
 
-      store.graphTypes = getTypes(nodes)
+      // store.graphTypes = getTypes(nodes)
       // panelStates.currentFocus = 'details'
 
       graph.draw({

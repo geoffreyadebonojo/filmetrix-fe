@@ -3,14 +3,17 @@
   import api from "@/mixins/api.js"
   import { 
     gameStates,
+    graphStates,
     store 
   } from '@/stores/store.js'
+  import graph from "@mixins/graph"
+
 </script>
 
 <template>
   <div id="game-prompt">
     <p style="height:90px"></p>
-    <input id="game-search-bar"
+    <!-- <input id="game-search-bar"
            style="display:none"
            type="text"
            placeholder="start"
@@ -21,7 +24,7 @@
       <div v-for="result in withPoster" class="choice-tile">
         <img v-bind:src="result.poster" @click="submitChoice(result)"/>
       </div>
-    </div>
+    </div> -->
   </div>
   <div id="reply">
     <p class="button" id="no" @click="reply('no')"></p>
@@ -65,7 +68,7 @@
       ]
 
       const opts = gamePrompts.random(1)[0]
-      d3.select("#game-prompt p").html(opts.progitmpt)
+      d3.select("#game-prompt p").html(opts.prompt)
       d3.select("#no").html(opts.no)
       d3.select("#yes").html(opts.yes)
     },
@@ -73,15 +76,19 @@
     methods: {
       async submitChoice(d) {
         const turnElem = d3.select(`#card-${gameStates.turn}`) 
-
+        const nextTurnElem = d3.select(`#card-${gameStates.turn+1}`) 
+        
         d3.selectAll(".guess-tile").classed("active", false)
-        turnElem.classed("active", true)
+        
+        nextTurnElem.classed("active", true)
         turnElem.select("p").remove()
         turnElem.select("img").attr("src", d.poster)
-
+        
         gameStates.turn += 1
+        
+        /////
       },
-
+      
       async submitSearch(value) {
         const val = value.toUpperCase()
         if (val == '' || val == null) { 
@@ -171,7 +178,7 @@
     text-align: center;
     background: $panel-body-grey;
     border: none;
-    border-radius: 16px;
+    border-radius: 40px;
 
     position: sticky;
     top: 0px;

@@ -23,8 +23,8 @@
       v-if="this.$attrs.type == 'main'">
     </main-resize-bar-component>
 
-    <nav-bar-component
-      v-if="this.$attrs.type == 'main'">
+    <nav-bar-component :type="this.$attrs.type">
+      <!-- v-if="this.$attrs.type == 'main'"> -->
     </nav-bar-component>
 
     <panel-panes :type="this.$attrs.type"></panel-panes>

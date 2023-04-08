@@ -19,7 +19,6 @@
       </div>
     </div>
     <graph-component :type="'main'"></graph-component>
-<!--<graph-component :type="'game'"></graph-component>-->
     <panel-component :type="'game'"></panel-component>
   </div>
 </template>
@@ -30,17 +29,15 @@
     async mounted () {
       d3.select(`#card-${gameStates.turn}`).classed("active", "true")
 
-      const mainTargetId = "person-4724"
-      await api.fetchGraphData(mainTargetId)
-
-      graphStates.existing.push([mainTargetId, 0])
-      const kevinNode = graphStates.graphData[mainTargetId].nodes[0]
-
-      graph.draw({
-        nodes: [kevinNode],
-        links: [],
-        type: "main"
-      })
+      // const mainTargetId = "person-4724"
+      // await api.fetchGraphData(mainTargetId)
+      // graphStates.existing.push([mainTargetId, 0])
+      // const kevinNode = graphStates.graphData[mainTargetId].nodes[0]
+      // graph.draw({
+      //   nodes: [kevinNode],
+      //   links: [],
+      //   type: "main"
+      // })
 
       const k = "https://image.tmdb.org/t/p/w185_and_h278_bestv2/rjX2Oz3tCZMfSwOoIAyEhdtXnTE.jpg"
 

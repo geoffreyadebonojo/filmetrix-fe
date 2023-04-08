@@ -27,5 +27,5 @@ export const appStates = reactive({
 export const store = reactive({
   searchResults: [],
   savedGraphs: {},
-  graphTypes: [],
+  // graphTypes: [],
 })
