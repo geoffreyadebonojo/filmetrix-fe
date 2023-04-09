@@ -9,6 +9,66 @@ export default {
     }
   },
 
+  async signupUser(args) {
+    const API_URL =`${this.data().base_url}/signup`
+
+    const api_response = await (
+      fetch(API_URL, {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          "user": {
+            "email": `${args.email}`,
+            "password": `${args.password}`
+          }
+        })
+      }).then((response) => {
+        return response.json()
+      })
+    )
+  },
+
+  async loginUser(args) {
+    const API_URL =`${this.data().base_url}/login`
+
+    const api_response = await (
+      fetch(API_URL, {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json' 
+        },
+        body: JSON.stringify({
+          "user": {
+            "email": `${args.email}`,
+            "password": `${args.password}`
+          }
+        })
+      }).then((response) => {
+        for(let entry of response.headers.entries()) {
+          localStorage.setItem(entry[0], entry[1]);
+        }
+      })
+    )
+  },
+
+  async currentUser(args) {
+    const API_URL =`${this.data().base_url}/current_user`
+
+    const api_response = await (
+      fetch(API_URL, {
+        method: 'GET',
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': localStorage.getItem('authorization')
+        }
+      }).then((response) => {
+        return response.json()
+      })
+    )
+  },
+
   async fetchSearchData(term) {
     const API_URL =`${this.data().base_url}/graphql`
 

@@ -39,6 +39,18 @@
         </div>
       </router-link>
 
+      <div @click="signup({})">
+        signup
+      </div>
+
+      <div @click="login({})">
+        login
+      </div>
+
+      <div @click="currentUser()">
+        current
+      </div>
+
       <router-link v-if="graphStates.currentDetailId !== false 
                           && appStates.displayingAbout === false
                           && this.$attrs.type == 'main'" 
@@ -78,7 +90,6 @@ export default {
   mounted () {
     d3.select("#navbar").transition().delay(300).duration(200).style("width", "100%")
   },
-
   methods: {
     async submitSearch(value) {
       const val = value.toUpperCase()
@@ -92,6 +103,28 @@ export default {
       //handle for no id
       this.setCurrentFocus(tab)
       document.querySelector("#search-text").value = ''
+    },
+
+    async signup(args) {
+      // args = {
+      //   email: "geezy@mail.com",
+      //   password: "password"
+      // }
+
+      await api.signupUser(args)
+    },
+
+    async login(args) {
+      // args = {
+      //   email: "geezy@mail.com",
+      //   password: "password"
+      // }
+
+      await api.loginUser(args)
+    },
+
+    async currentUser() {
+      await api.currentUser({})
     },
 
     setCurrentFocus(focus) {
