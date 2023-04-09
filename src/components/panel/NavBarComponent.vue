@@ -39,7 +39,7 @@
         </div>
       </router-link>
 
-      <div @click="signup({})">
+      <!-- <div @click="signup({})">
         signup
       </div>
 
@@ -49,7 +49,7 @@
 
       <div @click="currentUser()">
         current
-      </div>
+      </div> -->
 
       <router-link v-if="graphStates.currentDetailId !== false 
                           && appStates.displayingAbout === false
