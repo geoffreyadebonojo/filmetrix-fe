@@ -15,6 +15,12 @@
   </div>
 
   <div class="graph-control-buttons"
+       id="copy-button"
+       @click="copy()"> 
+    <p id="copy-flash"></p>
+  </div>
+
+    <div class="graph-control-buttons"
        id="save-button"
        @click="save()"> 
     <p id="save-flash"></p>
@@ -34,6 +40,11 @@
         }
       }
     },
+
+    mounted () {
+      // don't show save button unless use logged in
+    },
+
     methods: {
       lockGraph () {
         const id = this.$data.attrs.id  
@@ -61,14 +72,31 @@
         }
       },
       
-      async save () {
-        const flash = d3.select("#save-flash")
+      async copy () {
+        const flash = d3.select("#copy-flash")
 
         const response = await api.saveGraph(graphStates.existing)
         navigator.clipboard.writeText( response.data.saveGraph.shareUrl );
         console.log('Content copied ', response.data.saveGraph.shareUrl, ' to clipboard');
         
         flash.html('copied!')
+          .transition().duration(200).style("opacity", 1).style("color", "#72bcd4")
+          .transition().duration(1000).style("opacity", 0).style("color", "white")
+      },
+
+      async save() {
+        const flash = d3.select("#save-flash")
+
+        await api.loginUser({
+          email: "geezy@mail.com",
+          password: "password"
+        })
+        const resp = await api.currentUser()
+
+        debugger
+        // const response = await api.saveGraph(graphStates.existing)
+        
+        flash.html('saved')
           .transition().duration(200).style("opacity", 1).style("color", "#72bcd4")
           .transition().duration(1000).style("opacity", 0).style("color", "white")
       }
@@ -111,10 +139,25 @@
     width: 25px;
     height: 24px;
   }
+
+  #copy-button {
+    background-image: url("/copy-alt.svg");
+    top: 7.9vh;
+    left: -28px !important;
+    width: 20px;
+    height: 20px;
+    opacity: 0.5;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
   
   #save-button {
     background-image: url("/disk-empty-white.svg");
-    top: 7.9vh;
+    background-size: contain;
+
+    top: 12.3vh;
     left: -28px !important;
     width: 20px;
     height: 20px;
@@ -126,7 +169,7 @@
     }
   }
 
-  #lock-flash, #save-flash {
+  #lock-flash, #copy-flash, #save-flash {
     opacity: 1;
     text-transform: uppercase;
     font-family: $global-font;

@@ -53,7 +53,7 @@ export default {
     )
   },
 
-  async currentUser(args) {
+  async currentUser() {
     const API_URL =`${this.data().base_url}/current_user`
 
     const api_response = await (

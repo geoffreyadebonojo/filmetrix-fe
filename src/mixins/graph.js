@@ -48,7 +48,7 @@ export default {
                                      innerWrapper,
                                      outerWrapper }).build()
     
-    d3.select("#save-button").classed("locked", false).classed("unlocked", true)
+    d3.select("#copy-button").classed("locked", false).classed("unlocked", true)
 
     this.attachNodeClickActions(node, graphType)
 

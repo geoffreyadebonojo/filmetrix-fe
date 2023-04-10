@@ -28,9 +28,13 @@
         <img src="/lock-closed.svg"/>
       </div>
 
-      <!-- <div class="item save" style="height:3em">
+      <div class="item copy" style="height:3em">
+        <img src="/copy-alt.svg" style="opacity:0.5"/>
+      </div>
+
+      <div class="item save" style="height:3em">
         <img src="/disk-empty-white.svg"/>
-      </div> -->
+      </div>
 
       <div class="item centering" style="height:3em">
         <img src="/center-graph-icon.svg"/>
@@ -103,7 +107,19 @@
         </p>
       </div>
 
-      <!-- <div class="item save" style="height:3em">
+      <div class="item copy" style="height:3em">
+        <div @click="elaborateOn('copy')" style="display:flex">
+          <p>
+            copy
+          </p>
+          <img class="chevron" src="/chevron.svg"/>
+        </div>
+        <p class="elaboration" style="display:none">
+          copy the url to share with your friends
+        </p>
+      </div>
+
+      <div class="item save" style="height:3em">
         <div @click="elaborateOn('save')" style="display:flex">
           <p>
             save
@@ -111,9 +127,9 @@
           <img class="chevron" src="/chevron.svg"/>
         </div>
         <p class="elaboration" style="display:none">
-          you can save graphs and share them with your friends!
+          you can so you can play with them later. gotta be logged in though
         </p>
-      </div> -->
+      </div>
 
       <div class="item centering" style="height:3em">
         <div @click="elaborateOn('centering')" style="display:flex">
@@ -141,7 +157,8 @@
           "single-click": "5.5em",
           "unlock": "5.6em",
           "lock": "4.7em",
-          "save": "4.7em",
+          "copy": "4.7em",
+          "save": "5em",
           "centering": "7em"
         }
       }

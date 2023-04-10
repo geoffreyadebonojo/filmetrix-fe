@@ -39,17 +39,17 @@
         </div>
       </router-link>
 
-      <!-- <div @click="signup({})">
-        signup
+      <div @click="signup({})">
+        [signup]
       </div>
 
       <div @click="login({})">
-        login
+        [login]
       </div>
 
       <div @click="currentUser()">
-        current
-      </div> -->
+        [current]
+      </div>
 
       <router-link v-if="graphStates.currentDetailId !== false 
                           && appStates.displayingAbout === false
@@ -106,19 +106,19 @@ export default {
     },
 
     async signup(args) {
-      // args = {
-      //   email: "geezy@mail.com",
-      //   password: "password"
-      // }
+      args = {
+        email: "geezy@mail.com",
+        password: "password"
+      }
 
       await api.signupUser(args)
     },
 
     async login(args) {
-      // args = {
-      //   email: "geezy@mail.com",
-      //   password: "password"
-      // }
+      args = {
+        email: "geezy@mail.com",
+        password: "password"
+      }
 
       await api.loginUser(args)
     },
