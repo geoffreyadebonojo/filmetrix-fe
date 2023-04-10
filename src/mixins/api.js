@@ -53,6 +53,21 @@ export default {
     )
   },
 
+  async logoutUser() {
+    const API_URL =`${this.data().base_url}/login`
+
+    const api_response = await (
+      fetch(API_URL, {
+        method: 'GET',
+        headers: { 
+          'Content-Type': 'application/json' 
+        },
+        body: JSON.stringify()
+      }).then((response) => {
+      })
+    )
+  },
+
   async currentUser() {
     const API_URL =`${this.data().base_url}/current_user`
 
@@ -64,9 +79,16 @@ export default {
           'Authorization': localStorage.getItem('authorization')
         }
       }).then((response) => {
+
+        if (!response.ok) {
+          throw new Error("couldn't find that user")
+        }
+
         return response.json()
       })
     )
+
+    return api_response
   },
 
   async fetchSearchData(term) {

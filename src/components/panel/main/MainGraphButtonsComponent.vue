@@ -166,7 +166,6 @@
     
     &:hover {
       opacity: 1;
-      // background-image: url("/disk-empty-blue.svg");
     }
   }
 

@@ -34,29 +34,17 @@
                    v-bind:id="focus+ '-button'"
                    v-bind:to="'#' +focus"
                    v-bind:key="focus">
-        <div @click="setCurrentFocus(focus)">
+        <div @click="setFocus(focus)">
           <img v-bind:src="'/' +focus+ '-icon.svg'" class="icon" v-bind:id="focus + '-icon'" >
         </div>
       </router-link>
-
-      <div @click="signup({})">
-        [signup]
-      </div>
-
-      <div @click="login({})">
-        [login]
-      </div>
-
-      <div @click="currentUser()">
-        [current]
-      </div>
 
       <router-link v-if="graphStates.currentDetailId !== false 
                           && appStates.displayingAbout === false
                           && this.$attrs.type == 'main'" 
                    class="nav-button primary-nav" 
                    id="details-button" 
-                   @click="setCurrentFocus('details')" to="#details">
+                   @click="setFocus('details')" to="#details">
         <img src="/details-icon.svg" class="icon" id="details-icon">
       </router-link>
       <div v-else></div>
@@ -65,8 +53,16 @@
                    class="nav-button primary-nav" 
                    id="commands-button" 
                    to="#commands"
-                   @click="setCurrentFocus('commands')">
+                   @click="setFocus('commands')">
         <img src="/command-icon.svg" class="icon" id="commands-icon">
+      </router-link>
+
+      <router-link class="nav-button primary-nav"
+                   id="settings-button"
+                   to="#profile"
+                   v-bind:key="focus"
+                   @click="setFocus('settings')">
+        <img src="/settings-gear.svg" id="gear"/>
       </router-link>
 
       <router-link v-if="this.$attrs.type == 'main'"
@@ -101,11 +97,12 @@ export default {
       
       const tab = store.searchResults[0].id.split("-")[0]
       //handle for no id
-      this.setCurrentFocus(tab)
+      this.setFocus(tab)
       document.querySelector("#search-text").value = ''
     },
 
     async signup(args) {
+      return
       args = {
         email: "geezy@mail.com",
         password: "password"
@@ -125,10 +122,6 @@ export default {
 
     async currentUser() {
       await api.currentUser({})
-    },
-
-    setCurrentFocus(focus) {
-      setFocus(focus)
     },
     
     displayIcons() {
@@ -152,6 +145,13 @@ export default {
 
 <style scoped lang="scss">
   $nav-content-height: 27px;
+
+  #gear {
+    height: 17px;
+    width: 25px;
+    margin: 5px 0px 5px 2px;
+    opacity: 0.95;
+  }
 
   #navbar {
     grid-area: navbar;
@@ -225,8 +225,8 @@ export default {
 
   #commands-icon {
     height: 24px;
-    top: 0.25px;
-    left: 3px
+    top: 0.5px;
+    left: 2px;
   }
 
   #person-icon, #movie-icon, #tv-icon {

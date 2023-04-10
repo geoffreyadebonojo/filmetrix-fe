@@ -63,7 +63,7 @@ export function setFocus(focus) {
   const buttonMap = navButtons.map(x => x.id.split("-")[0]);
   const displacement = [
     1,
-    27,
+    28,
     56,
     85,
     112,

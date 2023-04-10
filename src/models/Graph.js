@@ -1,4 +1,5 @@
 import { 
+  appStates,
   graphStates 
 } from '@/stores/store.js'
 import GraphNode from '@models/GraphNode'
@@ -17,9 +18,12 @@ export default class Graph {
   }
   
   nodeSettings() {
+
+    const bodyColor = appStates.theme == 'dark' ? "#222222" : "#AAAAAA"
+
     return {
       strokeColor: "#7A7978",
-      bodyGrey: "#222222",
+      bodyGrey: bodyColor,
       node: {
       collide: 60,
       charge: -2700,

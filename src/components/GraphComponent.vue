@@ -19,7 +19,6 @@
 
 <style lang="scss">
   .graph-container {
-    background: $graph-body-grey;
     display: block;
     width: 100%;
   }

@@ -191,7 +191,7 @@
 <style scoped lang="scss">
   .chevron {
     height: 10px;
-    margin: auto 0 auto auto;
+    margin: auto -7px auto auto;
     transform: rotate(90deg);
     opacity: 0.5;
   }
@@ -199,10 +199,11 @@
   #commands-container {
     height: 100%;
     display: grid;
-    grid-template-columns: 2fr 10px 3fr;
+    grid-template-columns: 2fr 10px 4fr;
     grid-template-areas:
       "commands centerline effects";
     left: 100%;
+    padding-right: 15px;
   }
 
   #commands {

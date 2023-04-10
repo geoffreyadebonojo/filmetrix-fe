@@ -22,6 +22,7 @@ export const panelStates = reactive({
 export const appStates = reactive({
   displayingAbout: false,
   playingGame: false,
+  theme: 'dark',
 })
 
 export const store = reactive({
