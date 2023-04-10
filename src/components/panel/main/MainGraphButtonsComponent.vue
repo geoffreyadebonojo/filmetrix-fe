@@ -15,9 +15,9 @@
   </div>
 
   <div class="graph-control-buttons"
-       id="copy-button"
-       @click="copy()"> 
-    <p id="copy-flash"></p>
+       id="link-to-button"
+       @click="linkTo()"> 
+    <p id="link-to-flash"></p>
   </div>
 
     <div class="graph-control-buttons"
@@ -72,8 +72,8 @@
         }
       },
       
-      async copy () {
-        const flash = d3.select("#copy-flash")
+      async linkTo () {
+        const flash = d3.select("#link-to-flash")
 
         const response = await api.saveGraph(graphStates.existing)
         navigator.clipboard.writeText( response.data.saveGraph.shareUrl );
@@ -140,8 +140,9 @@
     height: 24px;
   }
 
-  #copy-button {
-    background-image: url("/copy-alt.svg");
+  #link-to-button {
+    background-image: url("/link-alt.svg");
+    background-size: contain;
     top: 7.9vh;
     left: -28px !important;
     width: 20px;
@@ -165,11 +166,11 @@
     
     &:hover {
       opacity: 1;
-      background-image: url("/disk-empty-blue.svg");
+      // background-image: url("/disk-empty-blue.svg");
     }
   }
 
-  #lock-flash, #copy-flash, #save-flash {
+  #lock-flash, #link-to-flash, #save-flash {
     opacity: 1;
     text-transform: uppercase;
     font-family: $global-font;

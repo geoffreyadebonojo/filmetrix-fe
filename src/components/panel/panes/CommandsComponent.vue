@@ -28,8 +28,8 @@
         <img src="/lock-closed.svg"/>
       </div>
 
-      <div class="item copy" style="height:3em">
-        <img src="/copy-alt.svg" style="opacity:0.5"/>
+      <div class="item link-to" style="height:3em">
+        <img src="/link-alt.svg" style="opacity:0.5"/>
       </div>
 
       <div class="item save" style="height:3em">
@@ -107,15 +107,15 @@
         </p>
       </div>
 
-      <div class="item copy" style="height:3em">
-        <div @click="elaborateOn('copy')" style="display:flex">
+      <div class="item link-to" style="height:3em">
+        <div @click="elaborateOn('link-to')" style="display:flex">
           <p>
-            copy
+            generate link
           </p>
           <img class="chevron" src="/chevron.svg"/>
         </div>
         <p class="elaboration" style="display:none">
-          copy the url to share with your friends
+          generate a url to share this graph with your friends and enemies
         </p>
       </div>
 
@@ -157,8 +157,8 @@
           "single-click": "5.5em",
           "unlock": "5.6em",
           "lock": "4.7em",
-          "copy": "4.7em",
-          "save": "5em",
+          "link-to": "5.5em",
+          "save": "5.5em",
           "centering": "7em"
         }
       }
