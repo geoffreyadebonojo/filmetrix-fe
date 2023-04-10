@@ -4,27 +4,10 @@
   import * as d3 from "d3"
 </script>
 
-<!-- Light Theme? <br>
-  <label class="switch">
-    <input type="checkbox" @click="toggleTheme($event)">
-    <span class="slider round"></span>
-  </label> -->
-
 <template>
   <div id="user-settings-body">
 
-    <div id="logged-in"  v-if="this.$data.loggedIn === true">
-
-      <div id="user-name"></div>
-      <div @click="api.logoutUser()">
-        [logout]
-      </div>
-      <div @click="api.currentUser()">
-        [current]
-      </div>
-    </div>
-
-    <div id="not-logged-in" v-else>
+    <div id="not-logged-in" v-if="this.$data.loggedIn !== true">
       <div @click="api.signupUser({})">
         [sign-up]
       </div>     
@@ -34,6 +17,37 @@
       })">
         [login]
       </div>
+    </div>
+
+    <div id="logged-in" v-else>
+      <div id="logout" @click="api.logoutUser()">
+        <img src="/exit.svg"/>
+      </div>
+
+      <div id="user-name"></div>
+
+      <div id="profile-image-container" v-if="this.$data.currentUser.profileImage == null">
+        <img id="awesome" src="/face-awesome.svg" />
+      </div>
+
+      <div id="profile-image-container" v-else>
+        <img v-bind:src="this.$data.currentUser.profileImage" />
+      </div>
+
+      <img id="pencil" src="/pencil.svg" />
+    </div>
+
+    <div id="theme-mode">
+      <p>
+        dark
+      </p>
+      <label class="switch">
+        <input type="checkbox" @click="toggleTheme($event)">
+        <span class="slider round"></span>
+      </label>
+      <p>
+        light
+      </p>
     </div>
   </div>
 </template>
@@ -74,6 +88,77 @@
 </script>
 
 <style scoped lang="scss">
+
+#theme-mode {
+  display: flex;
+
+  label {
+    margin: auto;
+
+    &:hover {
+      cursor: $cursor;
+    }
+  }
+
+  p {
+    margin: auto;
+    font-family: $global-font;
+  }
+}
+
+#logged-in {
+  display: grid;
+  grid-template-areas: 
+    ". profile-container logout"
+    ". user-name pencil";
+  grid-template-rows: 160px 25px;
+  grid-template-columns: 23px 1fr 30px;
+  margin-bottom: 30px;
+
+  #user-name {
+    grid-area: user-name;
+    margin: auto auto 0 auto;
+    font-family: $global-font;
+    font-size: 20px;
+  }
+
+  #logout {
+    grid-area: logout;
+    margin: 0 auto auto auto;
+    &:hover {
+      cursor: $cursor;
+    }
+    img {
+      height: 20px;
+    }
+  }
+
+  #pencil {
+    grid-area: pencil;
+    height: 22px;
+    margin: auto auto 0 auto;
+    &:hover {
+      cursor: $cursor;
+    }
+  }
+
+  #profile-image-container {
+    grid-area: profile-container;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    padding: 0 35px 20px 35px;
+
+    #awesome {
+      grid-area: awesome;
+      height: 100%;
+      margin: auto;
+    }
+  }
+
+}
+
+
 
 .switch {
   position: relative;

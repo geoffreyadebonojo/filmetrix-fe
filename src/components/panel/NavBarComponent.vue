@@ -97,7 +97,7 @@ export default {
       
       const tab = store.searchResults[0].id.split("-")[0]
       //handle for no id
-      this.setFocus(tab)
+      setFocus(tab)
       document.querySelector("#search-text").value = ''
     },
 
@@ -150,7 +150,7 @@ export default {
     height: 17px;
     width: 25px;
     margin: 5px 0px 5px 2px;
-    opacity: 0.95;
+    opacity: 1;
   }
 
   #navbar {

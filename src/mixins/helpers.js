@@ -65,7 +65,7 @@ export function setFocus(focus) {
     1,
     28,
     56,
-    85,
+    84,
     112,
     141
   ]

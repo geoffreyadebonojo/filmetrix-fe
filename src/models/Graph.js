@@ -130,7 +130,6 @@ export default class Graph {
   buildNode(parent, nodes) {
     let node = parent.append("g")
       .attr("class", "nodes")
-      // .attr("fill", "currentColor")
       .attr("stroke-linecap", "round")
       .attr("stroke-linejoin", "round")
       .selectAll("g")
