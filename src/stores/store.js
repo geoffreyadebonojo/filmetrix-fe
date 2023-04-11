@@ -28,5 +28,6 @@ export const appStates = reactive({
 export const store = reactive({
   searchResults: [],
   savedGraphs: {},
+  bookmarks: []
   // graphTypes: [],
 })

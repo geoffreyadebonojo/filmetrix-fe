@@ -11,25 +11,31 @@
 <template>
   <div v-if="graphStates.detailsData.id != null" v-bind:id="graphStates.detailsData.id + '-details'">
     <img class="poster"
-
-      v-bind:id="graphStates.lockedHighlights.includes(graphStates.detailsData.id) ? 'poster-locked' : 'poster-unlocked'"
-
-      v-bind:src="graphStates.detailsData.poster"
-      @click="toggleHighlightLock($event, graphStates.detailsData.id)"
-      @mouseenter="highlightNodes(graphStates.detailsData.id)"
-      @mouseleave="unhighlightNodes(graphStates.detailsData.id)">
-    <div id="name">{{ graphStates.detailsData.name }}</div>
-    <div id="birthday">{{ graphStates.detailsData.year }}</div>
+         v-bind:id="graphStates.lockedHighlights.includes(graphStates.detailsData.id) ? 'poster-locked' : 'poster-unlocked'"
+         v-bind:src="graphStates.detailsData.poster"
+         @click="toggleHighlightLock($event, graphStates.detailsData.id)"
+         @mouseenter="highlightNodes(graphStates.detailsData.id)"
+         @mouseleave="unhighlightNodes(graphStates.detailsData.id)">
+    <div id="name">
+      {{ graphStates.detailsData.name }}
+    </div>
+    <div id="bookmark" @click="addBookmark(graphStates.detailsData.id)">
+      <img v-if="store.bookmarks.includes(graphStates.detailsData.id)" id="filled-bookmark" src="/bookmark-filled.svg"/>  
+      <img v-else id="empty-bookmark" src="/bookmark-empty.svg"/>  
+    </div>
+    <div id="birthday">
+      {{ graphStates.detailsData.year }}
+    </div>
     <div id="links">
       <a id="imdb" 
-        v-bind:href="graphStates.detailsData.imdbId"
-        target="_blank">
+         v-bind:href="graphStates.detailsData.imdbId"
+         target="_blank">
         <img src="/imdb-icon.png">
       </a>
       <a id="youtube"
-        v-if="graphStates.detailsData.id.split('-')[0] !== 'person'"
-        v-bind:href="'https://www.youtube.com/results?search_query=' + graphStates.detailsData.name.split(' ').join('+') + ' ' + graphStates.detailsData.year"
-        target="_blank">
+          v-if="graphStates.detailsData.id.split('-')[0] !== 'person'"
+          v-bind:href="'https://www.youtube.com/results?search_query=' + graphStates.detailsData.name.split(' ').join('+') + ' ' + graphStates.detailsData.year"
+          target="_blank">
         <img src="/youtube-icon.png">
       </a>
     </div>
@@ -55,6 +61,10 @@
       d3.selectAll(".details-component").transition().delay(100).duration(500).style("left", "0%")
     },
     methods: {
+      addBookmark(id) {
+        store.bookmarks.togglePresence(id)
+      },
+
       toggleHighlightLock(e, id) {
         graphStates.lockedHighlights.togglePresence(id)
 
@@ -157,7 +167,7 @@
     grid-template-rows: 95px 21px 10px 30px 17fr;
     padding: 10px;
     grid-template-areas:
-      "poster . name name name"
+      "poster . name name bookmark"
       "poster . birthday links ."
       ". . . . ."
       "ft ft ft ft ft"
@@ -166,6 +176,27 @@
     overflow: hidden;
 
     left: 0%;
+  }
+
+  #bookmark {
+    grid-area: bookmark;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    opacity: 0.65;
+    
+    img {
+      height: 20px;
+      margin: 0 auto auto auto;
+      transform: scaleY(1.6);
+      position: relative;
+      top: 10px;
+    }
+        
+    &:hover {
+      cursor: $cursor;
+      opacity: 1;
+    }
   }
 
   .poster {

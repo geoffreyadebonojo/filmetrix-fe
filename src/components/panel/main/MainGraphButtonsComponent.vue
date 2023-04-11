@@ -87,15 +87,13 @@
       async save() {
         const flash = d3.select("#save-flash")
 
-        await api.loginUser({
-          email: "geezy@mail.com",
-          password: "password"
-        })
-        const resp = await api.currentUser()
+        // await api.loginUser({
+        //   email: "geezy@mail.com",
+        //   password: "password"
+        // })
+        // const resp = await api.currentUser()
 
-        debugger
         // const response = await api.saveGraph(graphStates.existing)
-        
         flash.html('saved')
           .transition().duration(200).style("opacity", 1).style("color", "#72bcd4")
           .transition().duration(1000).style("opacity", 0).style("color", "white")

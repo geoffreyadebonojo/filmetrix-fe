@@ -258,5 +258,24 @@ export default {
         nodes: d.nodes
       }
     })
-  }
+  },
+
+  async fetchMovieList(userId) {    
+    const API_URL =`${this.data().base_url}/graphql`
+    const api_response = await (
+      fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query:
+          `query {
+            movieList(userId:"${userId}")
+          }`
+        })
+      }).then((response) => {
+        return response.json()
+      })
+    )
+
+    return api_response.data.movieList
+  },
 }

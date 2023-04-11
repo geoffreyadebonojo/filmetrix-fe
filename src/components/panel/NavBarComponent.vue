@@ -58,11 +58,10 @@
       </router-link>
 
       <router-link class="nav-button primary-nav"
-                   id="settings-button"
+                   id="profile-button"
                    to="#profile"
-                   v-bind:key="focus"
-                   @click="setFocus('settings')">
-        <img src="/settings-gear.svg" v-bind:class="panelStates.currentFocus === 'settings' ? 'gear active' : 'gear'"/>
+                   @click="setFocus('profile')">
+        <img src="/settings-gear.svg" v-bind:class="panelStates.currentFocus === 'profile' ? 'gear active' : 'gear'"/>
       </router-link>
 
       <router-link v-if="this.$attrs.type == 'main'"
@@ -102,13 +101,12 @@ export default {
     },
 
     async signup(args) {
-      return
-      args = {
-        email: "geezy@mail.com",
-        password: "password"
-      }
+      // args = {
+      //   email: "geezy@mail.com",
+      //   password: "password"
+      // }
 
-      await api.signupUser(args)
+      // await api.signupUser(args)
     },
 
     async login(args) {
@@ -150,7 +148,7 @@ export default {
     height: 17px;
     width: 25px;
     margin: 5px 0px 5px 2px;
-    opacity: 1;
+    opacity: 0.9;
 
     &:hover {
       animation-name: rotateLabel;

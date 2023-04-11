@@ -5,7 +5,7 @@
 </script>
 
 <template>
-  <div id="user-settings-body">
+  <div id="user-profile-body">
 
     <div id="not-logged-in" v-if="this.$data.loggedIn !== true">
       <input class="login-fields" id="email-field"
@@ -54,6 +54,16 @@
       <img id="pencil" src="/pencil.svg" />
     </div>
 
+    <div id="my-movie-list">
+      <div v-for="movie in this.$data.movieList"
+          class="my-movie-item">
+        <img v-bind:src="'https://image.tmdb.org/t/p/w185_and_h278_bestv2' + movie[2]"/>
+        <p>
+          {{  movie[1] }}
+        </p>
+      </div>
+    </div>
+
     <!-- <div id="theme-mode">
       <p>
         dark
@@ -74,7 +84,8 @@
     data () {
       return {
         loggedIn: false,
-        currentUser: {}
+        currentUser: {},
+        movieList: []
       }
     },
 
@@ -84,8 +95,10 @@
       this.$data.currentUser = response
     },
     
-    updated () {
+    async updated () {
       d3.select("#user-name").text(this.$data.currentUser.email)
+      
+      this.$data.movieList = await api.fetchMovieList(this.$data.currentUser.id)
     },
     
     methods: {
@@ -139,7 +152,6 @@
 
   label {
     margin: auto;
-
     &:hover {
       cursor: $cursor;
     }
@@ -249,7 +261,7 @@
     ". profile-container logout"
     ". user-name pencil";
   grid-template-rows: 160px 25px;
-  grid-template-columns: 23px 1fr 30px;
+  grid-template-columns: 0px 1fr 30px;
   margin-bottom: 30px;
 
   #user-name {
@@ -298,7 +310,24 @@
       margin: auto;
     }
   }
+}
 
+#my-movie-list {
+  display: flex;
+  .my-movie-item {
+    width: 100px;
+    display: grid;
+  
+    img {
+      width: 100%;
+      border-radius: 15px;
+    }
+  
+    p {
+      font-family: $global-font;
+      margin: auto;
+    }
+  }
 }
 
 .switch {
