@@ -8,19 +8,36 @@
   <div id="user-settings-body">
 
     <div id="not-logged-in" v-if="this.$data.loggedIn !== true">
-      <div @click="api.signupUser({})">
-        [sign-up]
-      </div>     
-      <div @click="api.loginUser({
-        email: 'test@test.com', 
-        password: 'password'
-      })">
-        [login]
-      </div>
+      <input class="login-fields" id="email-field"
+           type="text"
+           placeholder="email">
+
+      <input class="login-fields" id="password-field"
+             type="text"
+             placeholder="password">
+
+      <!-- <div id="entry-button-container"> -->
+        <div class="entry-buttons" 
+             id="signup" 
+             @click="api.signupUser()">
+          <p>
+            sign-up
+          </p>
+        </div>     
+        <div class="entry-buttons" 
+             id="login" 
+             tabindex="0" 
+             @click="submitLogin()"
+             @keyup.enter="submitLogin()">
+          <p>
+            login
+          </p>
+        </div>
+      <!-- </div> -->
     </div>
 
     <div id="logged-in" v-else>
-      <div id="logout" @click="api.logoutUser()">
+      <div id="logout" @click="submitLogout()">
         <img src="/exit.svg"/>
       </div>
 
@@ -37,7 +54,7 @@
       <img id="pencil" src="/pencil.svg" />
     </div>
 
-    <div id="theme-mode">
+    <!-- <div id="theme-mode">
       <p>
         dark
       </p>
@@ -48,7 +65,7 @@
       <p>
         light
       </p>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -72,17 +89,45 @@
     },
     
     methods: {
-      toggleTheme (e) {
-        const isChecked = e.currentTarget.checked
+      async submitLogin() {
+        const email = d3.select("#email-field").node().value
+        const password = d3.select("#password-field").node().value.toLowerCase()
 
-        if (isChecked) {
-          localStorage.setItem('theme', 'light')
-          appStates.theme = 'light'
+        const resp = await api.loginUser({
+          email: email, 
+          password: password
+        })
+
+        if (resp.status.code == 200) {
+          this.$data.loggedIn = true
+          this.$data.currentUser = resp.data
         } else {
-          localStorage.setItem('theme', 'dark')
-          appStates.theme = 'dark'
+          throw new Error("login failed")
+        }
+      },
+
+      async submitLogout() {
+        const resp = await api.logoutUser()
+
+        if (resp.status == 200) {
+          this.$data.loggedIn = false
+          this.$data.currentUser = {}
+        } else {
+          throw new Error("logout failed")
         }
       }
+
+      // toggleTheme (e) {
+      //   const isChecked = e.currentTarget.checked
+
+      //   if (isChecked) {
+      //     localStorage.setItem('theme', 'light')
+      //     appStates.theme = 'light'
+      //   } else {
+      //     localStorage.setItem('theme', 'dark')
+      //     appStates.theme = 'dark'
+      //   }
+      // }
     }
   }
 </script>
@@ -106,6 +151,98 @@
   }
 }
 
+#not-logged-in {
+  display: grid;
+  width: 100%;
+  justify-content: space-around;
+  margin: auto;
+  padding-top: 70px;
+  grid-template-rows: 30px 30px 20px 50px;
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas: 
+  "email email"
+  "password password"
+  ". ."
+  "signup login";
+
+  .login-fields {
+    text-align: center;
+    font-size: 15px;
+    letter-spacing: 0.05em;
+    box-sizing: border-box;
+    // text-transform: uppercase;
+    font-family: $global-font;
+    background: #DDDDDD;
+    border: none;
+
+    &:focus {
+      outline: none;
+      background: white;
+    }
+  }
+
+  #email-field {
+    grid-area: email;
+    border-top-right-radius: 30px;
+    border-top-left-radius: 30px;
+    border-bottom: solid 1px black;
+  }
+
+  #password-field {
+    grid-area: password;
+    border-bottom-right-radius: 30px;
+    border-bottom-left-radius: 30px;
+  }
+
+  #signup {
+    grid-area: signup;
+    margin: auto 0 auto auto;
+    border-top-left-radius: 30px;
+    border-bottom-left-radius: 30px;
+    outline: none;
+  }
+  
+  #login {
+    grid-area: login;
+    margin: auto auto auto 0;
+    border-top-right-radius: 30px;
+    border-bottom-right-radius: 30px;
+    outline: none;
+
+    &:focus {
+      color: $panel-body-grey;
+      background: grey;
+    }
+  }
+  
+  .entry-buttons {
+    font-family: $global-font;
+    background: none;
+    border: 1px solid grey;
+    // padding: 25px;
+    // margin: auto; 
+    
+    // width: 75%;
+    // height: 35px;
+
+    width: 100%;
+    height: 100%;
+    
+    display: flex;
+    // border-radius: 20px;
+  
+    &:hover {
+      cursor: $cursor;
+      color: $panel-body-grey;
+      background: grey;
+    }
+  
+    p {
+      margin: auto;
+    }
+  }
+}
+
 #logged-in {
   display: grid;
   grid-template-areas: 
@@ -124,9 +261,12 @@
 
   #logout {
     grid-area: logout;
-    margin: 0 auto auto auto;
+    margin: 5px auto auto auto;
+    opacity: 0.65;
+
     &:hover {
       cursor: $cursor;
+      opacity: 1;
     }
     img {
       height: 20px;
@@ -137,8 +277,11 @@
     grid-area: pencil;
     height: 22px;
     margin: auto auto 0 auto;
+    opacity: 0.65;
+
     &:hover {
       cursor: $cursor;
+      opacity: 1;
     }
   }
 
@@ -157,8 +300,6 @@
   }
 
 }
-
-
 
 .switch {
   position: relative;

@@ -153,12 +153,12 @@
       return {
         sizeMatch: {
           "search-info": "6.7em",
-          "double-click": "4.5em",
-          "single-click": "5.5em",
-          "unlock": "5.6em",
-          "lock": "4.7em",
+          "double-click": "5.5em",
+          "single-click": "6.2em",
+          "unlock": "6.4em",
+          "lock": "5.2em",
           "link-to": "5.5em",
-          "save": "5.5em",
+          "save": "6.3em",
           "centering": "7em"
         }
       }

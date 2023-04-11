@@ -49,23 +49,28 @@ export default {
         for(let entry of response.headers.entries()) {
           localStorage.setItem(entry[0], entry[1]);
         }
+
+        return response.json()
       })
     )
+
+    return api_response
   },
 
   async logoutUser() {
-    const API_URL =`${this.data().base_url}/login`
+    const API_URL =`${this.data().base_url}/logout`
 
-    const api_response = await (
-      fetch(API_URL, {
-        method: 'GET',
-        headers: { 
-          'Content-Type': 'application/json' 
-        },
-        body: JSON.stringify()
-      }).then((response) => {
-      })
-    )
+    const api_response = await fetch(API_URL, {
+      method: 'DELETE',
+      headers: { 
+        'Content-Type': 'application/json',
+        'Authorization': localStorage.getItem('authorization')
+      }
+    }).then((response) => {
+      return response.json()
+    })
+
+    return api_response
   },
 
   async currentUser() {
@@ -79,11 +84,6 @@ export default {
           'Authorization': localStorage.getItem('authorization')
         }
       }).then((response) => {
-
-        if (!response.ok) {
-          throw new Error("couldn't find that user")
-        }
-
         return response.json()
       })
     )

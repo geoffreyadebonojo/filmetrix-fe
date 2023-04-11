@@ -1,5 +1,5 @@
 <script setup>
-  import { 
+  import {
     appStates,
     graphStates,
     panelStates,
@@ -62,7 +62,7 @@
                    to="#profile"
                    v-bind:key="focus"
                    @click="setFocus('settings')">
-        <img src="/settings-gear.svg" id="gear"/>
+        <img src="/settings-gear.svg" v-bind:class="panelStates.currentFocus === 'settings' ? 'gear active' : 'gear'"/>
       </router-link>
 
       <router-link v-if="this.$attrs.type == 'main'"
@@ -146,11 +146,34 @@ export default {
 <style scoped lang="scss">
   $nav-content-height: 27px;
 
-  #gear {
+  .gear {
     height: 17px;
     width: 25px;
     margin: 5px 0px 5px 2px;
     opacity: 1;
+
+    &:hover {
+      animation-name: rotateLabel;
+      animation-duration: 10s;
+      animation-iteration-count: infinite;
+      animation-timing-function: linear;
+      }
+  }
+
+  .gear.active {
+    animation-name: rotateLabel;
+    animation-duration: 10s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+  }
+
+  @keyframes rotateLabel {
+    0% {
+      transform: rotate(0deg);
+    } 
+    100% {
+      transform: rotate(-360deg);
+    }
   }
 
   #navbar {
