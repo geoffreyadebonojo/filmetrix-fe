@@ -1,6 +1,5 @@
 import { 
-  panelStates,
-  store 
+  panelStates
 } from '@/stores/store.js'
 import * as d3 from 'd3'
 

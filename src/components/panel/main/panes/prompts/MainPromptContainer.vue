@@ -1,5 +1,8 @@
 <script setup>
-  import ResumeGraphPrompt from '@main/ResumeGraphPrompt.vue'
+  import SearchPrompt from './SearchPrompt.vue'
+  import ResumePrompt from './ResumePrompt.vue'
+  // import TutorialPrompt from './TutorialPrompt.vue'
+
   import api from '@/mixins/api'
   import { 
     appStates,
@@ -13,51 +16,33 @@
 </script>
 
 <template>
-  <div id="search-prompt" @click="focusSearchBar()">
-    <p class="apply-effect">search for a movie or actor</p>
-  </div>
-
-  <div id="show-you-around-prompt" v-if="$data.newHere">
-    <p style="margin:5vh"> or </p>
-    <p class="apply-effect"> have a look around </p>
-  </div>
-
-  <resume-graph-prompt v-else-if="$data.hasSavedGraph"/>
-  <div v-else></div>
+  <search-prompt></search-prompt>
+  <!-- hidden until we can actually build it -->
+  <!-- <tutorial-prompt v-if="$data.newHere"></tutorial-prompt> -->
+  <resume-prompt v-if="$data.hasSavedGraph" :saved="this.$data.saved"></resume-prompt>
 </template>
 
 <script>
   export default {
-    name: "MainPromptComponent",
+    name: "MainPromptContainer",
     data () {
       return {
-        currentDetailSubjectId: '',
-        hasSavedGraph: false,
-        newHere: JSON.parse(localStorage.getItem("newHere"))
+        newHere: JSON.parse(localStorage.getItem("newHere")),
+        saved: JSON.parse(localStorage.getItem("lockedGraph"))
       }
     },
     mounted () {
-      d3.select("#search-prompt").transition().delay(200).duration(200).style("opacity", 1)
-      const saved = JSON.parse(localStorage.getItem("lockedGraph"))
-      
-      if (saved == null || saved.length == []) {
+      if (this.$data.saved == null || this.$data.saved.length == []) {
         this.$data.hasSavedGraph = false
       } else {
         this.$data.hasSavedGraph = true
       }
     },
-    methods: {
-      focusSearchBar() {
-        document.querySelector('#search-text').focus()
-      }
-    }
   }
 </script>
 
 <style lang="scss">
-    #search-prompt,
-    #resume-prompt,
-    #show-you-around-prompt {
+    .prompt {
       transform: scale(1);
       
       p {

@@ -2,6 +2,7 @@
   import { 
     appStates,
     graphStates,
+    userStates,
     store 
   } from '@/stores/store.js'
   import api from "@mixins/api"
@@ -9,7 +10,7 @@
 </script>
 
 <template>
-  <div v-if="appStates.loggedIn"
+  <div v-if="userStates.loggedIn"
        class="graph-control-buttons"
        id="save-button"
        @click="save()"> 

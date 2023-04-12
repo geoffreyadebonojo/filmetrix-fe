@@ -1,5 +1,5 @@
 <script setup>
-  import EffectExplanation from '@panel/global/EffectExplanation.vue'
+  import EffectExplanation from './EffectExplanation.vue'
   import * as d3 from 'd3'
 </script>
 

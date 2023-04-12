@@ -13,7 +13,7 @@ export default defineConfig({
       '@mixins': fileURLToPath(new URL('./src/mixins', import.meta.url)),
       '@components': fileURLToPath(new URL('./src/components', import.meta.url)),
       '@panel': fileURLToPath(new URL('./src/components/panel', import.meta.url)),
-      '@panes': fileURLToPath(new URL('./src/components/panel/panes', import.meta.url)),
+      '@panes': fileURLToPath(new URL('./src/components/panel/main/panes', import.meta.url)),
       '@game': fileURLToPath(new URL('./src/components/panel/game', import.meta.url)),
       '@about': fileURLToPath(new URL('./src/components/panel/about', import.meta.url)),
       '@main': fileURLToPath(new URL('./src/components/panel/main', import.meta.url)),

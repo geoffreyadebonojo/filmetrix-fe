@@ -1,6 +1,7 @@
 <script setup>
   import { 
     appStates,
+    panelStates,
     store 
   } from "@/stores/store.js"
   import * as d3 from 'd3'
@@ -121,7 +122,7 @@
 
     methods: {
       draw () {
-        graphStates.detailsData = {}
+        panelStates.detailsData = {}
         const links = this.$data.graphData.links
         const nodes = this.$data.graphData.nodes
         const s = settings("about")

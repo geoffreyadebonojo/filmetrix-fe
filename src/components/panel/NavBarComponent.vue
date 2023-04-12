@@ -39,7 +39,7 @@
         </div>
       </router-link>
 
-      <router-link v-if="graphStates.currentDetailId !== false 
+      <router-link v-if="panelStates.detailsData.id != null
                           && appStates.displayingAbout === false
                           && this.$attrs.type == 'main'" 
                    class="nav-button primary-nav" 

@@ -1,5 +1,5 @@
 import { 
-  appStates,
+  panelStates,
   graphStates, 
   store 
 } from '@/stores/store.js'
@@ -150,8 +150,8 @@ export default {
       })
     )
 
-    graphStates.detailsData = api_response.data.details
-    graphStates.currentDetailId = api_response.data.details.id
+    panelStates.detailsData = api_response.data.details
+    panelStates.detailsData.entity = api_response.data.details.id.split("-")[0]
   },
 
   async fetchGraphData(ids){

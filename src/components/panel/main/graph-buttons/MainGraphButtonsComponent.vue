@@ -1,7 +1,7 @@
 <script setup>
-  import LockButton from '@main/graph-buttons/LockButton.vue'
-  import GenerateLinkButton from '@main/graph-buttons/GenerateLinkButton.vue'
-  import SaveButton from '@main/graph-buttons/SaveButton.vue'
+  import LockButton from './LockButton.vue'
+  import GenerateLinkButton from './GenerateLinkButton.vue'
+  import SaveButton from './SaveButton.vue'
   import { 
     graphStates,
     store 

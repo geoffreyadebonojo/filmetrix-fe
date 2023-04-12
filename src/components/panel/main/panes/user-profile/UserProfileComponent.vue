@@ -1,5 +1,8 @@
 <script setup>
-  import { appStates } from '@/stores/store.js'
+  import { 
+    appStates,
+    userStates
+  } from '@/stores/store.js'
   import api from "@mixins/api"
   import * as d3 from "d3"
 </script>
@@ -7,7 +10,7 @@
 <template>
   <div id="user-profile-body">
 
-    <!-- <div v-if="appStates.currentUser.id == null"></div> -->
+    <!-- <div v-if="userStates.currentUser.id == null"></div> -->
 
     <div id="not-logged-in" v-if="this.$data.loggedIn !== true">
       <input class="login-fields" id="email-field"
@@ -45,19 +48,19 @@
 
       <div id="user-name"></div>
 
-      <div id="profile-image-container" v-if="appStates.currentUser.profileImage == null">
+      <div id="profile-image-container" v-if="userStates.currentUser.profileImage == null">
         <img id="awesome" src="/face-awesome.svg" />
       </div>
 
       <div id="profile-image-container" v-else>
-        <img v-bind:src="appStates.currentUser.profileImage" />
+        <img v-bind:src="userStates.currentUser.profileImage" />
       </div>
 
       <img id="pencil" src="/pencil.svg" />
 
       <div id="my-movie-list">
-        <div v-if="appStates.userMovieList.length > 0" 
-             v-for="movie in appStates.userMovieList"
+        <div v-if="userStates.userMovieList.length > 0" 
+             v-for="movie in userStates.userMovieList"
             class="my-movie-item">
           <img v-bind:src="'https://image.tmdb.org/t/p/w185_and_h278_bestv2' + movie[2]"/>
           <p>{{  movie[1] }}</p>
@@ -99,14 +102,14 @@
       const response = await api.currentUser()
       this.$data.loggedIn = response.id != null
 
-      if (appStates.currentUser.id == null) { return }
+      if (userStates.currentUser.id == null) { return }
 
-      appStates.currentUser = response
-      appStates.userMovieList = await api.fetchMovieList(appStates.currentUser.id)
+      userStates.currentUser = response
+      appStates.userMovieList = await api.fetchMovieList(userStates.currentUser.id)
     },
     
     updated () {
-      d3.select("#user-name").text(appStates.currentUser.email)
+      d3.select("#user-name").text(userStates.currentUser.email)
       console.log('updated')
     },
     
@@ -122,7 +125,7 @@
 
         if (resp.status.code == 200) {
           this.$data.loggedIn = true
-          appStates.currentUser = resp.data
+          userStates.currentUser = resp.data
           
           const movieList = await api.fetchMovieList(resp.data.id)
           appStates.userMovieList = movieList.map(d => d[0])
@@ -137,7 +140,7 @@
 
         if (resp.status == 200) {
           this.$data.loggedIn = false
-          appStates.currentUser = {}
+          userStates.currentUser = {}
         } else {
           throw new Error("logout failed")
         }

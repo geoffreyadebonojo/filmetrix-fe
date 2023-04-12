@@ -6,30 +6,29 @@
     store 
   } from '@/stores/store.js'
 
-  import DetailsComponent from '@panes/DetailsComponent.vue'
-  import CommandsComponent from '@panes/CommandsComponent.vue'
-  import SearchResultComponent from '@panes/SearchResultComponent.vue'
-  import UserProfileComponent from '@panes/UserProfileComponent.vue'
-  import MainPromptComponent from '@main/MainPromptComponent.vue'
+  import AboutDetailsComponent from  '@about/AboutDetailsComponent.vue'
   import MainNavArrowsComponent from '@main/MainNavArrowsComponent.vue'
-  import GamePromptComponent from '@game/GamePromptComponent.vue'
-  import AboutDetailsComponent from '@about/AboutDetailsComponent.vue'
+
+  import CommandsComponent from      '@panes/commands/CommandsComponent.vue'
+  import DetailsComponent from       '@panes/details/DetailsComponent.vue'
+  import MainPromptContainer from    '@panes/prompts/MainPromptContainer.vue'
+  import SearchResultsComponent from '@panes/search-results/SearchResultsComponent.vue'
+  import UserProfileComponent from   '@panes/user-profile/UserProfileComponent.vue'
 </script>
 
 <template>
   <div id="panel-panes" style="height:142%;zoom:100%">
    
     <about-details-component v-if="appStates.displayingAbout" class="about-details"></about-details-component>
-    <details-component v-else-if="panelStates.currentFocus === 'details' && graphStates.currentDetailId !== false" class="details-component"></details-component>
+    <details-component v-else-if="panelStates.currentFocus === 'details' && panelStates.detailsData.id != null" class="details-component"></details-component>
     <commands-component v-else-if="panelStates.currentFocus === 'commands'"></commands-component>
     <user-profile-component v-else-if="panelStates.currentFocus === 'profile'"></user-profile-component>
 
     <div id="empty-field" v-else-if="panelStates.currentFocus === 'empty'">
-      <game-prompt-component v-if="this.$attrs.type == 'game'"></game-prompt-component>
-      <main-prompt-component v-else-if="this.$attrs.type == 'main'"></main-prompt-component>
+      <main-prompt-container></main-prompt-container>
     </div>
 
-    <search-result-component v-else class="result-component"></search-result-component>
+    <search-results-component v-else class="result-component"></search-results-component>
     <main-nav-arrows-component v-if="this.$attrs.type == 'main'"></main-nav-arrows-component>
 
   </div>
@@ -40,11 +39,11 @@
     name: "PanelCenter",
     components: {
       AboutDetailsComponent,
-      DetailsComponent,
       CommandsComponent,
-      GamePromptComponent,
-      MainPromptComponent,
-      SearchResultComponent,
+      DetailsComponent,
+      MainPromptContainer,
+      SearchResultsComponent,
+      UserProfileComponent,
       MainNavArrowsComponent
     }
   }

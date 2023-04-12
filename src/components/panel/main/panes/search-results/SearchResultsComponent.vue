@@ -1,5 +1,5 @@
 <script setup>
-  import PosterTile from '@panel/global/PosterTile.vue'
+  import ResultPosterTile from './ResultPosterTile.vue'
   import graph from "@mixins/graph"
   import api from "@mixins/api"
   import { 
@@ -14,7 +14,7 @@
   <div v-if="panelStates.currentFocus !== 'noResult'"
        v-bind:id="panelStates.currentFocus + '-results'"
        class="result-container">
-    <poster-tile v-for="result in filteredSearchResults" :result="result"></poster-tile>
+    <result-poster-tile v-for="result in filteredSearchResults" :result="result"></result-poster-tile>
   </div>
 
   <div v-else>
@@ -25,7 +25,7 @@
 
 <script>
   export default {
-    name: "SearchResultComponent",
+    name: "SearchResultsComponent",
     data () {
       return {}
     },

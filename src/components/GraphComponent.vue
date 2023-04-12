@@ -54,7 +54,7 @@
       
       await api.findBySlug(gid)
 
-      graphStates.currentDetailId = graphStates.existing.last()[0]
+      // panelStates.detailsData.id = graphStates.existing.last()[0]
 
       let data
       let nodes = []

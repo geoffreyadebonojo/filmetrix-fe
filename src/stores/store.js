@@ -1,12 +1,11 @@
 import { reactive } from 'vue'
 
 export const graphStates = reactive({
-  currentDetailId: false,
-  detailsData: {},
   existing: [],
   graphData: {},
   inMotion: false,
-  lockedHighlights: [],
+  lockedHighlights: []
+  // graphTypes: [],
 })
 
 export const gameStates = reactive({
@@ -17,22 +16,25 @@ export const panelStates = reactive({
   width: '350',
   isOpen: true,
   currentFocus: 'empty',
+  detailsData: {}
 })
 
 export const appStates = reactive({
   displayingAbout: false,
   playingGame: false,
   theme: 'dark',
+})
+
+export const userStates = reactive({
+  userMovieList: [],
   loggedIn: false,
-  currentUser: {},
-  userMovieList: []
+  currentUser: {}
 })
 
 export const store = reactive({
   searchResults: [],
   savedGraphs: {},
   bookmarks: []
-  // graphTypes: [],
 })
 
 

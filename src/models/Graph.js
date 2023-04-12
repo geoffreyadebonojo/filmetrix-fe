@@ -18,7 +18,6 @@ export default class Graph {
   }
   
   nodeSettings() {
-
     const bodyColor = appStates.theme == 'dark' ? "#222222" : "#AAAAAA"
 
     return {
@@ -27,23 +26,21 @@ export default class Graph {
       node: {
       collide: 60,
       charge: -2700,
-      circle: {
-        r: 50
-      }
+        circle: {
+          r: 50
+        }
       },
       link: {
         length: 200,
       },
       image: {
         offset: {
-          x: -35,
+          x: -39,
           y: -35
         },
-        position: {
-          x: 70,
-          y: 70
-        },
-        clipPath: '0% 12px round 5px',
+        width: 60,
+        height: 70,
+        clipPath: 'inset(0% 16px round 5px)',
       }
     }
   }
@@ -196,14 +193,14 @@ export default class Graph {
         return this.settings.image.offset.y
       })
       .attr('width', () => {
-        return this.settings.image.position.x
+        return this.settings.image.width
       })
       .attr('height', () => {
-        return this.settings.image.position.y
+        return this.settings.image.height
       })
       .attr("xlink:href", d => d.poster)
       .attr("clip-path", () => {
-        return `inset(${this.settings.image.clipPath})`
+        return this.settings.image.clipPath
       })
     return node
   }

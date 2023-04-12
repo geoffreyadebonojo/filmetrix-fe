@@ -21,7 +21,7 @@
 
 <script>
   export default {
-    name: 'PosterTile',
+    name: 'ResultPosterTile',
     data () {
       return {}
     },

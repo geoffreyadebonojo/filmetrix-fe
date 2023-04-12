@@ -12,6 +12,9 @@ app.use(createPinia())
 app.use(router)
 app.mount('#app')
 
+
+/////////// Extenstions ///////////////////
+
 Array.prototype.random = function(size=1) {
   var shuffled = this.slice(0), i = this.length, temp, index;
   while (i--) {

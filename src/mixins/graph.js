@@ -72,7 +72,7 @@ export default {
       const doubleClickDelay = 300
       
       await api.fetchDetails(d.id)
-      graphStates.currentDetailId = d.id
+      panelStates.detailsData.id = d.id
       setFocus('details')
 
       if (alreadyClicked) { 
@@ -86,7 +86,7 @@ export default {
         }
 
         await api.fetchDetails(d.id)
-        graphStates.currentDetailId = d.id
+        panelStates.detailsData.id = d.id
         alreadyClicked = false;
         clearTimeout(timer);
 
@@ -135,7 +135,7 @@ export default {
       await api.fetchGraphData(ext)
     }
 
-    graphStates.currentDetailId = d.id
+    panelStates.detailsData.id = d.id
 
     let data
     let nodes = []

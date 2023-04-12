@@ -66,8 +66,8 @@
 
           appStates.displayingAbout = false
 
-          if (graphStates.detailsData != null || graphStates.detailsData != {}) {
-            graphStates.detailsData = {}
+          if (panelStates.detailsData != null || panelStates.detailsData != {}) {
+            panelStates.detailsData = {}
           }
         }
       }

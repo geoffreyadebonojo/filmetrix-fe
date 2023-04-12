@@ -16,11 +16,11 @@ const router = createRouter({
       name: 'graph',
       component: MainView
     },
-    {
-      path: '/game',
-      name: 'game',
-      component: GameView
-    }
+    // {
+    //   path: '/game',
+    //   name: 'game',
+    //   component: GameView
+    // }
   ]
 })
 

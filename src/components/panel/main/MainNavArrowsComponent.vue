@@ -29,13 +29,13 @@
     name: "MainNavArrowsComponent",
     computed: {
       showNavArrows: () => {
-        return panelStates.currentFocus === 'details' && graphStates.currentDetailId !== false && appStates.displayingAbout == false
+        return panelStates.currentFocus === 'details' && panelStates.detailsData.id != null && appStates.displayingAbout == false
       },
       showLeftArrow: () => {
-        return graphStates.existing.length > 1 && graphStates.existing[0][0] !== graphStates.currentDetailId
+        return graphStates.existing.length > 1 && graphStates.existing[0][0] !== panelStates.detailsData.id
       },
       showRightArrow: () => {
-        return graphStates.existing.length > 1 && graphStates.existing.last()[0] !== graphStates.currentDetailId
+        return graphStates.existing.length > 1 && graphStates.existing.last()[0] !== panelStates.detailsData.id
       }
     },
     methods: {
@@ -47,7 +47,7 @@
         })
         
         let ids = graphStates.existing.map(d => d[0])
-        let currentIndex = ids.indexOf(graphStates.currentDetailId)
+        let currentIndex = ids.indexOf(panelStates.detailsData.id)
         let changeId
         
         changeId = ids[currentIndex + i]
