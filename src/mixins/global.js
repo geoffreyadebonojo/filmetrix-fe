@@ -7,4 +7,6 @@ export const global = {
       }
     }
   }
+
+  // movie-poster-dimensions
 }

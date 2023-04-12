@@ -1,4 +1,6 @@
 <script setup>
+  import AuthFields from './AuthFields.vue'
+  import ProfileBody from './ProfileBody.vue'
   import { 
     appStates,
     userStates
@@ -8,84 +10,17 @@
 </script>
 
 <template>
-  <div id="user-profile-body">
+  <div id="user-profile">
+    <profile-body 
+      v-if="this.$data.loggedIn == true" 
+      :loggedIn="this.$data.loggedIn">
+    </profile-body>
 
-    <!-- <div v-if="userStates.currentUser.id == null"></div> -->
-
-    <div id="not-logged-in" v-if="this.$data.loggedIn !== true">
-      <input class="login-fields" id="email-field"
-           type="text"
-           placeholder="email">
-
-      <input class="login-fields" id="password-field"
-             type="text"
-             placeholder="password">
-
-      <!-- <div id="entry-button-container"> -->
-        <div class="entry-buttons" 
-             id="signup" 
-             @click="api.signupUser()">
-          <p>
-            sign-up
-          </p>
-        </div>     
-        <div class="entry-buttons" 
-             id="login" 
-             tabindex="0" 
-             @click="submitLogin()"
-             @keyup.enter="submitLogin()">
-          <p>
-            login
-          </p>
-        </div>
-      <!-- </div> -->
-    </div>
-
-    <div id="logged-in" v-else>
-      <div id="logout" @click="submitLogout()">
-        <img src="/exit.svg"/>
-      </div>
-
-      <div id="user-name"></div>
-
-      <div id="profile-image-container" v-if="userStates.currentUser.profileImage == null">
-        <img id="awesome" src="/face-awesome.svg" />
-      </div>
-
-      <div id="profile-image-container" v-else>
-        <img v-bind:src="userStates.currentUser.profileImage" />
-      </div>
-
-      <img id="pencil" src="/pencil.svg" />
-
-      <div id="my-movie-list">
-        <div v-if="userStates.userMovieList.length > 0" 
-             v-for="movie in userStates.userMovieList"
-            class="my-movie-item">
-          <img v-bind:src="'https://image.tmdb.org/t/p/w185_and_h278_bestv2' + movie[2]"/>
-          <p>{{  movie[1] }}</p>
-        </div>
-        <div v-else id="no-movies-yet">
-          <p>
-            Add some movies!
-          </p>
-        </div>
-      </div>
-    </div>
-
-
-    <!-- <div id="theme-mode">
-      <p>
-        dark
-      </p>
-      <label class="switch">
-        <input type="checkbox" @click="toggleTheme($event)">
-        <span class="slider round"></span>
-      </label>
-      <p>
-        light
-      </p>
-    </div> -->
+    <auth-fields 
+      v-if="this.$data.loggedIn == false" 
+      :loggedIn="this.$data.loggedIn"
+      @update-parent="updateComponent">
+    </auth-fields>
   </div>
 </template>
 
@@ -93,333 +28,36 @@
   export default {
     data () {
       return {
-        loggedIn: false,
-        currentUser: {},
+        loggedIn: null,
       }
     },
-
     async created () {
       const response = await api.currentUser()
-      this.$data.loggedIn = response.id != null
 
-      if (userStates.currentUser.id == null) { return }
+      this.$data.loggedIn = response.id != null
+      userStates.loggedIn = this.$data.loggedIn
+
+      if (this.$data.loggedIn == null) { return }
 
       userStates.currentUser = response
-      appStates.userMovieList = await api.fetchMovieList(userStates.currentUser.id)
     },
     
-    updated () {
+    async updated () {
       d3.select("#user-name").text(userStates.currentUser.email)
-      console.log('updated')
+      userStates.userMovieList = await api.fetchMovieList(userStates.currentUser.id)
     },
-    
+
     methods: {
-      async submitLogin() {
-        const email = d3.select("#email-field").node().value
-        const password = d3.select("#password-field").node().value.toLowerCase()
-
-        const resp = await api.loginUser({
-          email: email, 
-          password: password
-        })
-
-        if (resp.status.code == 200) {
-          this.$data.loggedIn = true
-          userStates.currentUser = resp.data
-          
-          const movieList = await api.fetchMovieList(resp.data.id)
-          appStates.userMovieList = movieList.map(d => d[0])
-
-        } else {
-          throw new Error("login failed")
-        }
-      },
-
-      async submitLogout() {
-        const resp = await api.logoutUser()
-
-        if (resp.status == 200) {
-          this.$data.loggedIn = false
-          userStates.currentUser = {}
-        } else {
-          throw new Error("logout failed")
-        }
+      updateComponent () {
+        this.$data.loggedIn = true
+        this.$forceUpdate()
       }
-
-      // toggleTheme (e) {
-      //   const isChecked = e.currentTarget.checked
-
-      //   if (isChecked) {
-      //     localStorage.setItem('theme', 'light')
-      //     appStates.theme = 'light'
-      //   } else {
-      //     localStorage.setItem('theme', 'dark')
-      //     appStates.theme = 'dark'
-      //   }
-      // }
     }
   }
 </script>
 
-<style scoped lang="scss">
-
-#theme-mode {
-  display: flex;
-
-  label {
-    margin: auto;
-    &:hover {
-      cursor: $cursor;
-    }
-  }
-
-  p {
-    margin: auto;
-    font-family: $global-font;
-  }
-}
-
-#not-logged-in {
-  display: grid;
-  width: 100%;
-  justify-content: space-around;
-  margin: auto;
-  padding-top: 70px;
-  grid-template-rows: 30px 30px 20px 50px;
-  grid-template-columns: 1fr 1fr;
-  grid-template-areas: 
-  "email email"
-  "password password"
-  ". ."
-  "signup login";
-
-  .login-fields {
-    text-align: center;
-    font-size: 15px;
-    letter-spacing: 0.05em;
-    box-sizing: border-box;
-    // text-transform: uppercase;
-    font-family: $global-font;
-    background: #DDDDDD;
-    border: none;
-
-    &:focus {
-      outline: none;
-      background: white;
-    }
-  }
-
-  #email-field {
-    grid-area: email;
-    border-top-right-radius: 30px;
-    border-top-left-radius: 30px;
-    border-bottom: solid 1px black;
-  }
-
-  #password-field {
-    grid-area: password;
-    border-bottom-right-radius: 30px;
-    border-bottom-left-radius: 30px;
-  }
-
-  #signup {
-    grid-area: signup;
-    margin: auto 0 auto auto;
-    border-top-left-radius: 30px;
-    border-bottom-left-radius: 30px;
-    outline: none;
-  }
-  
-  #login {
-    grid-area: login;
-    margin: auto auto auto 0;
-    border-top-right-radius: 30px;
-    border-bottom-right-radius: 30px;
-    outline: none;
-
-    &:focus {
-      color: $panel-body-grey;
-      background: grey;
-    }
-  }
-  
-  .entry-buttons {
-    font-family: $global-font;
-    background: none;
-    border: 1px solid grey;
-    // padding: 25px;
-    // margin: auto; 
-    
-    // width: 75%;
-    // height: 35px;
-
-    width: 100%;
-    height: 100%;
-    
-    display: flex;
-    // border-radius: 20px;
-  
-    &:hover {
-      cursor: $cursor;
-      color: $panel-body-grey;
-      background: grey;
-    }
-  
-    p {
-      margin: auto;
-    }
-  }
-}
-
-#logged-in {
-  display: grid;
-  grid-template-areas: 
-    ". profile-container logout"
-    ". user-name pencil"
-    "movie-list movie-list movie-list";
-  grid-template-rows: 100px 25px 1fr;
-  grid-template-columns: 30px 1fr 30px;
-
-  #user-name {
-    grid-area: user-name;
-    margin: auto auto 0 auto;
-    font-family: $global-font;
-    font-size: 20px;
-  }
-
-  #logout {
-    grid-area: logout;
-    margin: 5px auto auto auto;
-    opacity: 0.65;
-
-    &:hover {
-      cursor: $cursor;
-      opacity: 1;
-    }
-    img {
-      height: 15px;
-    }
-  }
-
-  #pencil {
-    grid-area: pencil;
-    height: 15px;
-    margin: auto;
-    opacity: 0.65;
-
-    &:hover {
-      cursor: $cursor;
-      opacity: 1;
-    }
-  }
-
-  #profile-image-container {
-    grid-area: profile-container;
-    height: 100%;
-    width: 100%;
-    display: flex;
-    // padding: 20px;
-
-    #awesome {
-      grid-area: awesome;
-      height: 100%;
-      margin: auto;
-      opacity: 0.65;
-    }
-  }
-}
-
-#my-movie-list {
-  grid-area: movie-list;
-
-  width: 100%;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 50px 20px;
-  justify-content: center;
-  padding: 20px;
-  overflow-y: scroll;
-
-  #no-movies-yet {
-    width: 100%;
+<style>
+  #user-profile {
     display: flex;
   }
-  .my-movie-item {
-    width: 75px;
-    height: 100px;
-    display: grid;
-  
-    img {
-      width: 50px;
-      border-radius: 15px;
-    }
-  }
-
-  p {
-    font-family: $global-font;
-    margin: 0 auto auto auto;
-    text-transform: uppercase;
-    text-align: center;
-  }
-}
-
-.switch {
-  position: relative;
-  display: inline-block;
-  width: 60px;
-  height: 34px;
-  
-  input { 
-    opacity: 0;
-    width: 0;
-    height: 0;
-
-    &:checked + .slider {
-      background-color: #2196F3;
-    }
-
-    &:focus + .slider {
-      box-shadow: 0 0 1px #2196F3;
-    }
-
-    &:checked + .slider:before {
-      -webkit-transform: translateX(26px);
-      -ms-transform: translateX(26px);
-      transform: translateX(26px);
-    }
-  }
-}
-
-.slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #ccc;
-  -webkit-transition: .4s;
-  transition: .4s;
-
-  &:before{
-    position: absolute;
-    content: "";
-    height: 26px;
-    width: 26px;
-    left: 4px;
-    bottom: 4px;
-    background-color: white;
-    -webkit-transition: .4s;
-    transition: .4s;
-  }
-}
-
-// .slider.round {
-//   border-radius: 34px;
-// }
-
-// .slider.round:before {
-//   border-radius: 50%;
-// }
-
 </style>
