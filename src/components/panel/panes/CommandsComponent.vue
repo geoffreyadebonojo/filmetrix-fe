@@ -1,4 +1,5 @@
 <script setup>
+  import EffectExplanation from '@panel/global/EffectExplanation.vue'
   import * as d3 from 'd3'
 </script>
 
@@ -47,101 +48,68 @@
       <div class="header">Effect</div>
       <hr class="line" style="margin:20px 0">
 
-      <div class="item search-info" style="height:3.8em">
-        <div @click="elaborateOn('search-info')" style="display:flex">
-          <p>
-            search for actors, movies, or tv shows
-          </p>
-          <img class="chevron" src="/chevron.svg"/>
-        </div>
-        <p class="elaboration" style="display:none">
-          you can search and add nodes to an existing graph
-        </p>
-      </div>
+      <effect-explanation 
+        :section="'search-info'"
+        :main="'search for actors, movies, or tv shows'"
+        :secondary="'you can search and add nodes to an existing graph'"
+        :expandedHeight="'6.7em'"
+        style="height:3.8em"/>
 
-      <div class="item double-click" style="height:2.8em">
-        <div @click="elaborateOn('double-click')" style="display:flex">
-          <p>
-            add more nodes!
-          </p>
-          <img class="chevron" src="/chevron.svg"/>
-        </div>
-        <p class="elaboration" style="display:none">
-          double click on any node to add more to the graph
-        </p>
-      </div>
+      <effect-explanation
+        :section="'double-click'"
+        :main="'add more nodes!'"
+        :secondary="'double click a node to add more!'"
+        :expandedHeight="'5.5em'"
+        style="height:2.8em"
+      />
 
-      <div class="item single-click" style="height:2.8em">
-        <div @click="elaborateOn('single-click')" style="display:flex">
-          <p>
-            get details
-          </p>
-          <img class="chevron" src="/chevron.svg"/>
-        </div>
-        <p class="elaboration" style="display:none">
-          single click on any node to view details for that person, movie or tv show
-        </p>
-      </div>
+      <effect-explanation
+        :section="'single-click'"
+        :main="'get details'"
+        :secondary="'single click on any node to view details for that person, movie, or tv show'"
+        :expandedHeight="'6.2em'"
+        style="height:2.8em"
+      />
 
-      <div class="item unlock" style="height:3em">
-        <div @click="elaborateOn('unlock')" style="display:flex">
-          <p>
-            unlocked
-          </p>
-          <img class="chevron" src="/chevron.svg"/>
-        </div>
-        <p class="elaboration" style="display:none">
-          graph won't be saved if you navigate away or refresh the page
-        </p>
-      </div>
+     <effect-explanation
+        :section="'unlock'"
+        :main="'unlocked'"
+        :secondary="'graph won\'t be saved if you navigate away or refresh the page'"
+        :expandedHeight="'6.4em'"
+        style="height:3em"
+      />
 
-      <div class="item lock" style="height:3em">
-        <div @click="elaborateOn('lock')" style="display:flex">
-          <p>
-            locked
-          </p>
-          <img class="chevron" src="/chevron.svg"/>
-        </div>
-        <p class="elaboration" style="display:none">
-          graph will be saved if you navigate away or refresh
-        </p>
-      </div>
+      <effect-explanation
+        :section="'lock'"
+        :main="'locked'"
+        :secondary="'graph will be saved if you navigate away or refresh'"
+        :expandedHeight="'5.2em'"
+        style="height:3em"
+      />
 
-      <div class="item link-to" style="height:3em">
-        <div @click="elaborateOn('link-to')" style="display:flex">
-          <p>
-            generate link
-          </p>
-          <img class="chevron" src="/chevron.svg"/>
-        </div>
-        <p class="elaboration" style="display:none">
-          generate a url to share this graph with your friends and enemies
-        </p>
-      </div>
+      <effect-explanation
+        :section="'link-to'"
+        :main="'generate link'"
+        :secondary="'generate a url to share this graph with your friends... or enemies'"
+        :expandedHeight="'5.5em'"
+        style="height:3em"
+      />
 
-      <div class="item save" style="height:3em">
-        <div @click="elaborateOn('save')" style="display:flex">
-          <p>
-            save
-          </p>
-          <img class="chevron" src="/chevron.svg"/>
-        </div>
-        <p class="elaboration" style="display:none">
-          you can so you can play with them later. gotta be logged in though
-        </p>
-      </div>
+      <effect-explanation
+        :section="'save'"
+        :main="'save'"
+        :secondary="'save a graph so you can play with it later. gotta be logged in though'"
+        :expandedHeight="'6.3em'"
+        style="height:3em"
+      />
 
-      <div class="item centering" style="height:3em">
-        <div @click="elaborateOn('centering')" style="display:flex">
-          <p>
-            re-center graph
-          </p>
-          <img class="chevron" src="/chevron.svg"/>
-        </div>
-        <p class="elaboration" style="display:none">
-          this will reset the graph to its original zoom and scale, good for if you get lost
-        </p>
-      </div>
+      <effect-explanation
+        :section="'centering'"
+        :main="'re-center graph'"
+        :secondary="'this will reset the graph to its original zoom and scale; good for if you get lost'"
+        :expandedHeight="'7em'"
+        style="height:3em"
+      />
     </div>
   </div>
 </template>
@@ -151,51 +119,16 @@
     name: "CommandsContainer",
     data () {
       return {
-        sizeMatch: {
-          "search-info": "6.7em",
-          "double-click": "5.5em",
-          "single-click": "6.2em",
-          "unlock": "6.4em",
-          "lock": "5.2em",
-          "link-to": "5.5em",
-          "save": "6.3em",
-          "centering": "7em"
-        }
+        sizeMatch: {}
       }
     },
     mounted () {
       d3.select("#commands-container").transition().duration(200).style("left", "0%")
-    },
-    methods: {
-      async elaborateOn(section) {
-        const si = d3.selectAll(`.${section}`)
-        const el = d3.select(`#effects .${section} .elaboration`)
-        const chev = d3.select(`#effects .${section} .chevron`)
-  
-        el.style("display", () => {
-          if (el.style("display") == "none"){
-            si.transition().duration(200).style("height", this.$data.sizeMatch[section])
-            chev.transition().duration(200).style("transform", "rotate(270deg)")
-            el.transition().delay(100).style("display", "block")
-          } else {
-            si.transition().duration(200).style("height", "3em")
-            chev.transition().duration(200).style("transform", "rotate(90deg)")
-            el.transition().delay(100).style("display", "none")
-          }
-        })
-      }
     }
   }
 </script>
 
 <style scoped lang="scss">
-  .chevron {
-    height: 10px;
-    margin: auto -7px auto auto;
-    transform: rotate(90deg);
-    opacity: 0.5;
-  }
-
   #commands-container {
     height: 100%;
     display: grid;
@@ -258,33 +191,6 @@
     grid-area: effects;
     text-align: left;
     margin: 10px;
-
-    .item {
-      &:hover {
-        cursor: $cursor;
-
-        p {
-          &:hover {
-            color: white
-          }
-        }
-        .chevron {
-          opacity: 1;
-          height: 13px;
-        }
-      }
-    }
-
-    .elaboration {
-      display: none;
-      font-style: italic;
-      font-size: 13px;
-      margin: 7px auto auto auto;
-    }
-
-    p {
-      margin: auto auto auto 0
-    }
   }
 
   .column {

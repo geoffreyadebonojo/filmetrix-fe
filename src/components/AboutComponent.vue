@@ -26,7 +26,7 @@
         details: {
           pierce: {
             id: "pierce",
-            name: "pierce",
+            name: "pierce siebers",
             description: 
                     `Experienced designer specializing in marketing collateral materials and mass emails—internal and external, 
                       print and digital. From real estate and the mortgage industry to B2B and eCommerce; 
@@ -39,7 +39,7 @@
           },
           geoff: {
             id: "geoff",
-            name: "geoff",
+            name: "geoff adebonojo",
             description: 
                     `Front-end, Back-end, whatever. 
                       Rails • React • Ember • SCSS, SASS, CSS,etc. 
@@ -71,7 +71,7 @@
           nodes: [
             {
               id: 'geoff',
-              name: "Geoff",
+              name: "Geoff Adebonojo",
               poster: "/geoff-pixel.png",
               type: [],
               description: "Rails • React • Ember • SCSS, SASS, CSS,etc. • Javascript/jQuery • RESTful JSON APIs Mysql • A/B Testing • Stripe pay processing • Jenkins CI • RSpec • Redis/ Sidekiq • Git/Github proficient • Kanban/Agile Web-scraping / data extraction DevOping public APIs Gathering and manipulating data Making visual maps Getting D3 to work half the time Finding excuses to use GraphQL Animations / natural simulations",
@@ -81,7 +81,7 @@
             },
             {
               id: 'pierce',
-              name: "Pierce",
+              name: "Pierce Seibers",
               poster: "/pierce-pixel.png",
               type: [],
               description: "Experienced designer specializing in marketing collateral materials and mass emails—internal and external, print and digital. From real estate and the mortgage industry to B2B and eCommerce; be it corporate and clean or something more creative and experimental, I love expanding a company's visual language and bringing the brand to life.",

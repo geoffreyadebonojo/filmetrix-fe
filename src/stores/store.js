@@ -23,6 +23,9 @@ export const appStates = reactive({
   displayingAbout: false,
   playingGame: false,
   theme: 'dark',
+  loggedIn: false,
+  currentUser: {},
+  userMovieList: []
 })
 
 export const store = reactive({
@@ -31,3 +34,12 @@ export const store = reactive({
   bookmarks: []
   // graphTypes: [],
 })
+
+
+
+// export const appState = reactive({
+//   search: {
+//     focus: 'search',
+//     searchResults: []
+//   }
+// })

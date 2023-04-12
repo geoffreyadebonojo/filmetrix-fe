@@ -7,6 +7,8 @@
 <template>
   <div id="user-profile-body">
 
+    <!-- <div v-if="appStates.currentUser.id == null"></div> -->
+
     <div id="not-logged-in" v-if="this.$data.loggedIn !== true">
       <input class="login-fields" id="email-field"
            type="text"
@@ -43,26 +45,31 @@
 
       <div id="user-name"></div>
 
-      <div id="profile-image-container" v-if="this.$data.currentUser.profileImage == null">
+      <div id="profile-image-container" v-if="appStates.currentUser.profileImage == null">
         <img id="awesome" src="/face-awesome.svg" />
       </div>
 
       <div id="profile-image-container" v-else>
-        <img v-bind:src="this.$data.currentUser.profileImage" />
+        <img v-bind:src="appStates.currentUser.profileImage" />
       </div>
 
       <img id="pencil" src="/pencil.svg" />
-    </div>
 
-    <div id="my-movie-list">
-      <div v-for="movie in this.$data.movieList"
-          class="my-movie-item">
-        <img v-bind:src="'https://image.tmdb.org/t/p/w185_and_h278_bestv2' + movie[2]"/>
-        <p>
-          {{  movie[1] }}
-        </p>
+      <div id="my-movie-list">
+        <div v-if="appStates.userMovieList.length > 0" 
+             v-for="movie in appStates.userMovieList"
+            class="my-movie-item">
+          <img v-bind:src="'https://image.tmdb.org/t/p/w185_and_h278_bestv2' + movie[2]"/>
+          <p>{{  movie[1] }}</p>
+        </div>
+        <div v-else id="no-movies-yet">
+          <p>
+            Add some movies!
+          </p>
+        </div>
       </div>
     </div>
+
 
     <!-- <div id="theme-mode">
       <p>
@@ -85,20 +92,22 @@
       return {
         loggedIn: false,
         currentUser: {},
-        movieList: []
       }
     },
 
     async created () {
       const response = await api.currentUser()
       this.$data.loggedIn = response.id != null
-      this.$data.currentUser = response
+
+      if (appStates.currentUser.id == null) { return }
+
+      appStates.currentUser = response
+      appStates.userMovieList = await api.fetchMovieList(appStates.currentUser.id)
     },
     
-    async updated () {
-      d3.select("#user-name").text(this.$data.currentUser.email)
-      
-      this.$data.movieList = await api.fetchMovieList(this.$data.currentUser.id)
+    updated () {
+      d3.select("#user-name").text(appStates.currentUser.email)
+      console.log('updated')
     },
     
     methods: {
@@ -113,7 +122,11 @@
 
         if (resp.status.code == 200) {
           this.$data.loggedIn = true
-          this.$data.currentUser = resp.data
+          appStates.currentUser = resp.data
+          
+          const movieList = await api.fetchMovieList(resp.data.id)
+          appStates.userMovieList = movieList.map(d => d[0])
+
         } else {
           throw new Error("login failed")
         }
@@ -124,7 +137,7 @@
 
         if (resp.status == 200) {
           this.$data.loggedIn = false
-          this.$data.currentUser = {}
+          appStates.currentUser = {}
         } else {
           throw new Error("logout failed")
         }
@@ -259,10 +272,10 @@
   display: grid;
   grid-template-areas: 
     ". profile-container logout"
-    ". user-name pencil";
-  grid-template-rows: 160px 25px;
-  grid-template-columns: 0px 1fr 30px;
-  margin-bottom: 30px;
+    ". user-name pencil"
+    "movie-list movie-list movie-list";
+  grid-template-rows: 100px 25px 1fr;
+  grid-template-columns: 30px 1fr 30px;
 
   #user-name {
     grid-area: user-name;
@@ -281,14 +294,14 @@
       opacity: 1;
     }
     img {
-      height: 20px;
+      height: 15px;
     }
   }
 
   #pencil {
     grid-area: pencil;
-    height: 22px;
-    margin: auto auto 0 auto;
+    height: 15px;
+    margin: auto;
     opacity: 0.65;
 
     &:hover {
@@ -302,31 +315,48 @@
     height: 100%;
     width: 100%;
     display: flex;
-    padding: 0 35px 20px 35px;
+    // padding: 20px;
 
     #awesome {
       grid-area: awesome;
       height: 100%;
       margin: auto;
+      opacity: 0.65;
     }
   }
 }
 
 #my-movie-list {
+  grid-area: movie-list;
+
+  width: 100%;
   display: flex;
+  flex-wrap: wrap;
+  gap: 50px 20px;
+  justify-content: center;
+  padding: 20px;
+  overflow-y: scroll;
+
+  #no-movies-yet {
+    width: 100%;
+    display: flex;
+  }
   .my-movie-item {
-    width: 100px;
+    width: 75px;
+    height: 100px;
     display: grid;
   
     img {
-      width: 100%;
+      width: 50px;
       border-radius: 15px;
     }
-  
-    p {
-      font-family: $global-font;
-      margin: auto;
-    }
+  }
+
+  p {
+    font-family: $global-font;
+    margin: 0 auto auto auto;
+    text-transform: uppercase;
+    text-align: center;
   }
 }
 

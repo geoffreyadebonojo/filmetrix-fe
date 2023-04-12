@@ -1,4 +1,8 @@
-import { graphStates, store } from '@/stores/store.js'
+import { 
+  appStates,
+  graphStates, 
+  store 
+} from '@/stores/store.js'
 
 export default {
   data () {
@@ -84,7 +88,13 @@ export default {
           'Authorization': localStorage.getItem('authorization')
         }
       }).then((response) => {
-        return response.json()
+        if (response.status !== 200) {
+          return {}
+        } else {
+          return response.json()
+        }
+      }).catch((error) => {
+        console.log(error)
       })
     )
 
@@ -268,7 +278,7 @@ export default {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ query:
           `query {
-            movieList(userId:"${userId}")
+            fetchMovieList(userId:"${userId}")
           }`
         })
       }).then((response) => {
@@ -276,6 +286,46 @@ export default {
       })
     )
 
-    return api_response.data.movieList
+    return api_response.data.fetchMovieList
+  },
+
+  async removeFromMovieList(args) {    
+    const API_URL =`${this.data().base_url}/graphql`
+    
+    const api_response = await (
+      fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query:
+          `query {
+            removeFromMovieList(userId:"${args.userId}", movieId:"${args.movieId}")
+          }`
+        })
+      }).then((response) => {
+        return response.json()
+      })
+    )
+
+    return api_response.data.removeFromMovieList
+  },
+
+  async addToMovieList(args) {    
+    const API_URL =`${this.data().base_url}/graphql`
+    
+    const api_response = await (
+      fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query:
+          `query {
+            addToMovieList(userId:"${args.userId}", movieId:"${args.movieId}")
+          }`
+        })
+      }).then((response) => {
+        return response.json()
+      })
+    )
+
+    return api_response.data.addToMovieList
   },
 }

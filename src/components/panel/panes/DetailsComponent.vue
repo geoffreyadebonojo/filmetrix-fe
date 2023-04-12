@@ -1,10 +1,12 @@
 <script setup>
-  import { 
+  import {
+    appStates,
     graphStates, 
     store 
   } from '@/stores/store.js'
   import { setFocus } from '@mixins/helpers'
   import GraphNode from '@models/GraphNode'
+  import api from "@mixins/api"
   import * as d3 from 'd3'
 </script>
 
@@ -19,10 +21,11 @@
     <div id="name">
       {{ graphStates.detailsData.name }}
     </div>
-    <div id="bookmark" @click="addBookmark(graphStates.detailsData.id)">
-      <img v-if="store.bookmarks.includes(graphStates.detailsData.id)" id="filled-bookmark" src="/bookmark-filled.svg"/>  
+    <div id="bookmark" v-if="graphStates.detailsData.id.includes('movie')" @click="addBookmark(graphStates.detailsData.id)">
+      <img v-if="this.$data.userMovieList.includes(graphStates.detailsData.id)" id="filled-bookmark" src="/bookmark-filled.svg"/>  
       <img v-else id="empty-bookmark" src="/bookmark-empty.svg"/>  
     </div>
+    <div v-else></div>
     <div id="birthday">
       {{ graphStates.detailsData.year }}
     </div>
@@ -56,13 +59,33 @@
 <script>
   export default {
     name: "DetailsComponent",
-    mounted () {
+    data () {
+      return {
+        userMovieList: []
+      }
+    },
+    async mounted () {
       setFocus('details')
       d3.selectAll(".details-component").transition().delay(100).duration(500).style("left", "0%")
+      appStates.userMovieList = await api.fetchMovieList(appStates.currentUser.id)
+      this.$data.userMovieList = appStates.userMovieList.map(d => d[0])
     },
+
     methods: {
-      addBookmark(id) {
-        store.bookmarks.togglePresence(id)
+      async addBookmark(movieId) {
+        if (appStates.userMovieList.map(d => d[0]).includes(movieId)) {
+          appStates.userMovieList = await api.removeFromMovieList({
+            userId: appStates.currentUser.id, 
+            movieId: movieId
+          })
+        } else {
+          appStates.userMovieList = await api.addToMovieList({
+            userId: appStates.currentUser.id, 
+            movieId: movieId
+          })
+        }
+
+        this.$data.userMovieList = appStates.userMovieList.map(d => d[0])
       },
 
       toggleHighlightLock(e, id) {
