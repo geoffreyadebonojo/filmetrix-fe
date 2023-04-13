@@ -254,7 +254,6 @@ export default class Graph {
       let n = d3.select(`#${d.id}`).select('.node-label').classed("inst", false)
       n.select("path").style("display", "block")
       n.select(".text-container").style("display", "block")
-      this.nodeTransformer(e.target, "scale(1)", this.settings.strokeColor, "none")
     })
   }
 

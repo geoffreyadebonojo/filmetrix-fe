@@ -38,10 +38,7 @@
       </p>
     </div>
   </div>
-
-  <div v-else>
-    Logged In
-  </div>
+  <div v-else></div>
 </template>
 
 <script>
@@ -61,8 +58,8 @@
         const password = d3.select("#password-field").node().value.toLowerCase()
 
         const resp = await api.loginUser({
-          email: email, 
-          password: password
+          email, 
+          password
         })
 
         if (resp.status.code == 200) {
@@ -71,7 +68,7 @@
           userStates.currentUser = resp.data
           
           const movieList = await api.fetchMovieList(resp.data.id)
-          appStates.userMovieList = movieList.map(d => d[0])
+          userStates.userMovieList = movieList
 
           this.$emit('updateParent')
         } else {
