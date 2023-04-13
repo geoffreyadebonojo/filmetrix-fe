@@ -7,25 +7,23 @@
 </script>
 
 <template>
-  <draggable
-      id="my-movie-list"
-      :list="this.$data.movieList"
-      :disabled="!enabled"
-      item-key="movie"
-      class="list-group"
-      ghost-class="ghost"
-      :move="checkMove"
-      @start="dragging = true"
-      @end="dragging = false"
+  <draggable id="my-movie-list"
+    :list="this.$data.movieList"
+    :disabled="!enabled"
+    item-key="movie"
+    :move="checkMove"
+    @start="dragging=true"
+    @end="dragging=false"
+    v-bind="dragOptions"
     >
-      <template #item="{ element }">
-          <div class="my-movie-item" :class="{ 'not-draggable': !enabled }">
-            <img class="delete-button" src="/red-x-icon.svg" @click="this.removeBookmark(element[0])"/>
-            <img v-bind:src="'https://image.tmdb.org/t/p/w185_and_h278_bestv2' + element[2]"/>
-            <div>{{ element[1] }}</div>
-          </div>
-      </template>
-</draggable>
+    <template #item="{ element }">
+      <div class="my-movie-item" v-bind:id="'my-movie-' + element[0]" type="transition">
+        <img class="delete-button" src="/red-x-icon.svg" @click="this.removeBookmark(element[0])"/>
+        <img v-bind:src="'https://image.tmdb.org/t/p/w185_and_h278_bestv2' + element[2]"/>
+        <div>{{ element[1] }}</div>
+      </div>
+    </template>
+  </draggable>
 </template>
 
 <script>
@@ -42,8 +40,12 @@
       Draggable
     },
     computed: {
-      draggingInfo() {
-        return this.dragging ? "under drag" : "";
+      dragOptions() {
+        return {
+          animation: 300,
+          disabled: false,
+          ghostClass: "ghost"
+        };
       },
       showMovieList: () => {
         if (userStates.userMovieList == null) { return }
@@ -51,16 +53,8 @@
       }
     },
     methods: {
-      add: function() {
-        debugger
-        // this.list.push({ name: "Juan " + id, id: id++ });
-      },
-      replace: function() {
-        debugger
-        // this.list = [{ name: "Edgard", id: id++ }];
-      },
       checkMove: function(e) {
-        window.console.log("Future index: " + e.draggedContext.futureIndex);
+        // window.console.log(e.draggedContext);
       },
       async removeBookmark(movieId) {
         userStates.userMovieList = await api.removeFromMovieList({
@@ -73,6 +67,10 @@
 </script>
 
 <style scoped lang="scss">
+  .ghost {
+    opacity: 0;
+  }
+
   #my-movie-list {
     grid-area: movie-list;
 
