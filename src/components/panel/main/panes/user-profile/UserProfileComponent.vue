@@ -39,8 +39,6 @@
     methods: {
       updateComponent () {
         this.$data.loggedIn = true
-
-        debugger
         this.$forceUpdate()
       }
     }

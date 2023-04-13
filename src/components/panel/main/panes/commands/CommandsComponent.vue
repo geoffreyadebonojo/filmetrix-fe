@@ -40,6 +40,10 @@
       <div class="item centering" style="height:3em">
         <img src="/center-graph-icon.svg"/>
       </div>
+
+      <div class="item profile" style="height:3em">
+        <img src="/settings-gear-command-section.svg"/>
+      </div>
     </div>
 
     <div id="centerline" class="line"></div>
@@ -107,6 +111,14 @@
         :section="'centering'"
         :main="'re-center graph'"
         :secondary="'this will reset the graph to its original zoom and scale; good for if you get lost'"
+        :expandedHeight="'7em'"
+        style="height:3em"
+      />
+
+      <effect-explanation
+        :section="'profile'"
+        :main="'view profile'"
+        :secondary="'this is where you can log in or sign up, view and edit your profile and manage your saved movies and graphs.'"
         :expandedHeight="'7em'"
         style="height:3em"
       />
@@ -183,6 +195,11 @@
     .save > img {
       right: 2px;
       height: 21px;
+      opacity: 0.5;
+    }
+
+    .profile > img {
+      height: 23px;
       opacity: 0.5;
     }
   }

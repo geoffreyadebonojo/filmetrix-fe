@@ -265,5 +265,9 @@ export default {
 
   .nav-button, .result-button {
     width: $nav-content-height + 1;
+
+    // &:hover {
+    //   cursor: $cursor;
+    // }
   }
 </style>

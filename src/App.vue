@@ -43,7 +43,10 @@
 
           userStates.loggedIn = true,
           userStates.currentUser = response,
-          userStates.userMovieList = await api.fetchMovieList(response.id) 
+          userStates.currentUser.username = response.email,
+          //generate on BE? looks slow...
+          userStates.currentUser.profileImage = `https://robohash.org/${userStates.currentUser.username}.png?set=set3`
+          userStates.userMovieList = await api.fetchMovieList(response.id)
 
         } else {
           userStates.loggedIn = false
@@ -51,8 +54,6 @@
           userStates.userMovieList = []
         }
       }).catch((d) => {})
-
-
     }
   }
 </script>

@@ -50,6 +50,9 @@
           links = links.concat(data.links.slice(0,d[1]))
         })
 
+        // const graph = new Graph()
+        // const graph.draw()
+
         graph.draw({
           nodes: nodes.uniqueById(),
           links: links,

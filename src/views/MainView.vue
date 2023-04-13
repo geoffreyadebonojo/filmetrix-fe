@@ -2,6 +2,9 @@
   import PanelComponent from '@components/PanelComponent.vue'
   import GraphComponent from '@components/GraphComponent.vue'
   import AboutComponent from '@components/AboutComponent.vue'
+
+  import { setFocus } from '@/mixins/helpers'
+
   import * as d3 from 'd3'
 </script>
 
@@ -31,6 +34,11 @@
       if (isMobile) {
         d3.select('#zoom-buttons').style('display', 'flex')
       } 
+
+      // const focus = this.$route.hash.replace("#", "")
+      // console.log(focus)
+      // setFocus(focus)
+
     }
   }
 </script>

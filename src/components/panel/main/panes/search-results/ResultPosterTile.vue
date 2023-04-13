@@ -30,6 +30,11 @@
         panelStates.isOpen = false
 
         await api.fetchDetails(result.id)
+
+      // const graph = new Graph()
+      // const graph.draw()
+      // ???
+      
         await graph.callForNodes(result, "main")
       }
     }
@@ -38,6 +43,7 @@
 
 <style scope lang="scss">
   .poster-tile {
-    @include poster-tile
+    @include poster-tile;
+
   }
 </style>

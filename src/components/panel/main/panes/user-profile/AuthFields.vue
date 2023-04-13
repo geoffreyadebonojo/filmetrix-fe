@@ -66,7 +66,10 @@
           userStates.loggedIn = true
           this.$data.loggedIn = true
           userStates.currentUser = resp.data
-          
+          // temp
+          userStates.currentUser.username = userStates.currentUser.email 
+          userStates.currentUser.profileImage = `https://robohash.org/${userStates.currentUser.username}.png?set=set3`
+
           const movieList = await api.fetchMovieList(resp.data.id)
           userStates.userMovieList = movieList
 

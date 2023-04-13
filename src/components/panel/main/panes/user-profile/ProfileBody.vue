@@ -14,13 +14,20 @@
       <img src="/exit.svg"/>
     </div>
 
-    <div id="user-name">{{ userStates.currentUser.email }}</div>
+    <div id="user-name">{{ userStates.currentUser.username }}</div>
 
-    <div id="profile-image-container" v-if="userStates.currentUser.profileImage == null">
-      <img id="awesome" src="/face-awesome.svg" />
-    </div>
+    <!-- last fallback -->
+    <!-- <div id="profile-image-container" v-if="userStates.currentUser.profileImage == null">
+      letter in circle
+    </div> -->
 
-    <div id="profile-image-container" v-else>
+    <!-- generated -->
+    <!-- <div id="profile-image-container" v-if="userStates.currentUser.profileImage == null">
+      <img id="awesome" v-bing:src="userStates.currentUser.profileImage" />
+    </div> -->
+
+    <!-- primary  -->
+    <div id="profile-image-container">
       <img v-bind:src="userStates.currentUser.profileImage" />
     </div>
 
@@ -110,11 +117,10 @@
       width: 100%;
       display: flex;
 
-      #awesome {
+      img {
         grid-area: awesome;
         height: 100%;
         margin: auto;
-        opacity: 0.65;
       }
     }
   }

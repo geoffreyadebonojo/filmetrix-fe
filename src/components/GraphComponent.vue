@@ -69,6 +69,9 @@
       // store.graphTypes = getTypes(nodes)
       // panelStates.currentFocus = 'details'
 
+      // const graph = new Graph()
+      // const graph.draw()
+
       graph.draw({
         nodes: nodes.uniqueById(),
         links: links,
