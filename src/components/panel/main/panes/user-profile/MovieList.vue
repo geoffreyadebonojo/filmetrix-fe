@@ -2,37 +2,66 @@
   import {
     userStates
   } from "@/stores/store.js"
+  import Draggable from 'vuedraggable'
   import api from '@mixins/api'
 </script>
 
 <template>
-  <div id="my-movie-list">
-    <div v-if="this.showMovieList" 
-         v-for="movie in userStates.userMovieList"
-         class="my-movie-item">
-      <img class="delete-button" src="/red-x-icon.svg" @click="this.removeBookmark(movie[0])"/>
-      <img v-bind:src="'https://image.tmdb.org/t/p/w185_and_h278_bestv2' + movie[2]"/>
-      <div>{{  movie[1] }}</div>
-    </div>
-
-    <div v-else id="no-movies-yet">
-      <p>
-        Add some movies!
-      </p>
-    </div>
-  </div>
+  <draggable
+      id="my-movie-list"
+      :list="this.$data.movieList"
+      :disabled="!enabled"
+      item-key="movie"
+      class="list-group"
+      ghost-class="ghost"
+      :move="checkMove"
+      @start="dragging = true"
+      @end="dragging = false"
+    >
+      <template #item="{ element }">
+          <div class="my-movie-item" :class="{ 'not-draggable': !enabled }">
+            <img class="delete-button" src="/red-x-icon.svg" @click="this.removeBookmark(element[0])"/>
+            <img v-bind:src="'https://image.tmdb.org/t/p/w185_and_h278_bestv2' + element[2]"/>
+            <div>{{ element[1] }}</div>
+          </div>
+      </template>
+</draggable>
 </template>
 
 <script>
   export default {
     name: "MovieList",
+    data () {
+      return {
+        enabled: true,
+        dragging: false,
+        movieList: userStates.userMovieList
+      }
+    },
+    components: {
+      Draggable
+    },
     computed: {
+      draggingInfo() {
+        return this.dragging ? "under drag" : "";
+      },
       showMovieList: () => {
         if (userStates.userMovieList == null) { return }
         return userStates.userMovieList.length > 0
       }
     },
     methods: {
+      add: function() {
+        debugger
+        // this.list.push({ name: "Juan " + id, id: id++ });
+      },
+      replace: function() {
+        debugger
+        // this.list = [{ name: "Edgard", id: id++ }];
+      },
+      checkMove: function(e) {
+        window.console.log("Future index: " + e.draggedContext.futureIndex);
+      },
       async removeBookmark(movieId) {
         userStates.userMovieList = await api.removeFromMovieList({
           userId: userStates.currentUser.id, 
