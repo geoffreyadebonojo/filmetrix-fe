@@ -108,16 +108,16 @@
     height: 83vh;
     width: 100%;
     display: grid;
-    grid-template-columns: 79px 10px 55px 50px 1fr;
+    grid-template-columns: 79px 10px 55px 1fr 36px;
     grid-template-rows: 95px 21px 10px 30px 17fr;
     padding: 10px;
     grid-template-areas:
-      "poster . name name bookmark"
-      "poster . birthday links ."
-      ". . . . ."
-      "ft ft ft ft ft"
-      "desc desc desc desc desc"
-      "fb fb fb fb fb";
+      "poster . name name bookmark ."
+      "poster . birthday links . ."
+      ". . . . . ."
+      "ft ft ft ft ft ft"
+      "desc desc desc desc desc desc"
+      "fb fb fb fb fb fb";
     overflow: hidden;
 
     left: 0%;

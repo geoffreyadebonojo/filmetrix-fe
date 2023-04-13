@@ -40,8 +40,8 @@
   #links {
     grid-area: links;
     display: flex;
+    width: 50px;
     justify-content: space-between;
-    margin: auto 0 0 0;
 
     a:hover {
       cursor: $cursor;
