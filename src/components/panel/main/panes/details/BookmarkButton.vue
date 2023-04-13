@@ -10,7 +10,7 @@
 </script>
 
 <template>
-  <div id="bookmark" v-if="this.isMovie" @click="addBookmark()">
+  <div id="bookmark" v-if="this.isMovie" @click="toggleBookmark()">
     <img v-if="this.bookmarksContainsId" id="filled-bookmark" src="/bookmark-filled.svg"/>  
     <img v-else id="empty-bookmark" src="/bookmark-empty.svg"/>  
   </div>
@@ -35,7 +35,7 @@
     },
 
     methods: {
-      async addBookmark() {
+      async toggleBookmark() {
 
         const args = {
           userId: userStates.currentUser.id, 
