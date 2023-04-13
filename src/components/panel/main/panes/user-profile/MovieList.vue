@@ -10,7 +10,7 @@
          v-for="movie in userStates.userMovieList"
          class="my-movie-item">
       <img v-bind:src="'https://image.tmdb.org/t/p/w185_and_h278_bestv2' + movie[2]"/>
-      <p>{{  movie[1] }}</p>
+      <div>{{  movie[1] }}</div>
     </div>
     <div v-else id="no-movies-yet">
       <p>
@@ -49,21 +49,7 @@
       display: flex;
     }
     .my-movie-item {
-      width: 75px;
-      height: 100px;
-      display: grid;
-    
-      img {
-        width: 50px;
-        border-radius: 15px;
-      }
-    }
-
-    p {
-      font-family: $global-font;
-      margin: 0 auto auto auto;
-      text-transform: uppercase;
-      text-align: center;
+      @include poster-tile
     }
   }
 </style>

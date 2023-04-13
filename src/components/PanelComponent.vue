@@ -42,7 +42,7 @@
       PanelPanes
     },
     mounted () {
-      d3.select("#panel-body").transition().duration(200).ease(d3.easeLinear).style("width", "350px")//.style("min-width", "270px")
+      d3.select("#panel-body").transition().duration(200).ease(d3.easeLinear).style("width", "300px")//.style("min-width", "270px")
       setFocus('search')
       // helpers.openField()
       panelStates.currentFocus = 'empty'

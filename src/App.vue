@@ -32,19 +32,27 @@
     },
 
     async created () {
-      userStates.theme = localStorage.getItem('theme')
-      
+      // userStates.theme = localStorage.getItem('theme')
       let x = localStorage.getItem("newHere")
       if (x == null) {
         localStorage.setItem("newHere", true)
       }
 
-      userStates.currentUser = await api.currentUser()
-      const userId = userStates.currentUser.id
+      await api.currentUser().then(async (response) => {
+        if (response.id != null) {
 
-      // if (userId) {
-      //   userStates.userMovieList = await api.fetchMovieList(userId)
-      // }
+          userStates.loggedIn = true,
+          userStates.currentUser = response,
+          userStates.userMovieList = await api.fetchMovieList(response.id) 
+
+        } else {
+          userStates.loggedIn = false
+          userStates.currentUser = {}
+          userStates.userMovieList = []
+        }
+      }).catch((d) => {})
+
+
     }
   }
 </script>

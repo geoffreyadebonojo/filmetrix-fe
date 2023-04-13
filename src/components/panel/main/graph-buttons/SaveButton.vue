@@ -31,8 +31,8 @@
         // const response = await api.saveGraph(graphStates.existing)
 
         d3.select("#save-flash").html('saved')
-          .transition().duration(200).style("opacity", 1).style("color", "#72bcd4")
-          .transition().duration(1000).style("opacity", 0).style("color", "white")
+        .transition().duration(200).style("opacity", 1).style("color", "#72bcd4")
+        .transition().duration(1000).style("opacity", 0).style("color", "white")
       }
     }
   }

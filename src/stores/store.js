@@ -22,13 +22,13 @@ export const panelStates = reactive({
 export const appStates = reactive({
   displayingAbout: false,
   playingGame: false,
-  theme: 'dark',
+  theme: 'dark'
 })
 
 export const userStates = reactive({
-  userMovieList: [],
+  currentUser: {},
   loggedIn: false,
-  currentUser: {}
+  userMovieList: []
 })
 
 export const store = reactive({

@@ -14,7 +14,7 @@
       <img src="/exit.svg"/>
     </div>
 
-    <div id="user-name"></div>
+    <div id="user-name">{{ userStates.currentUser.email }}</div>
 
     <div id="profile-image-container" v-if="userStates.currentUser.profileImage == null">
       <img id="awesome" src="/face-awesome.svg" />
@@ -24,7 +24,7 @@
       <img v-bind:src="userStates.currentUser.profileImage" />
     </div>
 
-    <img id="pencil" src="/pencil.svg" />
+    <img id="pencil" src="/pencil.svg"/>
 
     <movie-list></movie-list>
   </div>

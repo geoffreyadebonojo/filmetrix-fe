@@ -38,29 +38,6 @@
 
 <style scope lang="scss">
   .poster-tile {
-    width: 73px;
-    height: 109px;
-    border-radius: 8px;
-    border: 1px solid;
-
-    img {
-      width: 100%;
-      border-radius: 8px;
-      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    }
-  
-    div {
-      font-size: 10px;
-      text-transform: uppercase;
-      font-family: $global-font;
-      font-weight: bold;
-      text-align: center;
-    }
-
-    &:hover {
-      cursor: $cursor;
-      box-shadow: 0 14px 18px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-      transform: scale(1.03)
-    }
+    @include poster-tile
   }
 </style>

@@ -31,20 +31,9 @@
         loggedIn: null,
       }
     },
-    async created () {
-      const response = await api.currentUser()
 
-      this.$data.loggedIn = response.id != null
-      userStates.loggedIn = this.$data.loggedIn
-
-      if (this.$data.loggedIn == null) { return }
-
-      userStates.currentUser = response
-    },
-    
-    async updated () {
-      d3.select("#user-name").text(userStates.currentUser.email)
-      userStates.userMovieList = await api.fetchMovieList(userStates.currentUser.id)
+    created () {
+      this.$data.loggedIn = userStates.loggedIn
     },
 
     methods: {

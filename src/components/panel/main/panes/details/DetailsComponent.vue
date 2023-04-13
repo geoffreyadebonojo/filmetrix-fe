@@ -16,15 +16,14 @@
 
 <template>
   <div v-if="panelStates.detailsData.id != null" v-bind:id="panelStates.detailsData.id + '-details'">
-    
     <details-poster-tile></details-poster-tile>
-    
-    <div id="name">{{ panelStates.detailsData.name }}</div>
-
+    <div id="name">
+      {{ panelStates.detailsData.name }}
+    </div>
     <bookmark-button v-if="userStates.loggedIn"></bookmark-button>
-
-    <div id="birthday">{{ panelStates.detailsData.year }}</div>
-
+    <div id="birthday">
+      {{ panelStates.detailsData.year }}
+    </div>
     <external-links></external-links>
     
     <div v-if="panelStates.detailsData.summary != ''" id="description">

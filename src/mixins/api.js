@@ -88,13 +88,9 @@ export default {
           'Authorization': localStorage.getItem('authorization')
         }
       }).then((response) => {
-        if (response.status !== 200) {
-          return {}
-        } else {
-          return response.json()
-        }
+        return response.json()
       }).catch((error) => {
-        console.log(error)
+        return {}
       })
     )
 

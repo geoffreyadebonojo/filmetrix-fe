@@ -2,6 +2,7 @@
  import {
     appStates,
     graphStates,
+    panelStates,
     userStates
   } from '@/stores/store.js'
 
@@ -16,34 +17,36 @@
 </template>
 
 <script>
-
   export default {
     name: 'BookmarkButton',
+    data () {
+      return {
+        movieList: [],
+      }
+    },
+
     computed: {
       isMovie: () => {
         return panelStates.detailsData.entity == "movie"
       },
       bookmarksContainsId: () => {
-        return userStates.userMovieList
+        return userStates.userMovieList.map(d => d[0]).includes(panelStates.detailsData.id)
       }
     },
+
     methods: {
       async addBookmark() {
-        const movieId = panelStates.detailsData.id
-        if (userStates.userMovieList.map(d => d[0]).includes(movieId)) {
 
-          userStates.userMovieList = await api.removeFromMovieList({
-            userId: userStates.currentUser.id, 
-            movieId: movieId
-          })
-        } else {
-
-          userStates.userMovieList = await api.addToMovieList({
-            userId: userStates.currentUser.id, 
-            movieId: movieId
-          })
+        const args = {
+          userId: userStates.currentUser.id, 
+          movieId: panelStates.detailsData.id
         }
-        this.$data.userMovieList = userStates.userMovieList.map(d => d[0])
+        
+        if (this.bookmarksContainsId) {
+          userStates.userMovieList = await api.removeFromMovieList(args)
+        } else {
+          userStates.userMovieList = await api.addToMovieList(args)
+        }
       }
     }
   }
