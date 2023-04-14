@@ -40,7 +40,7 @@ export default class Graph {
         },
         width: 60,
         height: 70,
-        clipPath: 'inset(0% 16px round 5px)',
+        clipPath: "inset(0% 16px round 12px)"
       }
     }
   }

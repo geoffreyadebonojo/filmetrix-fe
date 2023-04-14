@@ -7,7 +7,7 @@
   } from '@/stores/store.js'
 
   import AboutDetailsComponent from  '@about/AboutDetailsComponent.vue'
-  import MainNavArrowsComponent from '@main/MainNavArrowsComponent.vue'
+  import MainNavArrowsComponent from '@main/panel-utils/MainNavArrowsComponent.vue'
 
   import CommandsComponent from      '@panes/commands/CommandsComponent.vue'
   import DetailsComponent from       '@panes/details/DetailsComponent.vue'
@@ -59,7 +59,7 @@
     }
     
     .result-component {
-      height: 100%;
+      // height: 100%;
       right: 100%;
     }  
   }

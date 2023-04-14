@@ -29,7 +29,7 @@
         <img src="/search-icon.svg" class="icon" id="search-icon">
       </router-link>
 
-      <router-link v-for="focus in displayIcons()"
+      <router-link v-for="focus in resultIconList"
                    class="nav-button primary-nav"
                    v-bind:id="focus+ '-button'"
                    v-bind:to="'#' +focus"
@@ -85,6 +85,11 @@ export default {
   mounted () {
     d3.select("#navbar").transition().delay(300).duration(200).style("width", "100%")
   },
+  computed: {
+    resultIconList: () => {
+      return store.searchResults.map(r => r['id'].split("-")[0]).unique()
+    }
+  },
   methods: {
     async submitSearch(value) {
       const val = value.toUpperCase()
@@ -98,32 +103,6 @@ export default {
       //handle for no id
       setFocus(tab)
       document.querySelector("#search-text").value = ''
-    },
-
-    async signup(args) {
-      // args = {
-      //   email: "geezy@mail.com",
-      //   password: "password"
-      // }
-
-      // await api.signupUser(args)
-    },
-
-    async login(args) {
-      args = {
-        email: "geezy@mail.com",
-        password: "password"
-      }
-
-      await api.loginUser(args)
-    },
-
-    async currentUser() {
-      await api.currentUser({})
-    },
-    
-    displayIcons() {
-      return store.searchResults.map(r => r['id'].split("-")[0]).unique()
     },
     
     toggleOrSubmitOnClick() {

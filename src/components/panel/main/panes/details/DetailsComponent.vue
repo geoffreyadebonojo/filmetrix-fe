@@ -128,12 +128,12 @@
     font-family: $global-font;
     height: 100%;
     width: 100%;
-    
+    overflow: scroll;
     line-height: 1em;
     margin-top: 0px;
-    font-size: 24px;
-    line-height: 28px;
-    letter-spacing: 3px;
+    font-size: 18px;
+    line-height: 22px;
+    // letter-spacing: 3px;
     font-weight: 900;
     text-transform: uppercase;
     color: white;

@@ -6,6 +6,11 @@ export const global = {
         emphatic: "blue"
       }
     }
+  },
+  panel: {
+    body: {
+      background: '#333333'
+    }
   }
 
   // movie-poster-dimensions

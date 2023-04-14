@@ -1,7 +1,7 @@
 <script setup>
   import MainGraphButtonsComponent from '@main/graph-buttons/MainGraphButtonsComponent.vue'
   import PanelPanes from '@main/panes/PanelPanes.vue'
-  import MainResizeBarComponent from '@main/MainResizeBarComponent.vue'
+  import MainResizeBarComponent from '@main/panel-utils/MainResizeBarComponent.vue'
   import NavBarComponent from '@panel/NavBarComponent.vue'
   import { 
     appStates,

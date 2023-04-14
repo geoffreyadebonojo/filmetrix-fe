@@ -110,6 +110,9 @@ export default {
               id
               name
               poster
+              entity
+              year
+              knownForDepartment
             }
           }`
         })
@@ -145,7 +148,7 @@ export default {
         return response.json()
       })
     )
-
+// debugger
     panelStates.detailsData = api_response.data.details
     panelStates.detailsData.entity = api_response.data.details.id.split("-")[0]
   },

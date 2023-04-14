@@ -7,6 +7,7 @@
 <template>
   <div id="links">
       <a id="imdb" 
+         v-if="panelStates.detailsData.imdbId != ''"
          v-bind:href="panelStates.detailsData.imdbId"
          target="_blank">
         <img src="/imdb-icon.png">
@@ -17,6 +18,9 @@
           target="_blank">
         <img src="/youtube-icon.png">
       </a>
+
+    <!-- link to TV guide for TV?? -->
+
     </div>
 </template>
 
