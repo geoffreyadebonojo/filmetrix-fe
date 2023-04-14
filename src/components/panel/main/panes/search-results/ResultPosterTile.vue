@@ -13,7 +13,7 @@
   <div class="poster-tile"
        v-bind:id="this.$attrs.result.id"
        tabindex="0"
-       :key="this.$attrs.result.id"
+       :key="this.$data.resultId"
        @dblclick="fetchNodesAndDetails(this.$attrs.result)"
        @keypress="fetchNodesAndDetails(this.$attrs.result)">  
     <img v-bind:src="this.$attrs.result.poster"/>
@@ -40,11 +40,12 @@
     data () {
       return {
         onGraph: false,
-        posterElem: null
+        posterElem: null,
+        resultId: this.$attrs.result.id
       }
     },
     
-    async mounted () {
+    mounted () {
       d3.select(`#${this.$attrs.result.id}`).call(
         d3.drag()
         .on("start", dragstarted)
@@ -52,7 +53,6 @@
         .on("end", dragended)
       )
       const ent = this.$attrs.result.entity
-
       console.log(this.$attrs.result.id)
 
       function dragstarted(e) {
