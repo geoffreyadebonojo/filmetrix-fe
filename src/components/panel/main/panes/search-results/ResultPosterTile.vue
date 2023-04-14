@@ -29,7 +29,6 @@
       }
     },
     mounted () {
-      const transitionTimer = 800
       d3.select(`#${this.$attrs.result.id}`).call(
         d3.drag()
         .on("start", dragstarted)
@@ -37,20 +36,23 @@
         .on("end", dragended)
       )
 
-      function dragstarted(e) {
+      function dragstarted() {
         const z = d3.select(this)
-
+        
         z.select("img")
         .transition().duration(0)
         .style("transform", "scale(0.7)")
         
-        z.transition().duration(200)
+        z.transition().duration(100)
         .style("width", "100px")
         .style("height", "100px")
         .style("border-radius", "50%")
         .style("border", "1px solid")
         .style("padding", "16px")
-    
+
+        z.transition().duration(100).delay(100)
+        .style("transform", "scale(0.7)")
+        
         z.select("div").style("display", "none") 
       }
 
@@ -63,46 +65,51 @@
         z.style("top", `${y}px`).style("left", `${x}px`)
       }
       
-      function dragended(e) {
+      async function dragended(e) {
         const z = d3.select(this)
         
-        const cx = e.sourceEvent.clientX - z.node().clientWidth/2
-        const gw = window.innerWidth-panelStates.width
-        
-        if (cx < gw) {
-          console.log("drop!")
-          z.transition().duration(500).style("transform", "scale(0)")
-        }
-
-        z.style("left", "0px")
-        .style("top", "0px")
-        .classed("fixed", false)
-
         z.select("img")
         .transition().duration(200)
         .style("transform", "scale(1)")
         .style("border-radius", "8px")
-
+        
         z.transition().duration(200)
         .style("width", "73px")
         .style("height", "109px")
         .style("border-radius", "8px")
-        .style("border", "1px solid")
+        .style("border", "1.5px solid")
         .style("padding", "unset")
+        .transition().duration(200).style("transform", "scale(1)")
+        
+        const cx = e.sourceEvent.clientX - z.node().clientWidth/2
+        const gw = window.innerWidth-panelStates.width
+        if (cx < gw) {
+          z.transition().duration(200).style("transform", "scale(0)")
+          addNodes()
+        } else {
+          z.classed("fixed", false)
+          z.style("left", "0px")
+          .style("top", "0px")
+          z.select("div").style("display", "block")
+        }
+      }
 
-        z.select("div").style("display", "block")
+      const result = this.$attrs.result
+      const fetchNodes = this.fetchNodesAndDetails
+      function addNodes() {
+        fetchNodes(result)
       }
     },
     methods: {
       async fetchNodesAndDetails(result) {
-        panelStates.isOpen = false
+        // panelStates.isOpen = false
+
 
         await api.fetchDetails(result.id)
 
-      // const graph = new Graph()
-      // const graph.draw()
-      // ???
-      
+        // const graph = new Graph()
+        // const graph.draw()
+        // ???
         await graph.callForNodes(result, "main")
       }
     }
