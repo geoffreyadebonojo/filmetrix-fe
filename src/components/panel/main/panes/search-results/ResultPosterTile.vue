@@ -14,7 +14,7 @@
        v-bind:id="this.$attrs.result.id"
        tabindex="0"
        :key="this.$data.resultId"
-       @dblclick="fetchNodesAndDetails(this.$attrs.result)"
+       @click="fetchNodesAndDetails(this.$attrs.result)"
        @keypress="fetchNodesAndDetails(this.$attrs.result)">  
     <img v-bind:src="this.$attrs.result.poster"/>
     <div>
@@ -41,39 +41,34 @@
       return {
         onGraph: false,
         posterElem: null,
-        resultId: this.$attrs.result.id
+        resultId: this.$attrs.result.id,
+        refresh: true
       }
     },
     
     mounted () {
+      const ent = this.$attrs.result.entity
       d3.select(`#${this.$attrs.result.id}`).call(
         d3.drag()
         .on("start", dragstarted)
         .on("drag", dragged)
         .on("end", dragended)
       )
-      const ent = this.$attrs.result.entity
-      console.log(this.$attrs.result.id)
 
       function dragstarted(e) {
         const z = d3.select(this)
-        
         z.select("img")
         .transition().duration(0)
         .style("transform", "scale(0.6)")
-        
         z.transition().duration(50)
         .style("width", "100px")
         .style("height", "100px")
         .style("border-radius", "50%")
         .style("border", "1.5px solid")
         .style("padding", "16px")
-
         z.transition().duration(50).delay(50)
         .style("transform", "scale(0.6)")
-        
         z.selectAll("div").style("display", "none")
-        
         if (z.node().__vnode.props.result.poster == ""){
           z.classed(`no-poster-${ent}`, true)
         }
@@ -81,7 +76,6 @@
 
       function dragged(e) {
         const z = d3.select(this)
-        
         z.classed("fixed", true)
         const x = e.sourceEvent.clientX - z.node().clientWidth/2
         const y = e.sourceEvent.clientY - z.node().clientHeight/2
@@ -90,12 +84,12 @@
       
       async function dragended(e) {
         const z = d3.select(this)
-        
+        const cx = e.sourceEvent.clientX - z.node().clientWidth/2
+        const gw = window.innerWidth-panelStates.width
         z.select("img")
         .transition().duration(0)
         .style("transform", "scale(1)")
         .style("border-radius", "8px")
-        
         z.transition().duration(50)
         .style("width", "73px")
         .style("height", "109px")
@@ -103,15 +97,10 @@
         .style("border", "1px solid")
         .style("padding", "unset")
         .transition().duration(50).style("transform", "scale(1)")
-        
-        const cx = e.sourceEvent.clientX - z.node().clientWidth/2
-        const gw = window.innerWidth-panelStates.width
-
         if (cx < gw) {
           z.transition().duration(200)
           .style("transform", "scale(0)")
           z.style("display", "none")
-
           store.searchResults.remove(result)
           addNodes()
         } else {
@@ -122,6 +111,7 @@
           z.classed(`no-poster-${ent}`, false)
         }
       }
+      this.$data.refresh = true
 
       const result = this.$attrs.result
       const fetchNodes = this.fetchNodesAndDetails
@@ -181,10 +171,6 @@
     img {
       transform-origin: 35px 12px;
     }
-
-    // div:first-of-type {
-    //   background: $panel-body-grey;
-    // }
 
     &:hover {
       z-index: 10;

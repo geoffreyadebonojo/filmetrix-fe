@@ -14,7 +14,7 @@
   <div v-if="panelStates.currentFocus !== 'noResult'"
        v-bind:id="panelStates.currentFocus + '-results'"
        class="result-container">
-    <result-poster-tile v-for="result in filteredSearchResults" :result="result"></result-poster-tile>
+    <result-poster-tile v-for="result in resultsWithPosters" :result="result"></result-poster-tile>
   </div>
 
   <div v-else>
@@ -34,7 +34,12 @@
     },
     computed: {
       filteredSearchResults: () => {
-        return store.searchResults.filter(r => r['id'].includes(panelStates.currentFocus))
+        return store.searchResults.filter(r => r.entity == panelStates.currentFocus)
+      },
+      resultsWithPosters: () => {
+        return store.searchResults.filter((r) => {
+          return r.entity == panelStates.currentFocus && r.poster != ''
+        })
       }
     }
   }

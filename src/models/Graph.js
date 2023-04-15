@@ -136,7 +136,6 @@ export default class Graph {
         return 'node ' + d.type.join(" ")
       })
       .attr("id", d => d.id)
-
     return node
   }
 
@@ -270,6 +269,11 @@ export default class Graph {
         if (!graphStates.inMotion) {
           gn.linkHighlighter()
         }
+
+        // if (e.altKey) {
+        //   console.log(e.altKey)
+        //   d3.select(`#${d.id}`).classed("scissors", true)
+        // }
       })
       .on("mouseleave", (e, d) => {
         
@@ -279,6 +283,8 @@ export default class Graph {
         if (!graphStates.inMotion) {
           d3.selectAll(".character-label").remove()
         }
+
+        // d3.select(`#${d.id}`).classed("scissors", false)
       })
     }
   }

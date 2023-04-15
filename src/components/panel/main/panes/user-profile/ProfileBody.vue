@@ -10,7 +10,8 @@
 
 <template>
   <div id="user-profile-container" v-if="this.$data.loggedIn">
-    <div id="logout-button" @click="submitLogout()">
+    <div id="logout-button" class="tooltip" @click="submitLogout()">
+      <span class="tooltiptext">Log out</span>
       <img src="/exit.svg"/>
     </div>
 
@@ -69,14 +70,39 @@
 </script>
 
 <style scope lang="scss">
+  .tooltiptext {
+    @include pulse;
+    @keyframes pulsate {
+    0% { transform: translate(0px, 0px) scale(1); opacity: 0.8}
+    50% { transform: translate(-1.5px, 0px) scale(1.08); opacity: 1}
+    100% { transform: translate(0px, 0px) scale(1); opacity: 0.8}
+  }
+
+    font-family: $global-font;
+    visibility: hidden;
+    width: 71px;
+    color: #fff;
+    text-align: right;
+    position: absolute;
+    z-index: 10;
+    top: -28px;
+    right: -11px;
+  }
+  .tooltip:hover .tooltiptext {
+    visibility: visible;
+  }
+
   #user-profile-container {
+    margin: auto;
     display: grid;
-    grid-template-areas: 
-      ". profile-container logout"
-      ". user-name pencil"
-      "movie-list movie-list movie-list";
-    grid-template-rows: 100px 25px 1fr;
-    grid-template-columns: 30px 1fr 30px;
+    width: 100%;
+    grid-template-areas:
+        ". . profile-container logout ."
+        ". . user-name pencil ."
+        "movie-list movie-list movie-list movie-list movie-list ";
+    grid-template-rows: 120px 25px 1fr;
+    grid-template-columns: 1fr 30px 150px 30px 1fr;
+    padding-top: 20px;
 
     #user-name {
       grid-area: user-name;

@@ -61,6 +61,8 @@
           userId: userStates.currentUser.id, 
           movieId: movieId
         })
+        
+        this.$data.movieList = userStates.userMovieList
       }
     }
   }

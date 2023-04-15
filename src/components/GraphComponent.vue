@@ -31,7 +31,12 @@
   }
 
   .node:hover {
-    cursor: $cursor;
+    &:hover{ 
+      cursor: $cursor;
+    }
+    &.scissors:hover {
+      cursor: $scissors;
+    }
   }
 
   @keyframes rotateLabel {

@@ -44,6 +44,10 @@
       <div class="item profile" style="height:3em">
         <img src="/settings-gear-command-section.svg"/>
       </div>
+
+      <!-- <div class="item scissors" style="height:3em">
+        <img src="/scissors-icon.svg" style="transform:rotate(-135deg);opacity:0.5"/>
+      </div> -->
     </div>
 
     <div id="centerline" class="line"></div>
