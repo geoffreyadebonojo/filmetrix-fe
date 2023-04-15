@@ -30,8 +30,8 @@
     animation-timing-function: linear;
   }
 
-  .node:hover {
-    &:hover{ 
+  .node {
+    &:hover {
       cursor: $cursor;
     }
     &.scissors:hover {

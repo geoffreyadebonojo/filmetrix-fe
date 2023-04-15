@@ -59,11 +59,9 @@
       }
       .apply-effect:hover {
         cursor: $cursor;
-        animation-name: pulsate;
-        animation-duration: 1.4s;
-        animation-iteration-count: infinite;
-        animation-timing-function: linear;
+        @include pulse
       }
+
     }
 
     @keyframes pulsate {

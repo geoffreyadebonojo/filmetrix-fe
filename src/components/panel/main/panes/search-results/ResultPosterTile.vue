@@ -46,79 +46,80 @@
       }
     },
     
-    mounted () {
-      const ent = this.$attrs.result.entity
-      d3.select(`#${this.$attrs.result.id}`).call(
-        d3.drag()
-        .on("start", dragstarted)
-        .on("drag", dragged)
-        .on("end", dragended)
-      )
+    // mounted () {
+    //   const ent = this.$attrs.result.entity
+    //   d3.select(`#${this.$attrs.result.id}`).call(
+    //     d3.drag()
+    //     .on("start", dragstarted)
+    //     .on("drag", dragged)
+    //     .on("end", dragended)
+    //   )
 
-      function dragstarted(e) {
-        const z = d3.select(this)
-        z.select("img")
-        .transition().duration(0)
-        .style("transform", "scale(0.6)")
-        z.transition().duration(50)
-        .style("width", "100px")
-        .style("height", "100px")
-        .style("border-radius", "50%")
-        .style("border", "1.5px solid")
-        .style("padding", "16px")
-        z.transition().duration(50).delay(50)
-        .style("transform", "scale(0.6)")
-        z.selectAll("div").style("display", "none")
-        if (z.node().__vnode.props.result.poster == ""){
-          z.classed(`no-poster-${ent}`, true)
-        }
-      }
+    //   function dragstarted(e) {
+    //     const z = d3.select(this)
+    //     z.select("img")
+    //     .transition().duration(0)
+    //     .style("transform", "scale(0.6)")
+    //     z.transition().duration(50)
+    //     .style("width", "100px")
+    //     .style("height", "100px")
+    //     .style("border-radius", "50%")
+    //     .style("border", "1.5px solid")
+    //     .style("padding", "16px")
+    //     z.transition().duration(50).delay(50)
+    //     .style("transform", "scale(0.6)")
+    //     z.selectAll("div").style("display", "none")
+    //     if (z.node().__vnode.props.result.poster == ""){
+    //       z.classed(`no-poster-${ent}`, true)
+    //     }
+    //   }
 
-      function dragged(e) {
-        const z = d3.select(this)
-        z.classed("fixed", true)
-        const x = e.sourceEvent.clientX - z.node().clientWidth/2
-        const y = e.sourceEvent.clientY - z.node().clientHeight/2
-        z.style("top", `${y-10}px`).style("left", `${x-6}px`)
-      }
+    //   function dragged(e) {
+    //     const z = d3.select(this)
+    //     z.classed("fixed", true)
+    //     const x = e.sourceEvent.clientX - z.node().clientWidth/2
+    //     const y = e.sourceEvent.clientY - z.node().clientHeight/2
+    //     z.style("top", `${y-10}px`).style("left", `${x-6}px`)
+    //   }
       
-      async function dragended(e) {
-        const z = d3.select(this)
-        const cx = e.sourceEvent.clientX - z.node().clientWidth/2
-        const gw = window.innerWidth-panelStates.width
-        z.select("img")
-        .transition().duration(0)
-        .style("transform", "scale(1)")
-        .style("border-radius", "8px")
-        z.transition().duration(50)
-        .style("width", "73px")
-        .style("height", "109px")
-        .style("border-radius", "8px")
-        .style("border", "1px solid")
-        .style("padding", "unset")
-        .transition().duration(50).style("transform", "scale(1)")
-        if (cx < gw) {
-          z.transition().duration(200)
-          .style("transform", "scale(0)")
-          z.style("display", "none")
-          store.searchResults.remove(result)
-          addNodes()
-        } else {
-          z.classed("fixed", false)
-          z.style("left", "0px")
-          .style("top", "0px")
-          z.selectAll("div").style("display", "block")
-          z.classed(`no-poster-${ent}`, false)
-        }
-      }
-      this.$data.refresh = true
+    //   async function dragended(e) {
+    //     const z = d3.select(this)
+    //     const cx = e.sourceEvent.clientX - z.node().clientWidth/2
+    //     const gw = window.innerWidth-panelStates.width
+    //     z.select("img")
+    //     .transition().duration(0)
+    //     .style("transform", "scale(1)")
+    //     .style("border-radius", "8px")
+    //     z.transition().duration(50)
+    //     .style("width", "73px")
+    //     .style("height", "109px")
+    //     .style("border-radius", "8px")
+    //     .style("border", "1px solid")
+    //     .style("padding", "unset")
+    //     .transition().duration(50).style("transform", "scale(1)")
+    //     if (cx < gw) {
+    //       z.transition().duration(200)
+    //       .style("transform", "scale(0)")
+    //       z.style("display", "none")
+    //       store.searchResults.remove(result)
+    //       addNodes()
+    //     } else {
+    //       z.classed("fixed", false)
+    //       z.style("left", "0px")
+    //       .style("top", "0px")
+    //       z.selectAll("div").style("display", "block")
+    //       z.classed(`no-poster-${ent}`, false)
+    //     }
+    //   }
+    //   this.$data.refresh = true
 
-      const result = this.$attrs.result
-      const fetchNodes = this.fetchNodesAndDetails
-      function addNodes() {
-        fetchNodes(result)
-      }
-    },
+    //   const result = this.$attrs.result
+    //   const fetchNodes = this.fetchNodesAndDetails
+    //   function addNodes() {
+    //     fetchNodes(result)
+    //   }
+    // },
+    
     methods: {
       async fetchNodesAndDetails(result) {
         // panelStates.isOpen = false

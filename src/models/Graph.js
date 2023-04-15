@@ -132,10 +132,15 @@ export default class Graph {
       .selectAll("g")
       .data(nodes)
       .join("g")
+      .attr("tabindex", (_d, i) => {
+        return i
+      })
       .attr("class", (d) => {
         return 'node ' + d.type.join(" ")
       })
       .attr("id", d => d.id)
+
+    console.log(this.counter)
     return node
   }
 
