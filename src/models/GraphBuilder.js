@@ -22,30 +22,51 @@ export default class GraphBuilder {
         fill: "#222222",
         text: "#FFFFFF"
       },
-      fontSize: 12
+      fontSize: 12,
+      applyHighlight: {
+        scale: 1.05,
+        stroke: "white",
+        textStroke: "white"
+      },
+      removeHighlight: {
+        scale: 1,
+        stroke: "#7A7978",
+        textStroke: "none"
+      }
     }
     
-    this.node = {
-      dimensions: { 
-        radius: 50,
-        image: {
-          offsetX: -39,
-          offsetY: -35,
-          width: 60,
-          height: 70,
-          clipPath: "inset(0% 16px round 12px)"
-        }
-      },
-      forces:{
-        collide: 60,
-        charge: -2700
-      }
+    this.image = { 
+      offsetX: -39,
+      offsetY: -35,
+      width: 60,
+      height: 70,
+      clipPath: "inset(0% 16px round 12px)"
     }
+  }
 
-    this.link = {
-      dimensions: {
-        length: 200
-      }
+  attachMouseEvents(node) {
+    if (this.newHere) {
+      const instructionLabel = new NewHereInstruction(node, this)
+      instructionLabel.addInstructionHover()
+    } else {
+      node.on("mouseenter", (_e, d) => {        
+        const gn = new GraphNode(d.id)
+        gn.nodeTransformer(this.graph.applyHighlight)
+
+        // if (!graphStates.inMotion) {
+          // gn.linkHighlighter()
+        // }
+
+        // if (e.altKey) {
+        //   d3.select(`#${d.id}`).classed("scissors", true)
+        // }
+      })
+      .on("mouseleave", (_e, d) => {
+        const gn = new GraphNode(d.id)
+        gn.nodeTransformer(this.graph.removeHighlight)
+        // gn.linkUnhighlighter()
+        // d3.select(`#${d.id}`).classed("scissors", false)
+      })
     }
   }
 
@@ -53,6 +74,7 @@ export default class GraphBuilder {
     const link = this.createLinks(
       this.args.innerWrapper, 
       this.args.links)
+
     const node = this.createNodes(
       this.args.innerWrapper, 
       this.args.nodes)
@@ -202,48 +224,16 @@ export default class GraphBuilder {
   appendImage(node) {
     node.append("svg:image")
       .attr("class", "poster")
-      .attr('x', this.node.dimensions.image.offsetX)
-      .attr('y', this.node.dimensions.image.offsetY)
-      .attr('width', this.node.dimensions.image.width)
-      .attr('height', this.node.dimensions.image.height)
+      .attr('x', this.image.offsetX)
+      .attr('y', this.image.offsetY)
+      .attr('width', this.image.width)
+      .attr('height', this.image.height)
       .attr("xlink:href", d => d.poster)
       .style("transform", (d) => {
         return `scale(${d.r/50})`
       })
-      .style("clip-path", this.node.dimensions.image.clipPath)
+      .style("clip-path", this.image.clipPath)
     return node
   }
 
-  attachMouseEvents(target) {
-    if (this.newHere) {
-      const instructionLabel = new NewHereInstruction(target, this)
-      instructionLabel.addInstructionHover()
-
-    } else {
-      node.on("mouseenter", (e, d) => {        
-        const gn = new GraphNode(d.id)
-        gn.nodeTransformer("scale(1.03)", "aliceblue", "white", "#FFFFFF")
-
-        if (!graphStates.inMotion) {
-          gn.linkHighlighter()
-        }
-
-        // if (e.altKey) {
-        //   console.log(e.altKey)
-        //   d3.select(`#${d.id}`).classed("scissors", true)
-        // }
-      })
-      .on("mouseleave", (e, d) => {
-        
-        const gn = new GraphNode(d.id)
-        gn.nodeTransformer("scale(1)", this.settings.strokeColor, "none", "#222222")
-
-        if (!graphStates.inMotion) {
-          d3.selectAll(".character-label").remove()
-        }
-
-        // d3.select(`#${d.id}`).classed("scissors", false)
-      })
-    }
-  }
 }

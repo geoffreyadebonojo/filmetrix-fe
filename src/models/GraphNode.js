@@ -1,4 +1,5 @@
 import { angle360 } from '@mixins/helpers'
+import { graphStates } from '@/stores/store.js'
 import * as d3 from 'd3'
 
 export default class GraphNode {
@@ -6,7 +7,7 @@ export default class GraphNode {
     this.id = nodeId
     this.node = d3.select(`#${nodeId}`)
 
-    this.elems = {
+    this.elem = {
       circle: this.node.select('circle'),
       label: this.node.select('.node-label'),
       poster: this.node.select('.poster'),
@@ -14,39 +15,30 @@ export default class GraphNode {
       targets: d3.selectAll(`.link[target='${nodeId}']`)
     }
 
-    const x = this.elems.sources.nodes().map((d)=>d.__data__.target.id)
-    const z = this.elems.targets.nodes().map((d)=>d.__data__.source.id)
+    const x = this.elem.sources.nodes().map((d)=>d.__data__.target.id)
+    const z = this.elem.targets.nodes().map((d)=>d.__data__.source.id)
     
     this.connections = d3.selectAll('.node').filter((d) => {
       return x.includes(d.id) || z.includes(d.id)
     })
   }
 
-  nodeTransformer(scale, highlightColor, textStroke) {
+  nodeTransformer(args) {
     // if (target.classList.contains('locked')) { return }
+    this.node.moveToFront()
 
-    const elems  = this.elems
-    const y = this.connections
+    this.elem.circle.style("transform", `scale(${args.scale})`) 
+    this.elem.label.style("transform", `scale(${args.scale})`)
+    this.elem.poster.style("transform", `scale(${args.scale})`)
+    this.elem.label.selectAll("text").style("stroke", args.textStroke)
+    this.elem.circle.style("stroke", args.stroke)
 
-    y.select('circle').style("stroke", highlightColor)
-    y.selectAll("text").style("stroke", highlightColor)
-    y.select(".poster").attr("transform", scale)
+    this.connections.select('circle').style("stroke", args.stroke)
+    this.connections.selectAll("text").style("stroke", args.textStroke)
+    // this.connections.select(".poster").style("transform", `scale(${args.scale})`)
 
-    let scaleElem = [elems.circle, elems.label, elems.poster]
-    scaleElem.forEach((d) => {
-      d.attr("transform", scale)
-    })
-
-    let highlightElems = [
-      elems.circle, 
-      elems.sources.select(".line"), 
-      elems.targets.select(".line")
-    ]
-    highlightElems.forEach((d) => {
-      d.style("stroke", highlightColor)
-    })
-
-    elems.label.selectAll("text").style("stroke", textStroke)
+    this.elem.sources.select("line").attr("stroke", args.stroke)
+    this.elem.targets.select("line").attr("stroke", args.stroke)
   }
 
   linkUnhighlighter() {

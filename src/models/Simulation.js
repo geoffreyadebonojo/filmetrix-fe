@@ -1,144 +1,73 @@
 import * as d3 from 'd3'
+import { graphStates } from '@/stores/store.js'
 
 export default class Simulation {
-  constructor({nodes, links, graphType}) {
+  constructor({nodes, links, graphType}, options={}) {
+    this.options = options
     this.nodes = nodes
     this.links = links
-    this.body
+
+    this.body = this.generateGraph(
+      this.fetchGraphAttrs(graphType)
+    )
+  }
+
+  generateGraph(args) { 
+    const sim = d3.forceSimulation(this.nodes, this.links)
+    .force("link", d3.forceLink(this.links).id(d => d.id).distance(() => {
+        return args.forces.length
+    }))
+    .force("charge", d3.forceManyBody().strength((d) => {
+        return args.forces.charge
+    }))
+    .force('collide', d3.forceCollide((d) => {
+        return args.forces.collide
+    }))
+    .force("center", d3.forceCenter(
+      ...args.forceCenter
+    ))
+    .alpha(args.alpha.g)
+    .alphaTarget(args.alpha.target)
     
-    this.width = window.innerWidth
-    this.height = window.innerHeight 
-
-    if (graphType == "about") {
-      this.generateAboutGraph()
-    } else if (graphType == "game") {
-      this.generateGameGraph()
-    } else if (graphType == "main") {
-      this.generateMainGraph()
+    if (args.alpha.min != null) {
+      sim.alphaMin(args.alpha.min)
     }
+
+    return sim
   }
 
-  generateMainGraph() { 
-    const posterOffset = 25
-    const settings = {
-      node: {
-        collide: 60,
-        charge: -1000,
-        circle: {
-          r: 50
+  fetchGraphAttrs(type){ 
+    const width = window.innerWidth
+    const height = window.innerHeight 
+
+    const attrs = {
+      main: {
+        forces: {
+          length:  200,
+          charge: -1800,
+          collide: 60
+        },
+        forceCenter: [width * 0.5, height * 0.5],
+        alpha: {
+          g:      1,
+          min:    0.2, 
+          target: 0.01
         }
       },
-      link: {
-        length: 200,
-      },
-      image: {
-        offset: {
-          x: -posterOffset,
-          y: -posterOffset
+      about: {
+        forces: {
+          length:  200,
+          charge: 700,
+          collide: 70
         },
-        position: {
-          x: posterOffset*2,
-          y: posterOffset*2
-        },
-        clipPath: '0% 12px round 5px',
+        forceCenter: [width * 0.5, height * 0.5],
+        alpha: {
+          g:      1,
+          target: 0.9999
+        }
       }
     }
 
-    this.body = d3.forceSimulation(this.nodes, this.links)
-    .force("link", d3.forceLink(this.links).id(d => d.id).distance(() => {
-      // by popularity?
-      return settings.link.length
-    }))
-    .force("charge", d3.forceManyBody().strength(() => {
-      return settings.node.charge
-    }))
-    .force('collide', d3.forceCollide(() => {
-      let col = settings.node.collide
-      return col
-      // if (graphStates.existing.map((f) => f[0]).includes(d.id)) {
-      //   return col * 1.2
-      // } else {
-      //   return col * 0.8
-      // }
-    }))
-    .force("center", d3.forceCenter(this.width * 0.5, this.height * 0.5))
-    // .force('x', d3.forceX().x(this.width * 0.5))
-    // .force('y', d3.forceY().y(this.height * 0.5))
-    .alpha(1)
-    .alphaMin(0.2)
-    .alphaTarget(0.01)
-  }
-
-  generateAboutGraph() { 
-    this.body = d3.forceSimulation(this.nodes, this.links)
-    .force("link", d3.forceLink(this.links).id(d => d.id).distance(() => {
-      return 200
-    }))
-    .force("charge", d3.forceManyBody().strength(() => {
-      return 700
-    }))
-    .force('collide', d3.forceCollide(() => {
-      return 70
-    }))
-    .force("center", d3.forceCenter(this.width * 0.5, this.height * 0.5))
-    // .force('x', d3.forceX().x(this.width * 0.5))
-    // .force('y', d3.forceY().y(this.height * 0.5))
-    // .alpha(1)
-    // .alphaMin(0.2)
-    // .alphaTarget(0.01)
-    .alpha(1)
-    .alphaTarget(0.9999)
-  }
-
-  generateGameGraph() { 
-    const posterOffset = 25
-
-    const settings = {
-      node: {
-        collide: 60,
-        charge: -1000,
-        circle: {
-          r: 50
-        }
-      },
-      link: {
-        length: 200,
-      },
-      image: {
-        offset: {
-          x: -posterOffset,
-          y: -posterOffset
-        },
-        position: {
-          x: posterOffset*2,
-          y: posterOffset*2
-        },
-        clipPath: '0% 12px round 5px',
-      }
-    }
-
-    this.body = d3.forceSimulation(this.nodes, this.links)
-    .force("link", d3.forceLink(this.links).id(d => d.id).distance(() => {
-      // by popularity?
-      return settings.link.length
-    }))
-    .force("charge", d3.forceManyBody().strength(() => {
-      return settings.node.charge
-    }))
-    .force('collide', d3.forceCollide(() => {
-      let col = settings.node.collide
-      return col
-      // if (graphStates.existing.map((f) => f[0]).includes(d.id)) {
-      //   return col * 1.2
-      // } else {
-      //   return col * 0.8
-      // }
-    }))
-    .force("center", d3.forceCenter(this.width * 0.5, this.height * 0.5))
-    // .force('x', d3.forceX().x(this.width * 0.5))
-    // .force('y', d3.forceY().y(this.height * 0.5))
-    .alpha(1)
-    .alphaMin(0.2)
-    .alphaTarget(0.01)
+    return attrs[type]
   }
 }

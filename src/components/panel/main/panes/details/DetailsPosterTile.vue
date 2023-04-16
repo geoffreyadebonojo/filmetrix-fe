@@ -13,10 +13,10 @@
     <img class="poster"
          v-bind:class="graphStates.lockedHighlights.includes(this.$data.detailId) ? 'poster-locked' : 'poster-unlocked'"
          v-bind:id="this.$data.detailId + 'detail-poster'"
-         v-bind:src="panelStates.detailsData.poster"
-         @click="toggleHighlightLock()"
+         v-bind:src="panelStates.detailsData.poster">
+         <!-- @click="toggleHighlightLock()"
          @mouseenter="highlightNodes()"
-         @mouseleave="unhighlightNodes()"/>
+         @mouseleave="unhighlightNodes()"/> -->
 </template>
 
 <script>
@@ -26,8 +26,16 @@
       return {
         detailId: panelStates.detailsData.id,
         graphNode: new GraphNode(panelStates.detailsData.id),
-        applyHighlight: ["scale(1.05)", "aliceblue", "white"],
-        removeHighlight: ["scale(1)", "#7A7978", "none"],
+        applyHighlight: {
+          scale: 1.05,
+          stroke: "aliceblue",
+          textStroke: "white"
+        },
+        removeHighlight: {
+          scale: 1,
+          stroke: "#7A797",
+          textStroke: "none"
+        }
       }
     },
 
@@ -49,8 +57,8 @@
       highlightNodes() {
         if (this.$data.target.node() == undefined) { return }
 
-        this.$data.graphNode.nodeTransformer(...this.$data.applyHighlight)
-        this.$data.graphNode.linkHighlighter()
+        this.$data.graphNode.nodeTransformer(this.$data.applyHighlight)
+        // this.$data.graphNode.linkHighlighter()
       },
 
       unhighlightNodes() {
@@ -58,8 +66,8 @@
         if (this.$data.target.classed("poster-locked")) { return }
         if (graphStates.lockedHighlights.includes(this.$data.detailId)) { return }
 
-        this.$data.graphNode.nodeTransformer(...this.$data.removeHighlight)
-        this.$data.graphNode.linkUnhighlighter()
+        this.$data.graphNode.nodeTransformer(this.$data.removeHighlight)
+        // this.$data.graphNode.linkUnhighlighter()
       }
     }
   }
