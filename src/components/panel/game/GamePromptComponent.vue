@@ -198,30 +198,30 @@
       // transform: scale(1.2);
     }
     
-    animation-name: pulsate;
-    animation-duration: 1.4s;
-    animation-iteration-count: infinite;
-    animation-timing-function: linear;
+    // animation-name: pulsate;
+    // animation-duration: 1.4s;
+    // animation-iteration-count: infinite;
+    // animation-timing-function: linear;
   }
 
-  @keyframes pulsate {
-    0% {
-      // transform: scale(1);
-      font-size: 2em;
-      // opacity: 0.5;
+  // @keyframes pulsate {
+  //   0% {
+  //     // transform: scale(1);
+  //     font-size: 2em;
+  //     // opacity: 0.5;
       
-    }
-    50% {
-      // transform: scale(1.1);
-      font-size: 2.2em;
-      // opacity: 0.8;
-    }
-    100% {
-      // transform: scale(1);
-      font-size: 2em;
-      // opacity: 0.5;
-    }
-  }
+  //   }
+  //   50% {
+  //     // transform: scale(1.1);
+  //     font-size: 2.2em;
+  //     // opacity: 0.8;
+  //   }
+  //   100% {
+  //     // transform: scale(1);
+  //     font-size: 2em;
+  //     // opacity: 0.5;
+  //   }
+  // }
 
   #back-to-graphs-link,
   #game-prompt,

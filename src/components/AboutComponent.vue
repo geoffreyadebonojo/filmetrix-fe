@@ -5,7 +5,7 @@
     store 
   } from "@/stores/store.js"
   import * as d3 from 'd3'
-  import Graph from '@models/Graph.js'
+  import GraphBuilder from '@models/GraphBuilder.js'
   import Simulation from '@models/Simulation.js'
   import { settings, setFocus } from "@/mixins/helpers"
   import { graphStates } from '@/stores/store.js'
@@ -141,7 +141,7 @@
                                             links,
                                             graphType }).body
 
-        const [link, node] = new Graph({links, 
+        const [link, node] = new GraphBuilder({links, 
                                         nodes,
                                         containerId,
                                         innerWrapper,

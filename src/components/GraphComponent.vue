@@ -2,7 +2,7 @@
   import { 
     appStates,
     graphStates,
-    store
+    panelStates
   } from '@/stores/store.js'
   import { getTypes } from "@mixins/helpers"
   import api from "@mixins/api"
@@ -31,6 +31,9 @@
   }
 
   .node {
+    &:focus {
+      outline: none;
+    }
     &:hover {
       cursor: $cursor;
     }
@@ -52,40 +55,45 @@
 <script>
   export default {
     name: "GraphComponent",
+    data() {
+      return {
+        graph:null
+      }
+    },
+
     async created () {
       const gid = this.$route.query.gid
-
       if (gid == null) { return }
-      
-      await api.findBySlug(gid)
-
-      // panelStates.detailsData.id = graphStates.existing.last()[0]
-
-      let data
-      let nodes = []
-      let links = []
-
-      graphStates.existing.forEach((d) => {
-        data = graphStates.graphData[d[0]]
-        nodes = nodes.concat(data.nodes.slice(0,d[1]+1))
-        links = links.concat(data.links.slice(0,d[1]))
-      })
-
-      // store.graphTypes = getTypes(nodes)
-      // panelStates.currentFocus = 'details'
-
-      // const graph = new Graph()
-      // const graph.draw()
-
-      graph.draw({
-        nodes: nodes.uniqueById(),
-        links: links,
-        type: this.$attrs.type
-      })
+      await this.loadFromSlug(gid)
     },
-    mounted () {
-      // d3.select("#main-graph-container")
-      // .attr("viewBox", `-${window.innerWidth*2/3} -${window.innerHeight} ${window.innerWidth*2} ${window.innerHeight*2}`)
+
+    methods: {
+      async loadFromSlug (gid) {
+        await api.findBySlug(gid)
+        // panelStates.detailsData.id = graphStates.existing.last()[0]
+
+        let data
+        let nodes = []
+        let links = []
+
+        graphStates.existing.forEach((d) => {
+          data = graphStates.graphData[d[0]]
+          nodes = nodes.concat(data.nodes.slice(0,d[1]+1))
+          links = links.concat(data.links.slice(0,d[1]))
+        })
+
+        // store.graphTypes = getTypes(nodes)
+        // panelStates.currentFocus = 'details'
+
+        // const graph = new Graph()
+        // const graph.draw()
+
+        graph.draw({
+          nodes: nodes.uniqueById(),
+          links: links,
+          type: "main"
+        })
+      }
     }
   }
 </script>

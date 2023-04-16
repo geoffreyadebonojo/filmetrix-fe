@@ -59,8 +59,12 @@
       }
       .apply-effect:hover {
         cursor: $cursor;
-        @include pulse
       }
+      
+      animation-name: pulsate;
+      animation-duration: 2s;
+      animation-iteration-count: infinite;
+      animation-timing-function: linear;      
 
     }
 
@@ -68,15 +72,14 @@
     0% {
       transform: scale(1);
       opacity: 0.5;
-
     }
     50% {
-      transform: scale(1.005);
+      transform: scale(1.015);
       opacity: 0.8;
     }
     100% {
       transform: scale(1);
       opacity: 0.5;
     }
-  }
+   }
 </style>

@@ -23,16 +23,18 @@
     methods: {
       focusSearchBar() {
         document.querySelector('#search-text').focus()
-        this.flashSearchTextHighlight()
+
+        this.flashHighlight(d3.select("#search-text"))
+        this.flashHighlight(d3.select("#highlight"))
       },
       
-      flashSearchTextHighlight () {
-        d3.select("#search-text")
+      flashHighlight (field) {
+        field
         .style("background", this.$data.searchHighlightColor.emphatic)
-        .style("border", this.$data.searchHighlightColor.emphatic)        
-        .transition().duration(300)
+        .style("border", this.$data.searchHighlightColor.emphatic)
+        .transition().duration(250)
         .style("background", this.$data.searchHighlightColor.primary)
-        .style("border", this.$data.searchHighlightColor.primary)        
+        .style("border", this.$data.searchHighlightColor.primary)
       }
     }
   }

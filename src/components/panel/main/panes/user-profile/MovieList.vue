@@ -14,8 +14,8 @@
     :move="checkMove"
     @start="dragging=true"
     @end="dragging=false"
-    v-bind="dragOptions"
-    >
+    v-bind="dragOptions">
+
     <template #item="{ element }">
       <div class="my-movie-item" v-bind:id="'my-movie-' + element[0]" type="transition">
         <img class="delete-button" src="/red-x-icon.svg" @click="this.removeBookmark(element[0])"/>
@@ -23,6 +23,7 @@
         <div>{{ element[1] }}</div>
       </div>
     </template>
+
   </draggable>
 </template>
 
@@ -74,7 +75,7 @@
   }
 
   #my-movie-list {
-    grid-area: movie-list;
+    grid-area: lower-field;
 
     width: 100%;
     display: flex;

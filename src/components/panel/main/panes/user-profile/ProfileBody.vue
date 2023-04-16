@@ -2,9 +2,11 @@
   import MovieList from "./MovieList.vue"
   import { 
     appStates,
+    graphStates,
     userStates
   } from '@/stores/store.js'
   import api from "@mixins/api"
+  import graph from "@mixins/graph"
   import * as d3 from "d3"
 </script>
 
@@ -16,17 +18,14 @@
     </div>
 
     <div id="user-name">{{ userStates.currentUser.username }}</div>
-
     <!-- last fallback -->
     <!-- <div id="profile-image-container" v-if="userStates.currentUser.profileImage == null">
       letter in circle
     </div> -->
-
     <!-- generated -->
     <!-- <div id="profile-image-container" v-if="userStates.currentUser.profileImage == null">
       <img id="awesome" v-bing:src="userStates.currentUser.profileImage" />
     </div> -->
-
     <!-- primary  -->
     <div id="profile-image-container">
       <img v-bind:src="userStates.currentUser.profileImage" />
@@ -35,6 +34,18 @@
     <img id="pencil" src="/pencil.svg"/>
 
     <movie-list></movie-list>
+
+    <!-- <div style="grid-area:lower-field; padding-top:30px; display:flex">
+      <p style="margin:auto 0">pack</p>
+      <label class="switch">
+        <input type="checkbox" checked @click="toggleLinks($event)">
+        <span class="slider round"></span>
+      </label>
+      <p style="margin:auto 0">tree</p>
+      <div class="slidecontainer">
+        <input type="range" min="1" max="100" value="50" class="slider" id="myRange" @input="change($event)" style="width:100%">
+      </div>
+    </div> -->
   </div>
 
   <div id="logout-msg" v-else>
@@ -51,6 +62,38 @@
       }
     },
     methods: {
+      change(e) {
+        let val = e.currentTarget.valueAsNumber
+        // .select("circle image .node-label").style("transform", `scale(${val/100})`)
+        // s.style("display", (d) => {
+        //   vis = store.graphSettings.a < 3 ? 'none' : "block"
+        //   d3.selectAll(`.link[target='${d.id}']`).style("display", vis)
+        //   return vis
+        // })
+      },
+      
+      toggleLinks(e) {
+        graphStates.graphType = e.currentTarget.checked ? "tree" : "pack"
+        
+        let data
+        let nodes = []
+        let links = []
+        
+        graphStates.existing.forEach((d) => {
+          data = graphStates.graphData[d[0]]
+          nodes = nodes.concat(data.nodes.slice(0,d[1]+1))
+          links = links.concat(data.links.slice(0,d[1]))
+        })
+        
+        graph.draw({
+          nodes: nodes.uniqueById(),
+          links: links,
+          type: "main"
+        })
+        d3.select(".links").style("display", e.currentTarget.checked ? "block" : "none")
+        d3.selectAll(".node-label").style("display", e.currentTarget.checked ? "block" : "none")
+      },
+
       async submitLogout() {
         const resp = await api.logoutUser()
   
@@ -70,9 +113,73 @@
 </script>
 
 <style scope lang="scss">
+
+  .switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+    
+    input { 
+      opacity: 0;
+      width: 0;
+      height: 0;
+
+      &:checked + .slider {
+        background-color: #2196F3;
+      }
+
+      &:focus + .slider {
+        box-shadow: 0 0 1px #2196F3;
+      }
+
+      &:checked + .slider:before {
+        -webkit-transform: translateX(26px);
+        -ms-transform: translateX(26px);
+        transform: translateX(26px);
+      }
+    }
+  }
+
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+
+    &:before{
+      position: absolute;
+      content: "";
+      height: 26px;
+      width: 26px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      -webkit-transition: .4s;
+      transition: .4s;
+    }
+  }
+
+  .slider.round {
+    border-radius: 34px;
+  }
+
+  .slider.round:before {
+    border-radius: 50%;
+  }
+
   .tooltiptext {
-    @include pulse;
-    @keyframes pulsate {
+    animation-name: tooltip-pulse;
+    animation-duration: 1.4s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+
+    @keyframes tooltip-pulse {
     0% { transform: translate(0px, 0px) scale(1); opacity: 0.8}
     50% { transform: translate(-1.5px, 0px) scale(1.08); opacity: 1}
     100% { transform: translate(0px, 0px) scale(1); opacity: 0.8}
@@ -88,6 +195,7 @@
     top: -28px;
     right: -11px;
   }
+ 
   .tooltip:hover .tooltiptext {
     visibility: visible;
   }
@@ -99,7 +207,7 @@
     grid-template-areas:
         ". . profile-container logout ."
         ". . user-name pencil ."
-        "movie-list movie-list movie-list movie-list movie-list ";
+        "lower-field lower-field lower-field lower-field lower-field ";
     grid-template-rows: 120px 25px 1fr;
     grid-template-columns: 1fr 30px 150px 30px 1fr;
     padding-top: 20px;
