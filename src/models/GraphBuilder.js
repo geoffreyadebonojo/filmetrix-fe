@@ -11,35 +11,40 @@ import * as d3 from 'd3'
 export default class GraphBuilder {
   constructor(args) {
     this.args = args
-    this.settings = this.nodeSettings()
+
     this.graphControlButtons = d3.selectAll(".graph-control-buttons")
     this.viewerBody = d3.select(`#${args.containerId}`)
-  }
-  
-  nodeSettings() {
-    const bodyColor = appStates.theme == 'dark' ? "#222222" : "#AAAAAA"
+    this.newHere = localStorage.getItem("newHere") === "true" || localStorage.getItem("newHere") === undefined
 
-    return {
-      strokeColor: "#7A7978",
-      bodyGrey: bodyColor,
-      node: {
-      collide: 60,
-      charge: -2700,
-        circle: {
-          r: 50
+    this.graph = {
+      colors: {
+        stroke: "#7A7978",
+        fill: "#222222",
+        text: "#FFFFFF"
+      },
+      fontSize: 12
+    }
+    
+    this.node = {
+      dimensions: { 
+        radius: 50,
+        image: {
+          offsetX: -39,
+          offsetY: -35,
+          width: 60,
+          height: 70,
+          clipPath: "inset(0% 16px round 12px)"
         }
       },
-      link: {
-        length: 200,
-      },
-      image: {
-        offset: {
-          x: -39,
-          y: -35
-        },
-        width: 60,
-        height: 70,
-        clipPath: "inset(0% 16px round 12px)"
+      forces:{
+        collide: 60,
+        charge: -2700
+      }
+    }
+
+    this.link = {
+      dimensions: {
+        length: 200
       }
     }
   }
@@ -47,16 +52,11 @@ export default class GraphBuilder {
   build() {
     const link = this.createLinks(
       this.args.innerWrapper, 
-      this.args.links
-    )
-
+      this.args.links)
     const node = this.createNodes(
       this.args.innerWrapper, 
-      this.args.nodes
-    )
-
+      this.args.nodes)
     this.createViewerBody()
-
     return [link, node]
   }
 
@@ -89,7 +89,7 @@ export default class GraphBuilder {
                    .call(zoom).on("dblclick.zoom", null)
     
     return this.viewerBody
-  } 
+  }
 
   createLinks(parent, links) {
     const link = this.buildLinks(parent, links)
@@ -100,11 +100,9 @@ export default class GraphBuilder {
     const node = this.buildNode(parent, nodes)
     this.appendCircle(node)
     this.appendImage(node)
-
-    if (graphStates.graphType == "tree") {
-      this.appendActorLabel(node)
-    }
-
+    // if (graphStates.graphType == "tree") {
+    this.appendActorLabel(node)
+    // }
     this.attachMouseEvents(node)
     return node
   }
@@ -121,14 +119,14 @@ export default class GraphBuilder {
       .attr("target", (d => d.target.id))
       .append("line")
       .attr("class", "line")
-      .attr("stroke", this.settings.strokeColor)
+      .attr("stroke", this.graph.colors.stroke)
 
-    if (graphStates.graphType == "tree") {
+    // if (graphStates.graphType == "tree") {
       link
       .attr("stroke-width", "1px")
       .attr("vector-effect", "non-scaling-stroke")
       .style("display", "block")
-    }
+    // }
     return link
   }
 
@@ -140,11 +138,15 @@ export default class GraphBuilder {
       .selectAll("g")
       .data(nodes,(d) => {
         // also defined in Simulation.js:73
-        if (graphStates.graphType == "tree") {
-          d.r = 50
-        } else if (graphStates.graphType == "pack") {
-          d.r = d.popularity * 1.5
-        }
+        // if (graphStates.graphType == "tree") {
+
+        /////// Set further upstream?
+        d.r = 50
+        ////////
+
+        // } else if (graphStates.graphType == "pack") {
+        //   d.r = d.popularity * 1.5
+        // }
         return d
       })
       .join("g")
@@ -161,10 +163,10 @@ export default class GraphBuilder {
   appendCircle(node) {
     node.append("circle")
       .attr("class", "outline")
-      .attr("stroke", this.settings.strokeColor)
+      .attr("stroke", this.graph.colors.stroke)
       .attr("stroke-width", 1)
       .attr("r", d => d.r)
-      .attr('fill', this.settings.bodyGrey)
+      .attr('fill', this.graph.colors.fill)
       .attr("vector-effect", "non-scaling-stroke")
     return node
   }
@@ -172,14 +174,12 @@ export default class GraphBuilder {
   appendActorLabel(node){
     const actorLabel = node.append("g")
     .attr("class", "node-label")
-    .attr("fill", "white")
+    .attr("fill", this.graph.colors.text)
     .attr("text-anchor", "middle")
     
     actorLabel.append("path")
-    .attr("d", (d) => {
-      return drawArc(d)
-    })
-    .attr("fill", this.settings.bodyGrey)
+    .attr("d", d => drawArc(d))
+    .attr("fill", this.graph.colors.fill)
     
     actorLabel.append("g").attr("class", "text-container").selectAll("text")
     .data((d) => {
@@ -189,10 +189,8 @@ export default class GraphBuilder {
     })
     .enter()
     .append("text")
-    .text((d) => { 
-      return d.letter
-    })
-    .style("font-size", "12px")
+    .text(d => d.letter)
+    .style("font-size", `${this.graph.fontSize}`)
     .style("font-family", "Dosis, sans-serif")
     .style("text-transform", "uppercase")
     .style("transform", (d, i, a) => {
@@ -204,34 +202,21 @@ export default class GraphBuilder {
   appendImage(node) {
     node.append("svg:image")
       .attr("class", "poster")
-      .attr('x', (d) => {
-        return this.settings.image.offset.x
-      })
-      .attr('y', (d) => {
-        return this.settings.image.offset.y
-      })
-      .attr('width', (d) => {
-        return this.settings.image.width
-      })
-      .attr('height', (d) => {
-        return this.settings.image.height
-      })
+      .attr('x', this.node.dimensions.image.offsetX)
+      .attr('y', this.node.dimensions.image.offsetY)
+      .attr('width', this.node.dimensions.image.width)
+      .attr('height', this.node.dimensions.image.height)
       .attr("xlink:href", d => d.poster)
       .style("transform", (d) => {
         return `scale(${d.r/50})`
       })
-      .style("clip-path", () => {
-        return this.settings.image.clipPath
-      })
+      .style("clip-path", this.node.dimensions.image.clipPath)
     return node
   }
 
-
-
-  attachMouseEvents(node) {
-    if (localStorage.getItem("newHere") === "true" || localStorage.getItem("newHere") === undefined) {
-      // this.instructionLabel(node)
-      const instructionLabel = new NewHereInstruction(node)
+  attachMouseEvents(target) {
+    if (this.newHere) {
+      const instructionLabel = new NewHereInstruction(target, this)
       instructionLabel.addInstructionHover()
 
     } else {

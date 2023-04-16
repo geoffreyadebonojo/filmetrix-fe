@@ -6,10 +6,10 @@ import * as d3 from 'd3'
 import { drawArc } from '@mixins/helpers'
 
 export default class NewHereInstruction {
-  constructor(node) {
-    this.node = node;
-    this.letters = "Double click me  double click me  double click me  "
-    this.bodyGrey= appStates.theme == 'dark' ? "#222222" : "#AAAAAA"
+  constructor(target, parent) {
+    this.node = target
+    this.graph = parent.graph
+    this.letters = "double click me  double click me  double click me  "
   }
   
   addInstructionHover() {
@@ -29,7 +29,7 @@ export default class NewHereInstruction {
     label.append("path")
     .attr("class", "instruction")
     .attr("d", f => this.tempArc(f))
-    .attr("fill", this.bodyGrey)
+    .attr("fill", this.graph.colors.fill)
 
     label.selectAll("text")
     .exit()
@@ -37,10 +37,8 @@ export default class NewHereInstruction {
     .enter()
     .append("text")
     .attr("class", "instruction")
-    .text((d) => {
-      return d
-    })
-    .style("font-size", "12px")
+    .text((d) => d)
+    .style("font-size", `${this.graph.fontSize+2}px`)
     .style("font-family", "Dosis, sans-serif")
     .style("font-weight", "900")
     .style("text-transform", "uppercase")
