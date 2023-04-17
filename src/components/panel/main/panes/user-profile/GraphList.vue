@@ -20,7 +20,7 @@
     name: "GraphStacks",
     data () {
       return {
-        posterOffset: 40
+        posterOffset: 50
       }
     },
     methods: {
@@ -45,11 +45,10 @@
 <style scoped lang="scss">
 
   #graph-stacks {
-    padding:20px;
 
     .stack {
       display: flex; 
-      margin: 10px;
+      margin: 10px 0;
       width: 100%;
       height: 100px;
       overflow-x: scroll;

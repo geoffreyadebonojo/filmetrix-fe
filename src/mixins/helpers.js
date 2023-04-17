@@ -59,11 +59,10 @@ export function angle360(cx, cy, ex, ey) {
   return theta;
 } 
 
-export function setFocus(focus) {
+export function setFocus(focus) {  
   const navButtons = d3.selectAll(".nav-button").nodes().reverse()
   navButtons.unshift()
   closeField()
-  d3.select("#highlight").style("display", "block")
   const buttonMap = navButtons.map(x => x.id.split("-")[0]);
   const displacement = [
     1,
@@ -81,12 +80,22 @@ export function setFocus(focus) {
 
   if (focus == 'search') {
     openField()
-  } else if (focus == 'profile') {
-    d3.select("#highlight").style("display", "none")
+  } 
+  
+  if (focus == 'profile') {
+    d3.select("#highlight")
+      .style("border", "solid 0.05em white")
+      .style("background", "none")
+  } else {
+    d3.select("#highlight")
+      .style("display", "block")
+      .style("border", "none")
+      .style("background", "white")
   }
 }
 
 export function openField() {
+  d3.select("#highlight").style("display", "block")
   d3.select("#search-text").transition().duration(0).delay(100).style("width", "100%").style("left", "15px")
   d3.select("#highlight").transition().duration(100).style("left", "-1px")
 }

@@ -14,12 +14,12 @@
       <div class="profile-nav-buttons" id="graphs" @click="changeArea('graphs')">
         <img src="/chart-network.svg"/>
       </div>
-      <div class="profile-nav-buttons" id="friends" @click="changeArea('friends')">
+      <!-- <div class="profile-nav-buttons" id="friends" @click="changeArea('friends')">
         <img src="/friends.svg"/>
       </div>
       <div class="profile-nav-buttons" id="settings" @click="changeArea('settings')">
         <img src="/settings-bars-black.svg"/>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
@@ -61,6 +61,7 @@
     background: none;
     position: sticky;
     top: 0px;
+    z-index: 1000;
   }
 
   #profile-nav {
@@ -75,7 +76,7 @@
       width: 27px;
 
       img {
-        opacity: 0.85;
+        opacity: 0.75;
         margin: 6px;
         height: 15px;
         cursor: $cursor;

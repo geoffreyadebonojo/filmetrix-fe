@@ -47,6 +47,7 @@
   #panel-panes {
     grid-area: panel-panes;
     overflow-y: auto;
+    // overflow-y: hidden;
     
     #empty-field {
       height: 100%;

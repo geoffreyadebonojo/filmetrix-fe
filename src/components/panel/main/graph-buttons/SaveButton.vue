@@ -30,6 +30,9 @@
           d3.select("#save-flash").html('saved')
           .transition().duration(200).style("opacity", 1).style("color", "#72bcd4")
           .transition().duration(1000).style("opacity", 0).style("color", "white")
+          return response
+        }).then(async (response) => {
+          userStates.userGraphList = await api.fetchGraphList(userStates.currentUser.id)
         })
       }
     }

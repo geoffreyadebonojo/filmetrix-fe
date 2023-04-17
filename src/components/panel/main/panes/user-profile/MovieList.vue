@@ -79,7 +79,6 @@
     display: flex;
     flex-wrap: wrap;
     gap: 50px 20px;
-    justify-content: center;
     padding: 20px 10px 61px;
     overflow-y: scroll;
 

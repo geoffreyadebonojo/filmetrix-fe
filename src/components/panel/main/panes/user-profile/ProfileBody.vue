@@ -1,7 +1,7 @@
 <script setup> 
   import MovieList from "./MovieList.vue"
+  import GraphList from "./GraphList.vue"
   import ProfileNavBar from "./ProfileNavBar.vue"
-  import GraphStacks from "./GraphStacks.vue"
   import { 
     appStates,
     graphStates,
@@ -14,12 +14,16 @@
 
 <template>
   <div id="user-profile-container" v-if="this.$data.loggedIn">
+
     <div id="logout-button" class="tooltip" @click="submitLogout()">
       <span class="tooltiptext">Log out</span>
       <img src="/exit.svg"/>
     </div>
 
-    <div id="user-name">{{ userStates.currentUser.username }}</div>
+    <div id="user-name">
+      <p>{{ userStates.currentUser.username }}</p>
+      <img id="pencil" src="/pencil.svg"/>
+    </div>
     <!-- last fallback -->
     <!-- <div id="profile-image-container" v-if="userStates.currentUser.profileImage == null">
       letter in circle
@@ -32,16 +36,15 @@
     <div id="profile-image-container">
       <img v-bind:src="userStates.currentUser.profileImage" />
     </div>
-    <img id="pencil" src="/pencil.svg"/>
 
     <profile-nav-bar @change-focus="changeFocus"></profile-nav-bar>
 
-    <movie-list class="profile-inner-panel"  v-if="this.$data.profileFocus == 'movies'"></movie-list>
-    <graph-stacks class="profile-inner-panel" v-else-if="this.$data.profileFocus == 'graphs'"></graph-stacks>
+    <movie-list class="profile-inner-panel" v-if="this.$data.profileFocus == 'movies'"></movie-list>
+    <graph-list class="profile-inner-panel" v-else-if="this.$data.profileFocus == 'graphs'"></graph-list>
+
     <div style="grid-area:lower-field" v-else-if="this.$data.profileFocus == 'friends'">friends</div>
     <div style="grid-area:lower-field" v-else-if="this.$data.profileFocus == 'settings'">settings</div>
     <div v-else></div>
-
     <!-- <div style="grid-area:lower-field; padding-top:30px; display:flex">
       <p style="margin:auto 0">pack</p>
       <label class="switch">
@@ -120,6 +123,63 @@
 </script>
 
 <style scope lang="scss">
+  #user-profile-container {
+    margin: auto;
+    display: grid;
+    width: 100%;
+    grid-template-areas:
+        ". profile-container profile-container profile-container . profile-nav"
+        ". . user-name user-name . logout"
+        ". lower-field lower-field lower-field lower-field . ";
+    grid-template-rows: 100px 27px 1fr;
+    grid-template-columns: 1fr 27px 2fr 1fr 30px 27px;
+
+    #user-name {
+      grid-area: user-name;
+      margin: auto;
+      display: flex;
+      font-family: $global-font;
+      font-size: 20px;
+    }
+    
+    #logout-button {
+      grid-area: logout;
+      margin: 5px auto auto auto;
+      opacity: 0.65;
+      
+      &:hover {
+        cursor: $cursor;
+        opacity: 1;
+      }
+      img {
+        height: 15px;
+      }
+    }
+    
+    #pencil {
+      grid-area: pencil;
+      height: 10px;
+      margin: 0;
+      opacity: 0.65;
+      
+      &:hover {
+        cursor: $cursor;
+        opacity: 1;
+      }
+    }
+    
+    #profile-image-container {
+      grid-area: profile-container;
+      display: flex;
+
+      img {
+        grid-area: awesome;
+        height: 120px;
+        margin: auto;
+      }
+    }
+  }
+
   .profile-inner-panel {
     grid-area: lower-field;
   }
@@ -197,76 +257,18 @@
 
     font-family: $global-font;
     visibility: hidden;
+    font-size: 10px;
     width: 71px;
-    color: #fff;
+    color: #FFFFFF;
     text-align: right;
     position: absolute;
     z-index: 10;
-    top: -28px;
-    right: -11px;
+    top: -15px;
+    right: -5px;
   }
  
   .tooltip:hover .tooltiptext {
     visibility: visible;
-  }
-
-  #user-profile-container {
-    margin: auto;
-    display: grid;
-    width: 100%;
-    grid-template-areas:
-        ". . . . profile-nav"
-        ". . profile-container logout profile-nav"
-        ". . user-name pencil ."
-        "lower-field lower-field lower-field lower-field lower-field ";
-    grid-template-rows: 27px 120px 27px 1fr;
-    grid-template-columns: 1fr 30px 150px 30px 27px;
-
-    #user-name {
-      grid-area: user-name;
-      margin: auto;
-      font-family: $global-font;
-      font-size: 20px;
-    }
-    
-    #logout-button {
-      grid-area: logout;
-      margin: 5px auto auto auto;
-      opacity: 0.65;
-      
-      &:hover {
-        cursor: $cursor;
-        opacity: 1;
-      }
-      img {
-        height: 15px;
-      }
-    }
-    
-    #pencil {
-      grid-area: pencil;
-      height: 15px;
-      margin: auto;
-      opacity: 0.65;
-      
-      &:hover {
-        cursor: $cursor;
-        opacity: 1;
-      }
-    }
-    
-    #profile-image-container {
-      grid-area: profile-container;
-      height: 100%;
-      width: 100%;
-      display: flex;
-
-      img {
-        grid-area: awesome;
-        height: 100%;
-        margin: auto;
-      }
-    }
   }
 
   #logout-msg {
