@@ -40,7 +40,7 @@
             return `translate(-${(window.innerWidth-panelStates.width)+70}px, 0)`
           })
 
-          d3.select("#panel-body").style("position", "unset").transition().duration(0).style("width", `${panelStates.width}`).style("min-width", "275px")
+          d3.select("#panel-body").style("position", "unset").transition().duration(0).style("width", `${panelStates.width}`).style("min-width", "300px")
           d3.select("#main-graph-component").transition().duration(this.$data.transition).style("width", "0%")
           d3.select("#about-graph-component").transition().duration(this.$data.transition).style("width", "100%")
           d3.select("#about-inner-wrapper").transition().duration(this.$data.transition).style("transform", "translate(0, 0)")
@@ -57,7 +57,7 @@
           d3.select("#about-graph-component").transition().duration(this.$data.transition).style("width", "0%")
           d3.select("#resize-bar").transition().delay(this.$data.transition).duration(0).style("opacity", "1").style("display", "block")
           d3.selectAll(".primary-nav").transition().delay(this.$data.transition).duration(0).style("display", "block")
-          d3.select(".nav-button-container").transition().delay(this.$data.transition).duration(0).style("background", "#6e6e6e")
+          d3.select(".nav-button-container").transition().delay(this.$data.transition).duration(0).style("background", "#6e6e6e") //$nav-background-grey
           d3.select("#navbar").transition().delay(this.$data.transition).duration(0).style("right", "unset").style("width", "100%")
           d3.select("#panel-body").transition().delay(this.$data.transition).duration(0).style("position", "absolute")
           d3.selectAll("#search-text").transition().delay(0).duration(0).style("display", "block")

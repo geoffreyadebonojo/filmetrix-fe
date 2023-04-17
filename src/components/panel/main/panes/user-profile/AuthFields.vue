@@ -70,8 +70,8 @@
           userStates.currentUser.username = userStates.currentUser.email 
           userStates.currentUser.profileImage = `https://robohash.org/${userStates.currentUser.username}.png?set=set3`
 
-          const movieList = await api.fetchMovieList(resp.data.id)
-          userStates.userMovieList = movieList
+          userStates.userMovieList = await api.fetchMovieList(resp.data.id)
+          userStates.userGraphList = await api.fetchGraphList(resp.data.id)
 
           this.$emit('updateParent')
         } else {

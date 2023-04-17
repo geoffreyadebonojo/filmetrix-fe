@@ -60,7 +60,7 @@ export default class Simulation {
           charge: 700,
           collide: 70
         },
-        forceCenter: [width * 0.5, height * 0.5],
+        forceCenter: [width * 0.48, height * 0.57],
         alpha: {
           g:      1,
           target: 0.9999

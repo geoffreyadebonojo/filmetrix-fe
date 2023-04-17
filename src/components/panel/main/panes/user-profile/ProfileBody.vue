@@ -1,5 +1,7 @@
 <script setup> 
   import MovieList from "./MovieList.vue"
+  import ProfileNavBar from "./ProfileNavBar.vue"
+  import GraphStacks from "./GraphStacks.vue"
   import { 
     appStates,
     graphStates,
@@ -30,10 +32,15 @@
     <div id="profile-image-container">
       <img v-bind:src="userStates.currentUser.profileImage" />
     </div>
-
     <img id="pencil" src="/pencil.svg"/>
 
-    <movie-list></movie-list>
+    <profile-nav-bar @change-focus="changeFocus"></profile-nav-bar>
+
+    <movie-list class="profile-inner-panel"  v-if="this.$data.profileFocus == 'movies'"></movie-list>
+    <graph-stacks class="profile-inner-panel" v-else-if="this.$data.profileFocus == 'graphs'"></graph-stacks>
+    <div style="grid-area:lower-field" v-else-if="this.$data.profileFocus == 'friends'">friends</div>
+    <div style="grid-area:lower-field" v-else-if="this.$data.profileFocus == 'settings'">settings</div>
+    <div v-else></div>
 
     <!-- <div style="grid-area:lower-field; padding-top:30px; display:flex">
       <p style="margin:auto 0">pack</p>
@@ -58,41 +65,39 @@
     name: "ProfileBody",
     data () {
       return {
-        loggedIn: this.$attrs.loggedIn
+        loggedIn: this.$attrs.loggedIn,
+        profileFocus: 'movies'
       }
     },
     methods: {
-      change(e) {
-        let val = e.currentTarget.valueAsNumber
-        // .select("circle image .node-label").style("transform", `scale(${val/100})`)
-        // s.style("display", (d) => {
-        //   vis = store.graphSettings.a < 3 ? 'none' : "block"
-        //   d3.selectAll(`.link[target='${d.id}']`).style("display", vis)
-        //   return vis
-        // })
+      changeFocus(f) {
+        this.$data.profileFocus = f
       },
+
       
-      toggleLinks(e) {
-        graphStates.graphType = e.currentTarget.checked ? "tree" : "pack"
+      
+      // toggleLinks(e) {
+      //   graphStates.graphType = e.currentTarget.checked ? "tree" : "pack"
         
-        let data
-        let nodes = []
-        let links = []
+      //   let data
+      //   let nodes = []
+      //   let links = []
         
-        graphStates.existing.forEach((d) => {
-          data = graphStates.graphData[d[0]]
-          nodes = nodes.concat(data.nodes.slice(0,d[1]+1))
-          links = links.concat(data.links.slice(0,d[1]))
-        })
+      //   graphStates.existing.forEach((d) => {
+      //     data = graphStates.graphData[d[0]]
+      //     nodes = nodes.concat(data.nodes.slice(0,d[1]+1))
+      //     links = links.concat(data.links.slice(0,d[1]))
+      //   })
         
-        graph.draw({
-          nodes: nodes.uniqueById(),
-          links: links,
-          type: "main"
-        })
-        d3.select(".links").style("display", e.currentTarget.checked ? "block" : "none")
-        d3.selectAll(".node-label").style("display", e.currentTarget.checked ? "block" : "none")
-      },
+      //   graph.draw({
+      //     nodes: nodes.uniqueById(),
+      //     links: links,
+      //     type: "main"
+      //   })
+
+      //   d3.select(".links").style("display", e.currentTarget.checked ? "block" : "none")
+      //   d3.selectAll(".node-label").style("display", e.currentTarget.checked ? "block" : "none")
+      // },
 
       async submitLogout() {
         const resp = await api.logoutUser()
@@ -101,6 +106,8 @@
           this.$data.loggedIn = false
           userStates.loggedIn = false
           userStates.currentUser = {}
+          userStates.userMovieList = {}
+          userStates.userGraphList = {}
         } else {
           throw new Error("logout failed")
           // manually clear headers from localstorage
@@ -113,6 +120,9 @@
 </script>
 
 <style scope lang="scss">
+  .profile-inner-panel {
+    grid-area: lower-field;
+  }
 
   .switch {
     position: relative;
@@ -205,16 +215,16 @@
     display: grid;
     width: 100%;
     grid-template-areas:
-        ". . profile-container logout ."
+        ". . . . profile-nav"
+        ". . profile-container logout profile-nav"
         ". . user-name pencil ."
         "lower-field lower-field lower-field lower-field lower-field ";
-    grid-template-rows: 120px 25px 1fr;
-    grid-template-columns: 1fr 30px 150px 30px 1fr;
-    padding-top: 20px;
+    grid-template-rows: 27px 120px 27px 1fr;
+    grid-template-columns: 1fr 30px 150px 30px 27px;
 
     #user-name {
       grid-area: user-name;
-      margin: auto auto 0 auto;
+      margin: auto;
       font-family: $global-font;
       font-size: 20px;
     }

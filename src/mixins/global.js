@@ -3,7 +3,7 @@ export const global = {
     searchText: {
       color: {
         primary: '#FFFFFF',
-        emphatic: "blue"
+        emphatic: "#88AED0"
       }
     }
   },

@@ -13,7 +13,7 @@
 
 <template>
   <div class="graph-container" id="about-graph-component">
-    <svg v-if="appStates.displayingAbout" id="about-graph-container" viewBox="350 300 400 400">
+    <svg v-if="appStates.displayingAbout" id="about-graph-container" viewBox="320 200 600 600">
       <g id="about-outer-wrapper" class="outer-wrapper"></g>
     </svg>
   </div>

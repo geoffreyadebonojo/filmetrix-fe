@@ -31,9 +31,14 @@ export function settings(type) {
 
 export function drawArc(d) {
   const degrees = d.name.length * 7
+
+  // const noder = 50
+  // const ir = 50-6
+  // const or = 50+14
+
   const arc = d3.arc()
-    .innerRadius(44)
-    .outerRadius(64)
+    .innerRadius(d.r -4)
+    .outerRadius(d.r + 14)
     .startAngle((-degrees -12 )* Math.PI/180 / 2) //converting from degs to radians
     .endAngle(degrees * Math.PI/180 / 2) //just radians
 
@@ -58,7 +63,7 @@ export function setFocus(focus) {
   const navButtons = d3.selectAll(".nav-button").nodes().reverse()
   navButtons.unshift()
   closeField()
-
+  d3.select("#highlight").style("display", "block")
   const buttonMap = navButtons.map(x => x.id.split("-")[0]);
   const displacement = [
     1,
@@ -76,6 +81,8 @@ export function setFocus(focus) {
 
   if (focus == 'search') {
     openField()
+  } else if (focus == 'profile') {
+    d3.select("#highlight").style("display", "none")
   }
 }
 

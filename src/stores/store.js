@@ -4,8 +4,8 @@ export const graphStates = reactive({
   existing: [],
   graphData: {},
   inMotion: false,
-  lockedHighlights: []
-  // graphTypes: [],
+  lockedHighlights: [],
+  graphType: 'tree'
 })
 
 export const gameStates = reactive({
@@ -16,6 +16,7 @@ export const panelStates = reactive({
   width: '350',
   isOpen: true,
   currentFocus: 'empty',
+  profileTab: 'movies',
   detailsData: {}
 })
 
@@ -28,7 +29,8 @@ export const appStates = reactive({
 export const userStates = reactive({
   currentUser: {},
   loggedIn: false,
-  userMovieList: []
+  userMovieList: [],
+  userGraphList: []
 })
 
 export const store = reactive({
@@ -36,7 +38,6 @@ export const store = reactive({
   savedGraphs: {},
   bookmarks: []
 })
-
 
 
 // export const appState = reactive({

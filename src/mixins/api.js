@@ -148,7 +148,7 @@ export default {
         return response.json()
       })
     )
-// debugger
+
     panelStates.detailsData = api_response.data.details
     panelStates.detailsData.entity = api_response.data.details.id.split("-")[0]
   },
@@ -170,6 +170,9 @@ export default {
                 poster
                 type
                 entity
+                popularity
+                voteAverage
+                voteCount
               }
               links { 
                 source
@@ -192,7 +195,7 @@ export default {
     })
   },
 
-  async saveGraph(existing) {
+  async saveGraph(existing, userId) {
     const ids = []
     const count = []
     
@@ -202,13 +205,14 @@ export default {
     })
     
     const API_URL =`${this.data().base_url}/graphql`
+
     return await (
       fetch(API_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ query:
           `query {
-            saveGraph(ids:"${ids}",counts:"${count}") {
+            saveGraph(ids:"${ids}",counts:"${count}",userId:"${userId}") {
               status
               msg
               resourceId
@@ -240,6 +244,9 @@ export default {
                   poster
                   type
                   entity
+                  popularity
+                  voteAverage
+                  voteCount
                 }
                 links {
                   source
@@ -258,7 +265,7 @@ export default {
     if (resp.data.findBySlug == false) { return }
     
     const d = resp.data.findBySlug
-    
+
     graphStates.existing = d.existing.map(d => [d[0], +d[1]])
     d.data.forEach((d, i) => {
       let key = graphStates.existing[i][0]
@@ -267,6 +274,25 @@ export default {
         nodes: d.nodes
       }
     })
+  },
+
+  async fetchGraphList(userId) {
+    const API_URL =`${this.data().base_url}/graphql`
+    const api_response = await (
+      fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query:
+          `query {
+            fetchGraphList(userId:"${userId}")
+          }`
+        })
+      }).then((response) => {
+        return response.json()
+      })
+    )
+
+    return api_response.data.fetchGraphList
   },
 
   async fetchMovieList(userId) {    

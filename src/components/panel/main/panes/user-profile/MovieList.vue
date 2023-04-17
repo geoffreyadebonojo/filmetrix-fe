@@ -75,8 +75,6 @@
   }
 
   #my-movie-list {
-    grid-area: lower-field;
-
     width: 100%;
     display: flex;
     flex-wrap: wrap;
@@ -91,6 +89,9 @@
     }
     .my-movie-item {
       @include poster-tile;
+
+      height: 81.75px;
+      width: 54.75px;
 
       .delete-button {
         display: none;

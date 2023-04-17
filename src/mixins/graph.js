@@ -6,7 +6,7 @@ import {
 import { settings, getTypes, setFocus } from './helpers.js'
 import api from './api.js'
 import * as d3 from 'd3'
-import Graph from '@models/Graph.js'
+import GraphBuilder from '@models/GraphBuilder.js'
 import Simulation from '@models/Simulation.js'
 
 let timer;
@@ -21,7 +21,7 @@ export default {
       nodeCount: 50
     }
   },
-  draw (responseData) {
+  draw (responseData, options={}) {
     graphStates.inMotion = true
     var links = responseData.links
     var nodes = responseData.nodes
@@ -40,16 +40,14 @@ export default {
 
     const simulation = new Simulation({ nodes, 
                                         links,
-                                        graphType }).body
+                                        graphType}, options).body
 
-    const [link, node] = new Graph({ links, 
+    const [link, node] = new GraphBuilder({ links, 
                                      nodes,
                                      containerId,
                                      innerWrapper,
                                      outerWrapper }).build()
     
-    d3.select("#copy-button").classed("locked", false).classed("unlocked", true)
-
     this.attachNodeClickActions(node, graphType)
 
     simulation.on("tick", () => {
