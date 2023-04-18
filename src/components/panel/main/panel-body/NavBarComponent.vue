@@ -93,16 +93,14 @@ export default {
   methods: {
     async submitSearch(value) {
       const val = value.toUpperCase()
-      if (val == '' || val == null) { 
-        // maybe a helpful tip?
-        return false
-      }
-      await api.fetchSearchData(val)
+      if (val == '' || val == null) { return false }
       
-      const tab = store.searchResults[0].id.split("-")[0]
-      //handle for no id
-      setFocus(tab)
-      document.querySelector("#search-text").value = ''
+      await api.fetchSearchData(val).then((response) => {
+        store.searchResults = response
+        const tab = store.searchResults[0].id.split("-")[0]
+        setFocus(tab)
+        document.querySelector("#search-text").value = ''
+      })
     },
     
     toggleOrSubmitOnClick() {

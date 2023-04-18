@@ -100,7 +100,7 @@ export default {
   async fetchSearchData(term) {
     const API_URL =`${this.data().base_url}/graphql`
 
-    const api_respsonse = await (
+    const api_response = await (
       fetch(API_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -121,7 +121,7 @@ export default {
       })
     )
     
-    store.searchResults = api_respsonse.data.search
+    return api_response.data.search
   },
 
   async fetchDetails(id) {
@@ -136,6 +136,7 @@ export default {
             details(id: "${id}", key:"${this.data().key}") {
               id
               summary
+              entity
               year
               imdbId
               name
@@ -150,7 +151,6 @@ export default {
     )
 
     panelStates.detailsData = api_response.data.details
-    panelStates.detailsData.entity = api_response.data.details.id.split("-")[0]
   },
 
   async fetchGraphData(ids){

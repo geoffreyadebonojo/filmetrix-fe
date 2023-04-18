@@ -7,6 +7,7 @@ import { settings, getTypes, setFocus } from './helpers.js'
 import api from './api.js'
 import * as d3 from 'd3'
 import GraphBuilder from '@models/GraphBuilder.js'
+import GraphManager from '@models/GraphManager.js'
 import Simulation from '@models/Simulation.js'
 
 let timer;
@@ -69,10 +70,6 @@ export default {
     node.on('click', async (_e, d) => {
       const doubleClickDelay = 300
       
-      await api.fetchDetails(d.id)
-      panelStates.detailsData.id = d.id
-      setFocus('details')
-
       if (alreadyClicked) { 
         localStorage.setItem("newHere", false)
 
@@ -85,12 +82,18 @@ export default {
 
         await api.fetchDetails(d.id)
         panelStates.detailsData.id = d.id
+
         alreadyClicked = false;
         clearTimeout(timer);
 
       } else {
         timer = setTimeout(async function () {
           alreadyClicked = false;
+
+          await api.fetchDetails(d.id)
+          panelStates.detailsData.id = d.id
+          setFocus('details')
+    
         }, doubleClickDelay);
         alreadyClicked = true;
       }
@@ -126,32 +129,15 @@ export default {
     })
   },
 
-  async callForNodes(d, graphType='tree') {
+  async callForNodes(d) {
+    panelStates.detailsData.id = d.id
+    panelStates.currentFocus = 'details'
+
     if (graphStates.existing.map((f) => f[0]).excludes(d.id) ) {
       graphStates.existing.push([d.id, 8])
       const ext = graphStates.existing.unique().map((d) => d[0])
       await api.fetchGraphData(ext)
+      new GraphManager().generate()
     }
-
-    panelStates.detailsData.id = d.id
-
-    let data
-    let nodes = []
-    let links = []
-    
-    graphStates.existing.forEach((d) => {
-      data = graphStates.graphData[d[0]]
-      nodes = nodes.concat(data.nodes.slice(0,d[1]+1))
-      links = links.concat(data.links.slice(0,d[1]))
-    })
-    
-    store.graphTypes =  getTypes(nodes)
-    panelStates.currentFocus = 'details'
-
-    this.draw({
-      nodes: nodes.uniqueById(),
-      links: links,
-      type: graphType
-    })
   }
 }

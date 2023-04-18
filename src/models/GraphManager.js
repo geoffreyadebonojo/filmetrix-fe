@@ -2,10 +2,11 @@ import graph from "@/mixins/graph"
 import { graphStates } from "@/stores/store.js"
 
 export default class GraphManager {
-  constructor() {
+  constructor(graphType="main") {
     this.data
     this.nodes = []
     this.links = []
+    this.graphType = graphType
   }
   
   generate() {
@@ -22,7 +23,7 @@ export default class GraphManager {
     graph.draw({
       nodes: this.nodes.uniqueById(),
       links: this.links,
-      type: "main"
+      type: this.graphType
     })
   }
 }

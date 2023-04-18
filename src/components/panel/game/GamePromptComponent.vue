@@ -94,7 +94,11 @@
         if (val == '' || val == null) { 
           return false
         }
-        await api.fetchSearchData(val)
+        const response = await api.fetchSearchData(val)
+
+        store.searchResults = response
+
+
         d3.select("#game-prompt p").transition().duration(500).style("opacity", "0").remove()
 
         this.$data.latestChoice = store.searchResults[0]

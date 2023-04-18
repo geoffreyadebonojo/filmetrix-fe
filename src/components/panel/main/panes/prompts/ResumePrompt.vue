@@ -38,15 +38,22 @@
         store.isLocked = true
         graphStates.existing = this.$data.saved
         
-        await api.fetchGraphData(graphStates.existing.unique().map(d => d[0]))
-        await api.fetchDetails(graphStates.existing.last()[0])
+        await api.fetchDetails(graphStates.existing.last()[0]).then((response) => {
+          panelStates.currentFocus = 'search'
+        })
+        await api.fetchGraphData(graphStates.existing.unique().map(d => d[0])).then((response) => {
+          response.forEach((d) => {
+            debugger
+            graphStates.graphData[d.id] = {
+              links: d.links,
+              nodes: d.nodes
+            }
+          })
+          new GraphManager().generate()
+          d3.select("#lock-button").classed("unlocked", false).classed("locked", true)
+          setFocus('details')
+        })
 
-        new GraphManager().generate()
-
-        panelStates.currentFocus = 'search'
-
-        d3.select("#lock-button").classed("unlocked", false).classed("locked", true)
-        setFocus('details')
       }
     }
   }

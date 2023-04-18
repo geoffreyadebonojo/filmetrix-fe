@@ -53,7 +53,7 @@
         changeId = ids[currentIndex + i]
         
         await api.fetchDetails(changeId)
-        
+
         dc.transition().duration(500).style("left", "0%")
       }
     }
