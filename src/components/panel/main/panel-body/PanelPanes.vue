@@ -46,8 +46,8 @@
 <style scoped lang="scss">
   #panel-panes {
     grid-area: panel-panes;
-    overflow-y: auto;
-    // overflow-y: hidden;
+    overflow-x: hidden;
+    overflow-y: scroll;
     
     #empty-field {
       height: 100%;

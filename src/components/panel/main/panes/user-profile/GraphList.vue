@@ -7,8 +7,8 @@
 
 <template>
   <div id="graph-stacks">
-    <div class="stack collapsed" v-for="posterStack in userStates.userGraphList" @click="toggleExpand($event)">
-      <div v-for="(poster, i) in posterStack" :style="{ 'z-index': i, 'right': i*this.$data.posterOffset+'px' }" class="poster">
+    <div class="stack collapsed" v-for="posterStack in userStates.userGraphList" @click="toggleExpand($event)" v-bind:id="posterStack.slug">
+      <div v-for="(poster, i) in posterStack.posters" :style="{ 'z-index': i, 'right': i*this.$data.posterOffset+'px' }" class="poster">
         <img v-bind:src="poster"/>
       </div>
     </div>

@@ -14,14 +14,19 @@
       <div class="profile-nav-buttons" id="graphs" @click="changeArea('graphs')">
         <img src="/chart-network.svg"/>
       </div>
-      <!-- <div class="profile-nav-buttons" id="friends" @click="changeArea('friends')">
+      <div class="profile-nav-buttons" id="friends" @click="changeArea('friends')">
         <img src="/friends.svg"/>
       </div>
       <div class="profile-nav-buttons" id="settings" @click="changeArea('settings')">
         <img src="/settings-bars-black.svg"/>
-      </div> -->
+      </div>
+    </div>
+    <div id="logout-button" class="tooltip" @click="submitLogout()">
+      <span class="tooltiptext">Log out</span>
+      <img src="/exit.svg"/>
     </div>
   </div>
+    
 </template>
 
 <script>
@@ -49,6 +54,23 @@
 </script>
 
 <style scoped lang="scss">
+
+#logout-button {
+  grid-area: logout;
+  margin: 5px auto auto auto;
+  opacity: 0.65;
+  top: 10px;
+  left: 7px;
+  
+  &:hover {
+    cursor: $cursor;
+    opacity: 1;
+  }
+  img {
+    height: 15px;
+  }
+}
+
   .focused {
     background: white;
     height: 25px;
@@ -82,5 +104,42 @@
         cursor: $cursor;
       }
     }
+  }
+
+
+
+  .tooltiptext {
+    animation-name: tooltip-pulse;
+    animation-duration: 1.4s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+
+    @keyframes tooltip-pulse {
+    0% { transform: translate(0px, 0px) scale(1); opacity: 0.8}
+    50% { transform: translate(-1.5px, 0px) scale(1.08); opacity: 1}
+    100% { transform: translate(0px, 0px) scale(1); opacity: 0.8}
+  }
+
+    font-family: $global-font;
+    visibility: hidden;
+    font-size: 15px;
+    width: 71px;
+    color: #FFFFFF;
+    text-align: right;
+    position: absolute;
+    font-weight: 900;
+    z-index: 10;
+    top: -2px;
+    right: 35px;
+  }
+ 
+  .tooltip:hover .tooltiptext {
+    visibility: visible;
+  }
+
+  #logout-msg {
+    margin: 30vh auto auto auto;
+    font-family: $global-font;
+    font-size: 50px;
   }
 </style>

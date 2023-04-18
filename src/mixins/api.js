@@ -284,7 +284,10 @@ export default {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ query:
           `query {
-            fetchGraphList(userId:"${userId}")
+            fetchGraphList(userId:"${userId}") {
+              slug
+              posters
+            }
           }`
         })
       }).then((response) => {
