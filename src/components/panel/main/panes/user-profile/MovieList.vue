@@ -1,9 +1,12 @@
 <script setup>
   import {
-    userStates
+    userStates,
+    panelStates,
+    graphStates
   } from "@/stores/store.js"
   import Draggable from 'vuedraggable'
   import api from '@mixins/api'
+  import graph from '@mixins/graph'
 </script>
 
 <template>
@@ -12,7 +15,7 @@
     :disabled="!enabled"
     item-key="movie"
     @start="dragging=true"
-    @end="dragging=false"
+    @end="dragEnd($event)"
     v-bind="dragOptions">
 
     <template #item="{ element }">
@@ -44,15 +47,38 @@
         return {
           animation: 300,
           disabled: false,
-          ghostClass: "ghost"
+          ghostClass: "ghost",
+          removeCloneOnHide: true
         };
-      },
-      showMovieList: () => {
-        if (userStates.userMovieList == null) { return }
-        return userStates.userMovieList.length > 0
       }
     },
     methods: {
+      async dragEnd(e) {
+        const w = window.innerWidth - panelStates.width
+        const dx = e.originalEvent.clientX
+        this.$data.dragging = false
+
+        if (dx < w) {
+        
+          const movieId = e.item.id.replace("my-movie-", "")
+          
+          // let data
+          // let nodes = []
+          // let links = []
+
+          // graphStates.existing.forEach((d) => {
+          //   data = graphStates.graphData[d[0]]
+          //   nodes = nodes.concat(data.nodes.slice(0,d[1]+1))
+          //   links = links.concat(data.links.slice(0,d[1]))
+          // })
+
+          // graph.draw({
+          //   nodes: nodes.uniqueById(),
+          //   links: links,
+          //   type: "main"
+          // })
+        }
+      },
       async removeBookmark(movieId) {
         userStates.userMovieList = await api.removeFromMovieList({
           userId: userStates.currentUser.id, 

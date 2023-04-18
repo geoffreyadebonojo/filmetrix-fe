@@ -12,24 +12,22 @@
 
 <template>
   <div id="graph-stacks">
-
     <draggable id="my-graphs-list"
       :list="this.$data.graphList"
       :disabled="!enabled"
       item-key="stack"
       @start="dragging=true"
-      @end="dragEnd($event)">
+      @end="dragEnd($event)"
+      v-bind="dragOptions">
 
-      <template #item="{ element }" 
-                @click="toggleExpand($event)">
-        <div class="stack collapsed" v-bind:id="element.slug">
+      <template #item="{ element }" >
+        <div class="stack collapsed" v-bind:id="'group-' + element.slug" @click="toggleExpand($event)">
           <div v-for="(poster, i) in element.posters" :style="{ 'z-index': i, 'right': i*this.$data.posterOffset+'px' }" class="poster">
             <img v-bind:src="poster"/>
           </div>
         </div>
       </template>
     </draggable>
-
   </div>
 </template>
 
@@ -47,18 +45,29 @@
     components: {
       Draggable
     },
+    computed: {
+      dragOptions() {
+        return {
+          animation: 300,
+          disabled: false,
+          ghostClass: "ghost",
+          removeCloneOnHide: true,
+          revertClone: true
+          // forceFallback: false,  // ignore the HTML5 DnD behaviour and force the fallback to kick in
+          // fallbackClass: "sortable-fallback",  // Class name for the cloned DOM Element when using forceFallback
+          // fallbackOnBody: false,  // Appends the cloned DOM Element into the Document's Body
+        };
+      }
+    },
     methods: {
       async dragEnd(e) {
         const w = window.innerWidth - panelStates.width
         const dx = e.originalEvent.clientX
         this.$data.dragging = false
-        
+
         if (dx < w) {
-
-          // dupe in graphcomponent
-
-          await api.findBySlug(e.item.id)
-
+          // dupe in graphcomponent & MovieList
+          await api.findBySlug(e.item.id.split("-")[1])
 
           let data
           let nodes = []
@@ -75,12 +84,7 @@
             links: links,
             type: "main"
           })
-
         }
-
-      },
-      checkMove: function(e) {
-        // window.console.log(e.draggedContext);
       },
       toggleExpand(e) {
         const stack = d3.select(e.currentTarget)
@@ -103,6 +107,9 @@
 <style scoped lang="scss">
 
   #graph-stacks {
+    .ghost {
+      opacity: 0;
+    }
 
     .stack {
       display: flex; 

@@ -126,7 +126,7 @@ export default {
     })
   },
 
-  async callForNodes(d, graphType) {
+  async callForNodes(d, graphType='tree') {
     if (graphStates.existing.map((f) => f[0]).excludes(d.id) ) {
       graphStates.existing.push([d.id, 8])
       const ext = graphStates.existing.unique().map((d) => d[0])
