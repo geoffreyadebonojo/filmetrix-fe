@@ -7,6 +7,7 @@
   import { getTypes } from "@mixins/helpers"
   import api from "@mixins/api"
   import graph from "@mixins/graph"
+  import GraphManager from "@/models/GraphManager.js"
 </script>
 
 <template>
@@ -70,29 +71,7 @@
     methods: {
       async loadFromSlug (gid) {
         await api.findBySlug(gid)
-        // panelStates.detailsData.id = graphStates.existing.last()[0]
-
-        let data
-        let nodes = []
-        let links = []
-
-        graphStates.existing.forEach((d) => {
-          data = graphStates.graphData[d[0]]
-          nodes = nodes.concat(data.nodes.slice(0,d[1]+1))
-          links = links.concat(data.links.slice(0,d[1]))
-        })
-
-        // store.graphTypes = getTypes(nodes)
-        // panelStates.currentFocus = 'details'
-
-        // const graph = new Graph()
-        // const graph.draw()
-
-        graph.draw({
-          nodes: nodes.uniqueById(),
-          links: links,
-          type: "main"
-        })
+        new GraphManager().generate()
       }
     }
   }

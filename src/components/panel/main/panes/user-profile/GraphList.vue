@@ -7,7 +7,7 @@
   import Draggable from 'vuedraggable'
   import api from '@/mixins/api'
   import * as d3 from "d3"
-  import graph from "@/mixins/graph"
+  import GraphManager from "@/models/GraphManager.js"
 </script>
 
 <template>
@@ -68,22 +68,7 @@
         if (dx < w) {
           // dupe in graphcomponent & MovieList
           await api.findBySlug(e.item.id.split("-")[1])
-
-          let data
-          let nodes = []
-          let links = []
-
-          graphStates.existing.forEach((d) => {
-            data = graphStates.graphData[d[0]]
-            nodes = nodes.concat(data.nodes.slice(0,d[1]+1))
-            links = links.concat(data.links.slice(0,d[1]))
-          })
-
-          graph.draw({
-            nodes: nodes.uniqueById(),
-            links: links,
-            type: "main"
-          })
+          new GraphManager().generate()
         }
       },
       toggleExpand(e) {

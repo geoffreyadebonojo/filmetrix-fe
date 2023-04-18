@@ -7,6 +7,7 @@
     store 
   } from '@/stores/store.js'
   import graph from '@/mixins/graph'
+  import GraphManager from "@/models/GraphManager.js"
   import { setFocus } from '@/mixins/helpers'
   import * as d3 from 'd3'
 </script>
@@ -40,24 +41,7 @@
         await api.fetchGraphData(graphStates.existing.unique().map(d => d[0]))
         await api.fetchDetails(graphStates.existing.last()[0])
 
-        let data
-        let nodes = []
-        let links = []
-
-        graphStates.existing.forEach((d) => {
-          data = graphStates.graphData[d[0]]
-          nodes = nodes.concat(data.nodes.slice(0,d[1]+1))
-          links = links.concat(data.links.slice(0,d[1]))
-        })
-
-        // const graph = new Graph()
-        // const graph.draw()
-
-        graph.draw({
-          nodes: nodes.uniqueById(),
-          links: links,
-          type: "main"
-        })      
+        new GraphManager().generate()
 
         panelStates.currentFocus = 'search'
 

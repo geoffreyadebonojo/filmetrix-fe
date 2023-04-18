@@ -195,7 +195,7 @@ export default {
     })
   },
 
-  async saveGraph(existing, userId) {
+  async saveGraph(existing, userId=null) {
     const ids = []
     const count = []
     
@@ -205,16 +205,13 @@ export default {
     })
     
     const API_URL =`${this.data().base_url}/graphql`
-
-    return await (
+    const resp = await (
       fetch(API_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ query:
           `query {
             saveGraph(ids:"${ids}",counts:"${count}",userId:"${userId}") {
-              status
-              msg
               resourceId
               shareUrl
             }
@@ -224,6 +221,8 @@ export default {
         return response.json()
       })
     )
+
+    return resp.data.saveGraph
   },
 
   async findBySlug(slug){

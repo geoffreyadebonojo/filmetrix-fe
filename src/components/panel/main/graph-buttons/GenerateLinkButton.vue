@@ -20,10 +20,12 @@
     name: "GenerateLinkButton",
     methods: {
       async generateLinkToShare () {
-        const response = await api.saveGraph(graphStates.existing)
+        
+        await api.saveGraph(graphStates.existing).then((response) => {
+          navigator.clipboard.writeText( response.shareUrl );
+          console.log('Content copied ', response.shareUrl, ' to clipboard');
+        })
 
-        navigator.clipboard.writeText( response.data.saveGraph.shareUrl );
-        console.log('Content copied ', response.data.saveGraph.shareUrl, ' to clipboard');
         
         d3.select("#link-to-flash").html('copied')
           .transition().duration(200).style("opacity", 1).style("color", "#72bcd4")
