@@ -1,17 +1,35 @@
 <script setup>
   import {
+    graphStates,
+    panelStates,
     userStates
   } from '@/stores/store.js'
+  import Draggable from 'vuedraggable'
+  import api from '@/mixins/api'
   import * as d3 from "d3"
+  import graph from "@/mixins/graph"
 </script>
 
 <template>
   <div id="graph-stacks">
-    <div class="stack collapsed" v-for="posterStack in userStates.userGraphList" @click="toggleExpand($event)" v-bind:id="posterStack.slug">
-      <div v-for="(poster, i) in posterStack.posters" :style="{ 'z-index': i, 'right': i*this.$data.posterOffset+'px' }" class="poster">
-        <img v-bind:src="poster"/>
-      </div>
-    </div>
+
+    <draggable id="my-graphs-list"
+      :list="this.$data.graphList"
+      :disabled="!enabled"
+      item-key="stack"
+      @start="dragging=true"
+      @end="dragEnd($event)">
+
+      <template #item="{ element }" 
+                @click="toggleExpand($event)">
+        <div class="stack collapsed" v-bind:id="element.slug">
+          <div v-for="(poster, i) in element.posters" :style="{ 'z-index': i, 'right': i*this.$data.posterOffset+'px' }" class="poster">
+            <img v-bind:src="poster"/>
+          </div>
+        </div>
+      </template>
+    </draggable>
+
   </div>
 </template>
 
@@ -20,10 +38,50 @@
     name: "GraphStacks",
     data () {
       return {
-        posterOffset: 50
+        posterOffset: 50,
+        enabled: true,
+        dragging: false,
+        graphList: userStates.userGraphList
       }
     },
+    components: {
+      Draggable
+    },
     methods: {
+      async dragEnd(e) {
+        const w = window.innerWidth - panelStates.width
+        const dx = e.originalEvent.clientX
+        this.$data.dragging = false
+        
+        if (dx < w) {
+
+          // dupe in graphcomponent
+
+          await api.findBySlug(e.item.id)
+
+
+          let data
+          let nodes = []
+          let links = []
+
+          graphStates.existing.forEach((d) => {
+            data = graphStates.graphData[d[0]]
+            nodes = nodes.concat(data.nodes.slice(0,d[1]+1))
+            links = links.concat(data.links.slice(0,d[1]))
+          })
+
+          graph.draw({
+            nodes: nodes.uniqueById(),
+            links: links,
+            type: "main"
+          })
+
+        }
+
+      },
+      checkMove: function(e) {
+        // window.console.log(e.draggedContext);
+      },
       toggleExpand(e) {
         const stack = d3.select(e.currentTarget)
         if (stack.classed("collapsed")) {

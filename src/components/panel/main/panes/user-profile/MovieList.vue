@@ -11,7 +11,6 @@
     :list="this.$data.movieList"
     :disabled="!enabled"
     item-key="movie"
-    :move="checkMove"
     @start="dragging=true"
     @end="dragging=false"
     v-bind="dragOptions">
@@ -54,9 +53,6 @@
       }
     },
     methods: {
-      checkMove: function(e) {
-        // window.console.log(e.draggedContext);
-      },
       async removeBookmark(movieId) {
         userStates.userMovieList = await api.removeFromMovieList({
           userId: userStates.currentUser.id, 

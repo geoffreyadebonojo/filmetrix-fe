@@ -1,6 +1,8 @@
 <script setup> 
   import MovieList from "./MovieList.vue"
   import GraphList from "./GraphList.vue"
+  import FriendsList from "./FriendsList.vue"
+  import SettingsPanel from "./SettingsPanel.vue"
   import ProfileNavBar from "./ProfileNavBar.vue"
   import { 
     appStates,
@@ -14,7 +16,6 @@
 
 <template>
   <div id="user-profile-container" v-if="this.$data.loggedIn">
-
     <!-- last fallback -->
     <!-- <div id="profile-image-container" v-if="userStates.currentUser.profileImage == null">
       letter in circle
@@ -24,22 +25,37 @@
       <img id="awesome" v-bing:src="userStates.currentUser.profileImage" />
     </div> -->
     <!-- primary  -->
-    <div class="sticky" id="profile-image-container">
-      <img v-bind:src="userStates.currentUser.profileImage" />
-    </div>
-
     <!-- <div id="user-name">
       <p>{{ userStates.currentUser.username }}</p>
       <img id="pencil" src="/pencil.svg"/>
     </div> -->
 
+    <div class="sticky" id="profile-image-container">
+      <img v-bind:src="userStates.currentUser.profileImage" />
+    </div>
+    
     <profile-nav-bar @change-focus="changeFocus"></profile-nav-bar>
 
-    <movie-list class="profile-inner-panel" v-if="this.$data.profileFocus == 'movies'"></movie-list>
-    <graph-list class="profile-inner-panel" v-else-if="this.$data.profileFocus == 'graphs'"></graph-list>
+    <movie-list 
+      class="profile-inner-panel" 
+      v-if="this.$data.profileFocus == 'movies'">
+    </movie-list>
 
-    <div style="grid-area:lower-field" v-else-if="this.$data.profileFocus == 'friends'">friends</div>
-    <div style="grid-area:lower-field" v-else-if="this.$data.profileFocus == 'settings'">settings</div>
+    <graph-list 
+      class="profile-inner-panel" 
+      v-else-if="this.$data.profileFocus == 'graphs'">
+    </graph-list>
+
+    <friends-list 
+      class="profile-inner-panel" 
+      v-else-if="this.$data.profileFocus == 'friends'">
+    </friends-list>
+
+    <settings-panel 
+      class="profile-inner-panel" 
+      v-else-if="this.$data.profileFocus == 'settings'">
+    </settings-panel>
+
     <div v-else></div>
     <!-- <div style="grid-area:lower-field; padding-top:30px; display:flex">
       <p style="margin:auto 0">pack</p>
