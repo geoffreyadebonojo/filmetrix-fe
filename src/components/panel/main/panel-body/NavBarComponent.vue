@@ -49,7 +49,7 @@
       </router-link>
       <div v-else></div>
 
-      <router-link v-if="this.$attrs.type == 'main'"
+      <router-link v-if="$attrs.type == 'main'"
                    class="nav-button primary-nav" 
                    id="commands-button" 
                    to="#commands"
