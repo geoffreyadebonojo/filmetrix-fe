@@ -57,12 +57,12 @@
         <img src="/command-icon.svg" class="icon" id="commands-icon">
       </router-link>
 
-      <router-link class="nav-button primary-nav"
+      <!--router-link class="nav-button primary-nav"
                    id="profile-button"
                    to="#profile"
                    @click="setFocus('profile')">
         <img src="/settings-gear.svg" v-bind:class="panelStates.currentFocus === 'profile' ? 'gear active' : 'gear'"/>
-      </router-link>
+      </router-link-->
 
       <router-link v-if="this.$attrs.type == 'main'"
                    class="nav-button" 

@@ -6,6 +6,7 @@
   import { 
     appStates,
     panelStates,
+    graphStates,
     store 
   } from '@/stores/store.js'
   import { setFocus, openField } from '@mixins/helpers'
@@ -16,7 +17,7 @@
 
   <div id="panel-body">
     <main-graph-buttons-component 
-      v-if="this.$attrs.type == 'main'">
+      v-if="this.$attrs.type == 'main' && showButtons">
     </main-graph-buttons-component>
 
     <main-resize-bar-component 
@@ -40,6 +41,11 @@
       MainResizeBarComponent,
       NavBarComponent,
       PanelPanes
+    },
+    computed: {
+      showButtons () {
+        return graphStates.existing.length > 0
+      }
     },
     mounted () {
       d3.select("#panel-body").transition().duration(200).ease(d3.easeLinear).style("width", "300px")//.style("min-width", "270px")

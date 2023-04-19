@@ -41,9 +41,9 @@
         <img src="/center-graph-icon.svg"/>
       </div>
 
-      <div class="item profile" style="height:3em">
+      <!--div class="item profile" style="height:3em">
         <img src="/settings-gear-command-section.svg"/>
-      </div>
+      </div-->
 
       <!-- <div class="item scissors" style="height:3em">
         <img src="/scissors-icon.svg" style="transform:rotate(-135deg);opacity:0.5"/>
@@ -119,13 +119,13 @@
         style="height:3em"
       />
 
-      <effect-explanation
+      <!--effect-explanation
         :section="'profile'"
         :main="'view profile'"
         :secondary="'this is where you can log in or sign up, view and edit your profile and manage your saved movies and graphs.'"
         :expandedHeight="'7em'"
         style="height:3em"
-      />
+      /-->
     </div>
   </div>
 </template>

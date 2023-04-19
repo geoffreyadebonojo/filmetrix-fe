@@ -105,6 +105,7 @@
   }
 
   .details-component {
+    top: 25px;
     height: 83vh;
     width: 100%;
     display: grid;
