@@ -11,9 +11,9 @@
 </script>
 
 <template>
-  <div class="graph-container" v-bind:id="this.$attrs.type + '-graph-component'">
-    <svg class="graph-container" v-bind:id="this.$attrs.type + '-graph-container'">
-      <g class="outer-wrapper" v-bind:id="this.$attrs.type + '-outer-wrapper'"></g>
+  <div class="graph-container" v-bind:id="$attrs.type + '-graph-component'">
+    <svg class="graph-container" v-bind:id="$attrs.type + '-graph-container'">
+      <g class="outer-wrapper" v-bind:id="$attrs.type + '-outer-wrapper'"></g>
     </svg>
   </div>
 </template>

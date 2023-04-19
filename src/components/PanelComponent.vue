@@ -17,18 +17,18 @@
 
   <div id="panel-body">
     <main-graph-buttons-component 
-      v-if="this.$attrs.type == 'main' && showButtons">
+      v-if="$attrs.type == 'main' && showButtons">
     </main-graph-buttons-component>
 
     <main-resize-bar-component 
-      v-if="this.$attrs.type == 'main'">
+      v-if="$attrs.type == 'main'">
     </main-resize-bar-component>
 
-    <nav-bar-component :type="this.$attrs.type">
-      <!-- v-if="this.$attrs.type == 'main'"> -->
+    <nav-bar-component :type="$attrs.type">
+      <!-- v-if="$attrs.type == 'main'"> -->
     </nav-bar-component>
 
-    <panel-panes :type="this.$attrs.type"></panel-panes>
+    <panel-panes :type="$attrs.type"></panel-panes>
   </div>
 
 </template>

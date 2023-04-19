@@ -41,7 +41,7 @@
 
       <router-link v-if="panelStates.detailsData.id != null
                           && appStates.displayingAbout === false
-                          && this.$attrs.type == 'main'" 
+                          && $attrs.type == 'main'" 
                    class="nav-button primary-nav" 
                    id="details-button" 
                    @click="setFocus('details')" to="#details">
@@ -64,7 +64,7 @@
         <img src="/settings-gear.svg" v-bind:class="panelStates.currentFocus === 'profile' ? 'gear active' : 'gear'"/>
       </router-link-->
 
-      <router-link v-if="this.$attrs.type == 'main'"
+      <router-link v-if="$attrs.type == 'main'"
                    class="nav-button" 
                    id="about-us-transition-button" 
                    to="#about">
