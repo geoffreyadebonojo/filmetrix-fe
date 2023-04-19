@@ -12,10 +12,10 @@
       <div id="description"></div>
     </div>
 
-    <div id="tmdb-attribution" style="display:none">
+    <a id="tmdb-attribution" href="https://www.themoviedb.org/?language=en-US" target="_blank" style="display:none">
       powered by
       <img src="https://www.themoviedb.org/assets/2/v4/logos/v2/blue_square_1-5bdc75aaebeb75dc7ae79426ddd9be3b2be1e342510f8202baf6bffa71d7f5c4.svg"/>
-    </div>
+    </a>
   </div>
 </template>
 
@@ -29,21 +29,25 @@
     }
     #name-container {
       justify-content: center;
-    }
-    #linked-in {
-      img {
-        display: none;
+      div {
+        font-weight: 900;
       }
     }
   }
   .about-details {
     font-family: $global-font;
     display: grid;
-    grid-template-rows: 25px 1fr 25px 2fr 125px;
+    grid-template-rows: 25px 0fr 25px 2fr 0fr;
     height: 100%;
     
-    #linked-in > img {
+    #linked-in { 
       height: 100%;
+      &:hover {
+        cursor: alias;
+      }
+      img {
+        height: 100%;
+      }
     }
 
     #poster {
@@ -51,21 +55,26 @@
       margin: auto auto 2em auto;
     }
 
-    #linked-in {
-      width: 20px;
-      height: 20px;
-    }
-
     #name-container {
       width: 100%;
       display: flex;
       justify-content: space-between;
+      div {
+        font-weight: 900;
+      }
     }
 
     #description-container {
       #description {
         margin: 2em auto auto auto;
         line-height: 1.3em;
+      }
+    }
+
+    #tmdb-attribution {
+      padding: 20px;
+      &:hover {
+        cursor: alias;
       }
     }
   }

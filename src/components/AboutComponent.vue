@@ -173,9 +173,8 @@
           aboutContainer.select("#poster").attr("src", details.poster)
           aboutContainer.select("#name").html(details.name)
           aboutContainer.select("#job").html(details.role)
-          aboutContainer.select("#linked-in").attr("xlink:href", details.linkedIn)
+          aboutContainer.select("#linked-in").attr("href", () => details.linkedIn)
           aboutContainer.select("#description").html(details.description)
-          
           aboutContainer.select("#linked-in img").style("display", () => {
             return details.name == "filmetrix" ? "none" : "block"
           })
