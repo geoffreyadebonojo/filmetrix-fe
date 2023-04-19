@@ -3,15 +3,15 @@
 </script>
 
 <template>
-  <div v-bind:class="'item ' + this.$attrs.section">
+  <div v-bind:class="'item ' + $attrs.section">
     <div @click="elaborateOn()" style="display:flex">
       <p>
-        {{ this.$attrs.main }}
+        {{ $attrs.main }}
       </p>
       <img class="chevron" src="/chevron.svg"/>
     </div>
     <p class="elaboration" style="display:none">
-      {{ this.$attrs.secondary }}
+      {{ $attrs.secondary }}
     </p>
   </div>
 </template>
