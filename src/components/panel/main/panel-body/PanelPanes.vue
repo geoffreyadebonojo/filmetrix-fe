@@ -16,7 +16,7 @@
 
 <template>
   <div id="panel-panes" style="height:142%;zoom:100%">
-    <about-details-component v-if="appStates.displayingAbout" class="about-details"></about-details-component>
+    <about-details-component v-if="appStates.displayingAbout"></about-details-component>
     <details-component v-else-if="panelStates.currentFocus === 'details' && panelStates.detailsData.id != null" class="details-component"></details-component>
     <commands-component v-else-if="panelStates.currentFocus === 'commands'"></commands-component>
     <user-profile-component v-else-if="panelStates.currentFocus === 'profile'"></user-profile-component>

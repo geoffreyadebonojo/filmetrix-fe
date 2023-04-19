@@ -1,58 +1,71 @@
 <template>
-  <div>
+  <div class="about-details">
+    <a id="linked-in" href="" target="_blank">
+      <img src="/linkedin-icon.png" style="display:none">  
+    </a>
     <img id="poster" src=""/>
     <div id="name-container">
       <div id="name"></div>
       <div id="job"></div>
     </div>
-    <div id="links">
-      <a id="linked-in" href="" target="_blank">
-      </a>
+    <div id="description-container">
+      <div id="description"></div>
     </div>
-    <div id="description"></div>
+
+    <div id="tmdb-attribution" style="display:none">
+      powered by
+      <img src="https://www.themoviedb.org/assets/2/v4/logos/v2/blue_square_1-5bdc75aaebeb75dc7ae79426ddd9be3b2be1e342510f8202baf6bffa71d7f5c4.svg"/>
+    </div>
   </div>
 </template>
 
 <style scoped lang="scss">
   #filmetrix {
     #poster {
-      width: 108px;
-      left: -3px;
-      bottom: 8px;
+      border-top-left-radius: 50px;
+      border-bottom-right-radius: 50px;
+      height: 245px;
+      width: 170px;
     }
-    #name {
-      margin: 100px 0px 0px -14px;
+    #name-container {
+      justify-content: center;
     }
-  }
-
-  #geoff, #pierce {
-    #poster {
-      width: 168px;
-      right: 37px;
-      bottom: 7px;
-    }
-
-    #job {
-      font-size: 12px;
-      line-height: 12px;
-      margin-top: 12px;
-    }
-
-    #name {
-      left: 20px;
-      top: 25px;
+    #linked-in {
+      img {
+        display: none;
+      }
     }
   }
-
   .about-details {
     font-family: $global-font;
+    display: grid;
+    grid-template-rows: 25px 1fr 25px 2fr 125px;
+    height: 100%;
     
-    #links {
-      right: 30px;
-      top: 10px;
+    #linked-in > img {
+      height: 100%;
+    }
 
-      #linked-in > img {
-        width: 20px;
+    #poster {
+      width: 100%;
+      margin: auto auto 2em auto;
+    }
+
+    #linked-in {
+      width: 20px;
+      height: 20px;
+    }
+
+    #name-container {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    #description-container {
+      #description {
+        margin: 2em auto auto auto;
+        line-height: 1.3em;
       }
     }
   }

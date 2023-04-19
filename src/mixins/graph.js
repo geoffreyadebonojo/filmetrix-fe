@@ -108,10 +108,11 @@ export default {
     if (t > this.data().nodeCount) { return }
     const n = t + 3
     c[0][1] = n
+
     let vals
     let nodes = []
     let links = []
-    // move to end of existing
+
     graphStates.existing.forEach(function(key) {
       vals = graphStates.graphData[key[0]]
       vals.nodes.slice(0,key[1]+1).forEach((node) => {
