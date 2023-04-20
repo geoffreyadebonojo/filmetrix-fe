@@ -97,7 +97,8 @@ export default {
 
   async fetchSearchData(term) {
     const API_URL =`https://enigmatic-wildwood-58151.herokuapp.com/graphql`
-    debugger
+
+    console.log(import.meta.env.VITE_API_URL)
 
     const api_response = await (
       fetch(API_URL, {
