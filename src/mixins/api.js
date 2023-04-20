@@ -1,7 +1,6 @@
 import { 
   panelStates,
-  graphStates, 
-  store 
+  graphStates
 } from '@/stores/store.js'
 
 export default {
@@ -79,7 +78,6 @@ export default {
 
   async currentUser() {
     const API_URL =`${this.data().base_url}/current_user`
-
     const api_response = await (
       fetch(API_URL, {
         method: 'GET',
@@ -99,6 +97,7 @@ export default {
 
   async fetchSearchData(term) {
     const API_URL =`https://enigmatic-wildwood-58151.herokuapp.com/graphql`
+    debugger
 
     const api_response = await (
       fetch(API_URL, {
