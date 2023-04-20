@@ -99,6 +99,7 @@ export default {
     const API_URL =`https://enigmatic-wildwood-58151.herokuapp.com/graphql`
 
     console.log(import.meta.env.VITE_API_URL)
+    console.log(import.meta.env)
 
     const api_response = await (
       fetch(API_URL, {
