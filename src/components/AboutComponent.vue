@@ -12,10 +12,6 @@
 </script>
 
 <template>
-  <head>
-    <link href=/geoff-pixel.png rel=preload as=image>
-    <link href=/pierce-pixel.png rel=preload as=image>
-  </head>
   <div class="graph-container" id="about-graph-component">
     <svg v-if="appStates.displayingAbout" id="about-graph-container" viewBox="320 200 600 600">
       <g id="about-outer-wrapper" class="outer-wrapper"></g>

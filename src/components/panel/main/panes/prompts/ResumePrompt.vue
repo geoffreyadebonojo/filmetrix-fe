@@ -38,22 +38,27 @@
         store.isLocked = true
         graphStates.existing = this.$data.saved
         
-        await api.fetchDetails(graphStates.existing.last()[0]).then((response) => {
-          panelStates.currentFocus = 'search'
-        })
-        await api.fetchGraphData(graphStates.existing.unique().map(d => d[0])).then((response) => {
-          response.forEach((d) => {
-            debugger
-            graphStates.graphData[d.id] = {
-              links: d.links,
-              nodes: d.nodes
-            }
-          })
-          new GraphManager().generate()
-          d3.select("#lock-button").classed("unlocked", false).classed("locked", true)
-          setFocus('details')
+        // tried to use the new Graph().generate fucks it up so whatever. this works.
+        await api.fetchGraphData(graphStates.existing.unique().map(d => d[0]))
+        await api.fetchDetails(graphStates.existing.last()[0])
+        let data
+        let nodes = []
+        let links = []
+        
+        graphStates.existing.forEach((d) => {
+          data = graphStates.graphData[d[0]]
+          nodes = nodes.concat(data.nodes.slice(0,d[1]+1))
+          links = links.concat(data.links.slice(0,d[1]))
         })
 
+        graph.draw({
+          nodes: nodes.uniqueById(),
+          links: links,
+          type: "main"
+        })      
+        panelStates.currentFocus = 'search'
+        d3.select("#lock-button").classed("unlocked", false).classed("locked", true)
+        setFocus('details')
       }
     }
   }
