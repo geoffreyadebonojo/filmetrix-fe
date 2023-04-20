@@ -11,8 +11,8 @@
 
 <template>
     <img class="poster"
-         v-bind:class="graphStates.lockedHighlights.includes(this.$data.detailId) ? 'poster-locked' : 'poster-unlocked'"
-         v-bind:id="this.$data.detailId + 'detail-poster'"
+         v-bind:class="graphStates.lockedHighlights.includes($data.detailId) ? 'poster-locked' : 'poster-unlocked'"
+         v-bind:id="$data.detailId + 'detail-poster'"
          v-bind:src="panelStates.detailsData.poster">
          <!-- @click="toggleHighlightLock()"
          @mouseenter="highlightNodes()"

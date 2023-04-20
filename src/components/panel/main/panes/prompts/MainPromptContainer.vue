@@ -19,7 +19,7 @@
   <search-prompt></search-prompt>
   <!-- hidden until we can actually build it -->
   <!-- <tutorial-prompt v-if="$data.newHere"></tutorial-prompt> -->
-  <resume-prompt v-if="$data.hasSavedGraph" :saved="this.$data.saved"></resume-prompt>
+  <resume-prompt v-if="$data.hasSavedGraph" :saved="$data.saved"></resume-prompt>
 </template>
 
 <script>

@@ -8,7 +8,7 @@
 </script>
 
 <template>
-  <div id="auth-fields-container" v-if="this.$data.loggedIn == false">
+  <div id="auth-fields-container" v-if="data.loggedIn == false">
     <input 
       class="login-fields" 
       id="email-field"

@@ -13,8 +13,8 @@
         <img src="/imdb-icon.png">
       </a>
       <a id="youtube"
-          v-if="this.notPerson"
-          v-bind:href="this.youtubeRef"
+          v-if="notPerson"
+          v-bind:href="youtubeRef"
           target="_blank">
         <img src="/youtube-icon.png">
       </a>

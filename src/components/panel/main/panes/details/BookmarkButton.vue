@@ -10,8 +10,8 @@
 </script>
 
 <template>
-  <div id="bookmark" v-if="this.isMovie" @click="toggleBookmark()">
-    <img v-if="this.bookmarksContainsId" id="filled-bookmark" src="/bookmark-filled.svg"/>  
+  <div id="bookmark" v-if="isMovie" @click="toggleBookmark()">
+    <img v-if="bookmarksContainsId" id="filled-bookmark" src="/bookmark-filled.svg"/>  
     <img v-else id="empty-bookmark" src="/bookmark-empty.svg"/>  
   </div>
 </template>

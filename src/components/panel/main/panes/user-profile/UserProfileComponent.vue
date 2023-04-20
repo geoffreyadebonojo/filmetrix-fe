@@ -12,13 +12,13 @@
 <template>
   <div id="user-profile">
     <profile-body 
-      v-if="this.$data.loggedIn == true" 
-      :loggedIn="this.$data.loggedIn">
+      v-if="$data.loggedIn == true" 
+      :loggedIn="$data.loggedIn">
     </profile-body>
 
     <auth-fields 
-      v-if="this.$data.loggedIn == false" 
-      :loggedIn="this.$data.loggedIn"
+      v-if="$data.loggedIn == false" 
+      :loggedIn="$data.loggedIn"
       @update-parent="updateComponent">
     </auth-fields>
   </div>

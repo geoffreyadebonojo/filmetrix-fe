@@ -13,7 +13,7 @@
 <template>
   <div id="graph-stacks">
     <draggable id="my-graphs-list"
-      :list="this.$data.graphList"
+      :list="$data.graphList"
       :disabled="!enabled"
       item-key="stack"
       @start="dragging=true"
@@ -22,7 +22,7 @@
 
       <template #item="{ element }" >
         <div class="stack collapsed" v-bind:id="'group-' + element.slug" @click="toggleExpand($event)">
-          <div v-for="(poster, i) in element.posters" :style="{ 'z-index': i, 'right': i*this.$data.posterOffset+'px' }" class="poster">
+          <div v-for="(poster, i) in element.posters" :style="{ 'z-index': i, 'right': i*$data.posterOffset+'px' }" class="poster">
             <img v-bind:src="poster"/>
           </div>
         </div>

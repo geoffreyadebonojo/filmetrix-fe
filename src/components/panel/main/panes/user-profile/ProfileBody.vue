@@ -15,7 +15,7 @@
 </script>
 
 <template>
-  <div id="user-profile-container" v-if="this.$data.loggedIn">
+  <div id="user-profile-container" v-if="$data.loggedIn">
     <!-- last fallback -->
     <!-- <div id="profile-image-container" v-if="userStates.currentUser.profileImage == null">
       letter in circle
@@ -38,22 +38,22 @@
 
     <movie-list 
       class="profile-inner-panel" 
-      v-if="this.$data.profileFocus == 'movies'">
+      v-if="$data.profileFocus == 'movies'">
     </movie-list>
 
     <graph-list 
       class="profile-inner-panel" 
-      v-else-if="this.$data.profileFocus == 'graphs'">
+      v-else-if="$data.profileFocus == 'graphs'">
     </graph-list>
 
     <friends-list 
       class="profile-inner-panel" 
-      v-else-if="this.$data.profileFocus == 'friends'">
+      v-else-if="$data.profileFocus == 'friends'">
     </friends-list>
 
     <settings-panel 
       class="profile-inner-panel" 
-      v-else-if="this.$data.profileFocus == 'settings'">
+      v-else-if="$data.profileFocus == 'settings'">
     </settings-panel>
 
     <div v-else></div>

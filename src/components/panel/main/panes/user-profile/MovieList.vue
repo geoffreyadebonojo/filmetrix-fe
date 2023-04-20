@@ -11,7 +11,7 @@
 
 <template>
   <draggable id="my-movie-list"
-    :list="this.$data.movieList"
+    :list="$data.movieList"
     :disabled="!enabled"
     item-key="movie"
     @start="dragging=true"
@@ -20,7 +20,7 @@
 
     <template #item="{ element }">
       <div class="my-movie-item" v-bind:id="'my-movie-' + element[0]" type="transition">
-        <img class="delete-button" src="/red-x-icon.svg" @click="this.removeBookmark(element[0])"/>
+        <img class="delete-button" src="/red-x-icon.svg" @click="removeBookmark(element[0])"/>
         <img v-bind:src="'https://image.tmdb.org/t/p/w185_and_h278_bestv2' + element[2]"/>
         <div>{{ element[1] }}</div>
       </div>
