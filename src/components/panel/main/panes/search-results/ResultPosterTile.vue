@@ -11,22 +11,22 @@
 
 <template>
   <div class="poster-tile"
-       v-bind:id="this.$attrs.result.id"
+       v-bind:id="$attrs.result.id"
        tabindex="0"
-       :key="this.$data.resultId"
-       @click="fetchNodesAndDetails(this.$attrs.result)"
-       @keypress="fetchNodesAndDetails(this.$attrs.result)">  
-    <img v-bind:src="this.$attrs.result.poster"/>
+       :key="$data.resultId"
+       @click="fetchNodesAndDetails($attrs.result)"
+       @keypress="fetchNodesAndDetails($attrs.result)">  
+    <img v-bind:src="$attrs.result.poster"/>
     <div>
-      {{ this.$attrs.result.name }}
+      {{ $attrs.result.name }}
     </div>
-    <div v-if="this.$attrs.result.poster == ''">
+    <div v-if="$attrs.result.poster == ''">
       <br>
-      <div v-if="this.$attrs.result.entity == 'person'">
-        [ {{ this.$attrs.result.knownForDepartment }} ]
+      <div v-if="$attrs.result.entity == 'person'">
+        [ {{ $attrs.result.knownForDepartment }} ]
       </div>
-      <div v-else-if="this.$attrs.result.entity == 'movie' && this.$attrs.result.year != null">
-        [ {{ this.$attrs.result.year }} ]
+      <div v-else-if="$attrs.result.entity == 'movie' && $attrs.result.year != null">
+        [ {{ $attrs.result.year }} ]
       </div>
       <div v-else></div>
     </div>
