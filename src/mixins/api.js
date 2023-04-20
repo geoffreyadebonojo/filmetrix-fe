@@ -8,7 +8,7 @@ export default {
     graphStates
     return {
       key: "6GzCesnexrzgnDv3FfxbHBrb",
-      base_url: import.meta.env.VITE_API_URL
+      base_url: import.meta.env.VITE_API_URL || `https://enigmatic-wildwood-58151.herokuapp.com/graphql`
     }
   },
 
@@ -96,7 +96,7 @@ export default {
   },
 
   async fetchSearchData(term) {
-    const API_URL =`https://enigmatic-wildwood-58151.herokuapp.com/graphql`
+    const API_URL = `${this.data().base_url}/graphql`
 
     console.log(import.meta.env.VITE_API_URL)
     console.log(import.meta.env)
