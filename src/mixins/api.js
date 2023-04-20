@@ -98,9 +98,6 @@ export default {
   async fetchSearchData(term) {
     const API_URL = `${this.data().base_url}/graphql`
 
-    console.log(import.meta.env.VITE_API_URL)
-    console.log(import.meta.env)
-
     const api_response = await (
       fetch(API_URL, {
         method: 'POST',
