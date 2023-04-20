@@ -41,7 +41,7 @@
 
       <router-link v-if="panelStates.detailsData.id != null
                           && appStates.displayingAbout === false
-                          && $attrs.type == 'main'" 
+                          && this.$attrs.type == 'main'" 
                    class="nav-button primary-nav" 
                    id="details-button" 
                    @click="setFocus('details')" to="#details">
@@ -49,7 +49,7 @@
       </router-link>
       <div v-else></div>
 
-      <router-link v-if="$attrs.type == 'main'"
+      <router-link v-if="this.$attrs.type == 'main'"
                    class="nav-button primary-nav" 
                    id="commands-button" 
                    to="#commands"
@@ -57,14 +57,14 @@
         <img src="/command-icon.svg" class="icon" id="commands-icon">
       </router-link>
 
-      <!--router-link class="nav-button primary-nav"
+      <router-link class="nav-button primary-nav"
                    id="profile-button"
                    to="#profile"
                    @click="setFocus('profile')">
         <img src="/settings-gear.svg" v-bind:class="panelStates.currentFocus === 'profile' ? 'gear active' : 'gear'"/>
-      </router-link-->
+      </router-link>
 
-      <router-link v-if="$attrs.type == 'main'"
+      <router-link v-if="this.$attrs.type == 'main'"
                    class="nav-button" 
                    id="about-us-transition-button" 
                    to="#about">
@@ -93,14 +93,17 @@ export default {
   methods: {
     async submitSearch(value) {
       const val = value.toUpperCase()
-      if (val == '' || val == null) { return false }
+      if (val == '' || val == null) { 
+        // maybe a helpful tip?
+        return false
+      }
       
-      await api.fetchSearchData(val).then((response) => {
-        store.searchResults = response
-        const tab = store.searchResults[0].id.split("-")[0]
-        setFocus(tab)
-        document.querySelector("#search-text").value = ''
-      })
+      store.searchResults = await api.fetchSearchData(val)
+      
+      const tab = store.searchResults[0].id.split("-")[0]
+      //handle for no id
+      setFocus(tab)
+      document.querySelector("#search-text").value = ''
     },
     
     toggleOrSubmitOnClick() {
