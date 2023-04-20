@@ -61,6 +61,12 @@
     height: 100vh;
     width: 0px;
     min-width: 300px;
+
+    &.mobile {
+      min-width: 10vw;
+      max-width: 90vw;
+    }
+
     display: grid;
     grid-template-columns: 30px 1fr 27px;
     grid-template-rows: 2vh 28px 10fr 1vh 4fr 4vh;

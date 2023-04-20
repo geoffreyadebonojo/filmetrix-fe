@@ -19,14 +19,30 @@
     mounted () {
       const resizeBar = d3.select("#resize-bar")
       
-      resizeBar.call(
-        d3.drag()
-        .on("start", dragstarted)
-        .on("drag", dragged)
-        .on("end", dragended)
-      )
-      
       let isMobile = /Android|iPhone/i.test(navigator.userAgent)
+
+      if (isMobile) {
+        let panel = d3.select("#panel-body")
+        panel.classed("mobile", true)
+        
+        resizeBar.on("touchmove", (e) => {
+          let x = e.changedTouches[0].clientX
+
+          let pw = window.innerWidth - x
+          console.log(pw, panel)
+          panel.style("width", `${(pw)}px`)
+        })
+        resizeBar.on("touchend", (e) => {
+        })
+      } else {        
+        resizeBar.call(
+          d3.drag()
+          .on("start", dragstarted)
+          .on("drag", dragged)
+          .on("end", dragended)
+        );
+      }
+      
       if (isMobile) {
         resizeBar.on("click", () => {
           let panel = d3.select("#panel-body")
