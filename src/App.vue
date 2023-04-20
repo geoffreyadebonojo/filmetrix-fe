@@ -38,24 +38,24 @@
         localStorage.setItem("newHere", true)
       }
 
-      await api.currentUser().then(async (response) => {
-        if (response.id != null) {
+      // await api.currentUser().then(async (response) => {
+      //   if (response.id != null) {
 
-          userStates.loggedIn = true,
-          userStates.currentUser = response,
-          userStates.currentUser.username = response.email,
-          //generate on BE? looks slow...
-          userStates.currentUser.profileImage = `https://robohash.org/${userStates.currentUser.username}.png?set=set3`
-          userStates.userMovieList = await api.fetchMovieList(response.id)
-          userStates.userGraphList = await api.fetchGraphList(response.id)
+      //     userStates.loggedIn = true,
+      //     userStates.currentUser = response,
+      //     userStates.currentUser.username = response.email,
+      //     //generate on BE? looks slow...
+      //     userStates.currentUser.profileImage = `https://robohash.org/${userStates.currentUser.username}.png?set=set3`
+      //     userStates.userMovieList = await api.fetchMovieList(response.id)
+      //     userStates.userGraphList = await api.fetchGraphList(response.id)
 
-        } else {
+      //   } else {
           userStates.loggedIn = false
           userStates.currentUser = {}
           userStates.userMovieList = []
           userStates.userGraphList = []
-        }
-      }).catch((d) => {})
+      //   }
+      // }).catch((d) => {})
     }
   }
 </script>
