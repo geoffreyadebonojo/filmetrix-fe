@@ -18,9 +18,7 @@ let alreadyClicked = false
 export default {
   name: "graph",
   data () {
-    return {
-      nodeCount: 50
-    }
+    return {}
   },
   draw (responseData, options={}) {
     graphStates.inMotion = true

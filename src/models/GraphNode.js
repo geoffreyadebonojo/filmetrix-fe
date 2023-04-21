@@ -54,10 +54,16 @@ export default class GraphNode {
 
     linkholder.append("rect")
     .attr('fill', "#222222")
-    .attr("x", -2)
-    .attr("y", start)
-    .attr("width", 4)
-    .attr("height", (d) => {
+    .attr("x", (d) => {
+      if (d.target.x < d.source.x) { 
+        return start-200 -(d.roles.join("").length)
+      } else {
+        return start
+      }
+    })
+    .attr("y", -4)
+    .attr("height", 8)
+    .attr("width", (d) => {
       let c = d.roles.join().split("").length
       return c*4
     })
@@ -68,12 +74,31 @@ export default class GraphNode {
         d.target.x,
         d.target.y
       )
-      return `translate(${d.source.x},${d.source.y})rotate(${theta-90})`
+
+      if (d.target.x < d.source.x) {
+        return `translate(${d.source.x},${d.source.y})rotate(${theta+180})`
+      } else {
+        return `translate(${d.source.x},${d.source.y})rotate(${theta})`
+      }
     })
+
 
     linkholder.append("text")
     .text(d => d.roles.join(", "))
-    .attr("x", start)
+    .attr("x", (d) => {
+      if (d.target.x < d.source.x) { 
+        return start-200 -(d.roles.join("").length)
+      } else {
+        return start
+      }
+    })
+    .attr("text-anchor", (d) => {
+      // if (d.target.x < d.source.x) { 
+      //   return "middle" 
+      // } else {
+        return "start"
+      // }
+    })
     .attr("y", 2)
     .attr("stroke", "#FFF")
     .style("font-family", "Dosis, sans-serif")
@@ -87,7 +112,12 @@ export default class GraphNode {
         d.target.x,
         d.target.y
       )
-      return `translate(${d.source.x},${d.source.y})rotate(${theta})`
+
+      if (d.target.x < d.source.x) {
+        return `translate(${d.source.x},${d.source.y})rotate(${theta+180})`
+      } else {
+        return `translate(${d.source.x},${d.source.y})rotate(${theta})`
+      }
     })
   }
 }

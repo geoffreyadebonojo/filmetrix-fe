@@ -53,9 +53,9 @@ export default class GraphBuilder {
         const gn = new GraphNode(d.id)
         gn.nodeTransformer(this.graph.applyHighlight)
 
-        // if (!graphStates.inMotion) {
-          // gn.linkHighlighter()
-        // }
+        if (!graphStates.inMotion) {
+          gn.linkHighlighter()
+        }
 
         // if (e.altKey) {
         //   d3.select(`#${d.id}`).classed("scissors", true)
@@ -64,7 +64,7 @@ export default class GraphBuilder {
       .on("mouseleave", (_e, d) => {
         const gn = new GraphNode(d.id)
         gn.nodeTransformer(this.graph.removeHighlight)
-        // gn.linkUnhighlighter()
+        gn.linkUnhighlighter()
         // d3.select(`#${d.id}`).classed("scissors", false)
       })
     }
