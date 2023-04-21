@@ -16,7 +16,7 @@
        :key="$data.resultId"
        @click="fetchNodesAndDetails($attrs.result)"
        @keypress="fetchNodesAndDetails($attrs.result)">  
-    <img v-bind:src="$attrs.result.poster"/>
+    <img v-bind:src="$attrs.result.poster" class="tile-img"/>
     <div>
       {{ $attrs.result.name }}
     </div>
@@ -91,14 +91,38 @@
 
   .poster-tile {
     @include poster-tile;
-
-    img {
-      transform-origin: 35px 12px;
+    // img {
+      height: 154px;
+      width: 170px;
+      display: flow-root;
+      // }
+      border: 1px solid transparent;
+      
+    div:first-of-type {
+      overflow: hidden;
+      // white-space: nowrap;
+      text-overflow: ellipsis;
+      font-size: 15px;
+      text-align: center;
     }
 
     &:hover {
-      z-index: 10;
+      box-shadow: none;
+      
+      .tile-img {
+        box-shadow: 0 9px 13px 0 rgba(0, 0, 0, 0.2), 0 6px 15px 0 rgba(0, 0, 0, 0.19)
+      }
     }
+
+    img {
+      transform-origin: 35px 12px;
+      width: 100px;
+      margin: 0px 34px;
+    }
+
+    // &:hover {
+    //   z-index: 10;
+    // }
   }
 
 </style>

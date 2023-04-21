@@ -16,7 +16,7 @@
       <p>
         choose one to get started
       </p>
-      <div id="fade-top"></div>
+      <div id="fade-top-1"></div>
     </div>
     <div v-if="panelStates.currentFocus !== 'noResult'"
           v-bind:id="panelStates.currentFocus + '-results'"
@@ -60,12 +60,12 @@
 </script>
 
 <style scoped lang="scss">
-  #fade-top {
+  #fade-top-1 {
     width: 100%;
     height: 0px;
   }
   
-  #fade-top::before {
+  #fade-top-1::before {
     position: absolute;
     right: 0px;
     content: '';
