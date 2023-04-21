@@ -67,6 +67,12 @@ export default class GraphBuilder {
         gn.linkUnhighlighter()
         // d3.select(`#${d.id}`).classed("scissors", false)
       })
+      // .on("click.delete", (e, d) => {
+      //   if (e.altKey) {
+      //     // d3.select(`#${d.id}`).classed("scissors", true)
+      //     debugger
+      //   }
+      // })
     }
   }
 

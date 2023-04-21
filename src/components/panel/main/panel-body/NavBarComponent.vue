@@ -33,8 +33,9 @@
                    class="nav-button primary-nav"
                    v-bind:id="focus+ '-button'"
                    v-bind:to="'#' +focus"
-                   v-bind:key="focus">
-        <div @click="setFocus(focus)">
+                   v-bind:key="focus"
+                   @click="setFocus(focus)">
+        <div>
           <img v-bind:src="'/' +focus+ '-icon.svg'" class="icon" v-bind:id="focus + '-icon'" >
         </div>
       </router-link>

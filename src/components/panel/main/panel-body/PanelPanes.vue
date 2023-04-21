@@ -23,7 +23,7 @@
     <div id="empty-field" v-else-if="panelStates.currentFocus === 'empty'">
       <main-prompt-container></main-prompt-container>
     </div>
-    <search-results-component v-else class="result-component"></search-results-component>
+    <search-results-component v-else></search-results-component>
     <main-nav-arrows-component v-if="$attrs.type == 'main'"></main-nav-arrows-component>
   </div>
 </template>

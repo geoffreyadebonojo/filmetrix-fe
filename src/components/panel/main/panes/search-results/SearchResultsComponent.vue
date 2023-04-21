@@ -11,22 +11,25 @@
 </script>
 
 <template>
-  <div id="first-time-instruction" class="apply-effect">
-    <p>
-      choose one to get started
-    </p>
-    <div id="fade-top"></div>
-  </div>
-  <div v-if="panelStates.currentFocus !== 'noResult'"
-       v-bind:id="panelStates.currentFocus + '-results'"
-       class="result-container">
-    <result-poster-tile v-for="result in resultsWithPosters" :result="result"></result-poster-tile>
-  </div>
+  <div class="result-component">
+    <div id="first-time-instruction" class="apply-effect">
+      <p>
+        choose one to get started
+      </p>
+      <div id="fade-top"></div>
+    </div>
+    <div v-if="panelStates.currentFocus !== 'noResult'"
+          v-bind:id="panelStates.currentFocus + '-results'"
+          class="result-container">
+      <result-poster-tile v-for="result in resultsWithPosters" :result="result"></result-poster-tile>
+    </div>
 
-  <div v-else>
-    <p>No result found.</p>
-    <p style="margin-top:30px">Did you get the spelling right?</p>
-  </div>
+    <div v-else>
+      <p>No result found.</p>
+      <p style="margin-top:30px">Did you get the spelling right?</p>
+    </div>
+    </div>
+
 </template>
 
 <script>
