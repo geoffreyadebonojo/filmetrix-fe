@@ -11,6 +11,12 @@
 </script>
 
 <template>
+  <div id="first-time-instruction" class="apply-effect">
+    <p>
+      choose one to get started
+    </p>
+    <div id="fade-top"></div>
+  </div>
   <div v-if="panelStates.currentFocus !== 'noResult'"
        v-bind:id="panelStates.currentFocus + '-results'"
        class="result-container">
@@ -27,10 +33,15 @@
   export default {
     name: "SearchResultsComponent",
     data () {
-      return {}
+      return {
+        newHere: JSON.parse(localStorage.getItem("newHere"))
+      }
     },
     mounted () {
       d3.select(".result-component").transition().delay(0).duration(200).style("right", "0%")
+      d3.select("#first-time-instruction").style("display", () => {
+        return this.$data.newHere ? "block" : "none"
+      })
     },
     computed: {
       filteredSearchResults: () => {
@@ -46,7 +57,20 @@
 </script>
 
 <style scoped lang="scss">
-  .result-container {
+  #fade-top {
+    width: 100%;
+    height: 0px;
+  }
+  
+  #fade-top::before {
+    position: absolute;
+    right: 0px;
+    content: '';
+    background: linear-gradient(to top, transparent 29%, #333 100%);
+    width: 100%;
+    height: 25px;
+  }
+.result-container {
     width: 100%;
     display: flex;
     flex-wrap: wrap;
@@ -55,11 +79,25 @@
     padding: 20px;
   }
   
-  #no-result {
+  #no-result, #first-time-instruction {
     text-transform: uppercase;
     font-family: $global-font;
     font-weight: bold;
     font-size: 40px;
+    text-align: center;
+  }
+  
+  #first-time-instruction {
+    position: sticky;
+    opacity: 0.5;
+    top: 0px;
+    padding: 30px 10px 0px;
+    background: $panel-body-grey;
+    z-index: 1000;
+    text-transform: uppercase;
+    font-family: "Dosis", sans-serif;
+    font-weight: 100;
+    font-size: 2em;
     text-align: center;
   }
 </style>

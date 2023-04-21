@@ -58,7 +58,7 @@
     name: "GraphComponent",
     data() {
       return {
-        graph:null
+        graph: null
       }
     },
 
