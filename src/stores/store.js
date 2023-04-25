@@ -34,6 +34,7 @@ export const userStates = reactive({
 })
 
 export const store = reactive({
+  searchTerm: '',
   searchResults: [],
   savedGraphs: {},
   bookmarks: []

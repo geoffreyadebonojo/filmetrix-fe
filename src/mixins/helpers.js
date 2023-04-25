@@ -77,16 +77,15 @@ export function setFocus(focus) {
   moveHighlightCircle(displacement[index], "right")
 
   panelStates.currentFocus = focus
-
-  if (focus == 'search') {
-    openField()
-  } 
   
   if (focus == 'profile') {
     d3.select("#highlight")
-      .style("border", "solid 0.05em white")
-      .style("background", "none")
+    .style("border", "solid 0.05em white")
+    .style("background", "none")
   } else {
+    if (focus == 'search') {
+      openField()
+    }
     d3.select("#highlight")
       .style("display", "block")
       .style("border", "none")

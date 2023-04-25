@@ -11,13 +11,13 @@
 
 <template>
   <draggable id="my-movie-list"
+    v-if="$data.movieList.length > 0"
     :list="$data.movieList"
     :disabled="!enabled"
     item-key="movie"
     @start="dragging=true"
     @end="dragEnd($event)"
     v-bind="dragOptions">
-
     <template #item="{ element }">
       <div class="my-movie-item" v-bind:id="'my-movie-' + element[0]" type="transition">
         <img class="delete-button" src="/red-x-icon.svg" @click="removeBookmark(element[0])"/>
@@ -25,8 +25,10 @@
         <div>{{ element[1] }}</div>
       </div>
     </template>
-
   </draggable>
+  <div v-else id="no-movies-yet">
+    Add some movies
+  </div>
 </template>
 
 <script>
@@ -96,6 +98,12 @@
     opacity: 0;
   }
 
+  #no-movies-yet {
+    width: 100%;
+    display: flex;
+    font-family: $global-font;
+  }
+
   #my-movie-list {
     width: 100%;
     display: flex;
@@ -104,10 +112,6 @@
     padding: 20px 10px 61px;
     overflow-y: scroll;
 
-    #no-movies-yet {
-      width: 100%;
-      display: flex;
-    }
     .my-movie-item {
       @include poster-tile;
 

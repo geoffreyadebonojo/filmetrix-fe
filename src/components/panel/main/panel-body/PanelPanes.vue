@@ -12,6 +12,7 @@
   import MainPromptContainer from    '@panes/prompts/MainPromptContainer.vue'
   import SearchResultsComponent from '@panes/search-results/SearchResultsComponent.vue'
   import UserProfileComponent from   '@panes/user-profile/UserProfileComponent.vue'
+  import * as d3 from 'd3'
 </script>
 
 <template>

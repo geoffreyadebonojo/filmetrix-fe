@@ -31,6 +31,8 @@ export default {
         return response.json()
       })
     )
+
+    return api_response
   },
 
   async loginUser(args) {
@@ -110,6 +112,7 @@ export default {
               poster
               entity
               year
+              popularity
               knownForDepartment
             }
           }`
@@ -122,6 +125,35 @@ export default {
     return api_response.data.search
   },
 
+  async fetchSearchNext(term) {
+    const API_URL = `${this.data().base_url}/graphql`
+
+    const api_response = await (
+      fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query:
+          `query {
+            getNextPage(term:"${term}") {
+              id
+              name
+              poster
+              entity
+              year
+              popularity
+              knownForDepartment
+            }
+          }`
+        })
+      }).then((response) => {
+        return response.json()
+      })
+    )
+
+    return api_response.data.getNextPage
+  },
+
+  
   async fetchDetails(id) {
     const API_URL =`${this.data().base_url}/graphql`
 
@@ -352,5 +384,5 @@ export default {
     )
 
     return api_response.data.addToMovieList
-  },
+  }
 }

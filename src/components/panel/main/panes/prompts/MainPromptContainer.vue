@@ -19,6 +19,8 @@
   <search-prompt></search-prompt>
   <!-- hidden until we can actually build it -->
   <!-- <tutorial-prompt v-if="$data.newHere"></tutorial-prompt> -->
+
+  <!-- should refactor later -->
   <resume-prompt v-if="$data.hasSavedGraph" :saved="$data.saved"></resume-prompt>
 </template>
 

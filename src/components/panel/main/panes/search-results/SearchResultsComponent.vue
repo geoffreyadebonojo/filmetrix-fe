@@ -28,8 +28,7 @@
       <p>No result found.</p>
       <p style="margin-top:30px">Did you get the spelling right?</p>
     </div>
-    </div>
-
+  </div>
 </template>
 
 <script>
@@ -44,6 +43,26 @@
       d3.select(".result-component").transition().delay(0).duration(200).style("right", "0%")
       d3.select("#first-time-instruction").style("display", () => {
         return this.$data.newHere ? "block" : "none"
+      })
+      d3.select("#panel-panes").on("scroll", async (e) => {        
+        let scrollBottom = (e.target.scrollTop + e.target.clientHeight)// -5
+        
+        const atBottom = scrollBottom > e.target.scrollHeight
+
+        // if ( atBottom && !d3.select(".result-component").classed("lock-scroll") ){
+        if ( atBottom){
+          // const rc = d3.select(".result-component")
+          // rc.append("p").text("add final").style("height", "100px").style("width", "100px")
+          // rc.classed("lock-scroll", "true")
+          // setTimeout((d) => {
+          //   const ls = d3.select(".lock-scroll").classed("lock-scroll", "false")
+          //   ls.remove()
+          // },3000)
+
+          // const nextPageData = await api.fetchSearchNext(store.searchTerm)
+          // store.searchResults = store.searchResults.concat(nextPageData)
+          console.log("call for new")
+        }
       })
     },
     computed: {

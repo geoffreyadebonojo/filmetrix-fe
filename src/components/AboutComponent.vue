@@ -82,7 +82,7 @@
             },
             {
               id: 'pierce',
-              name: "Pierce Seibers",
+              name: "Pierce Siebers",
               poster: "/pierce-pixel.png",
               type: [],
               // description: "Experienced designer specializing in marketing collateral materials and mass emails—internal and external, print and digital. From real estate and the mortgage industry to B2B and eCommerce; be it corporate and clean or something more creative and experimental, I love expanding a company's visual language and bringing the brand to life.",

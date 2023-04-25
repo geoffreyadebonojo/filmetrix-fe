@@ -8,12 +8,12 @@
 </script>
 
 <template>
-  <div class="graph-control-buttons"
+  <!-- <div class="graph-control-buttons"
        v-bind:class="store.isLocked ? 'locked' : 'unlocked'" 
        id="lock-button"
        @click="toggleLock($event)">
     <p id="lock-flash"></p>
-  </div>
+  </div> -->
 </template>
 
 <script>

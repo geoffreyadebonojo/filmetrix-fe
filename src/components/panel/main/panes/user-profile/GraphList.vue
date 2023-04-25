@@ -13,14 +13,14 @@
 <template>
   <div id="graph-stacks">
     <draggable id="my-graphs-list"
+      v-if="$data.graphList.length > 0"
       :list="$data.graphList"
       :disabled="!enabled"
       item-key="stack"
       @start="dragging=true"
       @end="dragEnd($event)"
       v-bind="dragOptions">
-
-      <template #item="{ element }" >
+      <template #item="{ element }">
         <div class="stack collapsed" v-bind:id="'group-' + element.slug" @click="toggleExpand($event)">
           <div v-for="(poster, i) in element.posters" :style="{ 'z-index': i, 'right': i*$data.posterOffset+'px' }" class="poster">
             <img v-bind:src="poster"/>
@@ -28,6 +28,9 @@
         </div>
       </template>
     </draggable>
+    <div id="no-graphs-yet" v-else>
+      Make a graph... then save it
+    </div>
   </div>
 </template>
 
@@ -94,6 +97,12 @@
   #graph-stacks {
     .ghost {
       opacity: 0;
+    }
+
+    #no-graphs-yet {
+      width: 100%;
+      display: flex;
+      font-family: $global-font;
     }
 
     .stack {

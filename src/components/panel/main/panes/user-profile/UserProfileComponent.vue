@@ -28,7 +28,7 @@
   export default {
     data () {
       return {
-        loggedIn: null,
+        loggedIn: false,
       }
     },
 

@@ -17,12 +17,12 @@
 <template>
   <div id="user-profile-container" v-if="$data.loggedIn">
     <!-- last fallback -->
-    <!-- <div id="profile-image-container" v-if="userStates.currentUser.profileImage == null">
+    <!-- <div id="profile-image-container" v-if="userStates.currentUser.profileImg == null">
       letter in circle
     </div> -->
     <!-- generated -->
-    <!-- <div id="profile-image-container" v-if="userStates.currentUser.profileImage == null">
-      <img id="awesome" v-bing:src="userStates.currentUser.profileImage" />
+    <!-- <div id="profile-image-container" v-if="userStates.currentUser.profileImg == null">
+      <img id="awesome" v-bing:src="userStates.currentUser.profileImg" />
     </div> -->
     <!-- primary  -->
     <!-- <div id="user-name">
@@ -31,7 +31,7 @@
     </div> -->
 
     <div class="sticky" id="profile-image-container">
-      <img v-bind:src="userStates.currentUser.profileImage" />
+      <img v-bind:src="userStates.currentUser.profileImg" />
     </div>
     
     <profile-nav-bar @change-focus="changeFocus"></profile-nav-bar>
@@ -87,9 +87,7 @@
     methods: {
       changeFocus(f) {
         this.$data.profileFocus = f
-      },
-
-      
+      }
       
       // toggleLinks(e) {
       //   graphStates.graphType = e.currentTarget.checked ? "tree" : "pack"
@@ -113,23 +111,6 @@
       //   d3.select(".links").style("display", e.currentTarget.checked ? "block" : "none")
       //   d3.selectAll(".node-label").style("display", e.currentTarget.checked ? "block" : "none")
       // },
-
-      async submitLogout() {
-        const resp = await api.logoutUser()
-  
-        if (resp.status == 200) {
-          this.$data.loggedIn = false
-          userStates.loggedIn = false
-          userStates.currentUser = {}
-          userStates.userMovieList = {}
-          userStates.userGraphList = {}
-        } else {
-          throw new Error("logout failed")
-          // manually clear headers from localstorage
-          // userStates.loggedIn = false
-          // userStates.currentUser = {}
-        }
-      }
     }
   }
 </script>

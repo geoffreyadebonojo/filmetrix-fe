@@ -8,7 +8,7 @@
 </script>
 
 <template>
-  <div id="auth-fields-container" v-if="data.loggedIn == false">
+  <div id="auth-fields-container" v-if="$data.loggedIn == false">
     <input 
       class="login-fields" 
       id="email-field"
@@ -51,7 +51,13 @@
     },
     methods: {
       async signupUser () {
-        await api.signupUser()
+        const email = d3.select("#email-field").node().value
+        const password = d3.select("#password-field").node().value.toLowerCase()
+
+        const resp = await api.signupUser({
+          email,
+          password
+        })
       },
       async submitLogin () {
         const email = d3.select("#email-field").node().value
@@ -68,7 +74,7 @@
           userStates.currentUser = resp.data
           // temp
           userStates.currentUser.username = userStates.currentUser.email 
-          userStates.currentUser.profileImage = `https://robohash.org/${userStates.currentUser.username}.png?set=set3`
+          userStates.currentUser.profileImg = `https://robohash.org/${userStates.currentUser.username}.png?set=set3`
 
           userStates.userMovieList = await api.fetchMovieList(resp.data.id)
           userStates.userGraphList = await api.fetchGraphList(resp.data.id)

@@ -3,6 +3,7 @@
     appStates,
     graphStates,
     panelStates,
+    userStates,
     store 
   } from "@/stores/store.js"
   import { setFocus, openField } from '@mixins/helpers'
@@ -22,55 +23,51 @@
     
     <div class="nav-button-container">
       <div id="highlight"></div>
-      <router-link class="primary-nav" 
+      <div class="primary-nav" 
                    id="search-button" 
-                   to="#search" 
                    @click="toggleOrSubmitOnClick()">
         <img src="/search-icon.svg" class="icon" id="search-icon">
-      </router-link>
+      </div>
 
-      <router-link v-for="focus in resultIconList"
+      <div v-for="focus in resultIconList"
                    class="nav-button primary-nav"
                    v-bind:id="focus+ '-button'"
-                   v-bind:to="'#' +focus"
                    v-bind:key="focus"
                    @click="setFocus(focus)">
         <div>
           <img v-bind:src="'/' +focus+ '-icon.svg'" class="icon" v-bind:id="focus + '-icon'" >
         </div>
-      </router-link>
+      </div>
 
-      <router-link v-if="panelStates.detailsData.id != null
+      <div v-if="panelStates.detailsData.id != null
                           && appStates.displayingAbout === false
                           && this.$attrs.type == 'main'" 
                    class="nav-button primary-nav" 
                    id="details-button" 
                    @click="setFocus('details')" to="#details">
         <img src="/details-icon.svg" class="icon" id="details-icon">
-      </router-link>
+      </div>
       <div v-else></div>
 
-      <router-link v-if="this.$attrs.type == 'main'"
+      <div v-if="this.$attrs.type == 'main'"
                    class="nav-button primary-nav" 
-                   id="commands-button" 
-                   to="#commands"
+                   id="commands-button"
                    @click="setFocus('commands')">
         <img src="/command-icon.svg" class="icon" id="commands-icon">
-      </router-link>
+      </div>
 
-      <!--router-link class="nav-button primary-nav"
+      <div class="nav-button primary-nav"
                    id="profile-button"
-                   to="#profile"
                    @click="setFocus('profile')">
         <img src="/settings-gear.svg" v-bind:class="panelStates.currentFocus === 'profile' ? 'gear active' : 'gear'"/>
-      </router-link-->
+        <!-- <img v-bind:src="userStates.currentUser.profileImg" v-bind:class="panelStates.currentFocus === 'profile' ? 'gear active' : 'gear'"/> -->
+      </div>
 
-      <router-link v-if="this.$attrs.type == 'main'"
+      <div v-if="this.$attrs.type == 'main'"
                    class="nav-button" 
-                   id="about-us-transition-button" 
-                   to="#about">
+                   id="about-us-transition-button">
         <about-button-component></about-button-component>
-      </router-link>
+      </div>
     </div>
   </div>
 </template>
@@ -98,7 +95,8 @@ export default {
         // maybe a helpful tip?
         return false
       }
-      
+
+      store.searchTerm = val
       store.searchResults = await api.fetchSearchData(val)
       
       const tab = store.searchResults[0].id.split("-")[0]
@@ -109,13 +107,14 @@ export default {
     
     toggleOrSubmitOnClick() {
       const d = d3.select("#search-text") 
-      openField(d)
+      setFocus('search')
+
       const val = d.node().value
       if (val == '' || val == null) { 
         panelStates.currentFocus = "empty"
         return false
       }
-      panelStates.currentFocus = "search"
+
       this.submitSearch(val)
     }
   }
