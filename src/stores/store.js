@@ -5,7 +5,8 @@ export const graphStates = reactive({
   graphData: {},
   inMotion: false,
   lockedHighlights: [],
-  graphType: 'tree'
+  graphType: 'tree',
+  currentGraphId: ''
 })
 
 export const gameStates = reactive({

@@ -1,7 +1,8 @@
 <script setup>
-  import LockButton from './LockButton.vue'
+  // import LockButton from './LockButton.vue'
   import GenerateLinkButton from './GenerateLinkButton.vue'
-  import SaveButton from './SaveButton.vue'
+  // import SaveButton from './SaveButton.vue'
+  import ClearGraphButton from './ClearGraphButton.vue'
   import { 
     graphStates,
     store 
@@ -13,7 +14,8 @@
 <template>
   <!--lock-button></lock-button-->
   <generate-link-button></generate-link-button>
-  <save-button></save-button>
+  <!-- <save-button></save-button> -->
+  <clear-graph-button></clear-graph-button>
   <div class="graph-control-buttons" id="centering-button"></div>
 </template>
 

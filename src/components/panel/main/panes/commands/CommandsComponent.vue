@@ -21,21 +21,21 @@
         <img src="/cursor-finger.svg" style="opacity:0.5"/>
       </div>
 
-      <div class="item unlock" style="height:3em">
+      <!-- <div class="item unlock" style="height:3em">
         <img src="/lock-open.svg" style="opacity:0.5"/>
       </div>
 
       <div class="item lock" style="height:3em">
         <img src="/lock-closed.svg"/>
-      </div>
+      </div> -->
 
       <div class="item link-to" style="height:3em">
         <img src="/link-alt.svg" style="opacity:0.5"/>
       </div>
 
-      <div class="item save" style="height:3em">
+      <!-- <div class="item save" style="height:3em">
         <img src="/disk-empty-white.svg"/>
-      </div>
+      </div> -->
 
       <div class="item centering" style="height:3em">
         <img src="/center-graph-icon.svg"/>
@@ -48,6 +48,10 @@
       <!-- <div class="item scissors" style="height:3em">
         <img src="/scissors-icon.svg" style="transform:rotate(-135deg);opacity:0.5"/>
       </div> -->
+
+      <div class="item clear-graph" style="height:3em">
+        <img src="/clear-graph.svg"/>
+      </div>
     </div>
 
     <div id="centerline" class="line"></div>
@@ -79,7 +83,7 @@
         style="height:2.8em"
       />
 
-     <effect-explanation
+     <!--effect-explanation
         :section="'unlock'"
         :main="'unlocked'"
         :secondary="'graph won\'t be saved if you navigate away or refresh the page'"
@@ -93,7 +97,7 @@
         :secondary="'graph will be saved if you navigate away or refresh'"
         :expandedHeight="'5.2em'"
         style="height:3em"
-      />
+      /-->
 
       <effect-explanation
         :section="'link-to'"
@@ -103,13 +107,13 @@
         style="height:3em"
       />
 
-      <effect-explanation
+      <!--effect-explanation
         :section="'save'"
         :main="'save'"
         :secondary="'save a graph so you can play with it later. gotta be logged in though'"
         :expandedHeight="'6.3em'"
         style="height:3em"
-      />
+      /-->
 
       <effect-explanation
         :section="'centering'"
@@ -126,6 +130,14 @@
         :expandedHeight="'7em'"
         style="height:3em"
       /-->
+
+      <effect-explanation
+        :section="'clear-graph'"
+        :main="'clear graph'"
+        :secondary="'this will reset the graph'"
+        :expandedHeight="'7em'"
+        style="height:3em"
+      />
     </div>
   </div>
 </template>
@@ -204,6 +216,10 @@
 
     .profile > img {
       height: 23px;
+      opacity: 0.5;
+    }
+
+    .clear-graph > img {
       opacity: 0.5;
     }
   }

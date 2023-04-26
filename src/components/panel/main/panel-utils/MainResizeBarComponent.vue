@@ -29,7 +29,6 @@
           let x = e.changedTouches[0].clientX
 
           let pw = window.innerWidth - x
-          console.log(pw, panel)
           panel.style("width", `${(pw)}px`)
         })
         resizeBar.on("touchend", (e) => {

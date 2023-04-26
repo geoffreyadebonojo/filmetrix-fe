@@ -36,9 +36,7 @@
       } 
 
       // const focus = this.$route.hash.replace("#", "")
-      // console.log(focus)
       // setFocus(focus)
-
     }
   }
 </script>

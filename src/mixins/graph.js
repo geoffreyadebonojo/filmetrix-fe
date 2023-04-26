@@ -1,9 +1,8 @@
 import { 
   graphStates, 
   panelStates,
-  store 
 } from '@/stores/store.js'
-import { settings, getTypes } from './helpers.js'
+import { settings, setFocus } from './helpers.js'
 import api from './api.js'
 import * as d3 from 'd3'
 import GraphBuilder from '@models/GraphBuilder.js'

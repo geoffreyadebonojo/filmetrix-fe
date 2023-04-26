@@ -93,7 +93,6 @@ export default class GraphBuilder {
     .on('zoom', (e) => {
       this.args.outerWrapper
       .attr("transform", e.transform)
-      console.log(e.transform)
     })
     .on('end', (e) => {
       localStorage.setItem('currentZoom', e.transform)
