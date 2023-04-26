@@ -67,10 +67,23 @@
       const yInt = +y.replace(")", "")
       const kInt = +scale.replace("scale(", "").replace(")", "")
 
-      g1.call(zoom1.transform, d3.zoomIdentity
-        .translate(xInt, yInt)
-        .scale(kInt)
+      g1.call(
+        zoom1.transform, 
+        d3.zoomIdentity
+          .translate(xInt, yInt)
+          .scale(kInt)
       )
+
+      g1.transition()
+      .duration(3000)
+      .attr("transform", d3.zoomIdentity)
+      .on("end", function() {
+        setFocus('details')
+        d3.select(this).call(
+          zoom1.transform, 
+          d3.zoomIdentity
+        );   
+      })
     }
   }
 </script>
