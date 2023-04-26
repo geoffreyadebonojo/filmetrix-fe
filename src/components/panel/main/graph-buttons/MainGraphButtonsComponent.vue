@@ -11,7 +11,7 @@
 </script>
 
 <template>
-  <lock-button></lock-button>
+  <!--lock-button></lock-button-->
   <generate-link-button></generate-link-button>
   <save-button></save-button>
   <div class="graph-control-buttons" id="centering-button"></div>

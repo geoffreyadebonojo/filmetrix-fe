@@ -89,9 +89,14 @@ export default class GraphBuilder {
   }
 
   createViewerBody() {
-    let zoom = d3.zoom().on('zoom', (e) => {
+    let zoom = d3.zoom()
+    .on('zoom', (e) => {
       this.args.outerWrapper
       .attr("transform", e.transform)
+      console.log(e.transform)
+    })
+    .on('end', (e) => {
+      localStorage.setItem('currentZoom', e.transform)
     })
     // out of place here...
     if (this.graphControlButtons) {
@@ -102,13 +107,17 @@ export default class GraphBuilder {
         const duration = 1000
         
         d3.select(e.target).style("opacity", "1")
+        
         var transform = d3.zoomIdentity
           .translate(0,0)
           .scale(1)
         
         d3.select(e.target).transition().duration(duration).style("opacity", "0.5")
         this.viewerBody.transition().duration(duration)
-          .call(zoom.transform, transform);
+          .call(zoom.transform, () => {
+            // debugger
+            return transform
+          });
         return this.viewerBody
       })
     }

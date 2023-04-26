@@ -59,7 +59,6 @@ export default {
     })
     .on("end", () => {
       graphStates.inMotion = false
-
       localStorage.setItem("lockedGraph", JSON.stringify(graphStates.existing))
     })
     

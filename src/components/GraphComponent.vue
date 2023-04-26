@@ -4,10 +4,11 @@
     graphStates,
     panelStates
   } from '@/stores/store.js'
-  import { getTypes } from "@mixins/helpers"
+  import { getTypes, setFocus } from "@mixins/helpers"
   import api from "@mixins/api"
   import graph from "@mixins/graph"
   import GraphManager from "@/models/GraphManager.js"
+  import * as d3 from 'd3'
 </script>
 
 <template>
@@ -67,7 +68,7 @@
       if (gid == null) { return }
       await this.loadFromSlug(gid)
     },
-
+    
     methods: {
       async loadFromSlug (gid) {
         await api.findBySlug(gid)

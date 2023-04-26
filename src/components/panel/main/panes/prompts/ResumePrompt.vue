@@ -54,10 +54,23 @@
         nodes: nodes.uniqueById(),
         links: links,
         type: "main"
-      })      
-      panelStates.currentFocus = 'search'
-      d3.select("#lock-button").classed("unlocked", false).classed("locked", true)
-      setFocus('details')
+      })
+
+      var g1 = d3.select("#main-outer-wrapper")
+      var zoom1 = d3.zoom().on("zoom", (e) => {
+        g1.attr("transform", e.transform);
+      });
+
+      const [translate, scale] = localStorage.getItem("currentZoom").split(" ")
+      const [x, y] = translate.split(",")
+      const xInt = +x.replace("translate(", "").replace(")", "")
+      const yInt = +y.replace(")", "")
+      const kInt = +scale.replace("scale(", "").replace(")", "")
+
+      g1.call(zoom1.transform, d3.zoomIdentity
+        .translate(xInt, yInt)
+        .scale(kInt)
+      )
     }
   }
 </script>

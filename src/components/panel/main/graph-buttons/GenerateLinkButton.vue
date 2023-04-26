@@ -39,7 +39,7 @@
   #link-to-button {
     background-image: url("/link-alt.svg");
     background-size: contain;
-    top: 7.9vh;
+    top: 1.9vh;
     left: -28px !important;
     width: 20px;
     height: 20px;
