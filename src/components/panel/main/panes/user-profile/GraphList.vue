@@ -21,7 +21,10 @@
       @end="dragEnd($event)"
       v-bind="dragOptions">
       <template #item="{ element }">
-        <div class="stack collapsed" v-bind:id="'group-' + element.slug" @click="toggleExpand($event)">
+        <div class="stack collapsed" 
+          v-bind:class="graphStates.currentGraphId == element.slug ? 'current-graph' : ''" 
+          v-bind:id="'group-' + element.slug" 
+          @click="toggleExpand($event)">
           <div v-for="(poster, i) in element.posters" :style="{ 'z-index': i, 'right': i*$data.posterOffset+'px' }" class="poster">
             <img v-bind:src="poster"/>
           </div>
@@ -71,6 +74,8 @@
         if (dx < w) {
           // dupe in graphcomponent & MovieList
           await api.findBySlug(e.item.id.split("-")[1])
+          graphStates.currentGraphId = e.item.id.split("-")[1]
+
           new GraphManager().generate()
         }
       },
@@ -105,9 +110,14 @@
       font-family: $global-font;
     }
 
+    .current-graph {
+      border: solid red 1px;
+    }
+
     .stack {
       display: flex; 
       margin: 10px 0;
+      padding-top: 10px;
       width: 100%;
       height: 100px;
       overflow-x: scroll;

@@ -77,13 +77,16 @@
       g1.transition()
       .duration(3000)
       .attr("transform", d3.zoomIdentity)
-      .on("end", function() {
+      .on("start", () => {
         setFocus('details')
+      })
+      .on("end", () => {
         d3.select(this).call(
           zoom1.transform, 
           d3.zoomIdentity
-        );   
+        )
       })
+
     }
   }
 </script>
