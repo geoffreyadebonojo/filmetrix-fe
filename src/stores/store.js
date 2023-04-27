@@ -14,11 +14,11 @@ export const gameStates = reactive({
 })
 
 export const panelStates = reactive({
-  width: '350',
+  width: '351`',
   isOpen: true,
   currentFocus: 'empty',
   profileTab: 'movies',
-  detailsData: {}
+  detailsData: {},
 })
 
 export const appStates = reactive({

@@ -27,7 +27,6 @@
         
         resizeBar.on("touchmove", (e) => {
           let x = e.changedTouches[0].clientX
-
           let pw = window.innerWidth - x
           panel.style("width", `${(pw)}px`)
         })
@@ -39,7 +38,21 @@
           .on("start", dragstarted)
           .on("drag", dragged)
           .on("end", dragended)
-        );
+        )
+        resizeBar.on("dblclick", () => {
+          let panel = d3.select("#panel-body")
+          let pw
+          if (panelStates.isOpen) {
+            panelStates.isOpen = false
+            pw = 15
+          } else {
+            panelStates.isOpen = true
+            pw = 350
+          }
+          panel.transition().duration(300)
+          .style("width", `${(pw)}px`)
+          .style("min-width", `${(pw)}px`)
+        })
       }
       
       if (isMobile) {
@@ -77,11 +90,6 @@
         d3.select(this).style("cursor", "col-resize")
         let panel = this.parentElement
         let pw = window.innerWidth - event.x
-        // if (pw < 220) {
-        //   d3.select("#search-text").style("left", "167px").style("top", "27px")
-        // } else {
-        //   d3.select("#search-text").style("left", "20px").style("top", "0px")
-        // }
         panel.style.width = `${(pw)}px`
       }
       

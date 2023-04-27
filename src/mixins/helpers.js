@@ -80,8 +80,8 @@ export function setFocus(focus) {
   
   if (focus == 'profile') {
     d3.select("#highlight")
-    .style("border", "solid 0.05em white")
-    .style("background", "none")
+      .style("border", "solid 0.05em white")
+      .style("background", "none")
   } else {
     if (focus == 'search') {
       openField()
