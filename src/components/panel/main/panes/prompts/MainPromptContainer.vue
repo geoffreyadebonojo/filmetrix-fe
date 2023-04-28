@@ -1,6 +1,5 @@
 <script setup>
   import SearchPrompt from './SearchPrompt.vue'
-  import ResumePrompt from './ResumePrompt.vue'
   // import TutorialPrompt from './TutorialPrompt.vue'
 
   import api from '@/mixins/api'
@@ -19,27 +18,11 @@
   <search-prompt></search-prompt>
   <!-- hidden until we can actually build it -->
   <!-- <tutorial-prompt v-if="$data.newHere"></tutorial-prompt> -->
-
-  <!-- should refactor later -->
-  <resume-prompt v-if="$data.hasSavedGraph" :saved="$data.saved"></resume-prompt>
 </template>
 
 <script>
   export default {
-    name: "MainPromptContainer",
-    data () {
-      return {
-        newHere: JSON.parse(localStorage.getItem("newHere")),
-        saved: JSON.parse(localStorage.getItem("lockedGraph"))
-      }
-    },
-    mounted () {
-      if (this.$data.saved == null || this.$data.saved.length == []) {
-        this.$data.hasSavedGraph = false
-      } else {
-        this.$data.hasSavedGraph = true
-      }
-    },
+    name: "MainPromptContainer"
   }
 </script>
 

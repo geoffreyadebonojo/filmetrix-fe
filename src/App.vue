@@ -2,9 +2,14 @@
   import { RouterView } from 'vue-router'
   import { 
     appStates,
-    userStates
+    graphStates,
+    userStates,
+    store
    } from '@/stores/store.js'
   import api from "@mixins/api"
+  import graph from "@mixins/graph"
+  import { setFocus } from '@mixins/helpers'
+  import manageGlobalState from "@mixins/manageGlobalState"
   import * as d3 from 'd3'
 </script>
 
@@ -27,34 +32,86 @@
   export default {
     data () {
       return {
-        isMobile: /Android|iPhone/i.test(navigator.userAgent)
+        isMobile: /Android|iPhone/i.test(navigator.userAgent),
+        newHere: JSON.parse(localStorage.getItem("newHere")),
       }
     },
-
+    
     async created () {
       // userStates.theme = localStorage.getItem('theme')
-      let x = localStorage.getItem("newHere")
-      if (x == null) {
+      if (this.$data.newHere == null) {
         localStorage.setItem("newHere", true)
       }
-
+      
+      graphStates.existing = JSON.parse(localStorage.getItem("lockedGraph"))
+      
+      await this.loadSavedGraph()
+      
       await api.currentUser().then(async (response) => {
         if (response.id != null) {
-
-          userStates.loggedIn = true
-          userStates.currentUser = response
-          userStates.currentUser.username = response.email
-          userStates.currentUser.profileImg = response.profile_img
-          userStates.userMovieList = await api.fetchMovieList(response.id)
-          userStates.userGraphList = await api.fetchGraphList(response.id)
-
+          manageGlobalState.loadUser(response)
         } else {
-          userStates.loggedIn = false
-          userStates.currentUser = {}
-          userStates.userMovieList = []
-          userStates.userGraphList = []
+          manageGlobalState.nullUser()
         }
-      }).catch((d) => {})
+      }).catch((d) => {
+        manageGlobalState.nullUser()
+      })
+    },
+    
+    methods: {
+      async loadSavedGraph () {
+        store.isLocked = true
+
+        await api.fetchGraphData(graphStates.existing.map(d => d[0]))
+        await api.fetchDetails(graphStates.existing[0])
+
+        let data
+        let nodes = []
+        let links = []
+        
+        graphStates.existing.forEach((d) => {
+          data = graphStates.graphData[d[0]]
+          nodes = nodes.concat(data.nodes.slice(0,d[1]+1))
+          links = links.concat(data.links.slice(0,d[1]))
+        })
+  
+        graph.draw({
+          nodes: nodes.uniqueById(),
+          links: links,
+          type: "main"
+        })
+  
+        var g1 = d3.select("#main-outer-wrapper")
+        var zoom1 = d3.zoom().on("zoom", (e) => {
+          g1.attr("transform", e.transform);
+        });
+  
+        const [translate, scale] = localStorage.getItem("currentZoom").split(" ")
+        const [x, y] = translate.split(",")
+        const xInt = +x.replace("translate(", "").replace(")", "")
+        const yInt = +y.replace(")", "")
+        const kInt = +scale.replace("scale(", "").replace(")", "")
+  
+        g1.call(
+          zoom1.transform, 
+          d3.zoomIdentity
+            .translate(xInt, yInt)
+            .scale(kInt)
+        )
+  
+        g1.transition()
+        .duration(1000)
+        .attr("transform", d3.zoomIdentity)
+        .on("start", () => {
+          setFocus('details')
+        })
+        .on("end", () => {
+          d3.select(this).call(
+            zoom1.transform, 
+            d3.zoomIdentity
+          )
+        })
+      }
     }
   }
 </script>
