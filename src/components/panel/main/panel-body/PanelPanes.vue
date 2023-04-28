@@ -1,9 +1,7 @@
 <script setup>
   import { 
     appStates,
-    graphStates,
-    panelStates,
-    store 
+    panelStates
   } from '@/stores/store.js'
   import AboutDetailsComponent from  '@about/AboutDetailsComponent.vue'
   import MainNavArrowsComponent from '@main/panel-utils/MainNavArrowsComponent.vue'

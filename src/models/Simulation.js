@@ -1,5 +1,4 @@
 import * as d3 from 'd3'
-import { graphStates } from '@/stores/store.js'
 
 export default class Simulation {
   constructor({nodes, links, graphType}, options={}) {

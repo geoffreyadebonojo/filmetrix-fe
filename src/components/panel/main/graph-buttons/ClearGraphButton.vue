@@ -1,10 +1,6 @@
 <script setup>
   import { 
-    appStates,
-    graphStates,
-    panelStates,
-    userStates,
-    store 
+    userStates
   } from '@/stores/store.js'
   import api from "@mixins/api"
   import manageGlobalState from "@mixins/manageGlobalState"
@@ -46,6 +42,7 @@
     width: 20px;
     height: 20px;
     opacity: 0.5;
+    display: block;
     
     &:hover {
       opacity: 1;

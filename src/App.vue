@@ -38,7 +38,6 @@
     },
     
     async created () {
-      // userStates.theme = localStorage.getItem('theme')
       if (this.$data.newHere == null) {
         localStorage.setItem("newHere", true)
       }
@@ -103,7 +102,11 @@
         .duration(1000)
         .attr("transform", d3.zoomIdentity)
         .on("start", () => {
-          setFocus('details')
+          if (JSON.parse(localStorage.getItem("lockedGraph")) == []){
+            setFocus("empty")
+          } else {
+            setFocus("details")
+          }
         })
         .on("end", () => {
           d3.select(this).call(

@@ -1,9 +1,4 @@
-import { 
-  appStates,
-  graphStates 
-} from '@/stores/store.js'
 import * as d3 from 'd3'
-import { drawArc } from '@mixins/helpers'
 
 export default class NewHereInstruction {
   constructor(target, parent) {

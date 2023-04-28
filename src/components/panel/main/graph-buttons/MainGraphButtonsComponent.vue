@@ -3,10 +3,6 @@
   import GenerateLinkButton from './GenerateLinkButton.vue'
   // import SaveButton from './SaveButton.vue'
   import ClearGraphButton from './ClearGraphButton.vue'
-  import { 
-    graphStates,
-    store 
-  } from '@/stores/store.js'
   import api from "@mixins/api"
   import * as d3 from 'd3'
 </script>

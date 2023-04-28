@@ -1,5 +1,4 @@
 import { angle360 } from '@mixins/helpers'
-import { graphStates } from '@/stores/store.js'
 import * as d3 from 'd3'
 
 export default class GraphNode {
@@ -27,9 +26,9 @@ export default class GraphNode {
     // if (target.classList.contains('locked')) { return }
     this.node.moveToFront()
 
-    this.elem.circle.style("transform", `scale(${args.scale})`) 
-    this.elem.label.style("transform", `scale(${args.scale})`)
-    this.elem.poster.style("transform", `scale(${args.scale})`)
+    // this.elem.circle.style("transform", `scale(${args.scale})`) 
+    // this.elem.label.style("transform", `scale(${args.scale})`)
+    // this.elem.poster.style("transform", `scale(${args.scale})`)
     this.elem.label.selectAll("text").style("stroke", args.textStroke)
     this.elem.circle.style("stroke", args.stroke)
 

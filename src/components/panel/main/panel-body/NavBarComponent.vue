@@ -1,7 +1,6 @@
 <script setup>
   import {
     appStates,
-    graphStates,
     panelStates,
     userStates,
     store 
@@ -39,7 +38,7 @@
         </div>
       </div>
 
-      <div v-if="panelStates.detailsData.id != null
+      <div v-if="panelStates.detailsData?.id != null
                           && appStates.displayingAbout === false
                           && this.$attrs.type == 'main'" 
                    class="nav-button primary-nav" 

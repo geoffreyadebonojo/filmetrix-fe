@@ -1,7 +1,6 @@
 <script setup>
   import { 
-    graphStates,
-    store 
+    graphStates
   } from '@/stores/store.js'
   import api from "@mixins/api"
   import * as d3 from 'd3'
