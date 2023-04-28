@@ -5,6 +5,7 @@
     userStates
   } from '@/stores/store.js'
   import * as d3 from "d3"
+  import manageGlobalState from "@mixins/manageGlobalState"
 </script>
 
 <template>
@@ -19,7 +20,7 @@
       class="login-fields" 
       id="password-field"
       type="text"
-      placeholder="password">
+      placeholder="*******">
 
     <div class="entry-buttons" 
         id="signup" 
@@ -59,6 +60,7 @@
           password
         })
       },
+      
       async submitLogin () {
         const email = d3.select("#email-field").node().value
         const password = d3.select("#password-field").node().value.toLowerCase()
@@ -69,17 +71,9 @@
         })
 
         if (resp.status.code == 200) {
-          userStates.loggedIn = true
           this.$data.loggedIn = true
-          userStates.currentUser = resp.data
-          // temp
-          userStates.currentUser.username = userStates.currentUser.email 
-          userStates.currentUser.profileImg = `https://robohash.org/${userStates.currentUser.username}.png?set=set3`
-
-          userStates.userMovieList = await api.fetchMovieList(resp.data.id)
-          userStates.userGraphList = await api.fetchGraphList(resp.data.id)
-
-          this.$emit('updateParent')
+          await manageGlobalState.loadUser(resp.data)
+          this.$emit('updateParent', true)
         } else {
           throw new Error("login failed")
         }

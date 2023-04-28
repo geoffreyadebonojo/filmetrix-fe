@@ -13,7 +13,8 @@
   <div id="user-profile">
     <profile-body 
       v-if="$data.loggedIn == true" 
-      :loggedIn="$data.loggedIn">
+      :loggedIn="$data.loggedIn"
+      @update-parent="updateComponent">
     </profile-body>
 
     <auth-fields 
@@ -37,8 +38,10 @@
     },
 
     methods: {
-      updateComponent () {
-        this.$data.loggedIn = true
+      async updateComponent (loginStatus) {
+        this.$data.loggedIn = loginStatus
+        userStates.loggedIn = loginStatus
+
         this.$forceUpdate()
       }
     }

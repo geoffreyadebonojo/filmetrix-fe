@@ -4,6 +4,7 @@
     panelStates,
     userStates
   } from '@/stores/store.js'
+  import manageGlobalState from "@mixins/manageGlobalState"
   import * as d3 from "d3"
 </script>
 
@@ -51,22 +52,20 @@
         panelStates.profileTab = f
         this.$emit('changeFocus', f)
       },
-
+      
       async submitLogout() {
         const resp = await api.logoutUser()
-  
+        
         if (resp.status == 200) {
           this.$data.loggedIn = false
-          userStates.loggedIn = false
-          userStates.currentUser = {}
-          userStates.userMovieList = {}
-          userStates.userGraphList = {}
+          manageGlobalState.nullUser()
+          this.$emit('updateParent', false)
         } else {
           throw new Error("logout failed")
-          // manually clear headers from localstorage
-          // userStates.loggedIn = false
-          // userStates.currentUser = {}
         }
+
+        // do it anyway
+        manageGlobalState.nullUser()
       }
     }
   }

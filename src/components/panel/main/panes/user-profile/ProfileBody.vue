@@ -16,20 +16,6 @@
 
 <template>
   <div id="user-profile-container" v-if="$data.loggedIn">
-    <!-- last fallback -->
-    <!-- <div id="profile-image-container" v-if="userStates.currentUser.profileImg == null">
-      letter in circle
-    </div> -->
-    <!-- generated -->
-    <!-- <div id="profile-image-container" v-if="userStates.currentUser.profileImg == null">
-      <img id="awesome" v-bing:src="userStates.currentUser.profileImg" />
-    </div> -->
-    <!-- primary  -->
-    <!-- <div id="user-name">
-      <p>{{ userStates.currentUser.username }}</p>
-      <img id="pencil" src="/pencil.svg"/>
-    </div> -->
-
     <div class="sticky" id="profile-image-container">
       <img v-bind:src="userStates.currentUser.profileImg" />
     </div>
