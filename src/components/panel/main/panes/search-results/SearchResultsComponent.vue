@@ -55,10 +55,8 @@
         const atBottom = scrollBottom > e.target.scrollHeight
 
         if (atBottom) {
-          console.log("at bottom")
-            const nextPageData = await api.fetchSearchNext(store.searchTerm)
-            store.searchResults = store.searchResults.concat(nextPageData)
-          // },3000)
+          const nextPageData = await api.fetchSearchNext(store.searchTerm)
+          store.searchResults = store.searchResults.concat(nextPageData)
         }
       })
     },
