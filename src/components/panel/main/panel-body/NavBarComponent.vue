@@ -59,7 +59,7 @@
                    id="profile-button"
                    @click="setFocus('profile')">
         <img src="/settings-gear.svg" v-bind:class="panelStates.currentFocus === 'profile' ? 'gear active' : 'gear'"/>
-        <!-- <img v-bind:src="userStates.currentUser.profileImg" v-bind:class="panelStates.currentFocus === 'profile' ? 'gear active' : 'gear'"/> -->
+        img v-bind:src="userStates.currentUser.profileImg" v-bind:class="panelStates.currentFocus === 'profile' ? 'gear active' : 'gear'"/>
       </div> -->
 
       <div v-if="this.$attrs.type == 'main'"
