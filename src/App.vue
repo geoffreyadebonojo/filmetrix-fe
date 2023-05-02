@@ -56,9 +56,11 @@
         manageGlobalState.nullUser()
       })
     },
-    
+
     methods: {
       async loadSavedGraph () {
+        if (graphStates.existing.length < 1) { return }
+
         store.isLocked = true
 
         await api.fetchGraphData(graphStates.existing.map(d => d[0]))

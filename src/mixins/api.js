@@ -7,7 +7,6 @@ export default {
   data () {
     graphStates
     return {
-      key: "6GzCesnexrzgnDv3FfxbHBrb",
       base_url: import.meta.env.VITE_API_URL || `https://enigmatic-wildwood-58151.herokuapp.com`
     }
   },
@@ -106,7 +105,7 @@ export default {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ query:
           `query {
-            search(term:"${term}", key:"${this.data().key}") {
+            search(term:"${term}") {
               id
               name
               poster
@@ -163,7 +162,7 @@ export default {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ query: 
           `query {
-            details(id: "${id}", key:"${this.data().key}") {
+            details(id: "${id}") {
               id
               summary
               entity
@@ -192,7 +191,7 @@ export default {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ query: `
           query {
-            graphData(ids:"${ids}", key:"${this.data().key}") {
+            graphData(ids:"${ids}") {
               id
               nodes {
                 id

@@ -8,8 +8,7 @@
 </script>
 
 <template>
-  <div v-if="userStates.loggedIn"
-       class="graph-control-buttons"
+  <div class="graph-control-buttons"
        id="clear-graph-button"
        @click="clear()"> 
     <p id="clear-graph-flash"></p>

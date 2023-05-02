@@ -40,7 +40,7 @@
 
       <div v-if="panelStates.detailsData?.id != null
                           && appStates.displayingAbout === false
-                          && this.$attrs.type == 'main'" 
+                          && $attrs.type == 'main'" 
                    class="nav-button primary-nav" 
                    id="details-button" 
                    @click="setFocus('details')" to="#details">
@@ -48,7 +48,7 @@
       </div>
       <div v-else></div>
 
-      <div v-if="this.$attrs.type == 'main'"
+      <div v-if="$attrs.type == 'main'"
                    class="nav-button primary-nav" 
                    id="commands-button"
                    @click="setFocus('commands')">
@@ -62,7 +62,7 @@
         img v-bind:src="userStates.currentUser.profileImg" v-bind:class="panelStates.currentFocus === 'profile' ? 'gear active' : 'gear'"/>
       </div> -->
 
-      <div v-if="this.$attrs.type == 'main'"
+      <div v-if="$attrs.type == 'main'"
                    class="nav-button" 
                    id="about-us-transition-button">
         <about-button-component></about-button-component>
@@ -81,6 +81,7 @@ export default {
   },
   mounted () {
     d3.select("#navbar").transition().delay(300).duration(200).style("width", "100%")
+    document.querySelector('#search-text').focus()
   },
   computed: {
     resultIconList: () => {
@@ -98,9 +99,14 @@ export default {
       store.searchTerm = val
       store.searchResults = await api.fetchSearchData(val)
       
-      const tab = store.searchResults[0].id.split("-")[0]
-      //handle for no id
-      setFocus(tab)
+      const firstResult = store.searchResults[0]
+      
+      if (firstResult == null) {
+        setFocus('noResult')
+      } else {
+        const tab = store.searchResults[0].id.split("-")[0]
+        setFocus(tab)
+      }
       document.querySelector("#search-text").value = ''
     },
     
