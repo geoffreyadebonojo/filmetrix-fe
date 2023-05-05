@@ -1,5 +1,7 @@
 <script setup>
   import ResultPosterTile from './ResultPosterTile.vue'
+  import manageGlobalState from "@mixins/manageGlobalState"
+  import SearchPrompt from '@panel/main/panes/prompts/SearchPrompt.vue'
   import graph from "@mixins/graph"
   import api from "@mixins/api"
   import { 
@@ -7,26 +9,32 @@
     panelStates,
     store
   } from '@/stores/store.js'
+  import { setFocus } from '@mixins/helpers'
   import * as d3 from 'd3'
 </script>
 
 <template>
   <div class="result-component">
-    <div id="first-time-instruction" class="apply-effect">
-      <p>
-        choose one to get started
-      </p>
-      <div id="fade-top-1"></div>
-    </div>
-    <div v-if="panelStates.currentFocus !== 'noResult'"
-          v-bind:id="panelStates.currentFocus + '-results'"
-          class="result-container">
-      <result-poster-tile v-for="result in resultsWithPosters" :result="result"></result-poster-tile>
+    <div v-if="store.searchTerm == ''">
+      <search-prompt></search-prompt>
     </div>
 
     <div v-else>
-      <p>No result found.</p>
-      <p style="margin-top:30px">Did you get the spelling right?</p>
+      <!-- fuck my life -->
+      <div v-if="store.currentFocus != 'noResult'" 
+        v-bind:id="panelStates.currentFocus + '-results'"
+        class="result-container">
+        <result-poster-tile v-for="result in resultsWithPosters" :result="result"></result-poster-tile>
+      </div>
+
+      <div v-else id="no-results">
+        <p>No result found:</p>
+        <p id="term">
+          {{ store.searchTerm }}
+        </p>
+        <p style="margin-top:30px">Did you get the spelling right? Make sure to get the spelling right.</p>
+        <p style="margin-top:30px">Its important to spell things corectly.</p>
+      </div>
     </div>
   </div>
 </template>
@@ -40,37 +48,32 @@
       }
     },
     mounted () {
-      d3.select(".result-component").transition().delay(0).duration(200).style("right", "0%")
+      // d3.select(".result-component").transition().delay(0).duration(200).style("right", "0%")
       d3.select("#first-time-instruction").style("display", () => {
         return this.$data.newHere ? "block" : "none"
       })
+
+      // if (store.searchResults.length > 0) {
+        // debugger
+      //   setFocus(store.searchResults[0].entlity)
+      // }
+
       d3.select("#panel-panes").on("scroll", async (e) => {        
-        let scrollBottom = (e.target.scrollTop + e.target.clientHeight)// -5
-        
+        let scrollBottom = (e.target.scrollTop + e.target.clientHeight)+1
         const atBottom = scrollBottom > e.target.scrollHeight
 
-        // if ( atBottom && !d3.select(".result-component").classed("lock-scroll") ){
-        if ( atBottom){
-          // const rc = d3.select(".result-component")
-          // rc.append("p").text("add final").style("height", "100px").style("width", "100px")
-          // rc.classed("lock-scroll", "true")
-          // setTimeout((d) => {
-          //   const ls = d3.select(".lock-scroll").classed("lock-scroll", "false")
-          //   ls.remove()
+        if (atBottom) {
+          console.log("at bottom")
+            const nextPageData = await api.fetchSearchNext(store.searchTerm)
+            store.searchResults = store.searchResults.concat(nextPageData)
           // },3000)
-
-          // const nextPageData = await api.fetchSearchNext(store.searchTerm)
-          // store.searchResults = store.searchResults.concat(nextPageData)
-          console.log("call for new")
         }
       })
     },
+
     computed: {
-      filteredSearchResults: () => {
-        return store.searchResults.filter(r => r.entity == panelStates.currentFocus)
-      },
       resultsWithPosters: () => {
-        return store.searchResults.filter((r) => {
+        return store.searchResults.uniqueById().filter((r) => {
           return r.entity == panelStates.currentFocus && r.poster != ''
         })
       }
@@ -80,7 +83,7 @@
 
 <style scoped lang="scss">
   #fade-top-1 {
-    width: 100%;
+    width: 10 0%;
     height: 0px;
   }
   
@@ -105,21 +108,30 @@
     text-transform: uppercase;
     font-family: $global-font;
     font-weight: bold;
-    font-size: 40px;
+    font-size: 1.25em;
     text-align: center;
+    font-weight: 100;
+    padding: 30px 10px 0px;
+    
+    #term {
+      font-size: 1.75em;
+      font-weight: 900;
+      margin: 30px 0px;
+    }
   }
-  
+
   #first-time-instruction {
     position: sticky;
-    opacity: 0.5;
     top: 0px;
-    padding: 30px 10px 0px;
     background: $panel-body-grey;
     z-index: 1000;
-    text-transform: uppercase;
-    font-family: "Dosis", sans-serif;
-    font-weight: 100;
-    font-size: 2em;
-    text-align: center;
+  }
+
+  .hidden {
+    display: none;
+  }
+
+  .shown {
+    display: block;
   }
 </style>

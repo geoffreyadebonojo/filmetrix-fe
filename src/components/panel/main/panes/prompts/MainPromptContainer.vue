@@ -15,7 +15,7 @@
 </script>
 
 <template>
-  <search-prompt></search-prompt>
+  <!-- <search-prompt></search-prompt> -->
   <!-- hidden until we can actually build it -->
   <!-- <tutorial-prompt v-if="$data.newHere"></tutorial-prompt> -->
 </template>

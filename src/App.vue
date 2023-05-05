@@ -43,9 +43,7 @@
       }
       
       graphStates.existing = JSON.parse(localStorage.getItem("lockedGraph"))
-      
-      await this.loadSavedGraph()
-      
+            
       await api.currentUser().then(async (response) => {
         if (response.id != null) {
           manageGlobalState.loadUser(response)
@@ -55,6 +53,12 @@
       }).catch((d) => {
         manageGlobalState.nullUser()
       })
+    },
+
+    async mounted () {
+      if (graphStates.existing.length > 0) {
+        await this.loadSavedGraph()
+      }
     },
     
     methods: {

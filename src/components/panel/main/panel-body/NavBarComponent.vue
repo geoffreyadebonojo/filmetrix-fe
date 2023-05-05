@@ -84,7 +84,7 @@ export default {
   },
   computed: {
     resultIconList: () => {
-      return store.searchResults.map(r => r['id'].split("-")[0]).unique()
+      return store.searchResults.map(r => r.entity).unique()
     }
   },
   methods: {
@@ -98,9 +98,15 @@ export default {
       store.searchTerm = val
       store.searchResults = await api.fetchSearchData(val)
       
-      const tab = store.searchResults[0].id.split("-")[0]
-      //handle for no id
-      setFocus(tab)
+      const results = store.searchResults
+      //handle for no id 
+      if (results.length < 1) {
+        setFocus('empty')
+      } else {
+        const tab = results[0].id.split("-")[0]
+        setFocus(tab)
+      }
+
       document.querySelector("#search-text").value = ''
     },
     
