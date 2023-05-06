@@ -14,7 +14,7 @@
 </script>
 
 <template>
-  <div id="panel-panes" style="height:142%;zoom:100%">
+  <div id="panel-panes" style="zoom:100%">
 
     <about-details-component v-if="appStates.displayingAbout">
     </about-details-component>
@@ -77,10 +77,5 @@
     #empty-field {
       height: 100%;
     }
-    
-    .result-component {
-      right: 0%;
-      // right: 100%;
-    }  
   }
 </style>

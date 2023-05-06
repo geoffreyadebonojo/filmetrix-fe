@@ -63,8 +63,8 @@
       </div> -->
 
       <div v-if="this.$attrs.type == 'main'"
-                   class="nav-button" 
-                   id="about-us-transition-button">
+                 class="nav-button" 
+                 id="about-us-transition-button">
         <about-button-component></about-button-component>
       </div>
     </div>
@@ -88,6 +88,19 @@ export default {
     }
   },
   methods: {
+    toggleOrSubmitOnClick() {
+      const d = d3.select("#search-text") 
+      setFocus('search')
+
+      const val = d.node().value
+      if (val == '' || val == null) { 
+        panelStates.currentFocus = "empty"
+        return false
+      }
+
+      this.submitSearch(val)
+    },
+
     async submitSearch(value) {
       const val = value.toUpperCase()
       if (val == '' || val == null) { 
@@ -108,20 +121,7 @@ export default {
       }
 
       document.querySelector("#search-text").value = ''
-    },
-    
-    toggleOrSubmitOnClick() {
-      const d = d3.select("#search-text") 
-      setFocus('search')
-
-      const val = d.node().value
-      if (val == '' || val == null) { 
-        panelStates.currentFocus = "empty"
-        return false
-      }
-
-      this.submitSearch(val)
-    }
+    }  
   }
 }
 </script>
