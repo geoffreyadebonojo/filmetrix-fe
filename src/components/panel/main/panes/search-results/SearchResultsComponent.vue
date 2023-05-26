@@ -21,13 +21,13 @@
 
     <div v-else>
       <!-- fuck my life -->
-      <div v-if="store.currentFocus != 'noResult'" 
+      <div v-if="store.searchResults.length > 0" 
         v-bind:id="panelStates.currentFocus + '-results'"
         class="result-container">
         <result-poster-tile v-for="result in resultsWithPosters" :result="result"></result-poster-tile>
       </div>
-
-      <div v-else id="no-results">
+      
+      <div v-else id="no-results" style="opacity:0">
         <p>No result found:</p>
         <p id="term">
           {{ store.searchTerm }}
@@ -47,16 +47,18 @@
         newHere: JSON.parse(localStorage.getItem("newHere"))
       }
     },
+    updated () {
+      d3.select("#no-results").transition().duration(300).style("opacity", 1)
+    },
     mounted () {
       // d3.select(".result-component").transition().delay(0).duration(200).style("right", "0%")
-      d3.select("#first-time-instruction").style("display", () => {
-        return this.$data.newHere ? "block" : "none"
-      })
+      // d3.select("#first-time-instruction").style("display", () => {
+      //   return this.$data.newHere ? "block" : "none"
+      // })
 
-      // if (store.searchResults.length > 0) {
-        // debugger
-      //   setFocus(store.searchResults[0].entlity)
-      // }
+      if (store.searchResults.length > 0) {
+        setFocus(store.searchResults[0].entlity)
+      }
 
       d3.select("#panel-panes").on("scroll", async (e) => {        
         let scrollBottom = (e.target.scrollTop + e.target.clientHeight)+1
@@ -64,9 +66,8 @@
 
         if (atBottom) {
           console.log("at bottom")
-            const nextPageData = await api.fetchSearchNext(store.searchTerm)
-            store.searchResults = store.searchResults.concat(nextPageData)
-          // },3000)
+          // const nextPageData = await api.fetchSearchNext(store.searchTerm)
+          // store.searchResults = store.searchResults.concat(nextPageData)
         }
       })
     },
@@ -82,19 +83,11 @@
 </script>
 
 <style scoped lang="scss">
-  #fade-top-1 {
-    width: 10 0%;
-    height: 0px;
+  .result-component {
+    right: 0%;
+    margin-top: 30px;
   }
-  
-  #fade-top-1::before {
-    position: absolute;
-    right: 0px;
-    content: '';
-    background: linear-gradient(to top, transparent 29%, #333 100%);
-    width: 100%;
-    height: 25px;
-  }
+
 .result-container {
     width: 100%;
     display: flex;
@@ -104,7 +97,7 @@
     padding: 20px;
   }
   
-  #no-result, #first-time-instruction {
+  #no-results, #first-time-instruction {
     text-transform: uppercase;
     font-family: $global-font;
     font-weight: bold;
