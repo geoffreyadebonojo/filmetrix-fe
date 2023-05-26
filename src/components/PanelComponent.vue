@@ -69,7 +69,7 @@
 
     display: grid;
     grid-template-columns: 30px 1fr 27px;
-    grid-template-rows: 2vh 28px 10fr 1vh 4fr 4vh;
+    grid-template-rows: 2vh 28px 10fr 5vh;
     grid-template-areas:
       "resize-bar flash ."
       "resize-bar navbar navbar"

@@ -59,7 +59,7 @@ export function angle360(cx, cy, ex, ey) {
   return theta;
 } 
 
-export function setFocus(focus) {  
+export function setFocus(focus) { 
   const navButtons = d3.selectAll(".nav-button").nodes().reverse()
   navButtons.unshift()
   closeField()
@@ -74,6 +74,7 @@ export function setFocus(focus) {
   ]
   // can be adjusted to be vertical
   const index = buttonMap.indexOf(focus)
+
   moveHighlightCircle(displacement[index], "right")
 
   panelStates.currentFocus = focus

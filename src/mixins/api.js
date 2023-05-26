@@ -120,7 +120,7 @@ export default {
         return response.json()
       })
     )
-    
+
     return api_response.data.search
   },
 
@@ -183,7 +183,7 @@ export default {
   },
 
   async fetchGraphData(ids){
-    const API_URL = `https://enigmatic-wildwood-58151.herokuapp.com/graphql`
+    const API_URL = `${this.data().base_url}/graphql`
 
     const resp = await (
       fetch(API_URL, {

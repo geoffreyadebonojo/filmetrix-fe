@@ -14,16 +14,36 @@
 </script>
 
 <template>
-  <div id="panel-panes" style="height:142%;zoom:100%">
-    <about-details-component v-if="appStates.displayingAbout"></about-details-component>
-    <details-component v-else-if="panelStates.currentFocus === 'details' && panelStates.detailsData.id != null" class="details-component"></details-component>
-    <commands-component v-else-if="panelStates.currentFocus === 'commands'"></commands-component>
-    <user-profile-component v-else-if="panelStates.currentFocus === 'profile'"></user-profile-component>
-    <div id="empty-field" v-else-if="panelStates.currentFocus === 'empty'">
-      <main-prompt-container></main-prompt-container>
-    </div>
-    <search-results-component v-else></search-results-component>
-    <main-nav-arrows-component v-if="$attrs.type == 'main'"></main-nav-arrows-component>
+  <div id="panel-panes" style="zoom:100%">
+
+    <about-details-component v-if="appStates.displayingAbout">
+    </about-details-component>
+    
+    <details-component 
+      v-else-if="panelStates.currentFocus === 'details' && 
+      panelStates.detailsData?.id != null" 
+      class="details-component">
+    </details-component>
+    
+    <commands-component 
+      v-else-if="panelStates.currentFocus === 'commands'">
+    </commands-component>
+    
+    <user-profile-component 
+      v-else-if="panelStates.currentFocus === 'profile'">
+    </user-profile-component>
+    
+    <!-- <main-prompt-container
+      v-else-if="panelStates.currentFocus === 'empty'"
+      id="empty-field">
+    </main-prompt-container> -->
+    
+    <search-results-component v-else>
+    </search-results-component>
+    
+    <main-nav-arrows-component v-if="$attrs.type == 'main'">
+    </main-nav-arrows-component>
+
   </div>
 </template>
 
@@ -38,6 +58,12 @@
       SearchResultsComponent,
       UserProfileComponent,
       MainNavArrowsComponent
+    },
+    computed: {
+      resultsFocus: () => {
+        const resultTypes = ["person", "movie", "tv"]
+        return resultTypes.includes(panelStates.currentFocus)
+      }
     }
   }
 </script>
@@ -51,9 +77,5 @@
     #empty-field {
       height: 100%;
     }
-    
-    .result-component {
-      right: 100%;
-    }  
   }
 </style>

@@ -29,7 +29,7 @@
     name: "MainNavArrowsComponent",
     computed: {
       showNavArrows: () => {
-        return panelStates.currentFocus === 'details' && panelStates.detailsData.id != null && appStates.displayingAbout == false
+        return panelStates.currentFocus === 'details' && panelStates.detailsData?.id != null && appStates.displayingAbout == false
       },
       showLeftArrow: () => {
         return graphStates.existing.length > 1 && graphStates.existing[0][0] !== panelStates.detailsData.id

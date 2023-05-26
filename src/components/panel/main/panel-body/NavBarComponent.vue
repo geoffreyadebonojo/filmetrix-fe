@@ -63,8 +63,8 @@
       </div> -->
 
       <div v-if="$attrs.type == 'main'"
-                   class="nav-button" 
-                   id="about-us-transition-button">
+                 class="nav-button" 
+                 id="about-us-transition-button">
         <about-button-component></about-button-component>
       </div>
     </div>
@@ -85,31 +85,10 @@ export default {
   },
   computed: {
     resultIconList: () => {
-      return store.searchResults.map(r => r['id'].split("-")[0]).unique()
+      return store.searchResults.map(r => r.entity).unique()
     }
   },
   methods: {
-    async submitSearch(value) {
-      const val = value.toUpperCase()
-      if (val == '' || val == null) { 
-        // maybe a helpful tip?
-        return false
-      }
-
-      store.searchTerm = val
-      store.searchResults = await api.fetchSearchData(val)
-      
-      const firstResult = store.searchResults[0]
-      
-      if (firstResult == null) {
-        setFocus('noResult')
-      } else {
-        const tab = store.searchResults[0].id.split("-")[0]
-        setFocus(tab)
-      }
-      document.querySelector("#search-text").value = ''
-    },
-    
     toggleOrSubmitOnClick() {
       const d = d3.select("#search-text") 
       setFocus('search')
@@ -121,7 +100,29 @@ export default {
       }
 
       this.submitSearch(val)
-    }
+    },
+
+    async submitSearch(value) {
+      const val = value.toUpperCase()
+      if (val == '' || val == null) { 
+        // maybe a helpful tip?
+        return false
+      }
+
+      store.searchTerm = val
+      store.searchResults = await api.fetchSearchData(val)
+      
+      const results = store.searchResults
+      //handle for no id 
+      if (results.length < 1) {
+        setFocus('empty')
+      } else {
+        const tab = results[0].id.split("-")[0]
+        setFocus(tab)
+      }
+
+      document.querySelector("#search-text").value = ''
+    }  
   }
 }
 </script>
