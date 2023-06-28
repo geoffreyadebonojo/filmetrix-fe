@@ -57,7 +57,7 @@
       // })
 
       if (store.searchResults.length > 0) {
-        setFocus(store.searchResults[0].entlity)
+        setFocus(store.searchResults[0].entity)
       }
 
       d3.select("#panel-panes").on("scroll", async (e) => {        
