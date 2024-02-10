@@ -55,12 +55,13 @@
         <img src="/command-icon.svg" class="icon" id="commands-icon">
       </div>
 
-      <!-- <div class="nav-button primary-nav"
+
+      <div v-if="this.$route.query.userbeta == '1'"
+                   class="nav-button primary-nav"
                    id="profile-button"
                    @click="setFocus('profile')">
         <img src="/settings-gear.svg" v-bind:class="panelStates.currentFocus === 'profile' ? 'gear active' : 'gear'"/>
-        <img v-bind:src="userStates.currentUser.profileImg" v-bind:class="panelStates.currentFocus === 'profile' ? 'gear active' : 'gear'"/>
-      </div> -->
+      </div>
 
       <div v-if="$attrs.type == 'main'"
                  class="nav-button" 
