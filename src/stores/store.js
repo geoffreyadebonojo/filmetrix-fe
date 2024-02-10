@@ -1,22 +1,50 @@
 import { reactive } from 'vue'
 
-export const store = reactive({
-  inMotion: false,
-  currentFocus: 'empty',
-  currentResultTab: '',
-  aboutUs: false,
-  panelWidth: '350',
-  searchResults: [],
-  currentDetailId: false,
+export const graphStates = reactive({
   existing: [],
   graphData: {},
-  graphTypes: [],
-  appliedFilters: [], 
-  detailsData: {},
-  highlighted: [],
-  showControls: false,
-  panelOpen: true,
-  savedGraphs: {},
-  isSaved: false,
-  lockedHighlights: []
+  inMotion: false,
+  lockedHighlights: [],
+  graphType: 'tree',
+  currentGraphId: ''
 })
+
+export const gameStates = reactive({
+  turn: 1
+})
+
+export const panelStates = reactive({
+  width: '351',
+  isOpen: true,
+  currentFocus: 'empty',
+  profileTab: 'movies',
+  detailsData: {},
+})
+
+export const appStates = reactive({
+  displayingAbout: false,
+  playingGame: false,
+  theme: 'dark'
+})
+
+export const userStates = reactive({
+  currentUser: {},
+  loggedIn: false,
+  userMovieList: [],
+  userGraphList: []
+})
+
+export const store = reactive({
+  searchTerm: '',
+  searchResults: [],
+  savedGraphs: {},
+  bookmarks: []
+})
+
+
+// export const appState = reactive({
+//   search: {
+//     focus: 'search',
+//     searchResults: []
+//   }
+// })

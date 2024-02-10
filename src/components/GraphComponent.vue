@@ -1,23 +1,48 @@
 <script setup>
-  import { store } from '@/stores/store.js'
+  import {
+    panelStates
+  } from '@/stores/store.js'
+  import GraphManager from "@/models/GraphManager.js"
   import api from "@mixins/api"
-  import graph from "@mixins/graph"
-  import helpers from "@mixins/helpers"
-  import * as d3 from 'd3'
 </script>
 
 <template>
-  <svg id="graph-container">
-    <g id="outer-wrapper"></g>
-  </svg>
+  <div class="graph-container" v-bind:id="$attrs.type + '-graph-component'">
+    <svg class="graph-container" v-bind:id="$attrs.type + '-graph-container'" v-bind:viewBox="$data.vb">
+      <g class="outer-wrapper" v-bind:id="$attrs.type + '-outer-wrapper'"></g>
+    </svg>
+  </div>
 </template>
 
+<script>
+  export default {
+    name: "GraphComponent",
+    data() {
+      // const storedScale = localStorage.getItem("currentZoom").split(" ")[1].replace("scale(", "").replace(")", "")
+      return {
+        vb: `${-350} ${-window.innerHeight/2} ${window.innerWidth*2} ${window.innerHeight*2}`
+      }
+    },
+
+    async created () {
+      const gid = this.$route.query.gid
+      if (gid == null) { return }
+      await this.loadFromSlug(gid)
+    },
+    
+    methods: {
+      async loadFromSlug (gid) {
+        await api.findBySlug(gid)
+        new GraphManager().generate()
+      }
+    }
+  }
+</script>
+
 <style lang="scss">
-  #graph-container {
-    background: $graph-body-grey;
+  .graph-container {
+    display: block;
     width: 100%;
-    height: 100vh;
-    display: flex;
   }
 
   .inst {
@@ -27,8 +52,16 @@
     animation-timing-function: linear;
   }
 
-  .node:hover {
-    cursor: $cursor;
+  .node {
+    &:focus {
+      outline: none;
+    }
+    &:hover {
+      cursor: $cursor;
+    }
+    &.scissors:hover {
+      cursor: $scissors;
+    }
   }
 
   @keyframes rotateLabel {
@@ -36,44 +69,7 @@
       transform: rotate(0deg);
     } 
     100% {
-      transform: rotate(360deg);
+      transform: rotate(-360deg);
     }
   }
 </style>
-
-<script>
-  export default {
-    name: "GraphComponent",
-    async created () {
-      const gid = this.$route.query.gid
-
-      if (gid == null) { return }
-      
-      await api.findBySlug(gid)
-
-      store.currentDetailId = store.existing.last()[0]
-
-      let data
-      let nodes = []
-      let links = []
-
-      store.existing.forEach((d) => {
-        data = store.graphData[d[0]]
-        nodes = nodes.concat(data.nodes.slice(0,d[1]+1))
-        links = links.concat(data.links.slice(0,d[1]))
-      })
-
-      store.graphTypes =  helpers.getTypes(nodes)
-      // store.currentFocus = 'details'
-
-      graph.methods.draw({
-        nodes: nodes.uniqueById(),
-        links: links
-      })
-    },
-    mounted () {
-      d3.select("#graph-container")
-      .attr("viewBox", `-${window.innerWidth*2/3} -${window.innerHeight} ${window.innerWidth*2} ${window.innerHeight*2}`)
-    }
-  }
-</script>

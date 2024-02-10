@@ -1,157 +1,143 @@
+import { 
+  graphStates, 
+  panelStates,
+} from '@/stores/store.js'
+import { settings, setFocus } from './helpers.js'
 import api from './api.js'
 import * as d3 from 'd3'
-import helpers from './helpers.js'
-import focusHelper from './focusHelper.js'
-import graphBuilder from './graphBuilder.js'
-import Simulation from './Simulation.js'
-import { store } from '@/stores/store.js'
+import GraphBuilder from '@models/GraphBuilder.js'
+import GraphManager from '@models/GraphManager.js'
+import Simulation from '@models/Simulation.js'
 
 let timer;
 let alreadyClicked = false
 // IGNORE THE LINTER
-let i = 0
-      
+// let i = 0
+
 export default {
-  methods: {
-    draw (responseData) {
-      store.inMotion = true
-      
-      d3.select("#inner-wrapper").remove()
-      var links = responseData.links
-      var nodes = responseData.nodes
-      const width = window.innerWidth
-      const height = window.innerHeight
-      const outerWrapper = d3.select("#outer-wrapper")
-      const innerWrapper = outerWrapper.append("g").attr("id", "inner-wrapper")
-      const graphControlButtons = d3.selectAll(".graph-control-buttons")
-      
-      const simulation = new Simulation({nodes, 
-                                         links, 
-                                         width, 
-                                         height}).body
+  name: "graph",
+  data () {
+    return {}
+  },
+  draw (responseData, options={}) {
+    graphStates.inMotion = true
+    var links = responseData.links
+    var nodes = responseData.nodes
 
-      let link = graphBuilder.createLinks(innerWrapper, links)
-      let node = graphBuilder.createNodes(innerWrapper, nodes)
+    const s = settings(responseData.type)
 
-      graphBuilder.createViewerBody({
-        graphControlButtons,
-        outerWrapper
-      })
-      
-      d3.select("#save-button").classed("locked", false).classed("unlocked", true)
+    const graphType =      s.graphType
+    const containerId =    s.containerId
+    const outerWrapperId = s.outerWrapperId
+    const innerWrapperId = s.innerWrapperId
 
-      node.on('click', async (e, d) => {
-        const doubleClickDelay = 300
-        if (alreadyClicked) { 
-          localStorage.setItem("newHere", false)
+    d3.select(`#${innerWrapperId}`).remove()
+    
+    const outerWrapper = d3.select(`#${outerWrapperId}`)
+    const innerWrapper = outerWrapper.append("g").attr("id", innerWrapperId)
 
-          // double-click existing node to
-          // add new nodes
-          if (store.existing.map(x => x[0]).includes(d.id)){
-            const c = store.existing.filter((y) => {
-              return y[0] === d.id
-            })
-            const t = c[0][1]
-            
+    const simulation = new Simulation({ nodes, 
+                                        links,
+                                        graphType}, options).body
 
-            if (t > 28) { return }
-            
-            const n = t + 3
-            c[0][1] = n
-            let vals
-            let nodes = []
-            let links = []
-            
-            // move to end of existing
-            
-            store.existing.forEach(function(key) {
-              vals = store.graphData[key[0]]
-              vals.nodes.slice(0,key[1]+1).forEach((node) => {
-                if (nodes.map(d => d.id).excludes(node.id)){
-                  nodes.push(node)
-                }
-              })
-              links = links.concat(vals.links.slice(0,key[1]))
+    const [link, node] = new GraphBuilder({ links, 
+                                     nodes,
+                                     containerId,
+                                     innerWrapper,
+                                     outerWrapper }).build()
+    
+    this.attachNodeClickActions(node, graphType)
 
-            })
-
-            this.draw({
-              nodes: nodes,
-              links: links
-            })
-          } else {
-            // double-click on new node
-            localStorage.setItem("newHere", false)
-            await this.callForNodes(d.id)
-            return
-          }
-
-          await api.fetchDetails(d.id)
-          store.currentDetailId = d.id
-
-          alreadyClicked = false;
-          clearTimeout(timer);
-        } else {
-          timer = setTimeout(async function () {
-            alreadyClicked = false;
-            // single click
-            // if (store.currentDetailId !== d.id) {
-            //   await api.fetchDetails(d.id)
-            //   store.currentDetailId = d.id
-            // }
-          }, doubleClickDelay);
-          alreadyClicked = true;
-        }
-        
-        // on every click
-        await api.fetchDetails(d.id)
-
-        store.currentDetailId = d.id
-      })
-
-      simulation
-      .on("tick", () => {
-        i += 1
-
-        link
-          .attr("x1", d => d.source.x)
+    simulation.on("tick", () => {
+      link.attr("x1", d => d.source.x)
           .attr("y1", d => d.source.y)
           .attr("x2", d => d.target.x)
           .attr("y2", d => d.target.y)
-        node.attr("transform", d => `translate(${d.x},${d.y})`);
-      })
-      .on("end", () => {
-        store.inMotion = false
-      })
-      
-      return innerWrapper.node();
-    },
 
-    async callForNodes(id) {
-      if (store.existing.map((d) => d[0]).excludes(id) ) {
-        store.existing.push([id, 8])
-        const ext = store.existing.unique().map((d) => d[0])
-        await api.fetchGraphData(ext)
+      node.attr("transform", d => `translate(${d.x},${d.y})`);
+    })
+    .on("end", () => {
+      graphStates.inMotion = false
+      localStorage.setItem("lockedGraph", JSON.stringify(graphStates.existing))
+    })
+    
+    return innerWrapper.node();
+  },
+
+  attachNodeClickActions(node, graphType) {
+    node.on('click', async (_e, d) => {
+      const doubleClickDelay = 300
+      
+      if (alreadyClicked) { 
+        localStorage.setItem("newHere", false)
+
+        if (graphStates.existing.map(x => x[0]).includes(d.id)){
+          this.addToExistingNodes(d, graphType)
+        } else {
+          localStorage.setItem("newHere", false)
+          return await this.callForNodes(d, graphType)
+        }
+
+        await api.fetchDetails(d.id)
+        panelStates.detailsData.id = d.id
+
+        alreadyClicked = false;
+        clearTimeout(timer);
+
+      } else {
+        timer = setTimeout(async function () {
+          alreadyClicked = false;
+
+          await api.fetchDetails(d.id)
+          panelStates.detailsData.id = d.id
+          setFocus('details')
+    
+        }, doubleClickDelay);
+        alreadyClicked = true;
       }
 
-      store.currentDetailId = id
-      let data
-      let nodes = []
-      let links = []
+    })
+  },
 
-      store.existing.forEach((d) => {
-        data = store.graphData[d[0]]
-        nodes = nodes.concat(data.nodes.slice(0,d[1]+1))
-        links = links.concat(data.links.slice(0,d[1]))
+  async addToExistingNodes (d, graphType) {
+    const c = graphStates.existing.filter((y) => {
+      return y[0] === d.id
+    })
+    const t = c[0][1]
+    if (t > this.data().nodeCount) { return }
+    const n = t + 3
+    c[0][1] = n
+
+    let vals
+    let nodes = []
+    let links = []
+
+    graphStates.existing.forEach(function(key) {
+      vals = graphStates.graphData[key[0]]
+      vals.nodes.slice(0,key[1]+1).forEach((node) => {
+        if (nodes.map(d => d.id).excludes(node.id)){
+          nodes.push(node)
+        }
       })
+      links = links.concat(vals.links.slice(0,key[1]))
+    })
 
-      store.graphTypes =  helpers.getTypes(nodes)
-      store.currentFocus = 'details'
+    this.draw({
+      nodes: nodes,
+      links: links,
+      type: graphType
+    })
+  },
 
-      this.draw({
-        nodes: nodes.uniqueById(),
-        links: links
-      })
+  async callForNodes(d) {
+    panelStates.detailsData.id = d.id
+    panelStates.currentFocus = 'details'
+
+    if (graphStates.existing.map((f) => f[0]).excludes(d.id) ) {
+      graphStates.existing.push([d.id, 8])
+      const ext = graphStates.existing.unique().map((d) => d[0])
+      await api.fetchGraphData(ext)
+      new GraphManager().generate()
     }
   }
 }

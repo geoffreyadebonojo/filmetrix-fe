@@ -1,28 +1,118 @@
-import { store } from '@/stores/store.js'
+import { 
+  panelStates,
+  graphStates
+} from '@/stores/store.js'
 
 export default {
-  data() {
-    store
+  data () {
+    graphStates
     return {
-      prodUrl: "https://enigmatic-wildwood-58151.herokuapp.com",
-      localUrl: "http://localhost:3000",
-      key: "6GzCesnexrzgnDv3FfxbHBrb",
+      base_url: import.meta.env.VITE_API_URL || `https://enigmatic-wildwood-58151.herokuapp.com`
     }
   },
 
-  async fetchSearchData(term) {
-    const API_URL =`${this.data().prodUrl}/graphql`
+  async signupUser(args) {
+    const API_URL =`${this.data().base_url}/signup`
 
-    const api_respsonse = await (
+    const api_response = await (
+      fetch(API_URL, {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          "user": {
+            "email": `${args.email}`,
+            "password": `${args.password}`
+          }
+        })
+      }).then((response) => {
+        return response.json()
+      })
+    )
+
+    return api_response
+  },
+
+  async loginUser(args) {
+    const API_URL =`${this.data().base_url}/login`
+
+    const api_response = await (
+      fetch(API_URL, {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json' 
+        },
+        body: JSON.stringify({
+          "user": {
+            "email": `${args.email}`,
+            "password": `${args.password}`
+          }
+        })
+      }).then((response) => {
+        for(let entry of response.headers.entries()) {
+          localStorage.setItem(entry[0], entry[1]);
+        }
+
+        return response.json()
+      })
+    )
+
+    return api_response
+  },
+
+  async logoutUser() {
+    const API_URL =`${this.data().base_url}/logout`
+
+    const api_response = await fetch(API_URL, {
+      method: 'DELETE',
+      headers: { 
+        'Content-Type': 'application/json',
+        'Authorization': localStorage.getItem('authorization')
+      }
+    }).then((response) => {
+      return response.json()
+    })
+
+    return api_response
+  },
+
+  async currentUser() {
+    const API_URL =`${this.data().base_url}/current_user`
+    const api_response = await (
+      fetch(API_URL, {
+        method: 'GET',
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': localStorage.getItem('authorization')
+        }
+      }).then((response) => {
+        return response.json()
+      }).catch((error) => {
+        return {}
+      })
+    )
+
+    return api_response
+  },
+
+  async fetchSearchData(term) {
+    const API_URL = `${this.data().base_url}/graphql`
+
+    const api_response = await (
       fetch(API_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ query:
           `query {
-            search(term:"${term}", key:"${this.data().key}") {
+            search(term:"${term}") {
               id
               name
               poster
+              entity
+              year
+              popularity
+              knownForDepartment
             }
           }`
         })
@@ -30,13 +120,40 @@ export default {
         return response.json()
       })
     )
-    
-    store.searchResults = api_respsonse.data.search
-    // store.currentResultTab = store.searchResults[0].id.split("-")[0]
+    return api_response.data.search
   },
 
+  async fetchSearchNext(term) {
+    const API_URL = `${this.data().base_url}/graphql`
+
+    const api_response = await (
+      fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query:
+          `query {
+            getNextPage(term:"${term}") {
+              id
+              name
+              poster
+              entity
+              year
+              popularity
+              knownForDepartment
+            }
+          }`
+        })
+      }).then((response) => {
+        return response.json()
+      })
+    )
+
+    return api_response.data.getNextPage
+  },
+
+  
   async fetchDetails(id) {
-    const API_URL =`${this.data().prodUrl}/graphql`
+    const API_URL =`${this.data().base_url}/graphql`
 
     const api_response = await (
       fetch(API_URL, {
@@ -44,9 +161,10 @@ export default {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ query: 
           `query {
-            details(id: "${id}", key:"${this.data().key}") {
+            details(id: "${id}") {
               id
               summary
+              entity
               year
               imdbId
               name
@@ -60,12 +178,11 @@ export default {
       })
     )
 
-    store.detailsData = api_response.data.details
-    store.currentDetailId = api_response.data.details.id
+    panelStates.detailsData = api_response.data.details
   },
 
   async fetchGraphData(ids){
-    const API_URL = `${this.data().prodUrl}/graphql`
+    const API_URL = `${this.data().base_url}/graphql`
 
     const resp = await (
       fetch(API_URL, {
@@ -73,7 +190,7 @@ export default {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ query: `
           query {
-            graphData(ids:"${ids}", key:"${this.data().key}") {
+            graphData(ids:"${ids}") {
               id
               nodes {
                 id
@@ -81,6 +198,9 @@ export default {
                 poster
                 type
                 entity
+                popularity
+                voteAverage
+                voteCount
               }
               links { 
                 source
@@ -96,14 +216,14 @@ export default {
     )
 
     resp.data.graphData.forEach((d) => {
-      store.graphData[d.id] = {
+      graphStates.graphData[d.id] = {
         links: d.links,
         nodes: d.nodes
       }
     })
   },
 
-  async saveGraph(existing) {
+  async saveGraph(existing, userId=null) {
     const ids = []
     const count = []
     
@@ -112,16 +232,14 @@ export default {
       count.push(d[1])
     })
     
-    const API_URL =`${this.data().prodUrl}/graphql`
-    return await (
+    const API_URL =`${this.data().base_url}/graphql`
+    const resp = await (
       fetch(API_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ query:
           `query {
-            saveGraph(ids:"${ids}",counts:"${count}") {
-              status
-              msg
+            saveGraph(ids:"${ids}",counts:"${count}",userId:"${userId}") {
               resourceId
               shareUrl
             }
@@ -131,10 +249,12 @@ export default {
         return response.json()
       })
     )
+
+    return resp.data.saveGraph
   },
 
   async findBySlug(slug){
-    const API_URL = `${this.data().prodUrl}/graphql`
+    const API_URL = `${this.data().base_url}/graphql`
 
     const resp = await (
       fetch(API_URL, {
@@ -151,6 +271,9 @@ export default {
                   poster
                   type
                   entity
+                  popularity
+                  voteAverage
+                  voteCount
                 }
                 links {
                   source
@@ -169,14 +292,95 @@ export default {
     if (resp.data.findBySlug == false) { return }
     
     const d = resp.data.findBySlug
-    
-    store.existing = d.existing.map(d => [d[0], +d[1]])
+
+    graphStates.existing = d.existing.map(d => [d[0], +d[1]])
     d.data.forEach((d, i) => {
-      let key = store.existing[i][0]
-      store.graphData[key] = {
+      let key = graphStates.existing[i][0]
+      graphStates.graphData[key] = {
         links: d.links,
         nodes: d.nodes
       }
     })
+  },
+
+  async fetchGraphList(userId) {
+    const API_URL =`${this.data().base_url}/graphql`
+    const api_response = await (
+      fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query:
+          `query {
+            fetchGraphList(userId:"${userId}") {
+              slug
+              posters
+            }
+          }`
+        })
+      }).then((response) => {
+        return response.json()
+      })
+    )
+
+    return api_response.data.fetchGraphList
+  },
+
+  async fetchMovieList(userId) {    
+    const API_URL =`${this.data().base_url}/graphql`
+    const api_response = await (
+      fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query:
+          `query {
+            fetchMovieList(userId:"${userId}")
+          }`
+        })
+      }).then((response) => {
+        return response.json()
+      })
+    )
+
+    return api_response.data.fetchMovieList
+  },
+
+  async removeFromMovieList(args) {    
+    const API_URL =`${this.data().base_url}/graphql`
+    
+    const api_response = await (
+      fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query:
+          `query {
+            removeFromMovieList(userId:"${args.userId}", movieId:"${args.movieId}")
+          }`
+        })
+      }).then((response) => {
+        return response.json()
+      })
+    )
+
+    return api_response.data.removeFromMovieList
+  },
+
+  async addToMovieList(args) {    
+    const API_URL =`${this.data().base_url}/graphql`
+    
+    const api_response = await (
+      fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query:
+          `query {
+            addToMovieList(userId:"${args.userId}", movieId:"${args.movieId}")
+          }`
+        })
+      }).then((response) => {
+        return response.json()
+      })
+    )
+
+    return api_response.data.addToMovieList
   }
 }

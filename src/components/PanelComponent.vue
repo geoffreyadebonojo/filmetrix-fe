@@ -1,41 +1,57 @@
 <script setup>
-  import GraphButtonsComponent from '@panel/GraphButtonsComponent.vue'
-  import NavBarComponent from '@panel/NavBarComponent.vue'
-  import PanelCenter from '@panel/PanelCenter.vue'
-  import ResizeBarComponent from '@panel/ResizeBarComponent.vue'
-  import focusHelper from "@/mixins/focusHelper"
-  import { store } from '@/stores/store.js'
+  import MainGraphButtonsComponent from '@main/graph-buttons/MainGraphButtonsComponent.vue'
+  import PanelPanes from '@main/panel-body/PanelPanes.vue'
+  import NavBarComponent from '@main/panel-body/NavBarComponent.vue'
+  import MainResizeBarComponent from '@main/panel-utils/MainResizeBarComponent.vue'
+  import { 
+    appStates,
+    panelStates,
+    graphStates,
+    store 
+  } from '@/stores/store.js'
+  import { setFocus, openField } from '@mixins/helpers'
   import * as d3 from 'd3'
 </script>
 
 <template>
+
   <div id="panel-body">
-    <graph-buttons-component></graph-buttons-component>
-    <resize-bar-component></resize-bar-component>
-    <nav-bar-component></nav-bar-component>
-    <panel-center></panel-center>
+    <main-graph-buttons-component 
+      v-if="$attrs.type == 'main' && showButtons">
+    </main-graph-buttons-component>
+
+    <main-resize-bar-component 
+      v-if="$attrs.type == 'main'">
+    </main-resize-bar-component>
+
+    <nav-bar-component :type="$attrs.type">
+      <!-- v-if="$attrs.type == 'main'"> -->
+    </nav-bar-component>
+
+    <panel-panes :type="$attrs.type"></panel-panes>
   </div>
+
 </template>
 
 <script>
   export default {
     name: "PanelComponent",
     components: {
-      GraphButtonsComponent,
-      ResizeBarComponent,
+      MainGraphButtonsComponent,
+      MainResizeBarComponent,
       NavBarComponent,
-      PanelCenter
+      PanelPanes
     },
-    data () {
-      return {
-        transitionTimer: 500
+    computed: {
+      showButtons () {
+        return graphStates.existing.length > 0
       }
     },
     mounted () {
-      d3.select("#panel-body").transition().duration(200).ease(d3.easeLinear).style("width", "350px").style("min-width", "270px")
-      focusHelper.methods.set('search')
-      focusHelper.methods.openField()
-      store.currentFocus = 'empty'
+      d3.select("#panel-body").transition().duration(200).ease(d3.easeLinear).style("width", "300px")//.style("min-width", "270px")
+      setFocus('search')
+      // helpers.openField()
+      panelStates.currentFocus = 'empty'
     }
   }
 </script>
@@ -44,20 +60,32 @@
   #panel-body {
     height: 100vh;
     width: 0px;
+    min-width: 300px;
+
+    &.mobile {
+      min-width: 10vw;
+      max-width: 90vw;
+    }
+
     display: grid;
-    grid-template-columns: 30px 1fr 30px;
-    grid-template-rows: 2vh 1.8em 4vh 10fr 1vh 4fr 4vh;
+    grid-template-columns: 30px 1fr 27px;
+    grid-template-rows: 2vh 28px 10fr 5vh;
     grid-template-areas:
       "resize-bar flash ."
       "resize-bar navbar navbar"
-      "resize-bar . ."
-      "resize-bar panel-center ."
+      "resize-bar panel-panes ."
       "resize-bar . ."
       "resize-bar . ."
       "resize-bar . .";
     background: $panel-body-grey;
+
+    
     position: absolute;
+
+    
     top: 0px;
+    // simply by turning this off, we can float the panel to the left
+    // still have to account for everything else though...
     right: 0px;
     left: null;
     z-index: 2;
