@@ -32,8 +32,8 @@
         <p id="term">
           {{ store.searchTerm }}
         </p>
-        <p style="margin-top:30px">Did you get the spelling right? Make sure to get the spelling right.</p>
-        <p style="margin-top:30px">Its important to spell things corectly.</p>
+        <p style="margin-top:30px">Did you get the spelling right? Make sure to get the spelling right</p>
+        <p style="margin-top:30px">Its important to spell thigns corectly</p>
       </div>
     </div>
   </div>
@@ -49,7 +49,10 @@
     },
     updated () {
       if (store.searchResults.length > 0) {
-        setFocus(store.searchResults[0].entity)
+
+        // setFocus(store.searchResults[0].entity)
+        // This is causing the nav buttons to stick
+        
       } else {
         d3.select("#no-results").transition().duration(300).style("opacity", 1)
       }
@@ -57,7 +60,7 @@
     mounted () {
       // d3.select(".result-component").transition().delay(0).duration(200).style("right", "0%")
       // d3.select("#first-time-instruction").style("display", () => {
-      //   return this.$data.newHere ? "block" : "none"
+        //   return this.$data.newHere ? "block" : "none"
       // })
       d3.select("#panel-panes").on("scroll", async (e) => {        
         let scrollBottom = (e.target.scrollTop + e.target.clientHeight)+1
