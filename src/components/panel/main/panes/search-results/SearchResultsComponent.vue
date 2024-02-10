@@ -26,7 +26,7 @@
         class="result-container">
         <result-poster-tile v-for="result in resultsWithPosters" :result="result"></result-poster-tile>
       </div>
-      
+
       <div v-else id="no-results" style="opacity:0">
         <p>No result found:</p>
         <p id="term">
@@ -48,18 +48,17 @@
       }
     },
     updated () {
-      d3.select("#no-results").transition().duration(300).style("opacity", 1)
+      if (store.searchResults.length > 0) {
+        setFocus(store.searchResults[0].entity)
+      } else {
+        d3.select("#no-results").transition().duration(300).style("opacity", 1)
+      }
     },
     mounted () {
       // d3.select(".result-component").transition().delay(0).duration(200).style("right", "0%")
       // d3.select("#first-time-instruction").style("display", () => {
       //   return this.$data.newHere ? "block" : "none"
       // })
-
-      if (store.searchResults.length > 0) {
-        setFocus(store.searchResults[0].entity)
-      }
-
       d3.select("#panel-panes").on("scroll", async (e) => {        
         let scrollBottom = (e.target.scrollTop + e.target.clientHeight)+1
         const atBottom = scrollBottom > e.target.scrollHeight

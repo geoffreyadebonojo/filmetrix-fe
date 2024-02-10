@@ -42,6 +42,10 @@
         localStorage.setItem("newHere", true)
       }
       
+      if (localStorage.getItem("lockedGraph") == null) {
+        localStorage.setItem("lockedGraph", "[]")
+      }
+
       graphStates.existing = JSON.parse(localStorage.getItem("lockedGraph"))
             
       // await api.currentUser().then(async (response) => {
@@ -56,13 +60,16 @@
     },
 
     async mounted () {
-      if (graphStates.existing.length > 0) {
-        await this.loadSavedGraph()
+      if (graphStates.existing != null) {
+        if (graphStates.existing.length > 0) {
+          await this.loadSavedGraph()
+        }
       }
     },
     
     methods: {
       async loadSavedGraph () {
+        if (graphStates.existing == null) { return }
         if (graphStates.existing.length < 1) { return }
 
         store.isLocked = true

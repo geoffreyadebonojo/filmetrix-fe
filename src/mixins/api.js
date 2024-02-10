@@ -120,7 +120,6 @@ export default {
         return response.json()
       })
     )
-
     return api_response.data.search
   },
 
