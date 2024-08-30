@@ -25,7 +25,6 @@
     </main-resize-bar-component>
 
     <nav-bar-component :type="$attrs.type">
-      <!-- v-if="$attrs.type == 'main'"> -->
     </nav-bar-component>
 
     <panel-panes :type="$attrs.type"></panel-panes>
