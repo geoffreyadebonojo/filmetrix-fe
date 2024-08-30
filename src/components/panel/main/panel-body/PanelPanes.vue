@@ -22,7 +22,8 @@
     
     <details-component 
       v-else-if="panelStates.currentFocus === 'details' && 
-      panelStates.detailsData?.id != null">
+      panelStates.detailsData?.id != null"
+      class="details-component">
     </details-component>
     
     <commands-component 
