@@ -3,6 +3,7 @@
     appStates,
     panelStates
   } from '@/stores/store.js'
+  import { closeField, openField } from '@mixins/helpers'
   import AboutDetailsComponent from  '@about/AboutDetailsComponent.vue'
   import MainNavArrowsComponent from '@main/panel-utils/MainNavArrowsComponent.vue'
   import CommandsComponent from      '@panes/commands/CommandsComponent.vue'
@@ -21,8 +22,7 @@
     
     <details-component 
       v-else-if="panelStates.currentFocus === 'details' && 
-      panelStates.detailsData?.id != null" 
-      class="details-component">
+      panelStates.detailsData?.id != null">
     </details-component>
     
     <commands-component 
@@ -59,11 +59,34 @@
       UserProfileComponent,
       MainNavArrowsComponent
     },
+    // data () {
+    //   return {
+    //     isMobile: /Android|iPhone/i.test(navigator.userAgent)
+    //   }
+    // },
     computed: {
       resultsFocus: () => {
         const resultTypes = ["person", "movie", "tv"]
         return resultTypes.includes(panelStates.currentFocus)
       }
+    },
+    updated () {
+      // if (this.isMobile) {
+      //   this.handleMobileTransition()
+      // }
+    },
+    methods: {
+      // handleMobileTransition() {
+      //   if (panelStates.currentFocus == "details") {
+      //     d3.select("#mobile-panel-body").style("height", "80vh")
+      //                                    .transition()
+      //                                    .duration(300)
+      //                                    .ease(d3.easeLinear)
+      //                                    .style("height", "30vh")
+      //   } else {
+
+      //   }
+      // }
     }
   }
 </script>

@@ -96,7 +96,15 @@ export function setFocus(focus) {
 
 export function openField() {
   d3.select("#highlight").style("display", "block")
-  d3.select("#search-text").transition().duration(0).delay(100).style("width", "100%").style("left", "15px")
+  
+  d3.select("#navbar").style("flex-direction", "row")
+
+  d3.select("#search-text")
+  .transition().duration(0).delay(0)
+    .style("display", "block")
+    .style("width", "100%")
+    .style("left", "15px")
+
   d3.select("#highlight").transition().duration(100).style("left", "-1px")
 }
 
@@ -109,6 +117,10 @@ function moveHighlightCircle(x, direction) {
     .style(direction, `${d}px`)
 }
 
-function closeField() {
-  d3.select("#search-text").transition().duration(0).style("left", "100%")
+export function closeField() {
+  d3.select("#navbar").style("flex-direction", "row-reverse")
+
+  d3.select("#search-text")
+    .transition().duration(0)
+    .style("display", "none")
 }

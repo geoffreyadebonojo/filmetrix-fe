@@ -3,7 +3,7 @@
   import GraphComponent from '@components/GraphComponent.vue'
   import AboutComponent from '@components/AboutComponent.vue'
 
-  import { setFocus } from '@/mixins/helpers'
+  // import { setFocus } from '@/mixins/helpers'
 
   import * as d3 from 'd3'
 </script>
