@@ -81,7 +81,10 @@ export default {
     }
   },
   mounted () {
-    d3.select("#navbar").transition().delay(300).duration(200).style("width", "100%")
+    d3.select("#navbar")
+      .transition().delay(0)
+        .style('display', "flex")
+        .style("width", "100%")
     document.querySelector('#search-text').focus()
   },
   computed: {
@@ -164,7 +167,7 @@ export default {
   #navbar {
     grid-area: navbar;
     background: $panel-body-grey;
-    display: flex;
+    display: none;
     flex-direction: row-reverse;
     margin: auto 0 auto auto;
     height: 26px;
