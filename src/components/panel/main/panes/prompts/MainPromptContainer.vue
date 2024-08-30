@@ -10,7 +10,6 @@
     store 
   } from '@/stores/store.js'
   import graph from '@/mixins/graph'
-  import { getTypes, setFocus } from '@/mixins/helpers'
   import * as d3 from 'd3'
 </script>
 

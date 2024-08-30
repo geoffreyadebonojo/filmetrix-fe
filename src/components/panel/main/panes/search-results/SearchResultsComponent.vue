@@ -44,34 +44,42 @@
     name: "SearchResultsComponent",
     data () {
       return {
-        newHere: JSON.parse(localStorage.getItem("newHere"))
+        newHere: JSON.parse(localStorage.getItem("newHere")),
+        firstSearchLoad: true
       }
     },
     updated () {
       if (store.searchResults.length > 0) {
-
-        // setFocus(store.searchResults[0].entity)
-        // This is causing the nav buttons to stick
-        
+        // inelegant, but functional
+        this.updateNavHighlight()
       } else {
         d3.select("#no-results").transition().duration(300).style("opacity", 1)
       }
     },
     mounted () {
-      // d3.select(".result-component").transition().delay(0).duration(200).style("right", "0%")
-      // d3.select("#first-time-instruction").style("display", () => {
-        //   return this.$data.newHere ? "block" : "none"
-      // })
       d3.select("#panel-panes").on("scroll", async (e) => {        
         let scrollBottom = (e.target.scrollTop + e.target.clientHeight)+1
         const atBottom = scrollBottom > e.target.scrollHeight
-
-        if (atBottom) {
-          console.log("at bottom")
-          // const nextPageData = await api.fetchSearchNext(store.searchTerm)
-          // store.searchResults = store.searchResults.concat(nextPageData)
-        }
+        
+        this.loadMoreResults(atBottom)
       })
+    },
+
+    methods: {
+      updateNavHighlight() {
+        if (this.firstSearchLoad == true) {
+          setFocus(store.searchResults[0].entity)
+          this.firstSearchLoad = false
+        }
+      },
+      async loadMoreResults(atBottom) {
+        if (atBottom) {
+          // console.log("at bottom")
+          // FOR PAGINATING RESULTS
+          const nextPageData = await api.fetchSearchNext(store.searchTerm)
+          store.searchResults = store.searchResults.concat(nextPageData)
+        }
+      }
     },
 
     computed: {
