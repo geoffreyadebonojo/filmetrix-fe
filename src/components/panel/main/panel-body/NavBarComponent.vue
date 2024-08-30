@@ -165,6 +165,7 @@ export default {
     grid-area: navbar;
     background: $panel-body-grey;
     display: flex;
+    flex-direction: row-reverse;
     margin: auto 0 auto auto;
     height: 26px;
     width: 0%;
