@@ -1,5 +1,6 @@
 <script setup>
   import PanelComponent from '@components/PanelComponent.vue'
+  import MobilePanelComponent from '@components/MobilePanelComponent.vue'
   import GraphComponent from '@components/GraphComponent.vue'
   import AboutComponent from '@components/AboutComponent.vue'
 
@@ -10,8 +11,14 @@
 
 <template>
   <div id="viewer-body">
+    <mobile-panel-component :type="'main'" :isMobile="isMobile">
+    </mobile-panel-component>
+
     <graph-component :type="'main'"></graph-component>
-    <panel-component :type="'main'"></panel-component>
+
+    <panel-component :type="'main'" :isMobile="!isMobile">
+    </panel-component>
+
     <about-component></about-component>
   </div>
 </template>
@@ -21,17 +28,18 @@
     name: 'MainView',
     data () {
       return {
-        type: 'main'
+        type: 'main',
+        isMobile: /Android|iPhone/i.test(navigator.userAgent)
       }
     },
     components: {
       GraphComponent,
       PanelComponent,
+      MobilePanelComponent,
       AboutComponent
     },
     mounted () {
-      let isMobile = /Android|iPhone/i.test(navigator.userAgent)
-      if (isMobile) {
+      if (this.isMobile) {
         d3.select('#zoom-buttons').style('display', 'flex')
       } 
 
