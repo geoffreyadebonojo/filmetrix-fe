@@ -2,11 +2,14 @@
   import graph from "@mixins/graph"
   import api from "@mixins/api"
   import {
+    graphStates,
     panelStates,
     store
   } from '@/stores/store.js'
   import * as d3 from 'd3'
   import { global } from '@/mixins/global.js'
+  import GraphManager from '@models/GraphManager.js'
+
 </script>
 
 <template>
@@ -14,8 +17,8 @@
        v-bind:id="$attrs.result.id"
        tabindex="0"
        :key="$data.resultId"
-       @click="fetchNodesAndDetails($attrs.result)"
-       @keypress="fetchNodesAndDetails($attrs.result)">  
+       @click="fetchNodesAndDetails($attrs.result, 8)"
+       @keypress="fetchNodesAndDetails($attrs.result, 8)">  
     <img v-bind:src="$attrs.result.poster" class="tile-img"/>
     <div>
       {{ $attrs.result.name }}
@@ -42,15 +45,31 @@
         onGraph: false,
         posterElem: null,
         resultId: this.$attrs.result.id,
-        refresh: true
+        refresh: true,
+
       }
     },
-    
     methods: {
-      async fetchNodesAndDetails(result) {
-        // panelStates.isOpen = false
-        await api.fetchDetails(result.id)
-        await graph.callForNodes(result)
+      async fetchNodesAndDetails(result, count) {
+        if (event.shiftKey) {
+          await api.fetchDetails(result.id)
+          await graph.callForNodes(result, count)
+
+          const firstOrder = graphStates.graphData[result.id].nodes.slice(1, count+1)  
+          firstOrder.forEach((node) => {
+            graphStates.existing.push([node.id, 4])
+          })
+
+
+          // oooooooooooooh shit
+          await api.fetchGraphData(graphStates.existing.map(d => d[0]))
+  
+          new GraphManager().generate()
+        } else {
+          await api.fetchDetails(result.id)
+          await graph.callForNodes(result, count)
+
+        }
       }
     }
   }
