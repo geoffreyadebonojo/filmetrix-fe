@@ -15,7 +15,8 @@
 </script>
 
 <template>
-  <div v-if="panelStates.detailsData.id != null" v-bind:id="panelStates.detailsData.id + '-details'">
+  <div v-if="panelStates.detailsData.id != null" 
+       v-bind:id="panelStates.detailsData.id + '-details'">
     <details-poster-tile></details-poster-tile>
     <div id="name">
       {{ panelStates.detailsData.name }}
@@ -152,5 +153,56 @@
     position: absolute;
     bottom: 0px;
     left: 0px;
+  }
+
+  /////////////////////////////
+   .mobile-details-component {
+    height: 85%;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 3fr 1fr 11fr ;
+    grid-template-rows: 0px 120px 30px 30px 10fr;
+    padding: 10px;
+    grid-template-areas:
+      "poster        .        ft"
+      "poster        .        desc"
+      "name          name     desc"
+      "birthday      birthday desc"
+      "links         links    desc"
+      ".             .        fb";
+    overflow: hidden;
+    left: 0%;
+
+    #name, #birthday {
+      align-content: center;
+    }
+
+    #description, #no-summary-available {
+      grid-area: desc;
+      font-family: $global-font;
+      margin-top: 0px;
+      height: 100%;
+      width: 100%;
+      color: white;
+      text-shadow: 1px 0px black;
+      overflow-y: auto;
+    }
+
+    #description {
+      padding-top: 5px;
+      padding-bottom: 20px;
+      font-size: 16px;
+      font-weight: 300;
+      line-height: 26px;
+      letter-spacing: 0.002em;
+    }
+
+    #no-summary-available {
+      margin-top: 5vh;
+      font-size: 30px;
+      font-weight: 300;
+      letter-spacing: 0.002em;
+      text-transform: uppercase;
+    }
   }
 </style>

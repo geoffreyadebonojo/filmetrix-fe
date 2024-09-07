@@ -15,7 +15,7 @@
 
 <template>
 
-  <div id="panel-body">
+  <div id="panel-body" v-if="$attrs.isMobile">
     <main-graph-buttons-component 
       v-if="$attrs.type == 'main' && showButtons">
     </main-graph-buttons-component>

@@ -23,7 +23,7 @@
     <details-component 
       v-else-if="panelStates.currentFocus === 'details' && 
       panelStates.detailsData?.id != null"
-      class="details-component">
+      v-bind:class="isMobile ? 'mobile-details-component' : 'details-component'">
     </details-component>
     
     <commands-component 
@@ -60,11 +60,11 @@
       UserProfileComponent,
       MainNavArrowsComponent
     },
-    // data () {
-    //   return {
-    //     isMobile: /Android|iPhone/i.test(navigator.userAgent)
-    //   }
-    // },
+    data () {
+      return {
+        isMobile: /Android|iPhone/i.test(navigator.userAgent)
+      }
+    },
     computed: {
       resultsFocus: () => {
         const resultTypes = ["person", "movie", "tv"]
@@ -72,22 +72,19 @@
       }
     },
     updated () {
-      // if (this.isMobile) {
-      //   this.handleMobileTransition()
-      // }
+      if (this.isMobile) {
+        // this.handleMobileTransition()
+      }
     },
     methods: {
-      // handleMobileTransition() {
-      //   if (panelStates.currentFocus == "details") {
-      //     d3.select("#mobile-panel-body").style("height", "80vh")
-      //                                    .transition()
-      //                                    .duration(300)
-      //                                    .ease(d3.easeLinear)
-      //                                    .style("height", "30vh")
-      //   } else {
-
-      //   }
-      // }
+      handleMobileTransition() {
+        if (panelStates.currentFocus == "details") {
+          d3.select("#mobile-panel-body").style("height", "80vh")
+                                         .transition()
+                                         .duration(400)
+                                         .style("height", "40vh")
+        }
+      }
     }
   }
 </script>

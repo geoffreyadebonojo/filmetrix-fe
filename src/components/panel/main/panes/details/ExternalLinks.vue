@@ -18,9 +18,6 @@
           target="_blank">
         <img src="/youtube-icon.png">
       </a>
-
-    <!-- link to TV guide for TV?? -->
-
     </div>
 </template>
 

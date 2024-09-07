@@ -11,91 +11,6 @@ export default {
     }
   },
 
-  async signupUser(args) {
-    const API_URL =`${this.data().base_url}/signup`
-
-    const api_response = await (
-      fetch(API_URL, {
-        method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          "user": {
-            "email": `${args.email}`,
-            "password": `${args.password}`
-          }
-        })
-      }).then((response) => {
-        return response.json()
-      })
-    )
-
-    return api_response
-  },
-
-  async loginUser(args) {
-    const API_URL =`${this.data().base_url}/login`
-
-    const api_response = await (
-      fetch(API_URL, {
-        method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json' 
-        },
-        body: JSON.stringify({
-          "user": {
-            "email": `${args.email}`,
-            "password": `${args.password}`
-          }
-        })
-      }).then((response) => {
-        for(let entry of response.headers.entries()) {
-          localStorage.setItem(entry[0], entry[1]);
-        }
-
-        return response.json()
-      })
-    )
-
-    return api_response
-  },
-
-  async logoutUser() {
-    const API_URL =`${this.data().base_url}/logout`
-
-    const api_response = await fetch(API_URL, {
-      method: 'DELETE',
-      headers: { 
-        'Content-Type': 'application/json',
-        'Authorization': localStorage.getItem('authorization')
-      }
-    }).then((response) => {
-      return response.json()
-    })
-
-    return api_response
-  },
-
-  async currentUser() {
-    const API_URL =`${this.data().base_url}/current_user`
-    const api_response = await (
-      fetch(API_URL, {
-        method: 'GET',
-        headers: { 
-          'Content-Type': 'application/json',
-          'Authorization': localStorage.getItem('authorization')
-        }
-      }).then((response) => {
-        return response.json()
-      }).catch((error) => {
-        return {}
-      })
-    )
-
-    return api_response
-  },
-
   async fetchSearchData(term) {
     const API_URL = `${this.data().base_url}/graphql`
 
@@ -150,7 +65,6 @@ export default {
 
     return api_response.data.getNextPage
   },
-
   
   async fetchDetails(id) {
     const API_URL =`${this.data().base_url}/graphql`
@@ -181,7 +95,7 @@ export default {
     panelStates.detailsData = api_response.data.details
   },
 
-  async fetchGraphData(ids){
+  async fetchGraphData(ids, c="30"){
     const API_URL = `${this.data().base_url}/graphql`
 
     const resp = await (
@@ -223,6 +137,8 @@ export default {
     })
   },
 
+  ///////////////////////////////////
+
   async saveGraph(existing, userId=null) {
     const ids = []
     const count = []
@@ -231,7 +147,7 @@ export default {
       ids.push(d[0])
       count.push(d[1])
     })
-    
+
     const API_URL =`${this.data().base_url}/graphql`
     const resp = await (
       fetch(API_URL, {
@@ -382,5 +298,91 @@ export default {
     )
 
     return api_response.data.addToMovieList
-  }
+  },
+
+
+  async signupUser(args) {
+    const API_URL =`${this.data().base_url}/signup`
+
+    const api_response = await (
+      fetch(API_URL, {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          "user": {
+            "email": `${args.email}`,
+            "password": `${args.password}`
+          }
+        })
+      }).then((response) => {
+        return response.json()
+      })
+    )
+
+    return api_response
+  },
+
+  async loginUser(args) {
+    const API_URL =`${this.data().base_url}/login`
+
+    const api_response = await (
+      fetch(API_URL, {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json' 
+        },
+        body: JSON.stringify({
+          "user": {
+            "email": `${args.email}`,
+            "password": `${args.password}`
+          }
+        })
+      }).then((response) => {
+        for(let entry of response.headers.entries()) {
+          localStorage.setItem(entry[0], entry[1]);
+        }
+
+        return response.json()
+      })
+    )
+
+    return api_response
+  },
+
+  async logoutUser() {
+    const API_URL =`${this.data().base_url}/logout`
+
+    const api_response = await fetch(API_URL, {
+      method: 'DELETE',
+      headers: { 
+        'Content-Type': 'application/json',
+        'Authorization': localStorage.getItem('authorization')
+      }
+    }).then((response) => {
+      return response.json()
+    })
+
+    return api_response
+  },
+
+  async currentUser() {
+    const API_URL =`${this.data().base_url}/current_user`
+    const api_response = await (
+      fetch(API_URL, {
+        method: 'GET',
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': localStorage.getItem('authorization')
+        }
+      }).then((response) => {
+        return response.json()
+      }).catch((error) => {
+        return {}
+      })
+    )
+
+    return api_response
+  },
 }
