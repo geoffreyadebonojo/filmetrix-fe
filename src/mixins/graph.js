@@ -17,9 +17,14 @@ let alreadyClicked = false
 export default {
   name: "graph",
   data () {
-    return {}
+    return {
+      nodes: [],
+      links: []
+    }
   },
   draw (responseData, options={}) {
+    localStorage.setItem("lockedGraph", JSON.stringify(graphStates.existing))
+
     graphStates.inMotion = true
     var links = responseData.links
     var nodes = responseData.nodes
@@ -58,7 +63,6 @@ export default {
     })
     .on("end", () => {
       graphStates.inMotion = false
-      localStorage.setItem("lockedGraph", JSON.stringify(graphStates.existing))
     })
     
     return innerWrapper.node();
@@ -72,10 +76,10 @@ export default {
         localStorage.setItem("newHere", false)
 
         if (graphStates.existing.map(x => x[0]).includes(d.id)){
-          this.addToExistingNodes(d, graphType)
+          this.addToExistingNodes(d)
         } else {
           localStorage.setItem("newHere", false)
-          return await this.callForNodes(d, graphType)
+          return await this.callForNodes(d)
         }
 
         await api.fetchDetails(d.id)
@@ -99,7 +103,7 @@ export default {
     })
   },
 
-  async addToExistingNodes (d, graphType) {
+  async addToExistingNodes (d) {
     const c = graphStates.existing.filter((y) => {
       return y[0] === d.id
     })
@@ -125,18 +129,19 @@ export default {
     this.draw({
       nodes: nodes,
       links: links,
-      type: graphType
-    })
+      type: "main"
+    }) 
   },
 
-  async callForNodes(d) {
+  async callForNodes(d, count=5) {
     panelStates.detailsData.id = d.id
     panelStates.currentFocus = 'details'
-
+    
     if (graphStates.existing.map((f) => f[0]).excludes(d.id) ) {
-      graphStates.existing.push([d.id, 8])
+      graphStates.existing.push([d.id, count])
       const ext = graphStates.existing.unique().map((d) => d[0])
       await api.fetchGraphData(ext)
+      
       new GraphManager().generate()
     }
   }
