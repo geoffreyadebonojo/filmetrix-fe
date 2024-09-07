@@ -84,6 +84,7 @@ export default class GraphBuilder {
     const node = this.createNodes(
       this.args.innerWrapper, 
       this.args.nodes)
+      
     this.createViewerBody()
     return [link, node]
   }
@@ -190,7 +191,12 @@ export default class GraphBuilder {
         return i
       })
       .attr("class", (d) => {
-        return 'node ' + d.type.join(" ")
+        // type means genre
+        if (d.type == null) {
+          return 'node'
+        } else {
+          return 'node ' + d.type.join(" ")
+        }
       })
       .attr("id", d => d.id)
     return node
