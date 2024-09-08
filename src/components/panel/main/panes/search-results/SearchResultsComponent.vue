@@ -28,12 +28,13 @@
       </div>
 
       <div v-else id="no-results" style="opacity:0">
-        <p>No result found:</p>
+        <p style="margin-top:30px">Searching...</p>
+        <!-- <p>No result found:</p>
         <p id="term">
           {{ store.searchTerm }}
         </p>
         <p style="margin-top:30px">Did you get the spelling right? Make sure to get the spelling right</p>
-        <p style="margin-top:30px">Its important to spell thigns corectly</p>
+        <p style="margin-top:30px">Its important to spell thigns corectly</p> -->
       </div>
     </div>
   </div>
