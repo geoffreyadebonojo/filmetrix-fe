@@ -51,7 +51,7 @@ export default {
                                      innerWrapper,
                                      outerWrapper }).build()
     
-    this.attachNodeClickActions(node, graphType)
+    this.attachNodeClickActions(node)
 
     simulation.on("tick", () => {
       link.attr("x1", d => d.source.x)
@@ -68,7 +68,7 @@ export default {
     return innerWrapper.node();
   },
 
-  attachNodeClickActions(node, graphType) {
+  attachNodeClickActions(node) {
     node.on('click', async (_e, d) => {
       const doubleClickDelay = 300
       
@@ -104,13 +104,20 @@ export default {
   },
 
   async addToExistingNodes (d) {
-    const c = graphStates.existing.filter((y) => {
+    let currentNode = graphStates.existing.filter((y) => {
       return y[0] === d.id
-    })
-    const t = c[0][1]
-    if (t > this.data().nodeCount) { return }
-    const n = t + 3
-    c[0][1] = n
+    })[0]
+
+    const currentNodeId =    currentNode[0]
+    const currentNodeCount = currentNode[1]
+
+    let newNodeCount = currentNodeCount + 3
+
+    if (newNodeCount > graphStates.graphData[currentNodeId].nodes.length) { 
+      newNodeCount = graphStates.graphData[currentNodeId].nodes.length
+    }
+
+    currentNode[1] = newNodeCount
 
     let vals
     let nodes = []
