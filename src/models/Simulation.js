@@ -13,18 +13,25 @@ export default class Simulation {
 
   generateGraph(args) { 
     const sim = d3.forceSimulation(this.nodes, this.links)
+    .velocityDecay(0.5)
     .force("link", d3.forceLink(this.links).id(d => d.id).distance(() => {
-        return args.forces.length
+        // return args.forces.length
+        return 200
     }))
     .force("charge", d3.forceManyBody().strength((d) => {
-        return args.forces.charge
+        // return args.forces.charge
+        return -2000
     }))
     .force('collide', d3.forceCollide((d) => {
-        return args.forces.collide
+        // return args.forces.collide
+        return 80
     }))
     .force("center", d3.forceCenter(
       ...args.forceCenter
     ))
+    .force("radial", d3.forceRadial((d) => {
+      return 600, 0, 0
+    }))
     .alpha(args.alpha.g)
     .alphaTarget(args.alpha.target)
     
@@ -42,8 +49,8 @@ export default class Simulation {
     const attrs = {
       main: {
         forces: {
-          length:  200,
-          charge: -1800,
+          length:  140,
+          charge: -1000,
           collide: 60
         },
         forceCenter: [width * 0.5, height * 0.5],
