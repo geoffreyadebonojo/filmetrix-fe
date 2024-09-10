@@ -20,22 +20,21 @@
     </div>
 
     <div v-else>
-      <!-- fuck my life -->
-      <div v-if="store.searchResults.length > 0" 
+      <div v-if="store.searchResults.length == 0" id="no-results" style="opacity:0" >
+        <p>No result found:</p>
+        <p id="term">
+          {{ store.searchTerm }}
+        </p>
+        <p style="margin-top:30px">Did you get the spelling right? Make sure to get the spelling right</p>
+        <p style="margin-top:30px">Its important to spell thigns corectly</p>
+      </div>
+
+      <div v-else-if="store.searchResults.length > 0" 
         v-bind:id="panelStates.currentFocus + '-results'"
         class="result-container">
         <result-poster-tile v-for="result in resultsWithPosters" :result="result"></result-poster-tile>
       </div>
 
-      <div v-else id="no-results" style="opacity:0">
-        <p style="margin-top:30px">Searching...</p>
-        <!-- <p>No result found:</p>
-        <p id="term">
-          {{ store.searchTerm }}
-        </p>
-        <p style="margin-top:30px">Did you get the spelling right? Make sure to get the spelling right</p>
-        <p style="margin-top:30px">Its important to spell thigns corectly</p> -->
-      </div>
     </div>
   </div>
 </template>
@@ -49,7 +48,7 @@
         firstSearchLoad: true
       }
     },
-    updated () {
+    async updated () {
       if (store.searchResults.length > 0) {
         // inelegant, but functional
         this.updateNavHighlight()
