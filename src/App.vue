@@ -14,7 +14,7 @@
 </script>
 
 <template>
-  <div id="app-wrapper" v-bind:class="appStates.theme + '-theme'">
+  <div id="app-wrapper" class="dark-theme">
     <RouterView></RouterView>
   </div>
 </template>
@@ -22,9 +22,6 @@
 <style lang="scss">
   .dark-theme {
     background: $graph-body-grey;
-  }
-  .light-theme {
-    background: #AAAAAA;
   }
 </style>
 
