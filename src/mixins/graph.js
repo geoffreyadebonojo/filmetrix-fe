@@ -14,7 +14,6 @@ import Simulation from '@models/Simulation.js'
 let timer;
 let alreadyClicked = false
 // IGNORE THE LINTER
-// let i = 0
 
 export default {
   name: "graph",
@@ -113,21 +112,17 @@ export default {
     const currentNodeId =    currentNode[0]
     const currentNodeCount = currentNode[1]
 
-    // WIP
     let addCount
     if (appStates.shiftKeyIsPressed) {
       addCount = 7
     } else {
       addCount = 3
     }
-    // console.log(addCount)
-    let newNodeCount = currentNodeCount + addCount
 
-    // let newNodeCount = currentNodeCount + appStates.nodeAddCount
+    let newNodeCount = currentNodeCount + addCount
 
     if (newNodeCount > graphStates.graphData[currentNodeId].nodes.length) {
       newNodeCount = graphStates.graphData[currentNodeId].nodes.length
-      // console.log(newNodeCount) 
     }
 
     currentNode[1] = newNodeCount
@@ -144,7 +139,6 @@ export default {
         }
       })
       links = links.concat(vals.links.slice(0,key[1]))
-      // console.log(links)
     })
 
     this.draw({
@@ -153,26 +147,7 @@ export default {
       type: "main"
     }) 
 
-    
     let gn
-    // const applyHighlight = {
-    //     colors: {
-    //     stroke: "#7A7978",
-    //     fill: "#222222",
-    //     text: "#FFFFFF"
-    //   },
-    //   fontSize: 12,
-    //   applyHighlight: {
-    //     scale: 1.05,
-    //     stroke: "white",
-    //     textStroke: "white"
-    //   },
-    //   removeHighlight: {
-    //     scale: 1,
-    //     stroke: "#7A7978",
-    //     textStroke: "none"
-    //   }
-    // }
 
     nodes.slice(nodes.length-addCount).forEach((node) => {
       gn = new GraphNode(node.id)
