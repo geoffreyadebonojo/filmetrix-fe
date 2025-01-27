@@ -111,16 +111,13 @@
 
   .poster-tile {
     @include poster-tile;
-    // img {
-      height: 154px;
-      width: 170px;
-      display: flow-root;
-      // }
-      border: 1px solid transparent;
+    height: 154px;
+    width: 170px;
+    display: flow-root;
+    border: 1px solid transparent;
       
     div:first-of-type {
       overflow: hidden;
-      // white-space: nowrap;
       text-overflow: ellipsis;
       font-size: 15px;
       text-align: center;
@@ -139,10 +136,6 @@
       width: 100px;
       margin: 0px 34px;
     }
-
-    // &:hover {
-    //   z-index: 10;
-    // }
   }
 
 </style>

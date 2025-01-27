@@ -17,41 +17,17 @@
         <img src="/cursor-finger.svg" style="opacity:0.5"/> <p id="superscript">x2</p>
       </div>
 
-      <!-- <div class="item double-click" style="display:flex; height:2.8em">
-        SHIFT + <img src="/cursor-finger.svg" style="opacity:0.5"/> <p id="superscript">x2</p>
-      </div> -->
-
       <div class="item single-click" style="height:2.8em">
         <img src="/cursor-finger.svg" style="opacity:0.5"/>
       </div>
-
-      <!-- <div class="item unlock" style="height:3em">
-        <img src="/lock-open.svg" style="opacity:0.5"/>
-      </div>
-
-      <div class="item lock" style="height:3em">
-        <img src="/lock-closed.svg"/>
-      </div> -->
 
       <div class="item link-to" style="height:3em">
         <img src="/link-alt.svg" style="opacity:0.5"/>
       </div>
 
-      <!-- <div class="item save" style="height:3em">
-        <img src="/disk-empty-white.svg"/>
-      </div> -->
-
       <div class="item centering" style="height:3em">
         <img src="/center-graph-icon.svg"/>
       </div>
-
-      <!--div class="item profile" style="height:3em">
-        <img src="/settings-gear-command-section.svg"/>
-      </div-->
-
-      <!-- <div class="item scissors" style="height:3em">
-        <img src="/scissors-icon.svg" style="transform:rotate(-135deg);opacity:0.5"/>
-      </div> -->
 
       <div class="item clear-graph" style="height:3em">
         <img src="/clear-graph.svg"/>
@@ -79,14 +55,6 @@
         style="height:2.8em"
       />
 
-      <!-- <effect-explanation
-        :section="'shift + double-click'"
-        :main="'add even more nodes!'"
-        :secondary="'double click a node to add more!'"
-        :expandedHeight="'5.5em'"
-        style="height:2.8em"
-      /> -->
-
       <effect-explanation
         :section="'single-click'"
         :main="'get details'"
@@ -94,22 +62,6 @@
         :expandedHeight="'6.2em'"
         style="height:2.8em"
       />
-
-     <!--effect-explanation
-        :section="'unlock'"
-        :main="'unlocked'"
-        :secondary="'graph won\'t be saved if you navigate away or refresh the page'"
-        :expandedHeight="'6.4em'"
-        style="height:3em"
-      />
-
-      <effect-explanation
-        :section="'lock'"
-        :main="'locked'"
-        :secondary="'graph will be saved if you navigate away or refresh'"
-        :expandedHeight="'5.2em'"
-        style="height:3em"
-      /-->
 
       <effect-explanation
         :section="'link-to'"
@@ -119,14 +71,6 @@
         style="height:3em"
       />
 
-      <!--effect-explanation
-        :section="'save'"
-        :main="'save'"
-        :secondary="'save a graph so you can play with it later. gotta be logged in though'"
-        :expandedHeight="'6.3em'"
-        style="height:3em"
-      /-->
-
       <effect-explanation
         :section="'centering'"
         :main="'re-center graph'"
@@ -134,14 +78,6 @@
         :expandedHeight="'7em'"
         style="height:3em"
       />
-
-      <!--effect-explanation
-        :section="'profile'"
-        :main="'view profile'"
-        :secondary="'this is where you can log in or sign up, view and edit your profile and manage your saved movies and graphs.'"
-        :expandedHeight="'7em'"
-        style="height:3em"
-      /-->
 
       <effect-explanation
         :section="'clear-graph'"

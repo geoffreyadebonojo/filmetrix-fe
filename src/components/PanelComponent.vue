@@ -49,7 +49,7 @@
     mounted () {
       d3.select("#panel-body").transition().duration(200).ease(d3.easeLinear).style("width", "300px")//.style("min-width", "270px")
       setFocus('search')
-      // helpers.openField()
+
       panelStates.currentFocus = 'empty'
     }
   }
@@ -77,14 +77,8 @@
       "resize-bar . ."
       "resize-bar . .";
     background: $panel-body-grey;
-
-    
     position: absolute;
-
-    
     top: 0px;
-    // simply by turning this off, we can float the panel to the left
-    // still have to account for everything else though...
     right: 0px;
     left: null;
     z-index: 2;

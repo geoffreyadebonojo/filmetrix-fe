@@ -155,7 +155,6 @@
     left: 0px;
   }
 
-  /////////////////////////////
    .mobile-details-component {
     height: 85%;
     width: 100%;

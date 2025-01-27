@@ -48,9 +48,8 @@
       d3.select("#mobile-resizer").on("click", (e) => {
         this.resize(e)
       })
-      // d3.select("#panel-body").transition().duration(200).ease(d3.easeLinear).style("width", "300px")//.style("min-width", "270px")
+
       setFocus('search')
-      // helpers.openField()
       panelStates.currentFocus = 'empty'
     },
     methods: {

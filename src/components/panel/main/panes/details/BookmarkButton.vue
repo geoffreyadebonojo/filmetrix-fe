@@ -30,7 +30,6 @@
         return panelStates.detailsData.entity == "movie"
       },
       bookmarksContainsId: () => {
-        // debugger
         return userStates.userMovieList.map(d => d[0]).includes(panelStates.detailsData.id)
       }
     },

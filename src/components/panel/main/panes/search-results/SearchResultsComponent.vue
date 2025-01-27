@@ -74,7 +74,6 @@
       },
       async loadMoreResults(atBottom) {
         if (atBottom) {
-          // console.log("at bottom")
           // FOR PAGINATING RESULTS
           const nextPageData = await api.fetchSearchNext(store.searchTerm)
           store.searchResults = store.searchResults.concat(nextPageData)

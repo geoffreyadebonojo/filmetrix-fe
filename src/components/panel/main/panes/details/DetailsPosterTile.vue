@@ -39,26 +39,6 @@
       }
     },
 
-    // mounted () {
-    //   this.$data.target = d3.select(`#${this.$data.detailId}`)
-
-    //   const b = d3.select("body")
-      
-    //   b.on("keydown", (e) => { 
-    //     if (e.keyCode == 16) {
-    //       let posters = d3.selectAll(".poster-tile > img")
-    //       posters.style("border", "solid aliceblue")
-    //     }
-    //   })
-
-    //   b.on("keyup", (e) => { 
-    //     if (e.keyCode == 16) {
-    //       let posters = d3.selectAll(".poster-tile > img")
-    //       posters.style("border", "transparent")
-    //     }
-    //   })
-    // },
-
     methods: {
       toggleHighlightLock() {
         graphStates.lockedHighlights.togglePresence(this.$data.detailId)
@@ -72,10 +52,7 @@
 
       highlightNodes() {
         if (this.$data.target.node() == undefined) { return }
-
         this.$data.graphNode.nodeTransformer(this.$data.applyHighlight)
-
-        // this.$data.graphNode.linkHighlighter()
       },
 
       unhighlightNodes() {
@@ -84,7 +61,6 @@
         if (graphStates.lockedHighlights.includes(this.$data.detailId)) { return }
 
         this.$data.graphNode.nodeTransformer(this.$data.removeHighlight)
-        // this.$data.graphNode.linkUnhighlighter()
       }
     }
   }

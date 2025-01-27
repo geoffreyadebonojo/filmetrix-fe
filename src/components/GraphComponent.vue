@@ -18,7 +18,6 @@
   export default {
     name: "GraphComponent",
     data() {
-      // const storedScale = localStorage.getItem("currentZoom").split(" ")[1].replace("scale(", "").replace(")", "")
       return {
         vb: `${-350} ${-window.innerHeight/2} ${window.innerWidth*2} ${window.innerHeight*2}`
       }

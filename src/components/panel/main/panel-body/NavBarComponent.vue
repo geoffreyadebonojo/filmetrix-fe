@@ -55,14 +55,6 @@
         <img src="/command-icon.svg" class="icon" id="commands-icon">
       </div>
 
-
-      <!-- <div v-if="this.$route.query.userbeta == '1'"
-                   class="nav-button primary-nav"
-                   id="profile-button"
-                   @click="setFocus('profile')">
-        <img src="/settings-gear.svg" v-bind:class="panelStates.currentFocus === 'profile' ? 'gear active' : 'gear'"/>
-      </div> -->
-
       <div v-if="$attrs.type == 'main'"
                  class="nav-button" 
                  id="about-us-transition-button">
@@ -179,13 +171,7 @@ export default {
   }
   .nav-button-container {
     height: 100%;
-    // width: max-content;
-    // if you remove this, then the icons
-    // become conveniently vertical
-    // requires router-link display vertical, height 27px
-    // display: inline-table;
     display: flex;
-
     justify-content: space-between;
     right: 0px;
     background: #6e6e6e;
@@ -256,9 +242,5 @@ export default {
 
   .nav-button, .result-button {
     width: $nav-content-height + 1;
-
-    // &:hover {
-    //   cursor: $cursor;
-    // }
   }
 </style>

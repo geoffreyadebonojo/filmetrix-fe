@@ -71,21 +71,21 @@
         return resultTypes.includes(panelStates.currentFocus)
       }
     },
-    updated () {
-      if (this.isMobile) {
-        // this.handleMobileTransition()
-      }
-    },
-    methods: {
-      handleMobileTransition() {
-        if (panelStates.currentFocus == "details") {
-          d3.select("#mobile-panel-body").style("height", "80vh")
-                                         .transition()
-                                         .duration(400)
-                                         .style("height", "40vh")
-        }
-      }
-    }
+    // updated () {
+    //   if (this.isMobile) {
+    //     // this.handleMobileTransition()
+    //   }
+    // },
+    // methods: {
+    //   handleMobileTransition() {
+    //     if (panelStates.currentFocus == "details") {
+    //       d3.select("#mobile-panel-body").style("height", "80vh")
+    //                                      .transition()
+    //                                      .duration(400)
+    //                                      .style("height", "40vh")
+    //     }
+    //   }
+    // }
   }
 </script>
 

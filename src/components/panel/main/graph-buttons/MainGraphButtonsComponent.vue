@@ -1,16 +1,12 @@
 <script setup>
-  // import LockButton from './LockButton.vue'
   import GenerateLinkButton from './GenerateLinkButton.vue'
-  // import SaveButton from './SaveButton.vue'
   import ClearGraphButton from './ClearGraphButton.vue'
   import api from "@mixins/api"
   import * as d3 from 'd3'
 </script>
 
 <template>
-  <!--lock-button></lock-button-->
   <generate-link-button></generate-link-button>
-  <!-- <save-button></save-button> -->
   <clear-graph-button></clear-graph-button>
   <div class="graph-control-buttons" id="centering-button"></div>
 </template>
