@@ -17,6 +17,10 @@
         <img src="/cursor-finger.svg" style="opacity:0.5"/> <p id="superscript">x2</p>
       </div>
 
+      <!-- <div class="item double-click" style="display:flex; height:2.8em">
+        SHIFT + <img src="/cursor-finger.svg" style="opacity:0.5"/> <p id="superscript">x2</p>
+      </div> -->
+
       <div class="item single-click" style="height:2.8em">
         <img src="/cursor-finger.svg" style="opacity:0.5"/>
       </div>
@@ -69,11 +73,19 @@
 
       <effect-explanation
         :section="'double-click'"
-        :main="'add more nodes!'"
+        :main="'add mode nodes!'"
         :secondary="'double click a node to add more!'"
         :expandedHeight="'5.5em'"
         style="height:2.8em"
       />
+
+      <!-- <effect-explanation
+        :section="'shift + double-click'"
+        :main="'add even more nodes!'"
+        :secondary="'double click a node to add more!'"
+        :expandedHeight="'5.5em'"
+        style="height:2.8em"
+      /> -->
 
       <effect-explanation
         :section="'single-click'"

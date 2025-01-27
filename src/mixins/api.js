@@ -95,7 +95,8 @@ export default {
     panelStates.detailsData = api_response.data.details
   },
 
-  async fetchGraphData(ids, c="30"){
+                          // NODE SENDCOUNT
+  async fetchGraphData(ids, count=50){
     const API_URL = `${this.data().base_url}/graphql`
 
     const resp = await (
@@ -104,7 +105,7 @@ export default {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ query: `
           query {
-            graphData(ids:"${ids}") {
+            graphData(ids:"${ids}",count:${count}) {
               id
               nodes {
                 id

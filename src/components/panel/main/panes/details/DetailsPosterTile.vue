@@ -12,7 +12,7 @@
 <template>
     <img class="poster"
          v-bind:class="graphStates.lockedHighlights.includes($data.detailId) ? 'poster-locked' : 'poster-unlocked'"
-         v-bind:id="$data.detailId + 'detail-poster'"
+         v-bind:id="$data.detailId + '-detail-poster'"
          v-bind:src="panelStates.detailsData.poster">
          <!-- @click="toggleHighlightLock()"
          @mouseenter="highlightNodes()"
@@ -39,9 +39,25 @@
       }
     },
 
-    mounted () {
-      this.$data.target = d3.select(`#${this.$data.detailId}`)
-    },
+    // mounted () {
+    //   this.$data.target = d3.select(`#${this.$data.detailId}`)
+
+    //   const b = d3.select("body")
+      
+    //   b.on("keydown", (e) => { 
+    //     if (e.keyCode == 16) {
+    //       let posters = d3.selectAll(".poster-tile > img")
+    //       posters.style("border", "solid aliceblue")
+    //     }
+    //   })
+
+    //   b.on("keyup", (e) => { 
+    //     if (e.keyCode == 16) {
+    //       let posters = d3.selectAll(".poster-tile > img")
+    //       posters.style("border", "transparent")
+    //     }
+    //   })
+    // },
 
     methods: {
       toggleHighlightLock() {
@@ -58,6 +74,7 @@
         if (this.$data.target.node() == undefined) { return }
 
         this.$data.graphNode.nodeTransformer(this.$data.applyHighlight)
+
         // this.$data.graphNode.linkHighlighter()
       },
 

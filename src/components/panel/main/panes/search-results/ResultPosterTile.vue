@@ -51,6 +51,7 @@
     },
     methods: {
       async fetchNodesAndDetails(result, count) {
+
         if (event.shiftKey) {
           await api.fetchDetails(result.id)
           await graph.callForNodes(result, count)
@@ -60,12 +61,12 @@
             graphStates.existing.push([node.id, 4])
           })
 
-
-          // oooooooooooooh shit
+          // NODE MULTISEND
           await api.fetchGraphData(graphStates.existing.map(d => d[0]))
   
           new GraphManager().generate()
         } else {
+
           await api.fetchDetails(result.id)
           await graph.callForNodes(result, count)
 

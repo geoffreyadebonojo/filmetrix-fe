@@ -9,7 +9,7 @@
 
 <template>
   <div id="viewer-body">
-    <div id="guesses">
+    <!-- <div id="guesses">
       <div class="guess-tile" v-for="i in 6" :key="i" :id="'card-' + i" :number="i">
         <p>{{ i }}</p>
         <img src=""/>
@@ -17,9 +17,9 @@
       <div class="guess-tile" id="target-tile">
         <img src=""/>
       </div>
-    </div>
-    <graph-component :type="'main'"></graph-component>
-    <panel-component :type="'game'"></panel-component>
+    </div> -->
+    <!-- <graph-component :type="'main'"></graph-component> -->
+    <!-- <panel-component :type="'game'"></panel-component> -->
   </div>
 </template>
 

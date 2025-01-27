@@ -24,7 +24,9 @@ export const panelStates = reactive({
 export const appStates = reactive({
   displayingAbout: false,
   playingGame: false,
-  theme: 'dark'
+  theme: 'dark',
+  shiftKeyIsPressed: false, //
+  nodeAddCount: 3
 })
 
 export const userStates = reactive({

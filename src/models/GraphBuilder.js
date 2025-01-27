@@ -50,29 +50,19 @@ export default class GraphBuilder {
       instructionLabel.addInstructionHover()
     } else {
       node.on("mouseenter", (_e, d) => {        
-        const gn = new GraphNode(d.id)
-        gn.nodeTransformer(this.graph.applyHighlight)
-
         if (!graphStates.inMotion) {
+          const gn = new GraphNode(d.id)
+          gn.nodeTransformer(this.graph.applyHighlight)
           gn.linkHighlighter()
         }
-
-        // if (e.altKey) {
-        //   d3.select(`#${d.id}`).classed("scissors", true)
-        // }
       })
       .on("mouseleave", (_e, d) => {
-        const gn = new GraphNode(d.id)
-        gn.nodeTransformer(this.graph.removeHighlight)
-        gn.linkUnhighlighter()
-        // d3.select(`#${d.id}`).classed("scissors", false)
+        if (!graphStates.inMotion) {
+          const gn = new GraphNode(d.id)
+          gn.nodeTransformer(this.graph.removeHighlight)
+          gn.linkUnhighlighter()
+        }
       })
-      // .on("click.delete", (e, d) => {
-      //   if (e.altKey) {
-      //     // d3.select(`#${d.id}`).classed("scissors", true)
-      //     debugger
-      //   }
-      // })
     }
   }
 

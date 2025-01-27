@@ -48,6 +48,7 @@
 
       graphStates.existing = JSON.parse(localStorage.getItem("lockedGraph"))
             
+      // USER PROFILE
       // await api.currentUser().then(async (response) => {
       //   if (response.id != null) {
       //     manageGlobalState.loadUser(response)
@@ -83,8 +84,11 @@
         
         graphStates.existing.forEach((d) => {
           data = graphStates.graphData[d[0]]
-          nodes = nodes.concat(data.nodes.slice(0,d[1]+1))
-          links = links.concat(data.links.slice(0,d[1]))
+          nodes = nodes.concat(data.nodes.slice(0,d[1]))
+          // NODE SENDCOUNT
+          // watch how you slice, you'll get an error
+          // if num links >= num nodes
+          links = links.concat(data.links.slice(0,d[1]-1))
         })
   
         graph.draw({

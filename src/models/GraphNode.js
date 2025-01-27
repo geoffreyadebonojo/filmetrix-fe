@@ -22,20 +22,18 @@ export default class GraphNode {
     })
   }
 
-  nodeTransformer(args) {
-    // if (target.classList.contains('locked')) { return }
-    this.node.moveToFront()
+  tempHighlight() {
+    this.elem.circle.style("stroke", "blue").transition().duration(2000).style("stroke", "#7A7978")
+    this.elem.sources.select("line").style("stroke", "blue").transition().duration(2000).style("stroke", "#7A7978")
+    this.elem.targets.select("line").style("stroke", "blue").transition().duration(2000).style("stroke", "#7A7978")
+  }
 
-    // this.elem.circle.style("transform", `scale(${args.scale})`) 
-    // this.elem.label.style("transform", `scale(${args.scale})`)
-    // this.elem.poster.style("transform", `scale(${args.scale})`)
+  nodeTransformer(args) {
+    this.node.moveToFront()
     this.elem.label.selectAll("text").style("stroke", args.textStroke)
     this.elem.circle.style("stroke", args.stroke)
-
     this.connections.select('circle').style("stroke", args.stroke)
     this.connections.selectAll("text").style("stroke", args.textStroke)
-    // this.connections.select(".poster").style("transform", `scale(${args.scale})`)
-
     this.elem.sources.select("line").attr("stroke", args.stroke)
     this.elem.targets.select("line").attr("stroke", args.stroke)
   }
