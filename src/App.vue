@@ -44,17 +44,6 @@
       }
 
       graphStates.existing = JSON.parse(localStorage.getItem("lockedGraph"))
-            
-      // USER PROFILE
-      // await api.currentUser().then(async (response) => {
-      //   if (response.id != null) {
-      //     manageGlobalState.loadUser(response)
-      //   } else {
-      //     manageGlobalState.nullUser()
-      //   }
-      // }).catch((d) => {
-      //   manageGlobalState.nullUser()
-      // })
     },
 
     async mounted () {
