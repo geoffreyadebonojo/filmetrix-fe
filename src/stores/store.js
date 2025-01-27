@@ -4,13 +4,8 @@ export const graphStates = reactive({
   existing: [],
   graphData: {},
   inMotion: false,
-  lockedHighlights: [],
   graphType: 'main',
   currentGraphId: ''
-})
-
-export const gameStates = reactive({
-  turn: 1
 })
 
 export const panelStates = reactive({
@@ -24,9 +19,7 @@ export const panelStates = reactive({
 export const appStates = reactive({
   displayingAbout: false,
   playingGame: false,
-  theme: 'dark',
-  shiftKeyIsPressed: false, //
-  nodeAddCount: 3
+  shiftKeyIsPressed: false
 })
 
 export const userStates = reactive({
@@ -42,11 +35,3 @@ export const store = reactive({
   savedGraphs: {},
   bookmarks: []
 })
-
-
-// export const appState = reactive({
-//   search: {
-//     focus: 'search',
-//     searchResults: []
-//   }
-// })
