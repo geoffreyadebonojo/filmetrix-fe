@@ -11,12 +11,8 @@
 
 <template>
     <img class="poster"
-         v-bind:class="graphStates.lockedHighlights.includes($data.detailId) ? 'poster-locked' : 'poster-unlocked'"
          v-bind:id="$data.detailId + '-detail-poster'"
          v-bind:src="panelStates.detailsData.poster">
-         <!-- @click="toggleHighlightLock()"
-         @mouseenter="highlightNodes()"
-         @mouseleave="unhighlightNodes()"/> -->
 </template>
 
 <script>
@@ -71,19 +67,5 @@
     grid-area: poster;
     width: 79px;
     border-radius: 8px;
-  }
-  
-  .poster-unlocked {
-    &:hover {
-      box-shadow: 0em 0em 5px 5px rgb(240 248 255 / 5%);
-      cursor: $cursor;
-    }
-  }  
-  
-  .poster-locked {
-    box-shadow: 0em 0em 5px 5px rgba(240, 248, 255, 0.35);
-    &:hover {
-      cursor: $cursor;
-    }
   }
 </style>
