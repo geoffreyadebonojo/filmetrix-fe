@@ -102,7 +102,10 @@ export default {
     const resp = await (
       fetch(API_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': 'https://filmetrix.netlify.app' 
+        },
         body: JSON.stringify({ query: `
           query {
             graphData(ids:"${ids}",count:${count}) {
