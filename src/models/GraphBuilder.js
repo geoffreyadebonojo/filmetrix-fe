@@ -105,7 +105,6 @@ export default class GraphBuilder {
         d3.select(e.target).transition().duration(duration).style("opacity", "0.5")
         this.viewerBody.transition().duration(duration)
           .call(zoom.transform, () => {
-            // debugger
             return transform
           });
         return this.viewerBody
@@ -127,9 +126,7 @@ export default class GraphBuilder {
     const node = this.buildNode(parent, nodes)
     this.appendCircle(node)
     this.appendImage(node)
-    // if (graphStates.graphType == "tree") {
     this.appendActorLabel(node)
-    // }
     this.attachMouseEvents(node)
     return node
   }
@@ -148,12 +145,10 @@ export default class GraphBuilder {
       .attr("class", "line")
       .attr("stroke", this.graph.colors.stroke)
 
-    // if (graphStates.graphType == "tree") {
-      link
-      .attr("stroke-width", "1px")
-      .attr("vector-effect", "non-scaling-stroke")
-      .style("display", "block")
-    // }
+    link
+    .attr("stroke-width", "1px")
+    .attr("vector-effect", "non-scaling-stroke")
+    .style("display", "block")
     return link
   }
 
@@ -165,15 +160,7 @@ export default class GraphBuilder {
       .selectAll("g")
       .data(nodes,(d) => {
         // also defined in Simulation.js:73
-        // if (graphStates.graphType == "tree") {
-
-        /////// Set further upstream?
         d.r = 50
-        ////////
-
-        // } else if (graphStates.graphType == "pack") {
-        //   d.r = d.popularity * 1.5
-        // }
         return d
       })
       .join("g")

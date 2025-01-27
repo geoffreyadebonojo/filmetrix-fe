@@ -11,21 +11,18 @@ export default class Simulation {
     )
   }
 
+  // setting of forces still being researched
+  // ---- static or dynamic -----
+  // there was also ideas for slider control
+  // which would require dynamic control
+  // at the moment more trouble than its worth
+
   generateGraph(args) { 
     const sim = d3.forceSimulation(this.nodes, this.links)
     .velocityDecay(0.5)
-    .force("link", d3.forceLink(this.links).id(d => d.id).distance(() => {
-        // return args.forces.length
-        return 200
-    }))
-    .force("charge", d3.forceManyBody().strength((d) => {
-        // return args.forces.charge
-        return -2000
-    }))
-    .force('collide', d3.forceCollide((d) => {
-        // return args.forces.collide
-        return 80
-    }))
+    .force("link", d3.forceLink(this.links).id(d => d.id).distance(200))
+    .force("charge", d3.forceManyBody().strength(-2000))
+    .force('collide', d3.forceCollide(80))
     .force("center", d3.forceCenter(
       ...args.forceCenter
     ))

@@ -89,13 +89,7 @@ export default class GraphNode {
         return start
       }
     })
-    .attr("text-anchor", (d) => {
-      // if (d.target.x < d.source.x) { 
-      //   return "middle" 
-      // } else {
-        return "start"
-      // }
-    })
+    .attr("text-anchor", "start")
     .attr("y", 2)
     .attr("stroke", "#FFF")
     .style("font-family", "Dosis, sans-serif")
