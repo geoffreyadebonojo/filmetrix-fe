@@ -36,28 +36,28 @@
     },
 
     methods: {
-      toggleHighlightLock() {
-        graphStates.lockedHighlights.togglePresence(this.$data.detailId)
+      // toggleHighlightLock() {
+      //   graphStates.lockedHighlights.togglePresence(this.$data.detailId)
 
-        if (this.$data.graphNode.connections.classed("locked")) {
-          this.$data.graphNode.connections.classed("locked", false)
-        } else {
-          this.$data.graphNode.connections.classed("locked", true)
-        }
-      },
+      //   if (this.$data.graphNode.connections.classed("locked")) {
+      //     this.$data.graphNode.connections.classed("locked", false)
+      //   } else {
+      //     this.$data.graphNode.connections.classed("locked", true)
+      //   }
+      // },
 
-      highlightNodes() {
-        if (this.$data.target.node() == undefined) { return }
-        this.$data.graphNode.nodeTransformer(this.$data.applyHighlight)
-      },
+      // highlightNodes() {
+      //   if (this.$data.target.node() == undefined) { return }
+      //   this.$data.graphNode.nodeTransformer(this.$data.applyHighlight)
+      // },
 
-      unhighlightNodes() {
-        if (this.$data.target.node() == undefined) { return }
-        if (this.$data.target.classed("poster-locked")) { return }
-        if (graphStates.lockedHighlights.includes(this.$data.detailId)) { return }
+      // unhighlightNodes() {
+      //   if (this.$data.target.node() == undefined) { return }
+      //   if (this.$data.target.classed("poster-locked")) { return }
+      //   if (graphStates.lockedHighlights.includes(this.$data.detailId)) { return }
 
-        this.$data.graphNode.nodeTransformer(this.$data.removeHighlight)
-      }
+      //   this.$data.graphNode.nodeTransformer(this.$data.removeHighlight)
+      // }
     }
   }
 </script>

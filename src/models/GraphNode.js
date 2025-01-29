@@ -37,42 +37,58 @@ export default class GraphNode {
     // this.elem.targets.select("line").style("stroke", grey) .transition().duration(duration).style("stroke", blue)
   }
 
-  restoreDefaultHighlight() {
+  restoreDefaultCircle() {
     this.node.moveToFront()
-
-    // const stroke = "lightgreen"
     const grey = "#7A7978"
-    const white = "white"
 
     this.elem.label.selectAll("text") .style("stroke", grey)
-    this.elem.circle                  .style("stroke", grey)
-    // this.connections.select('circle') .style("stroke", white)
-    // this.connections.selectAll("text").style("stroke", white)
-    // this.elem.sources.select("line").attr("stroke", white)
-    // this.elem.targets.select("line").attr("stroke", white)
+    this.elem.circle.style("stroke", grey)
+  }
+  
+  restoreDefaultConnections() {
+    this.connections.select('circle') .style("stroke", "white")
+    this.connections.selectAll("text").style("stroke", "white")
   }
 
-  shiftHighlight() {
-    let stroke = 'lightgreen'
-    let textStroke = 'lightgreen'
+  restoreDefaultLinks() {
+    const grey = "#7A7978"
 
-    this.elem.label.selectAll("text") .style("stroke", textStroke)
-    this.elem.circle                  .style("stroke", stroke)
-    // this.connections.select('circle') .style("stroke", stroke)
-    // this.connections.selectAll("text").style("stroke", textStroke)
-    // this.elem.sources.select("line").attr("stroke", stroke)
-    // this.elem.targets.select("line").attr("stroke", stroke)
+    this.elem.sources.select("line").attr("stroke", grey)
+    this.elem.targets.select("line").attr("stroke", grey)
   }
 
-  nodeTransformer(args) {
-    this.node.moveToFront()
+  applyHighlight() {
+    let grey = '#7A7978'
+    let white = 'white'
 
-    this.elem.label.selectAll("text") .style("stroke", args.textStroke)
-    this.elem.circle                  .style("stroke", args.stroke)
-    this.connections.select('circle') .style("stroke", args.stroke)
-    this.connections.selectAll("text").style("stroke", args.textStroke)
-    this.elem.sources.select("line").attr("stroke", args.stroke)
-    this.elem.targets.select("line").attr("stroke", args.stroke)
+    this.elem.label.selectAll("text") .style("stroke", white)
+    this.elem.circle                  .style("stroke", white)
+    this.connections.select('circle') .style("stroke", "white")
+    this.connections.selectAll("text").style("stroke", "white")
+    this.elem.sources.select("line").attr("stroke", white)
+    this.elem.targets.select("line").attr("stroke", white)
+  }
+
+  applyGreen() {
+    this.elem.label.selectAll("text") .style("stroke", 'white').transition().duration(500).style("stroke", "lightgreen")
+    this.elem.circle                  .style("stroke", 'white').transition().duration(500).style("stroke", "lightgreen")
+    // this.connections.select('circle') .style("stroke", "lightgreen")
+    // this.connections.selectAll("text").style("stroke", "lightgreen")
+    this.elem.sources.select("line").attr("stroke", 'lightgreen')
+    this.elem.targets.select("line").attr("stroke", 'lightgreen')
+  }
+
+  applyBlue() {
+    this.elem.label.selectAll("text") .style("stroke", 'white')
+    this.elem.circle                  .style("stroke", 'white')
+
+    this.elem.sources.select("line").attr("stroke", 'white')
+    this.elem.targets.select("line").attr("stroke", 'white')
+  }
+
+  applyLineConnectionsHighlight() {
+    this.elem.sources.select("line").attr("stroke", "lightgreen").transition().duration(500).style("stroke", "lightgreen")
+    this.elem.targets.select("line").attr("stroke", "lightgreen").transition().duration(500).style("stroke", "lightgreen")
   }
 
   linkUnhighlighter() {

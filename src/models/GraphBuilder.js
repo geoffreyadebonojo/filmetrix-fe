@@ -59,16 +59,12 @@ export default class GraphBuilder {
         if (graphStates.inMotion) { return }
         const gn = new GraphNode(d.id)
         
-        gn.linkUnhighlighter()
+        // gn.restoreDefaultHighlight()
+        // gn.linkUnhighlighter()
+        gn.applyBlue()
+        gn.linkHighlighter()
 
-        // if (appStates.shiftKeyIsPressed) {
-          gn.shiftHighlight()
-          gn.linkHighlighter()
-
-        // } else {
-          // gn.nodeTransformer(this.graph.applyHighlight)
-          // gn.linkHighlighter()
-        // }
+        // debugger
 
       })
       .on("mouseleave", (_e, d) => {
@@ -77,11 +73,14 @@ export default class GraphBuilder {
 
         gn.node._groups[0][0].classList.remove('added')
 
-        if (!gn.node._groups[0][0].classList.contains('visited')) {
-          gn.restoreDefaultHighlight()
+        if (gn.node._groups[0][0].classList.contains('visited')) {
+          gn.applyGreen()
+          gn.applyLineConnectionsHighlight()
+        } else {
+          gn.restoreDefaultCircle()
         }
-
-          gn.linkUnhighlighter()
+        gn.restoreDefaultLinks()
+        gn.linkUnhighlighter()
       })
     }
   }

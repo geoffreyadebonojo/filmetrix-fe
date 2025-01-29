@@ -67,6 +67,8 @@ export default {
     })
     .on("end", () => {
       graphStates.inMotion = false
+
+
     })
     
     return innerWrapper.node();
@@ -95,21 +97,21 @@ export default {
       } else {
         timer = setTimeout(async function () {
           alreadyClicked = false;
+          
+          const gn = new GraphNode(d.id)
 
-          await api.fetchDetails(d.id)
-          panelStates.detailsData.id = d.id
-          setFocus('details')
-          
-          const x = d3.select(`#${d.id}`)._groups[0][0]
-          
-          if (!x.classList.contains('visited')) {
-            x.classList.add('visited')
+          if (!gn.node.classed('visited')) {
+            gn.node._groups[0][0].classList.add('visited')
             graphStates.visited.push(d.id)
-
           }
           
-          let c = d3.select(x).select('circle')
-          c.attr('stroke', 'lightgreen')
+          
+          await api.fetchDetails(d.id)
+          panelStates.detailsData.id = d.id
+          
+          gn.applyGreen()
+          setFocus('details')
+
     
         }, doubleClickDelay);
         alreadyClicked = true;
