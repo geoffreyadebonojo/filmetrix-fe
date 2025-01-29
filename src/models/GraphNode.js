@@ -22,24 +22,54 @@ export default class GraphNode {
     })
 
     this.connectionIds = this.connections._groups[0].map((n) => n.id)
+
+    this.currentColor = ''
   }
 
   tempHighlight() {
-    let duration = 5000
-    let firstColor = 'lightblue'
-    let secondColor = '#7A7978'
+    let duration = 2000
+    let blue = '#4287f5'
+    let grey = '#7A7978'
 
-    let label =   this.elem.label.selectAll("text").style("stroke", firstColor).transition().duration(duration).style("stroke", secondColor)
-    let circle =  this.elem.circle.style("stroke", firstColor).transition().duration(duration).style("stroke", secondColor)
-    let sources = this.elem.sources.select("line").style("stroke", firstColor).transition().duration(duration).style("stroke", secondColor)
-    let targets = this.elem.targets.select("line").style("stroke", firstColor).transition().duration(duration).style("stroke", secondColor)
+    // this.elem.label.selectAll("text").style("stroke", grey).transition().duration(duration).style("stroke", blue)
+    // this.elem.circle.style("stroke", grey)                 .transition().duration(duration).style("stroke", blue)
+    // this.elem.sources.select("line").style("stroke", grey) .transition().duration(duration).style("stroke", blue)
+    // this.elem.targets.select("line").style("stroke", grey) .transition().duration(duration).style("stroke", blue)
+  }
+
+  restoreDefaultHighlight() {
+    this.node.moveToFront()
+
+    // const stroke = "lightgreen"
+    const grey = "#7A7978"
+    const white = "white"
+
+    this.elem.label.selectAll("text") .style("stroke", grey)
+    this.elem.circle                  .style("stroke", grey)
+    // this.connections.select('circle') .style("stroke", white)
+    // this.connections.selectAll("text").style("stroke", white)
+    // this.elem.sources.select("line").attr("stroke", white)
+    // this.elem.targets.select("line").attr("stroke", white)
+  }
+
+  shiftHighlight() {
+    let stroke = 'lightgreen'
+    let textStroke = 'lightgreen'
+
+    this.elem.label.selectAll("text") .style("stroke", textStroke)
+    this.elem.circle                  .style("stroke", stroke)
+    // this.connections.select('circle') .style("stroke", stroke)
+    // this.connections.selectAll("text").style("stroke", textStroke)
+    // this.elem.sources.select("line").attr("stroke", stroke)
+    // this.elem.targets.select("line").attr("stroke", stroke)
   }
 
   nodeTransformer(args) {
     this.node.moveToFront()
-    this.elem.label.selectAll("text").style("stroke", args.textStroke)
-    this.elem.circle.style("stroke", args.stroke)
-    this.connections.select('circle').style("stroke", args.stroke)
+
+    this.elem.label.selectAll("text") .style("stroke", args.textStroke)
+    this.elem.circle                  .style("stroke", args.stroke)
+    this.connections.select('circle') .style("stroke", args.stroke)
     this.connections.selectAll("text").style("stroke", args.textStroke)
     this.elem.sources.select("line").attr("stroke", args.stroke)
     this.elem.targets.select("line").attr("stroke", args.stroke)

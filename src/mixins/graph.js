@@ -55,6 +55,8 @@ export default {
     
     this.attachNodeClickActions(node)
 
+    // localStorage.setItem('visited', [])
+
     simulation.on("tick", () => {
       link.attr("x1", d => d.source.x)
           .attr("y1", d => d.source.y)
@@ -97,6 +99,17 @@ export default {
           await api.fetchDetails(d.id)
           panelStates.detailsData.id = d.id
           setFocus('details')
+          
+          const x = d3.select(`#${d.id}`)._groups[0][0]
+          
+          if (!x.classList.contains('visited')) {
+            x.classList.add('visited')
+            graphStates.visited.push(d.id)
+
+          }
+          
+          let c = d3.select(x).select('circle')
+          c.attr('stroke', 'lightgreen')
     
         }, doubleClickDelay);
         alreadyClicked = true;
@@ -153,7 +166,8 @@ export default {
     let connectionIds = new GraphNode(currentNodeId).connectionIds
 
     connectionIds.slice(connectionIds.length-addCount).forEach((nodeId) => {
-      console.log(nodeId)
+      let n = document.querySelector(`#${nodeId}`)
+      n.classList.add('newest')
       gn = new GraphNode(nodeId)
       gn.tempHighlight()
     })
@@ -176,7 +190,8 @@ export default {
     let connectionIds = new GraphNode(d.id).connectionIds
 
     connectionIds.slice(connectionIds.length-count).forEach((nodeId) => {
-      console.log(nodeId)
+      let n = document.querySelector(`#${nodeId}`)
+      n.classList.add('newest')
       gn = new GraphNode(nodeId)
       gn.tempHighlight()
     })

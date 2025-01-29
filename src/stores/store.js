@@ -5,7 +5,9 @@ export const graphStates = reactive({
   graphData: {},
   inMotion: false,
   graphType: 'main',
-  currentGraphId: ''
+  currentGraphId: '',
+  // ;\
+  visited: []
 })
 
 export const panelStates = reactive({
@@ -19,7 +21,7 @@ export const panelStates = reactive({
 export const appStates = reactive({
   displayingAbout: false,
   playingGame: false,
-  shiftKeyIsPressed: false
+  shiftKeyIsPressed: false,
 })
 
 export const userStates = reactive({
@@ -35,3 +37,7 @@ export const store = reactive({
   savedGraphs: {},
   bookmarks: []
 })
+
+// export const keyStates = reactive({
+//   shiftKeyIsPressed: false
+// })

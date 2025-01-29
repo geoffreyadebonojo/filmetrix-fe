@@ -28,6 +28,11 @@ export default class GraphBuilder {
         stroke: "white",
         textStroke: "white"
       },
+      shiftHighlight: {
+        scale: 1.05,
+        stroke: 'lightgreen',
+        textStroke: 'lightgreen'
+      },
       removeHighlight: {
         scale: 1,
         stroke: "#7A7978",
@@ -48,20 +53,35 @@ export default class GraphBuilder {
     if (this.newHere) {
       const instructionLabel = new NewHereInstruction(node, this)
       instructionLabel.addInstructionHover()
+
     } else {
-      node.on("mouseenter", (_e, d) => {        
-        if (!graphStates.inMotion) {
-          const gn = new GraphNode(d.id)
-          gn.nodeTransformer(this.graph.applyHighlight)
+      node.on("mouseenter", (_e, d) => {      
+        if (graphStates.inMotion) { return }
+        const gn = new GraphNode(d.id)
+        
+        gn.linkUnhighlighter()
+
+        // if (appStates.shiftKeyIsPressed) {
+          gn.shiftHighlight()
           gn.linkHighlighter()
-        }
+
+        // } else {
+          // gn.nodeTransformer(this.graph.applyHighlight)
+          // gn.linkHighlighter()
+        // }
+
       })
       .on("mouseleave", (_e, d) => {
-        if (!graphStates.inMotion) {
-          const gn = new GraphNode(d.id)
-          gn.nodeTransformer(this.graph.removeHighlight)
-          gn.linkUnhighlighter()
+        if (graphStates.inMotion) { return }
+        const gn = new GraphNode(d.id)
+
+        gn.node._groups[0][0].classList.remove('added')
+
+        if (!gn.node._groups[0][0].classList.contains('visited')) {
+          gn.restoreDefaultHighlight()
         }
+
+          gn.linkUnhighlighter()
       })
     }
   }
