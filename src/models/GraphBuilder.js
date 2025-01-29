@@ -61,7 +61,7 @@ export default class GraphBuilder {
         
         // gn.restoreDefaultHighlight()
         // gn.linkUnhighlighter()
-        gn.applyBlue()
+        // gn.flashElement()
         gn.linkHighlighter()
 
         // debugger
@@ -74,12 +74,13 @@ export default class GraphBuilder {
         gn.node._groups[0][0].classList.remove('added')
 
         if (gn.node._groups[0][0].classList.contains('visited')) {
-          gn.applyGreen()
-          gn.applyLineConnectionsHighlight()
+          // gn.applyGreen()
+          // gn.applyLineConnectionsHighlight()
         } else {
-          gn.restoreDefaultCircle()
+          // gn.restoreDefaultLinks()
+          // gn.restoreDefaultCircle()
         }
-        gn.restoreDefaultLinks()
+        // gn.restoreDefaultLinks()
         gn.linkUnhighlighter()
       })
     }

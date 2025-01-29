@@ -103,13 +103,13 @@ export default {
           if (!gn.node.classed('visited')) {
             gn.node._groups[0][0].classList.add('visited')
             graphStates.visited.push(d.id)
+
+            gn.flashElement()
           }
-          
           
           await api.fetchDetails(d.id)
           panelStates.detailsData.id = d.id
           
-          gn.applyGreen()
           setFocus('details')
 
     

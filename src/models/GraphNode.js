@@ -72,19 +72,33 @@ export default class GraphNode {
   applyGreen() {
     this.elem.label.selectAll("text") .style("stroke", 'white').transition().duration(500).style("stroke", "lightgreen")
     this.elem.circle                  .style("stroke", 'white').transition().duration(500).style("stroke", "lightgreen")
-    // this.connections.select('circle') .style("stroke", "lightgreen")
-    // this.connections.selectAll("text").style("stroke", "lightgreen")
+
     this.elem.sources.select("line").attr("stroke", 'lightgreen')
     this.elem.targets.select("line").attr("stroke", 'lightgreen')
   }
 
-  applyBlue() {
-    this.elem.label.selectAll("text") .style("stroke", 'white')
-    this.elem.circle                  .style("stroke", 'white')
-
-    this.elem.sources.select("line").attr("stroke", 'white')
-    this.elem.targets.select("line").attr("stroke", 'white')
+  flashElement() {
+    let grey = '#7A7978'
+    this.fadeElement("lightgreen", grey)
+    this.unfadeElement(grey, "lightgreen")
   }
+
+  fadeElement(initial, target) {
+    let white = "white"
+    this.elem.label.selectAll("text") .style("stroke", initial).transition().duration(500).style("stroke", white)
+    this.elem.circle                  .style("stroke", initial).transition().duration(500).style("stroke", target)
+    this.elem.sources.select("line").attr("stroke", initial).transition().duration(500).style("stroke", target)
+    this.elem.targets.select("line").attr("stroke", initial).transition().duration(500).style("stroke", target)
+  }
+  
+  unfadeElement(target, initial) {
+    let white = "white"
+    this.elem.label.selectAll("text") .style("stroke", target).transition().duration(500).style("stroke", white)
+    this.elem.circle                  .style("stroke", target).transition().duration(500).style("stroke", initial)
+    this.elem.sources.select("line").attr("stroke", target).transition().duration(500).style("stroke", initial)
+    this.elem.targets.select("line").attr("stroke", target).transition().duration(500).style("stroke", initial)
+  }
+
 
   applyLineConnectionsHighlight() {
     this.elem.sources.select("line").attr("stroke", "lightgreen").transition().duration(500).style("stroke", "lightgreen")
