@@ -13,6 +13,7 @@ import Simulation from '@models/Simulation.js'
 
 let timer;
 let alreadyClicked = false
+
 // IGNORE THE LINTER
 
 export default {
@@ -105,14 +106,15 @@ export default {
   },
 
   async addToExistingNodes (d) {
+    // current Anchor
     let currentNode = graphStates.existing.filter((y) => {
       return y[0] === d.id
     })[0]
 
     const currentNodeId =    currentNode[0]
     const currentNodeCount = currentNode[1]
-
     let addCount
+
     if (appStates.shiftKeyIsPressed) {
       addCount = 7
     } else {
@@ -148,14 +150,16 @@ export default {
     }) 
 
     let gn
+    let connectionIds = new GraphNode(currentNodeId).connectionIds
 
-    nodes.slice(nodes.length-addCount).forEach((node) => {
-      gn = new GraphNode(node.id)
+    connectionIds.slice(connectionIds.length-addCount).forEach((nodeId) => {
+      console.log(nodeId)
+      gn = new GraphNode(nodeId)
       gn.tempHighlight()
     })
 
   },
-
+  
   async callForNodes(d, count=5) {
     panelStates.detailsData.id = d.id
     panelStates.currentFocus = 'details'
@@ -167,5 +171,15 @@ export default {
       
       new GraphManager().generate()
     }
+
+    let gn
+    let connectionIds = new GraphNode(d.id).connectionIds
+
+    connectionIds.slice(connectionIds.length-count).forEach((nodeId) => {
+      console.log(nodeId)
+      gn = new GraphNode(nodeId)
+      gn.tempHighlight()
+    })
+
   }
 }

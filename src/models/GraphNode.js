@@ -20,12 +20,19 @@ export default class GraphNode {
     this.connections = d3.selectAll('.node').filter((d) => {
       return x.includes(d.id) || z.includes(d.id)
     })
+
+    this.connectionIds = this.connections._groups[0].map((n) => n.id)
   }
 
   tempHighlight() {
-    this.elem.circle.style("stroke", "blue").transition().duration(2000).style("stroke", "#7A7978")
-    this.elem.sources.select("line").style("stroke", "blue").transition().duration(2000).style("stroke", "#7A7978")
-    this.elem.targets.select("line").style("stroke", "blue").transition().duration(2000).style("stroke", "#7A7978")
+    let duration = 5000
+    let firstColor = 'lightblue'
+    let secondColor = '#7A7978'
+
+    let label =   this.elem.label.selectAll("text").style("stroke", firstColor).transition().duration(duration).style("stroke", secondColor)
+    let circle =  this.elem.circle.style("stroke", firstColor).transition().duration(duration).style("stroke", secondColor)
+    let sources = this.elem.sources.select("line").style("stroke", firstColor).transition().duration(duration).style("stroke", secondColor)
+    let targets = this.elem.targets.select("line").style("stroke", firstColor).transition().duration(duration).style("stroke", secondColor)
   }
 
   nodeTransformer(args) {

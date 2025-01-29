@@ -44,6 +44,17 @@
       }
 
       graphStates.existing = JSON.parse(localStorage.getItem("lockedGraph"))
+
+      d3.select("body").on("keydown", function(event) {
+        if (event.key === "Shift") {
+          appStates.shiftKeyIsPressed = true
+        }
+      }).on("keyup", function(event) {
+        if (event.key === "Shift") {
+          appStates.shiftKeyIsPressed = false
+        }
+      })
+
     },
 
     async mounted () {
