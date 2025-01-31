@@ -103,31 +103,11 @@ export default {
           const gn = new GraphNode(d.id)
 
           if (!gn.node.classed('visited')) {
-            gn.node._groups[0][0].classList.add('visited')
+            gn.node.classed('visited', true)
             graphStates.visited.push(d.id)
-            gn.clickOnElement(300)
+            gn.setLinkLock()
           }
 
-          // let first, second;
-
-          // for (let i=1; i++; i<graphStates.visited.length-2) {
-          //   if (graphStates.visited[i] !== undefined) {
-          //     first = graphStates.visited[i]
-          //   } else {
-          //     first = []
-          //   }
-
-          //   if (graphStates.visited[i+1] !== undefined) {
-          //     second = graphStates.visited[i+1]
-          //   } else {
-          //     second = []
-          //   }
-
-          //   let x = lm.locateEdge(first, second)
-          // //   debugger
-          // }
-          
-          
           await api.fetchDetails(d.id)
           panelStates.detailsData.id = d.id
           
@@ -190,8 +170,7 @@ export default {
     connectionIds.slice(connectionIds.length-addCount).forEach((nodeId) => {
       let n = document.querySelector(`#${nodeId}`)
       n.classList.add('newest')
-      gn = new GraphNode(nodeId)
-      gn.tempHighlight()
+      // gn = new GraphNode(nodeId)
     })
 
   },
@@ -214,8 +193,7 @@ export default {
     connectionIds.slice(connectionIds.length-count).forEach((nodeId) => {
       let n = document.querySelector(`#${nodeId}`)
       n.classList.add('newest')
-      gn = new GraphNode(nodeId)
-      gn.tempHighlight()
+      // gn = new GraphNode(nodeId)
     })
 
   }

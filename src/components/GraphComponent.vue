@@ -44,7 +44,7 @@
     width: 100%;
 
     .hover {
-      .outline, .node-label, .text-container {
+      .outline, .text-container {
         stroke: lightgreen;
 
       //   animation-name: pulseGreen;
@@ -79,6 +79,11 @@
     .visited {
       .outline {
         stroke: #65a765;
+      }
+
+      .node-label {
+        fill: lightgreen;
+        stroke: none;
       }
     }
   }

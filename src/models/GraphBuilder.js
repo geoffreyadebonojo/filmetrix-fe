@@ -57,28 +57,22 @@ export default class GraphBuilder {
       node.on("mouseenter", (_e, d) => {      
         if (graphStates.inMotion) { return }
         const gn = new GraphNode(d.id)
-        let grey = '#7A7978'
 
         gn.hover()
-        gn.enterElement()
         
         gn.linkHighlighter()
-        if (!gn.node._groups[0][0].classList.contains('visited')) {
-        }
 
       })
       .on("mouseleave", (_e, d) => {
         if (graphStates.inMotion) { return }
         const gn = new GraphNode(d.id)
 
-        gn.node._groups[0][0].classList.remove('added')
+        gn.node.classed('added', false)
+
         gn.unHover()
-        gn.exitElement()
 
         gn.linkUnhighlighter()
-        if (!gn.node._groups[0][0].classList.contains('visited')) {
-          // gn.resetBaseElement(100)
-        }
+
       })
     }
   }
@@ -161,6 +155,7 @@ export default class GraphBuilder {
       })
       .attr("source", (d => d.source.id))
       .attr("target", (d => d.target.id))
+      .attr("locked", false)
       .append("line")
       .attr("class", "line")
       .style("stroke", this.graph.colors.stroke)
