@@ -1,4 +1,5 @@
 import { angle360 } from '@mixins/helpers'
+import { appStates, graphStates } from '@/stores/store.js'
 import * as d3 from 'd3'
 
 export default class GraphNode {
@@ -24,17 +25,6 @@ export default class GraphNode {
     this.connectionIds = this.connections._groups[0].map((n) => n.id)
 
     this.currentColor = ''
-  }
-
-  tempHighlight() {
-    let duration = 2000
-    let blue = '#4287f5'
-    let grey = '#7A7978'
-
-    // this.elem.label.selectAll("text").style("stroke", grey).transition().duration(duration).style("stroke", blue)
-    // this.elem.circle.style("stroke", grey)                 .transition().duration(duration).style("stroke", blue)
-    // this.elem.sources.select("line").style("stroke", grey) .transition().duration(duration).style("stroke", blue)
-    // this.elem.targets.select("line").style("stroke", grey) .transition().duration(duration).style("stroke", blue)
   }
 
   restoreDefaultCircle() {
@@ -77,32 +67,120 @@ export default class GraphNode {
     this.elem.targets.select("line").attr("stroke", 'lightgreen')
   }
 
-  flashElement() {
-    let grey = '#7A7978'
-    this.fadeElement("lightgreen", grey)
-    this.unfadeElement(grey, "lightgreen")
+  // flashElement(initial, target, duration) {
+  //   this.fadeElement(initial, target, duration)
+  //   this.unfadeElement(target, initial, duration)
+  // }
+
+  hover() {
+    if (appStates.shiftKeyIsPressed) {
+      this.node.classed('shift-hover', true)
+    } else {
+      this.node.classed('hover', true)
+    }
   }
 
-  fadeElement(initial, target) {
-    let white = "white"
-    this.elem.label.selectAll("text") .style("stroke", initial).transition().duration(500).style("stroke", white)
-    this.elem.circle                  .style("stroke", initial).transition().duration(500).style("stroke", target)
-    this.elem.sources.select("line").attr("stroke", initial).transition().duration(500).style("stroke", target)
-    this.elem.targets.select("line").attr("stroke", initial).transition().duration(500).style("stroke", target)
+  unHover() {
+    this.node.classed('hover', false)
+    this.node.classed('shift-hover', false)
+  }
+
+  clickOnElement(duration) {
+    let grey = '#7A7978'
+    const colorSettings = {
+      base: {
+        label: 'white',
+        circle: 'lightblue',
+        sources: grey,
+        targets: grey
+      },
+      target: {
+        label: 'lightgreen',
+        circle: 'lightgreen',
+        sources: 'lightgreen',
+        targets: 'lightgreen'
+      }
+    }
+    
+    this.elem.label.selectAll("text") .style("stroke", colorSettings.base.label).transition().duration(duration).style("stroke", colorSettings.target.label)
+    this.elem.circle.style("stroke", colorSettings.base.circle).transition().duration(duration).style("stroke", colorSettings.target.circle)
+    this.elem.sources.select("line").attr("stroke", colorSettings.base.sources).transition().duration(duration).style("stroke", colorSettings.target.sources)
+    this.elem.targets.select("line").attr("stroke", colorSettings.base.targets).transition().duration(duration).style("stroke", colorSettings.target.targets)
   }
   
-  unfadeElement(target, initial) {
-    let white = "white"
-    this.elem.label.selectAll("text") .style("stroke", target).transition().duration(500).style("stroke", white)
-    this.elem.circle                  .style("stroke", target).transition().duration(500).style("stroke", initial)
-    this.elem.sources.select("line").attr("stroke", target).transition().duration(500).style("stroke", initial)
-    this.elem.targets.select("line").attr("stroke", target).transition().duration(500).style("stroke", initial)
+  // hoverElement(target, initial, duration) {
+  //   let grey = '#7A7978'
+  //   const colorSettings = {
+  //     base: {
+  //       label: 'white',
+  //       circle: grey,
+  //       sources: grey,
+  //       targets: grey
+  //     },
+  //     target: {
+  //       label: 'white',
+  //       circle: 'lightblue',
+  //       sources: grey,
+  //       targets: grey
+  //     }
+  //   }
+  //   this.elem.label.selectAll("text") .style("stroke", colorSettings.base.label).transition().duration(duration).style("stroke", colorSettings.target.label)
+  //   this.elem.circle                  .style("stroke", colorSettings.base.circle).transition().duration(duration).style("stroke", colorSettings.target.circle)
+  //   this.elem.sources.select("line").attr("stroke", colorSettings.base.targets).transition().duration(duration).style("stroke", colorSettings.target.targets)
+  //   this.elem.targets.select("line").attr("stroke", colorSettings.base.sources).transition().duration(duration).style("stroke", colorSettings.target.sources)
+  // }
+
+  enterElement() {
+    // let ani = this.node.append("g").attr("class", "add-nodes-increment").attr("width", "10px").attr("height", "10px")
+    // .style("transform", "translate(10px,-20px)")
+    // ani.append("text").text("+3").style("font-size", "30px").style("fill", "lightgreen")
+
+    this.elem.sources.select("line").style("stroke", 'lightgreen')
+    this.elem.targets.select("line").style("stroke", 'lightgreen')
+    this.connections.select('circle') .style("stroke", "lightgreen")
+
+    // this.connections.selectAll("text").attr("fill", "lightgreen")
+    
   }
 
+  exitElement() {
+    this.elem.sources.select("line").style("stroke", '#7A7978')
+    this.elem.targets.select("line").style("stroke", '#7A7978')
 
-  applyLineConnectionsHighlight() {
-    this.elem.sources.select("line").attr("stroke", "lightgreen").transition().duration(500).style("stroke", "lightgreen")
-    this.elem.targets.select("line").attr("stroke", "lightgreen").transition().duration(500).style("stroke", "lightgreen")
+    this.connections.selectAll("text").attr("fill", "white")
+    this.connections.select('circle').style("stroke", function(d) {
+      if (graphStates.visited.includes(d.id)) {
+        return "lightgreen"
+      } else {
+        return "#7A7978"
+      }
+    })
+
+    this.node.select(".add-nodes-increment").remove()
+  }
+
+  resetBaseElement(duration) {
+    let grey = '#7A7978'
+
+    const colorSettings = {
+      base: {
+      label: 'white',
+      circle: 'lightblue',
+      sources: grey,
+      targets: grey
+      },
+      target: {
+        label: grey,
+        circle: grey,
+        sources: grey,
+        targets: grey
+      }
+    }
+
+    this.elem.label.selectAll("text") .style("stroke", colorSettings.base.label).transition().duration(duration).style("stroke", colorSettings.target.label)
+    this.elem.circle                  .style("stroke", colorSettings.base.circle).transition().duration(duration).style("stroke", colorSettings.target.circle)
+    this.elem.sources.select("line").attr("stroke", colorSettings.base.targets).transition().duration(duration).style("stroke", colorSettings.target.targets)
+    this.elem.targets.select("line").attr("stroke", colorSettings.base.sources).transition().duration(duration).style("stroke", colorSettings.target.sources)
   }
 
   linkUnhighlighter() {

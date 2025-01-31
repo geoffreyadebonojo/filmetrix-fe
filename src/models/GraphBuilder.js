@@ -1,5 +1,4 @@
 import { 
-  appStates,
   graphStates 
 } from '@/stores/store.js'
 import GraphNode from '@models/GraphNode'
@@ -58,13 +57,14 @@ export default class GraphBuilder {
       node.on("mouseenter", (_e, d) => {      
         if (graphStates.inMotion) { return }
         const gn = new GraphNode(d.id)
-        
-        // gn.restoreDefaultHighlight()
-        // gn.linkUnhighlighter()
-        // gn.flashElement()
-        gn.linkHighlighter()
+        let grey = '#7A7978'
 
-        // debugger
+        gn.hover()
+        gn.enterElement()
+        
+        gn.linkHighlighter()
+        if (!gn.node._groups[0][0].classList.contains('visited')) {
+        }
 
       })
       .on("mouseleave", (_e, d) => {
@@ -72,16 +72,13 @@ export default class GraphBuilder {
         const gn = new GraphNode(d.id)
 
         gn.node._groups[0][0].classList.remove('added')
+        gn.unHover()
+        gn.exitElement()
 
-        if (gn.node._groups[0][0].classList.contains('visited')) {
-          // gn.applyGreen()
-          // gn.applyLineConnectionsHighlight()
-        } else {
-          // gn.restoreDefaultLinks()
-          // gn.restoreDefaultCircle()
-        }
-        // gn.restoreDefaultLinks()
         gn.linkUnhighlighter()
+        if (!gn.node._groups[0][0].classList.contains('visited')) {
+          // gn.resetBaseElement(100)
+        }
       })
     }
   }
@@ -159,11 +156,14 @@ export default class GraphBuilder {
       .enter()
       .append("g")
       .attr("class", "link")
+      .attr("id", (d) => {
+        return `${d.source.id}--${d.target.id}`
+      })
       .attr("source", (d => d.source.id))
       .attr("target", (d => d.target.id))
       .append("line")
       .attr("class", "line")
-      .attr("stroke", this.graph.colors.stroke)
+      .style("stroke", this.graph.colors.stroke)
 
     link
     .attr("stroke-width", "1px")

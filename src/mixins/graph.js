@@ -9,10 +9,12 @@ import * as d3 from 'd3'
 import GraphBuilder from '@models/GraphBuilder.js'
 import GraphManager from '@models/GraphManager.js'
 import GraphNode from '@models/GraphNode'
+import LinkMap from '@models/LinkMap'
 import Simulation from '@models/Simulation.js'
 
 let timer;
 let alreadyClicked = false
+let lm
 
 // IGNORE THE LINTER
 
@@ -55,6 +57,9 @@ export default {
     
     this.attachNodeClickActions(node)
 
+
+    lm = new LinkMap(links)
+
     // localStorage.setItem('visited', [])
 
     simulation.on("tick", () => {
@@ -67,8 +72,6 @@ export default {
     })
     .on("end", () => {
       graphStates.inMotion = false
-
-
     })
     
     return innerWrapper.node();
@@ -97,21 +100,38 @@ export default {
       } else {
         timer = setTimeout(async function () {
           alreadyClicked = false;
-          
           const gn = new GraphNode(d.id)
 
           if (!gn.node.classed('visited')) {
             gn.node._groups[0][0].classList.add('visited')
             graphStates.visited.push(d.id)
-
-            gn.flashElement()
+            gn.clickOnElement(300)
           }
+
+          // let first, second;
+
+          // for (let i=1; i++; i<graphStates.visited.length-2) {
+          //   if (graphStates.visited[i] !== undefined) {
+          //     first = graphStates.visited[i]
+          //   } else {
+          //     first = []
+          //   }
+
+          //   if (graphStates.visited[i+1] !== undefined) {
+          //     second = graphStates.visited[i+1]
+          //   } else {
+          //     second = []
+          //   }
+
+          //   let x = lm.locateEdge(first, second)
+          // //   debugger
+          // }
+          
           
           await api.fetchDetails(d.id)
           panelStates.detailsData.id = d.id
           
           setFocus('details')
-
     
         }, doubleClickDelay);
         alreadyClicked = true;

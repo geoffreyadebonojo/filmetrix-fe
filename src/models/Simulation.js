@@ -53,8 +53,8 @@ export default class Simulation {
         forceCenter: [width * 0.5, height * 0.5],
         alpha: {
           g:      1,
-          min:    0.2, 
-          target: 0.01
+          min:    0.4, 
+          target: 0.1
         }
       },
       about: {

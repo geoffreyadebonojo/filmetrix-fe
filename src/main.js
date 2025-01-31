@@ -26,6 +26,19 @@ Array.prototype.random = function(size=1) {
   return shuffled.slice(0, size);
 }
 
+// Array.prototype.fromEnd = function(x) {
+//   if (this.length > 0) {
+//     let val = this
+//     if (x > this.length) {
+//       val = this[0]
+//     } else {
+//       val = []
+//     }
+//     val = this[this.length- 1-x]
+//     return val
+//   }
+// }
+
 Array.prototype.last = function() {
   if (this.length > 0) {
     return this[this.length- 1]
