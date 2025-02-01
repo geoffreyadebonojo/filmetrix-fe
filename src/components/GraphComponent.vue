@@ -79,6 +79,7 @@
     .visited {
       .outline {
         stroke: #65a765;
+        stroke-width: 1.2;
       }
 
       .node-label {

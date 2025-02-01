@@ -39,6 +39,8 @@ export default class GraphNode {
     } else {
       this.node.classed('hover', true)
     }
+
+    this.allLinks.select(".line").style("stroke", "lightgreen")
   }
 
   unHover() {
@@ -47,9 +49,10 @@ export default class GraphNode {
   }
 
   linkUnhighlighter(val) {
-    let x = d3.selectAll(`.link[locked='false']`)
 
-    x.selectAll('.character-label').remove()
+    d3.selectAll(`.link[locked=false]`).selectAll('.character-label').remove()
+    d3.selectAll(`.link[locked=false]`).select('.line').style("stroke", "#7A7879")
+
   }
 
   linkHighlighter() {
