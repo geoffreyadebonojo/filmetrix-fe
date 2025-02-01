@@ -68,34 +68,39 @@ export default class GraphEvents {
       let g = d3.selectAll(`#${this.gn.id}--${conn.id}`)
       let h = d3.selectAll(`#${conn.id}--${this.gn.id}`)
 
-      g.select('.line').style("stroke", function() {
+      g.style("classed", function() {
         let n = d3.select(this)
 
         if (!n.classed("active")) {
           n.classed("active", true)
-          return "green"
+          n.select(".line").style("stroke", "green")
+          return "unlocked"
         } else if(n.classed("active")) {
-          return "lightgreen"
-        }
-    })
-
-      
-      h.select('.line').style("stroke", function(d) {
-        let n = d3.select(this)
-
-        if (!n.classed("active")) {
-          n.classed("active", true)
-          return "green"
-        } else if(n.classed("active")) {
-          return "lightgreen"
+          n.classed("locked", true)
+          n.select(".line").style("stroke", "lightgreen")
+          return "locked"
         }
       })
-
+      
+      h.style("classed", function(d) {
+        let n = d3.select(this)
+        
+        if (!n.classed("active")) {
+          n.classed("active", true)
+          n.select(".line").style("stroke", "green")
+          return "unlocked"
+        } else if(n.classed("active")) {
+          n.classed("locked", true)
+          n.select(".line").style("stroke", "lightgreen")
+          return "locked"
+        }
+      })
     })
+
+    // d3.selectAll(".line:not(.locked)").selectAll(".character-label").remove()
 
     this.navigate(this.gn)
 
     console.log(this.res)
-
   }
 }

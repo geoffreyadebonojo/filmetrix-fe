@@ -67,8 +67,7 @@ export default class GraphNode {
   }
 
   linkUnhighlighter() {
-    let d = d3.selectAll(".link:not(.active)")
-
+    let d = d3.selectAll(".link:not(.locked)")
     d.selectAll(".character-label").remove()
   }
 
