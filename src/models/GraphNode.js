@@ -28,52 +28,53 @@ export default class GraphNode {
     this.allLinks = d3.selectAll(`.link[target='${this.id}'], .link[source='${this.id}']`)
   }
 
-  setLinkLock(val) {
-    this.elem.sources.attr("locked", val)
-    this.elem.targets.attr("locked", val)
+  setLinkLock() {
+    this.elem.sources.classed("locked", true)
+    this.elem.targets.classed("locked", true)
   }
 
   checkLinks() {
-    var gn = this.id
-    var y = []
-    graphStates.visited.map((x) => {
-      let z = []
-      // if (gn != x) {
-      if (gn == x) {
-        return []
-      } else if (d3.select(`#${gn}--${x}`)._groups[0][0] !== null){
-        z.push(`#${gn}--${x}`)
-      } else if (d3.select(`#${x}--${gn}`)._groups[0][0] !== null){
-        z.push(`#${x}--${gn}`)
-      }
+    if (graphStates.visited.length < 1) {return}
 
-      y.push(z.join(" "))
+    var currentNodeId = this.id
+    var y = []
+    let z = []
+
+    let links = graphStates.visited.forEach((existingNodeId) => {
+      if (currentNodeId == existingNodeId) { return }
+      if (currentNodeId.slice(0,5) == existingNodeId.slice(0,5)) { return }
+
+      if (d3.select(`#${currentNodeId}--${existingNodeId}`)._groups[0][0] !== null){
+        z.push(`${currentNodeId}--${existingNodeId}`)
+      } else if (d3.select(`#${existingNodeId}--${currentNodeId}`)._groups[0][0] !== null){
+        z.push(`${existingNodeId}--${currentNodeId}`)
+      }
     })
 
-    debugger
-    console.log(y.join(" "))
+    return z
   }
 
   hover() {
-    if (appStates.shiftKeyIsPressed) { this.node.classed('shift-hover', true)
-    } else { this.node.classed('hover', true) }
-
-    this.allLinks.select(".line").style("stroke", "lightgreen")
+  if (appStates.shiftKeyIsPressed) { this.node.classed('shift-hover', true)
+  } else { this.node.classed('hover', true) }
+    // this.allLinks.selectAll(".line").style("stroke", "lightgreen")
   }
 
   unHover() {
     this.node.classed('hover', false)
     this.node.classed('shift-hover', false)
+    // this.allLinks.selectAll(".line").style("stroke", "#7A7879")
   }
 
-  linkUnhighlighter(val) {
-    // d3.selectAll(`.link[locked=false]`).selectAll('.character-label').remove()
-    d3.selectAll(`.link`).selectAll('.character-label').remove()
-    d3.selectAll(`.link[locked=false]`).select('.line').style("stroke", "#7A7879")
+  linkUnhighlighter() {
+    let d = d3.selectAll(".link:not(.active)")
+
+    d.selectAll(".character-label").remove()
   }
 
   async linkHighlighter() {
     let merged = this.allLinks
+    // let merged = this.elem.targets
     let linkholder = merged.append("g").attr("class", "character-label")
 
     let start = 65

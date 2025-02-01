@@ -9,6 +9,7 @@ import * as d3 from 'd3'
 import GraphBuilder from '@models/GraphBuilder.js'
 import GraphManager from '@models/GraphManager.js'
 import GraphNode from '@models/GraphNode'
+import GraphEvents from '@models/GraphEvents'
 import LinkMap from '@models/LinkMap'
 import Simulation from '@models/Simulation.js'
 
@@ -80,9 +81,10 @@ export default {
   attachNodeClickActions(node) {
     node.on('click', async (_e, d) => {
       const doubleClickDelay = 300
+      const ge = new GraphEvents(d.id)
       
-      // doubleClick
       if (alreadyClicked) { 
+        // ge.doubleClickNode()
         localStorage.setItem("newHere", false)
 
         if (graphStates.existing.map(x => x[0]).includes(d.id)){
@@ -91,38 +93,24 @@ export default {
           localStorage.setItem("newHere", false)
           return await this.callForNodes(d)
         }
-
-        
-        await api.fetchDetails(d.id)
         panelStates.detailsData.id = d.id
         
+        await api.fetchDetails(d.id)
         alreadyClicked = false;
         clearTimeout(timer);
         
       } else {
-        timer = setTimeout(async function () {
+        timer = setTimeout(async function () {          
           alreadyClicked = false;
-          const gn = new GraphNode(d.id)
-          
-          if (!gn.node.classed('visited')) {
-            gn.node.classed('visited', true)
-            graphStates.visited.push(d.id)
-            gn.setLinkLock()
-          }
-          
+          setFocus('details')
+          panelStates.detailsData.id = d.id
+         
+          ge.singleClickNode()
           
           await api.fetchDetails(d.id)
-          panelStates.detailsData.id = d.id
-          
-          setFocus('details')
-          
-          gn.linkHighlighter()
-          gn.checkLinks()
-    
         }, doubleClickDelay);
         alreadyClicked = true;
       }
-
     })
   },
 

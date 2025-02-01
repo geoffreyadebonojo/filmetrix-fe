@@ -47,8 +47,6 @@ export default class GraphBuilder {
       height: 70,
       clipPath: "inset(0% 16px round 12px)"
     }
-
-    // this.graphEvents = new GraphEvents
   }
   
   attachMouseEvents(node) {
@@ -144,7 +142,6 @@ export default class GraphBuilder {
       })
       .attr("source", (d => d.source.id))
       .attr("target", (d => d.target.id))
-      .attr("locked", false)
       .append("line")
       .attr("class", "line")
       .style("stroke", this.graph.colors.stroke)
