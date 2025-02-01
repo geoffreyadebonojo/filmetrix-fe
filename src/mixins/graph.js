@@ -81,6 +81,7 @@ export default {
     node.on('click', async (_e, d) => {
       const doubleClickDelay = 300
       
+      // doubleClick
       if (alreadyClicked) { 
         localStorage.setItem("newHere", false)
 

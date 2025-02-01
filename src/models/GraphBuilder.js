@@ -2,6 +2,7 @@ import {
   graphStates 
 } from '@/stores/store.js'
 import GraphNode from '@models/GraphNode'
+import GraphEvents from '@models/GraphEvents'
 import NewHereInstruction from '@models/NewHereInstruction.js'
 import { drawArc } from '@mixins/helpers'
 import * as d3 from 'd3'
@@ -46,31 +47,21 @@ export default class GraphBuilder {
       height: 70,
       clipPath: "inset(0% 16px round 12px)"
     }
-  }
 
+    // this.graphEvents = new GraphEvents
+  }
+  
   attachMouseEvents(node) {
     if (this.newHere) {
       const instructionLabel = new NewHereInstruction(node, this)
       instructionLabel.addInstructionHover()
-
+      
     } else {
       node.on("mouseenter", (_e, d) => {      
-        if (graphStates.inMotion) { return }
-        const gn = new GraphNode(d.id)
-
-        gn.hover()
-        gn.linkHighlighter()
-
+        new GraphEvents(d.id).mouseEnterNode()
       })
       .on("mouseleave", (_e, d) => {
-        if (graphStates.inMotion) { return }
-        const gn = new GraphNode(d.id)
-
-        gn.node.classed('added', false)
-
-        gn.unHover()
-        gn.linkUnhighlighter()
-
+        new GraphEvents(d.id).mouseLeaveNode()
       })
     }
   }
