@@ -91,27 +91,32 @@ export default {
           return await this.callForNodes(d)
         }
 
+        
         await api.fetchDetails(d.id)
         panelStates.detailsData.id = d.id
-
+        
         alreadyClicked = false;
         clearTimeout(timer);
-
+        
       } else {
         timer = setTimeout(async function () {
           alreadyClicked = false;
           const gn = new GraphNode(d.id)
-
+          
           if (!gn.node.classed('visited')) {
             gn.node.classed('visited', true)
             graphStates.visited.push(d.id)
             gn.setLinkLock()
           }
-
+          
+          
           await api.fetchDetails(d.id)
           panelStates.detailsData.id = d.id
           
           setFocus('details')
+          
+          gn.linkHighlighter()
+          gn.checkLinks()
     
         }, doubleClickDelay);
         alreadyClicked = true;

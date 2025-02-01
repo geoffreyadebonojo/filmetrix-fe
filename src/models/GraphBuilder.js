@@ -59,7 +59,6 @@ export default class GraphBuilder {
         const gn = new GraphNode(d.id)
 
         gn.hover()
-        
         gn.linkHighlighter()
 
       })
@@ -70,7 +69,6 @@ export default class GraphBuilder {
         gn.node.classed('added', false)
 
         gn.unHover()
-
         gn.linkUnhighlighter()
 
       })

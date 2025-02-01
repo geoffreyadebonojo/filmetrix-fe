@@ -33,12 +33,30 @@ export default class GraphNode {
     this.elem.targets.attr("locked", val)
   }
 
+  checkLinks() {
+    var gn = this.id
+    var y = []
+    graphStates.visited.map((x) => {
+      let z = []
+      // if (gn != x) {
+      if (gn == x) {
+        return []
+      } else if (d3.select(`#${gn}--${x}`)._groups[0][0] !== null){
+        z.push(`#${gn}--${x}`)
+      } else if (d3.select(`#${x}--${gn}`)._groups[0][0] !== null){
+        z.push(`#${x}--${gn}`)
+      }
+
+      y.push(z.join(" "))
+    })
+
+    debugger
+    console.log(y.join(" "))
+  }
+
   hover() {
-    if (appStates.shiftKeyIsPressed) {
-      this.node.classed('shift-hover', true)
-    } else {
-      this.node.classed('hover', true)
-    }
+    if (appStates.shiftKeyIsPressed) { this.node.classed('shift-hover', true)
+    } else { this.node.classed('hover', true) }
 
     this.allLinks.select(".line").style("stroke", "lightgreen")
   }
@@ -49,15 +67,15 @@ export default class GraphNode {
   }
 
   linkUnhighlighter(val) {
-
-    d3.selectAll(`.link[locked=false]`).selectAll('.character-label').remove()
+    // d3.selectAll(`.link[locked=false]`).selectAll('.character-label').remove()
+    d3.selectAll(`.link`).selectAll('.character-label').remove()
     d3.selectAll(`.link[locked=false]`).select('.line').style("stroke", "#7A7879")
-
   }
 
-  linkHighlighter() {
+  async linkHighlighter() {
     let merged = this.allLinks
     let linkholder = merged.append("g").attr("class", "character-label")
+
     let start = 65
     let fs = 10
 
@@ -90,7 +108,6 @@ export default class GraphNode {
         return `translate(${d.source.x},${d.source.y})rotate(${theta})`
       }
     })
-
 
     linkholder.append("text")
     .text(d => d.roles.join(", "))
