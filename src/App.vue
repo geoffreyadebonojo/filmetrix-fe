@@ -126,7 +126,7 @@
               setFocus("empty")
             } else {
               setFocus("details")
-              graphStates.visited = [graphStates.existing[0][0]]
+              // graphStates.visited = [graphStates.existing[0][0]]
             }
         })
         .on("end", () => {

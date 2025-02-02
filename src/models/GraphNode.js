@@ -34,7 +34,7 @@ export default class GraphNode {
   }
 
   checkLinks() {
-    if (graphStates.visited.length < 1) {return}
+    if (graphStates.visited.length < 1) { return }
 
     var currentNodeId = this.id
     var y = []

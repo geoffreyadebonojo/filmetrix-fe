@@ -9,7 +9,9 @@ import * as d3 from 'd3'
 export default class GraphEvents {
   constructor(id) {
     this.gn = new GraphNode(id)
-    this.res = []
+    this.seen = []
+    this.current = []
+    this.results = []
   }
 
   mouseEnterNode() {
@@ -42,20 +44,45 @@ export default class GraphEvents {
 
   navigate(node) {
     if (node == undefined || node == null) { return }
+    if (graphStates.visited.length < 1) { return }
+
     let gn = new GraphNode(node.id)
-
     let d = gn.connections.data()
-    // let n = []
 
-    for (let i=0; i<d.length-1; i++) {
+    gn.elem.circle.style("stroke", "lightgreen")
+    this.current.push(node.id)
+
+    setTimeout(() => {
+    for (let i=-1; i<d.length-1; i++) {
       let x = d[i+1]
-      this.navigate(x)
-      this.res.push(x)
-    }
+        if (!this.seen.includes(x.id)) {
+          this.seen.push(x.id)
 
-    // console.log(d)
+          if (x.id != node.id) {
+            this.current.push(x.id)
+          }
+
+          if (x.id == 'person-1150')  {
+            new GraphNode(x.id).elem.circle.style("stroke", "red")
+            return
+          } else {
+            this.navigate(x)
+          }
+          
+          let t = d3.selectAll(`#${node.id}--${x.id}`)
+          let o = d3.selectAll(`#${x.id}--${node.id}`)
+          
+          t.selectAll(".line").style("stroke", "lightgreen")
+          o.selectAll(".line").style("stroke", "lightgreen")
+
+        }
+      }      
+      this.current = []
+      return
+    }, 700);
     
-    // debugger
+
+    this.current.pop()
   }
 
   singleClickNode() {
@@ -95,12 +122,10 @@ export default class GraphEvents {
           return "locked"
         }
       })
+
+      this.navigate(this.gn)
     })
 
-    // d3.selectAll(".line:not(.locked)").selectAll(".character-label").remove()
-
-    this.navigate(this.gn)
-
-    console.log(this.res)
+    console.log(this.results)
   }
 }
