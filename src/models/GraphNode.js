@@ -26,6 +26,18 @@ export default class GraphNode {
     this.allLinks = d3.selectAll(`.link[target='${this.id}'], .link[source='${this.id}']`)
   }
 
+  shrinkNodeScale(scale) {
+    this.elem.poster.transition().duration(1000).style("transform", `scale(${scale})`)
+    this.elem.circle.transition().duration(1000).style("transform", `scale(${scale})`)
+    this.elem.label.transition().duration(1000).style("transform", `scale(${scale})`)
+  }
+
+  setNodeScale(scale) {
+    this.elem.poster.style("transform", `scale(${scale})`)
+    this.elem.circle.style("transform", `scale(${scale})`)
+    this.elem.label.style("transform", `scale(${scale})`)
+  }
+
   setLinkLock() {
     this.elem.sources.classed("locked", true)
     this.elem.targets.classed("locked", true)

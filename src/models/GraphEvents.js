@@ -18,26 +18,9 @@ export default class GraphEvents {
   }
   
   gatherNodes() {
-    // let nodes = d3.selectAll(".node").data().map((n) => n.id)
     this.nodes = graphStates.existing.map((s) => s[0])
 
-    // graphStates.existing.map((n) => {
-    //   return graphStates.graphData[n[0]].links.filter((l) => {
-    //     return l.index != undefined
-    //   }).map((l) => {
-    //     return [l.source.id, l.target.id]
-    //   })
-    // })
-    // .forEach((list) => {
-    //   list.forEach((entry) => {
-    //     if (!this.exists.includes(entry)) {
-    //       this.exists.push(entry)
-    //     }
-    //   })
-    // })
-
     this.numNodes = this.nodes.length
-    // this.visited = Array(this.numNodes).fill(false)
     this.nodes.forEach((n) => {
       this.visited[n] = false
     })
@@ -68,50 +51,6 @@ export default class GraphEvents {
         
         await api.fetchDetails(d.id)
         panelStates.detailsData.id = d.id
-  }
-
-
-  navigate(node) {
-    if (node == undefined || node == null) { return }
-    if (graphStates.visited.length < 1) { return }
-
-
-    let d = gn.connections.data()
-
-    this.currentStack.push(node.id)
-
-    // setTimeout(() => {
-    // for (let i=-1; i<d.length-1; i++) {
-    //   let x = d[i+1]
-    //     if (!this.seen.includes(x.id)) {
-    //       this.seen.push(x.id)
-
-    //       if (x.id != node.id) {
-    //         this.currentStack.push(x.id)
-    //       }
-          
-    //       let t = d3.selectAll(`#${node.id}--${x.id}`)
-    //       let o = d3.selectAll(`#${x.id}--${node.id}`)
-    //       t.selectAll(".line").style("stroke", "lightgreen")
-    //       o.selectAll(".line").style("stroke", "lightgreen")
-
-    //       let w = t || o
-    //       this.results.push(w)
-
-    //       if (x.id == 'person-1150')  {
-    //         new GraphNode(x.id).elem.circle.style("stroke", "red")
-    //         break
-    //       } else {
-    //         this.navigate(x)
-    //       }
-    //     }
-    //   }      
-
-    //   return
-    // }, 100);
-
-    // this.currentStack.pop()
-
   }
 
   singleClickNode() {
@@ -151,34 +90,41 @@ export default class GraphEvents {
     //   })
 
     // })
-    this.gatherNodes()
-    // this.navigate(this.gn)
-    this.dfs(this.gn)
+    // this.gatherNodes()
+
+    var stack = []
+    
+    this.dfs(this.gn, stack)
 
     console.log(this.results)
   }
   
-  dfs(node) {
+  dfs(node, stack) {
     if (this.visited[node.id]) { return }
     this.visited[node.id] = true
+
+    stack.push(node.node.data()[0].name)
+
+    if (node.id == 'person-500') {
+      // debugger
+    }
+
+    var temp = []
+    // setTimeout(() => {  
+    node.connectionIds.forEach((nid) => {
+      this.dfs(new GraphNode(nid), stack)
+    })
     
-    setTimeout(() => {  
-      if (graphStates.graphData[node.id] != undefined) {
-        node.elem.circle.style("stroke", "lightgreen")
-        let neighbors = node.connectionIds
-        
-        neighbors.forEach((nid) => {
-          this.results.push([node.id, nid])
-          node = new GraphNode(nid)
-          this.dfs(node)
-        })
-      } else {
-        // leaf
-        node.elem.poster.style("opacity", 0.4)
-        node.elem.circle.style("stroke", "green")
-        node.elem.label.style("opacity", 0)
-      }
-    },200)
+    if (graphStates.graphData[node.id] != undefined) {
+      node.elem.circle.style("stroke", "lightgreen")
+    } else { // leaf
+      // node.shrinkNodeScale(0.2)
+      temp.push(stack.join("-> "))
+      stack.pop()
+    }
+    // },200)
+    
+    this.results.push(temp)
   }
 }
 
