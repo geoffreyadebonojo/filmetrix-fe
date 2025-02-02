@@ -105,25 +105,21 @@ export default class GraphEvents {
 
     stack.push(node.node.data()[0].name)
 
-    if (node.id == 'person-500') {
-      // debugger
-    }
+    if (node.id == 'person-500') {}
 
-    var temp = []
-    // setTimeout(() => {  
+    var temp = ''
+
     node.connectionIds.forEach((nid) => {
       this.dfs(new GraphNode(nid), stack)
     })
     
-    if (graphStates.graphData[node.id] != undefined) {
+    if (graphStates.graphData[node.id] != undefined) { // node
       node.elem.circle.style("stroke", "lightgreen")
     } else { // leaf
-      // node.shrinkNodeScale(0.2)
-      temp.push(stack.join("-> "))
-      stack.pop()
+      temp = stack.join("-> ")
     }
-    // },200)
-    
+
+    stack.pop()
     this.results.push(temp)
   }
 }
