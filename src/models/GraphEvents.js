@@ -96,7 +96,20 @@ export default class GraphEvents {
     
     this.dfs(this.gn, stack)
 
-    console.log(this.results)
+    let y = this.results.map((result) => {
+      let links = []
+      
+      if (result.length > 1) {
+        for (let i=1; i<result.length; i++) {
+          links.push([result[i-1], result[i]])
+        }
+      }
+
+      return links
+    })
+
+    debugger
+
   }
   
   dfs(node, stack) {
@@ -105,7 +118,9 @@ export default class GraphEvents {
 
     stack.push(node.node.data()[0].name)
 
-    if (node.id == 'person-500') {}
+    if (node.id == 'person-500') {
+
+    }
 
     var temp = ''
 
@@ -113,14 +128,19 @@ export default class GraphEvents {
       this.dfs(new GraphNode(nid), stack)
     })
     
-    if (graphStates.graphData[node.id] != undefined) { // node
+    if (graphStates.graphData[node.id] != undefined) { 
+      // branch node
       node.elem.circle.style("stroke", "lightgreen")
-    } else { // leaf
-      temp = stack.join("-> ")
+    } else { 
+      // leaf
     }
 
+    //????
+    temp = stack.join("->")
+    this.results.push(temp.split("->"))
+
     stack.pop()
-    this.results.push(temp)
+
   }
 }
 
