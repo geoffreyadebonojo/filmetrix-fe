@@ -59,8 +59,7 @@ export default {
     this.attachNodeClickActions(node)
 
 
-    lm = new LinkMap(links)
-
+    // lm = new LinkMap(links)
     // localStorage.setItem('visited', [])
 
     simulation.on("tick", () => {
@@ -84,7 +83,6 @@ export default {
       const ge = new GraphEvents(d.id)
       
       if (alreadyClicked) { 
-        // ge.doubleClickNode()
         localStorage.setItem("newHere", false)
 
         if (graphStates.existing.map(x => x[0]).includes(d.id)){

@@ -10,6 +10,7 @@ export default class GraphNode {
     this.elem = {
       circle: this.node.select('circle'),
       label: this.node.select('.node-label'),
+      letters: this.node.select('.node-label').select('.text-container'),
       poster: this.node.select('.poster'),
       sources: d3.selectAll(`.link[source='${nodeId}']`),
       targets: d3.selectAll(`.link[target='${nodeId}']`)
@@ -17,11 +18,8 @@ export default class GraphNode {
 
     const x = this.elem.sources.nodes().map((d)=>d.__data__.target.id)
     const z = this.elem.targets.nodes().map((d)=>d.__data__.source.id)
-    
-    this.connections = d3.selectAll('.node').filter((d) => {
-      return x.includes(d.id) || z.includes(d.id)
-    })
 
+    this.connections = d3.selectAll('.node').filter((d) => { return x.includes(d.id) || z.includes(d.id)})
     this.connectionIds = this.connections._groups[0].map((n) => n.id)
     this.currentColor = ''
 
