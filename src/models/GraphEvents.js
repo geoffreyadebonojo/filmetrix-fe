@@ -95,52 +95,45 @@ export default class GraphEvents {
     var stack = []
     
     this.dfs(this.gn, stack)
-
-    let y = this.results.map((result) => {
-      let links = []
-      
-      if (result.length > 1) {
-        for (let i=1; i<result.length; i++) {
-          links.push([result[i-1], result[i]])
-        }
-      }
-
-      return links
-    })
-
-    debugger
-
   }
   
   dfs(node, stack) {
     if (this.visited[node.id]) { return }
     this.visited[node.id] = true
 
-    stack.push(node.node.data()[0].name)
-
-    if (node.id == 'person-500') {
-
-    }
-
-    var temp = ''
+    stack.push(node.id)
 
     node.connectionIds.forEach((nid) => {
       this.dfs(new GraphNode(nid), stack)
     })
     
-    if (graphStates.graphData[node.id] != undefined) { 
-      // branch node
-      node.elem.circle.style("stroke", "lightgreen")
-    } else { 
-      // leaf
+    // if (graphStates.graphData[node.id] != undefined) { 
+    //   // branch node
+    //   // node.elem.circle.style("stroke", "lightgreen")
+    // } else { 
+    //   // leaf
+    // }
+
+    // THE FINAL TARGET
+    if (stack.last() == 'person-500') {
+      let links = []
+
+      for (let i=1; i<stack.length; i++) {
+        let t = stack[i-1]
+        let s = stack[i]
+        let tar = d3.selectAll(`.link[source='${s}'][target='${t}']`)
+        if (tar.empty()) { 
+          tar =   d3.selectAll(`.link[source='${t}'][target='${s}']`)
+        }
+
+        tar.selectAll(".line").style("stroke", "lightgreen")
+        links.push(tar)
+      }
+
+      console.log(links)
     }
 
-    //????
-    temp = stack.join("->")
-    this.results.push(temp.split("->"))
-
     stack.pop()
-
   }
 }
 
