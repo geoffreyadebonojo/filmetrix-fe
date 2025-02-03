@@ -3,7 +3,6 @@ import {
   appStates
 } from '@/stores/store.js'
 import GraphNode from '@models/GraphNode'
-
 import * as d3 from 'd3'
 
 
@@ -14,16 +13,17 @@ export default class GraphEvents {
     this.currentStack = []
     this.results = []
     this.exists = []
-    this.nodes = []
+
     this.visited = {}
+    this.prev = {}
   }
   
   gatherNodes() {
-    this.nodes = graphStates.existing.map((s) => s[0])
+    let nodeIds = d3.selectAll(".node").data().map((n) => n.id)
 
-    this.numNodes = this.nodes.length
-    this.nodes.forEach((n) => {
+    nodeIds.forEach((n) => {
       this.visited[n] = false
+      this.prev[n] = null
     })
   }
 
@@ -55,54 +55,72 @@ export default class GraphEvents {
   }
 
   setRoot() {
-    let cn = this.gn.node
     if (appStates.metaKeyIsPressed) {
+      let cn = this.gn.node
       cn.classed("root", !cn.classed("root"))
     }
   }
 
   singleClickNode() {
     this.setRoot()
-    var stack = []
-    this.dfs(this.gn, stack)
+    // var stack = []
+    // this.dfs(this.gn, stack)
+
+  
+    this.bfs(this.gn)
+    
+
+
+    // let root = d3.select(".root")
+    // let paths = this.results.filter((r) => {
+    //   return r.split("->").last() == root.data()[0].name
+    // })
+
+    // console.log(this.results)
   }
   
   dfs(node, stack) {
     if (this.visited[node.id]) { return }
     this.visited[node.id] = true
 
-    stack.push(node.id)
+    stack.push(node.node.data()[0].name)
+
+    var temp = ''
 
     node.connectionIds.forEach((nid) => {
       this.dfs(new GraphNode(nid), stack)
     })
 
-    let root = d3.select(".root")
-    if (root.empty()) {
-    } else {
-      if (stack.last() == root.data()[0].id) {
-        ///////////
-        let links = []
-        for (let i=1; i<stack.length; i++) {
-          let t = stack[i-1]
-          let s = stack[i]
-
-          d3.select(`#${s}`).select(".outline").style("stroke", "gold")
-          d3.select(`#${s}`).select(".text-container").style("stroke", "gold")
-
-          let tar = d3.selectAll(`.link[source='${s}'][target='${t}']`)
-          if (tar.empty()) { 
-            tar =   d3.selectAll(`.link[source='${t}'][target='${s}']`)
-          }
-
-          tar.selectAll(".line").style("stroke", "gold")
-          links.push(tar) 
-        }
-        //////////
-      }
-    }
+    temp = stack.join("->")
+    this.results.push(temp)
 
     stack.pop()
+  }
+
+  bfs(root) {
+    this.gatherNodes()
+    
+    var queue = [root]
+    this.visited[root.id] = true
+
+    while (queue.length > 0) {
+      let node = queue.shift()
+
+      node.connectionIds.forEach((neighborId) => {
+        if (this.visited[neighborId] == false) {
+
+          let gn = new GraphNode(neighborId)
+          queue.push(gn)
+
+          this.visited[neighborId] = true
+          this.prev[neighborId] = node
+        }
+      })
+
+      // console.log(queue.map((n) => n.node.data()[0].name))
+    }
+
+    debugger
   }
 }
 
