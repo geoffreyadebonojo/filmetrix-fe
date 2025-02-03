@@ -80,17 +80,16 @@ export default class GraphEvents {
 
           temp = [t,s]
 
-          // d3.select(`#${s}`).select(".outline").style("stroke", "lightgreen")
-          // d3.select(`#${s}`).select(".text-container").style("stroke", "lightgreen")
+          d3.select(`#${s}`).select(".outline").style("stroke", "lightgreen")
+          d3.select(`#${s}`).select(".text-container").style("stroke", "lightgreen")
 
           let tar = d3.selectAll(`.link[source='${s}'][target='${t}']`)
           if (tar.empty()) { 
             tar =   d3.selectAll(`.link[source='${t}'][target='${s}']`)
           }
 
-          // tar.selectAll(".line").style("stroke", "lightgreen")
+          tar.selectAll(".line").style("stroke", "lightgreen")
           links.push(tar) 
-          // console.log(links)
         }
         //////////
       }

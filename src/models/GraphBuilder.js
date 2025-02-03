@@ -94,11 +94,12 @@ export default class GraphBuilder {
     let currentAnchor
     let zoomLevel = 2.5
     
-    d3.select("body").on("keydown", function(event) {
+    d3.select("body").on("keydown.nav", function(event) {
       // zoom to current detailed node
       if (event.key == "'") {
-        d = d3.select(`#${panelStates.detailsData.id}`).data()[0]
-        
+        let node = d3.select(`#${panelStates.detailsData.id}`)
+        d = node.data()[0]
+        node.classed("poster-highlight", true)
         er.transition().duration(2000).call(
           zoom.transform, 
           d3.zoomIdentity.translate(window.innerWidth * 0.6, window.innerHeight * 0.5).scale(zoomLevel).translate(-d.x, -d.y),
@@ -107,7 +108,7 @@ export default class GraphBuilder {
       } else if (["ArrowUp", "ArrowDown"].includes(event.key)) {
         if (event.key == "ArrowUp" && zoomLevel < 5) {
           zoomLevel += 0.5
-        } else if (event.key == "ArrowDown" && zoomLevel > 1) {
+        } else if (event.key == "ArrowDown" && zoomLevel > 0.5) {
           zoomLevel -= 0.5
         }
 
@@ -120,15 +121,14 @@ export default class GraphBuilder {
         )
 
       } else if (["ArrowRight", "ArrowLeft"].includes(event.key)) {
-        if (event.key == "ArrowRight") {
+        if (event.key == "ArrowRight" && currentIndex < anchors.length-1) {
           currentIndex += 1
         } else if (event.key == "ArrowLeft" && currentIndex > 0) {
           currentIndex -= 1
         }
         
-        currentAnchor = anchors[ currentIndex % anchors.length ]
+        currentAnchor = anchors[ currentIndex ]
         d3.selectAll(".node").classed("poster-highlight", false)
-
         let node = d3.select(`#${currentAnchor}`)
         node.classed("poster-highlight", true)
         d = node.data()[0]

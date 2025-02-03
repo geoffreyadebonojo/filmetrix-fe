@@ -50,27 +50,12 @@
 
       const zoom = d3zoom(d3.select("#main-outer-wrapper"))
 
-      d3.select("body").on("keydown", function(event) {
-        if (event.key === "Shift") {
-          appStates.shiftKeyIsPressed = true
-        
-        } else if (event.key == "Meta") {
-          appStates.metaKeyIsPressed = true
-        
-        } else if (event.key == "q") {
-          d3.select(`#${panelStates.detailsData.id}`).classed("poster-highlight", true)
-        
-        }
+      d3.select("body").on("keydown.click", function(event) {
+        if (event.key === "Shift") {    appStates.shiftKeyIsPressed = true } 
+        else if (event.key == "Meta") { appStates.metaKeyIsPressed =  true }
       }).on("keyup", function(event) {        
-        if (event.key === "Shift") {
-          appStates.shiftKeyIsPressed = false
-        
-        } else if (event.key == "Meta") {
-          appStates.metaKeyIsPressed = false
-        
-        } else if (event.key == "q") {
-          d3.select(`#${panelStates.detailsData.id}`).classed("poster-highlight", false)
-        }
+        if (event.key === "Shift") {    appStates.shiftKeyIsPressed = false } 
+        else if (event.key == "Meta") { appStates.metaKeyIsPressed =  false }
       })
 
     },
