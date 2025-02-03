@@ -1,4 +1,5 @@
 import { angle360 } from '@mixins/helpers'
+import { appStates, graphStates } from '@/stores/store.js'
 import * as d3 from 'd3'
 
 export default class GraphNode {
@@ -9,6 +10,7 @@ export default class GraphNode {
     this.elem = {
       circle: this.node.select('circle'),
       label: this.node.select('.node-label'),
+      letters: this.node.select('.node-label').select('.text-container'),
       poster: this.node.select('.poster'),
       sources: d3.selectAll(`.link[source='${nodeId}']`),
       targets: d3.selectAll(`.link[target='${nodeId}']`)
@@ -16,36 +18,58 @@ export default class GraphNode {
 
     const x = this.elem.sources.nodes().map((d)=>d.__data__.target.id)
     const z = this.elem.targets.nodes().map((d)=>d.__data__.source.id)
-    
-    this.connections = d3.selectAll('.node').filter((d) => {
-      return x.includes(d.id) || z.includes(d.id)
-    })
+
+    this.connections = d3.selectAll('.node').filter((d) => { return x.includes(d.id) || z.includes(d.id)})
+    this.connectionIds = this.connections._groups[0].map((n) => n.id)
+    this.currentColor = ''
+
+    this.allLinks = d3.selectAll(`.link[target='${this.id}'], .link[source='${this.id}']`)
   }
 
-  tempHighlight() {
-    this.elem.circle.style("stroke", "blue").transition().duration(2000).style("stroke", "#7A7978")
-    this.elem.sources.select("line").style("stroke", "blue").transition().duration(2000).style("stroke", "#7A7978")
-    this.elem.targets.select("line").style("stroke", "blue").transition().duration(2000).style("stroke", "#7A7978")
+  shrinkNodeScale(scale) {
+    this.elem.poster.transition().duration(1000).style("transform", `scale(${scale})`)
+    this.elem.circle.transition().duration(1000).style("transform", `scale(${scale})`)
+    this.elem.label.transition().duration(1000).style("transform", `scale(${scale})`)
   }
 
-  nodeTransformer(args) {
-    this.node.moveToFront()
-    this.elem.label.selectAll("text").style("stroke", args.textStroke)
-    this.elem.circle.style("stroke", args.stroke)
-    this.connections.select('circle').style("stroke", args.stroke)
-    this.connections.selectAll("text").style("stroke", args.textStroke)
-    this.elem.sources.select("line").attr("stroke", args.stroke)
-    this.elem.targets.select("line").attr("stroke", args.stroke)
+  setNodeScale(scale) {
+    this.elem.poster.style("transform", `scale(${scale})`)
+    this.elem.circle.style("transform", `scale(${scale})`)
+    this.elem.label.style("transform", `scale(${scale})`)
+  }
+
+  setLinkLock() {
+    this.elem.sources.classed("locked", true)
+    this.elem.targets.classed("locked", true)
+  }
+
+
+  hover() {
+    if (appStates.shiftKeyIsPressed) { 
+      this.node.classed('shift-hover', true)
+    } else if (appStates.metaKeyIsPressed) {
+      this.node.classed('alt-hover', true)
+    } else { 
+      this.node.classed('hover', true) 
+    }
+  }
+
+  unHover() {
+    this.node.classed('hover', false)
+    this.node.classed('shift-hover', false)
+    this.node.classed('alt-hover', false)
   }
 
   linkUnhighlighter() {
-    let merged = d3.selectAll(`.link[target='${this.id}'], .link[source='${this.id}']`)
-    merged.selectAll(".character-label").remove()
+    let d = d3.selectAll(".link:not(.locked)")
+    d.selectAll(".character-label").remove()
   }
 
-  linkHighlighter() {
-    let merged = d3.selectAll(`.link[target='${this.id}'], .link[source='${this.id}']`)
+  async linkHighlighter() {
+    let merged = this.allLinks
+    // let merged = this.elem.targets
     let linkholder = merged.append("g").attr("class", "character-label")
+
     let start = 65
     let fs = 10
 
@@ -78,7 +102,6 @@ export default class GraphNode {
         return `translate(${d.source.x},${d.source.y})rotate(${theta})`
       }
     })
-
 
     linkholder.append("text")
     .text(d => d.roles.join(", "))

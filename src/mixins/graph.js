@@ -9,10 +9,14 @@ import * as d3 from 'd3'
 import GraphBuilder from '@models/GraphBuilder.js'
 import GraphManager from '@models/GraphManager.js'
 import GraphNode from '@models/GraphNode'
+import GraphEvents from '@models/GraphEvents'
+import LinkMap from '@models/LinkMap'
 import Simulation from '@models/Simulation.js'
 
 let timer;
 let alreadyClicked = false
+let lm
+
 // IGNORE THE LINTER
 
 export default {
@@ -54,6 +58,10 @@ export default {
     
     this.attachNodeClickActions(node)
 
+
+    // lm = new LinkMap(links)
+    // localStorage.setItem('visited', [])
+
     simulation.on("tick", () => {
       link.attr("x1", d => d.source.x)
           .attr("y1", d => d.source.y)
@@ -72,6 +80,7 @@ export default {
   attachNodeClickActions(node) {
     node.on('click', async (_e, d) => {
       const doubleClickDelay = 300
+      const ge = new GraphEvents(d.id)
       
       if (alreadyClicked) { 
         localStorage.setItem("newHere", false)
@@ -82,37 +91,37 @@ export default {
           localStorage.setItem("newHere", false)
           return await this.callForNodes(d)
         }
-
-        await api.fetchDetails(d.id)
         panelStates.detailsData.id = d.id
-
+        
+        await api.fetchDetails(d.id)
         alreadyClicked = false;
         clearTimeout(timer);
-
+        
       } else {
-        timer = setTimeout(async function () {
+        timer = setTimeout(async function () {          
           alreadyClicked = false;
-
-          await api.fetchDetails(d.id)
-          panelStates.detailsData.id = d.id
           setFocus('details')
-    
+          panelStates.detailsData.id = d.id
+         
+          ge.singleClickNode()
+          
+          await api.fetchDetails(d.id)
         }, doubleClickDelay);
         alreadyClicked = true;
       }
-
     })
   },
 
   async addToExistingNodes (d) {
+    // current Anchor
     let currentNode = graphStates.existing.filter((y) => {
       return y[0] === d.id
     })[0]
 
     const currentNodeId =    currentNode[0]
     const currentNodeCount = currentNode[1]
-
     let addCount
+
     if (appStates.shiftKeyIsPressed) {
       addCount = 7
     } else {
@@ -148,14 +157,16 @@ export default {
     }) 
 
     let gn
+    let connectionIds = new GraphNode(currentNodeId).connectionIds
 
-    nodes.slice(nodes.length-addCount).forEach((node) => {
-      gn = new GraphNode(node.id)
-      gn.tempHighlight()
+    connectionIds.slice(connectionIds.length-addCount).forEach((nodeId) => {
+      let n = document.querySelector(`#${nodeId}`)
+      n.classList.add('newest')
+      // gn = new GraphNode(nodeId)
     })
 
   },
-
+  
   async callForNodes(d, count=5) {
     panelStates.detailsData.id = d.id
     panelStates.currentFocus = 'details'
@@ -167,5 +178,15 @@ export default {
       
       new GraphManager().generate()
     }
+
+    let gn
+    let connectionIds = new GraphNode(d.id).connectionIds
+
+    connectionIds.slice(connectionIds.length-count).forEach((nodeId) => {
+      let n = document.querySelector(`#${nodeId}`)
+      n.classList.add('newest')
+      // gn = new GraphNode(nodeId)
+    })
+
   }
 }

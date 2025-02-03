@@ -1,8 +1,8 @@
 import { 
-  appStates,
   graphStates 
 } from '@/stores/store.js'
 import GraphNode from '@models/GraphNode'
+import GraphEvents from '@models/GraphEvents'
 import NewHereInstruction from '@models/NewHereInstruction.js'
 import { drawArc } from '@mixins/helpers'
 import * as d3 from 'd3'
@@ -28,6 +28,11 @@ export default class GraphBuilder {
         stroke: "white",
         textStroke: "white"
       },
+      shiftHighlight: {
+        scale: 1.05,
+        stroke: 'lightgreen',
+        textStroke: 'lightgreen'
+      },
       removeHighlight: {
         scale: 1,
         stroke: "#7A7978",
@@ -43,25 +48,18 @@ export default class GraphBuilder {
       clipPath: "inset(0% 16px round 12px)"
     }
   }
-
+  
   attachMouseEvents(node) {
     if (this.newHere) {
       const instructionLabel = new NewHereInstruction(node, this)
       instructionLabel.addInstructionHover()
+      
     } else {
-      node.on("mouseenter", (_e, d) => {        
-        if (!graphStates.inMotion) {
-          const gn = new GraphNode(d.id)
-          gn.nodeTransformer(this.graph.applyHighlight)
-          gn.linkHighlighter()
-        }
+      node.on("mouseenter", (_e, d) => {      
+        new GraphEvents(d.id).mouseEnterNode()
       })
       .on("mouseleave", (_e, d) => {
-        if (!graphStates.inMotion) {
-          const gn = new GraphNode(d.id)
-          gn.nodeTransformer(this.graph.removeHighlight)
-          gn.linkUnhighlighter()
-        }
+        new GraphEvents(d.id).mouseLeaveNode()
       })
     }
   }
@@ -139,11 +137,14 @@ export default class GraphBuilder {
       .enter()
       .append("g")
       .attr("class", "link")
+      .attr("id", (d) => {
+        return `${d.source.id}--${d.target.id}`
+      })
       .attr("source", (d => d.source.id))
       .attr("target", (d => d.target.id))
       .append("line")
       .attr("class", "line")
-      .attr("stroke", this.graph.colors.stroke)
+      .style("stroke", this.graph.colors.stroke)
 
     link
     .attr("stroke-width", "1px")

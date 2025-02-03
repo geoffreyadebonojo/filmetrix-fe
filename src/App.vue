@@ -44,6 +44,21 @@
       }
 
       graphStates.existing = JSON.parse(localStorage.getItem("lockedGraph"))
+
+      d3.select("body").on("keydown", function(event) {
+        if (event.key === "Shift") {
+          appStates.shiftKeyIsPressed = true
+        } else if (event.key == "Meta") {
+          appStates.metaKeyIsPressed = true
+        }
+      }).on("keyup", function(event) {        
+        if (event.key === "Shift") {
+          appStates.shiftKeyIsPressed = false
+        } else if (event.key == "Meta") {
+          appStates.metaKeyIsPressed = false
+        }
+      })
+
     },
 
     async mounted () {
@@ -76,40 +91,41 @@
           // if num links >= num nodes
           links = links.concat(data.links.slice(0,d[1]-1))
         })
-  
+        
         graph.draw({
           nodes: nodes.uniqueById(),
           links: links,
           type: "main"
         })
-  
+        
         var g1 = d3.select("#main-outer-wrapper")
         var zoom1 = d3.zoom().on("zoom", (e) => {
           g1.attr("transform", e.transform);
         });
-  
+        
         const [translate, scale] = localStorage.getItem("currentZoom").split(" ")
         const [x, y] = translate.split(",")
         const xInt = +x.replace("translate(", "").replace(")", "")
         const yInt = +y.replace(")", "")
         const kInt = +scale.replace("scale(", "").replace(")", "")
-  
+        
         g1.call(
           zoom1.transform, 
           d3.zoomIdentity
-            .translate(xInt, yInt)
-            .scale(kInt)
-        )
-  
+          .translate(xInt, yInt)
+          .scale(kInt)
+          )
+          
         g1.transition()
-        .duration(1000)
-        .attr("transform", d3.zoomIdentity)
-        .on("start", () => {
-          if (JSON.parse(localStorage.getItem("lockedGraph")) == []){
-            setFocus("empty")
-          } else {
-            setFocus("details")
-          }
+          .duration(1000)
+          .attr("transform", d3.zoomIdentity)
+          .on("start", () => {
+            if (JSON.parse(localStorage.getItem("lockedGraph")) == []){
+              setFocus("empty")
+            } else {
+              setFocus("details")
+              // graphStates.visited = [graphStates.existing[0][0]]
+            }
         })
         .on("end", () => {
           d3.select(this).call(

@@ -42,6 +42,88 @@
   .graph-container {
     display: block;
     width: 100%;
+
+    .hover {
+      .outline, .node-label, .text-container {
+        stroke: lightgreen;
+      }
+
+      .node-label {
+        // fill: lightgreen;
+        stroke: none;
+      }
+    }
+
+    .alt-hover {
+      .outline, .node-label, .text-container {
+        stroke: rgb(241, 241, 156);
+      }
+
+      .node-label {
+        stroke: none;
+      }
+    }
+
+    .root {
+      .outline, .node-label, .text-container {
+        stroke: gold;
+      }
+
+      .node-label {
+        stroke: none;
+      }
+    }
+
+    .shift-hover {
+      .outline, .node-label, .text-container {
+        stroke: lightblue;
+
+        animation-name: pulse;
+        animation-duration: 0.75s;
+        animation-iteration-count: infinite;
+        animation-timing-function: linear;
+      }
+
+      .node-label {
+        stroke: none;
+      }
+    }
+    
+    .visited {
+      .outline {
+        stroke: #65a765;
+        stroke-width: 1.2;
+      }
+
+      .node-label {
+        fill: lightgreen;
+        stroke: none;
+      }
+    }
+  }
+
+  @keyframes pulseGreen {
+    0% {
+      stroke: white,
+    }
+    50% {
+      stroke: lightgreen,
+    }
+    100% {
+      stroke: white,
+    }
+  }
+
+  @keyframes pulse {
+    0% {
+      stroke-width: 1,
+    }
+    50% {
+      stroke-width: 2,
+    }
+    100% {
+      stroke-width: 1,
+    }
   }
 
   .inst {
