@@ -1,11 +1,11 @@
 import { 
-  graphStates 
+  panelStates 
 } from '@/stores/store.js'
 import GraphNode from '@models/GraphNode'
 import GraphEvents from '@models/GraphEvents'
 import NewHereInstruction from '@models/NewHereInstruction.js'
 import { drawArc } from '@mixins/helpers'
-import { d3zoom } from '@mixins/zoom'
+// import { d3zoom } from '@mixins/zoom'
 import * as d3 from 'd3'
 
 export default class GraphBuilder {
@@ -78,10 +78,6 @@ export default class GraphBuilder {
   }
 
   createViewerBody() {
-    // out of place here...
-
-    // const zoom = d3zoom(d3.select("#main-outer-wrapper"))
-
     const zoom = d3.zoom().on('zoom', (e) => {
       d3.select("#main-outer-wrapper").attr("transform", e.transform)
     })
@@ -93,15 +89,13 @@ export default class GraphBuilder {
 
     d3.select("body").on("keydown", function(event) {
       if (event.key == "w") {
-        er.transition().duration(1000)
-        .call(zoom.transform, () => {
-          return d3.zoomIdentity
-          .translate(0,0)
-          .scale(4)
-        });
-        this.viewerBody.call(zoom)
-        .call(zoom).on("dblclick.zoom", null)
+        const d = d3.select(`#${panelStates.detailsData.id}`).data()[0]
 
+        er.transition().duration(1000).call(
+          zoom.transform, 
+          d3.zoomIdentity.translate(window.innerWidth * 0.6, window.innerHeight * 0.5).scale(2.5).translate(-d.x, -d.y),
+        );
+        
         return er
       }
     })
