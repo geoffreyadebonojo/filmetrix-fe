@@ -47,17 +47,15 @@
 
       d3.select("body").on("keydown", function(event) {
         if (event.key === "Shift") {
-          // let l = d3.selectAll(".node")
-          // l.select('circle').style("stroke", "pink")
-
           appStates.shiftKeyIsPressed = true
+        } else if (event.key == "Meta") {
+          appStates.metaKeyIsPressed = true
         }
       }).on("keyup", function(event) {        
         if (event.key === "Shift") {
-          // let l = d3.selectAll(".node")
-          // l.select('circle').style("stroke", "#7A7879")
-
           appStates.shiftKeyIsPressed = false
+        } else if (event.key == "Meta") {
+          appStates.metaKeyIsPressed = false
         }
       })
 

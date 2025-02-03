@@ -43,37 +43,21 @@ export default class GraphNode {
     this.elem.targets.classed("locked", true)
   }
 
-  checkLinks() {
-    if (graphStates.visited.length < 1) { return }
-
-    var currentNodeId = this.id
-    var y = []
-    let z = []
-
-    let links = graphStates.visited.forEach((existingNodeId) => {
-      if (currentNodeId == existingNodeId) { return }
-      if (currentNodeId.slice(0,5) == existingNodeId.slice(0,5)) { return }
-
-      if (d3.select(`#${currentNodeId}--${existingNodeId}`)._groups[0][0] !== null){
-        z.push(`${currentNodeId}--${existingNodeId}`)
-      } else if (d3.select(`#${existingNodeId}--${currentNodeId}`)._groups[0][0] !== null){
-        z.push(`${existingNodeId}--${currentNodeId}`)
-      }
-    })
-
-    return z
-  }
 
   hover() {
-  if (appStates.shiftKeyIsPressed) { this.node.classed('shift-hover', true)
-  } else { this.node.classed('hover', true) }
-    // this.allLinks.selectAll(".line").style("stroke", "lightgreen")
+    if (appStates.shiftKeyIsPressed) { 
+      this.node.classed('shift-hover', true)
+    } else if (appStates.metaKeyIsPressed) {
+      this.node.classed('alt-hover', true)
+    } else { 
+      this.node.classed('hover', true) 
+    }
   }
 
   unHover() {
     this.node.classed('hover', false)
     this.node.classed('shift-hover', false)
-    // this.allLinks.selectAll(".line").style("stroke", "#7A7879")
+    this.node.classed('alt-hover', false)
   }
 
   linkUnhighlighter() {

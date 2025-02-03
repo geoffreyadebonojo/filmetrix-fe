@@ -44,19 +44,32 @@
     width: 100%;
 
     .hover {
-      .outline, .text-container {
+      .outline, .node-label, .text-container {
         stroke: lightgreen;
-
-      //   animation-name: pulseGreen;
-      //   animation-duration: 1s;
-      //   animation-iteration-count: infinite;
-      //   animation-timing-function: linear;
-      
-      // transform: scale(1.05)
       }
 
       .node-label {
-        fill: lightgreen;
+        // fill: lightgreen;
+        stroke: none;
+      }
+    }
+
+    .alt-hover {
+      .outline, .node-label, .text-container {
+        stroke: rgb(241, 241, 156);
+      }
+
+      .node-label {
+        stroke: none;
+      }
+    }
+
+    .root {
+      .outline, .node-label, .text-container {
+        stroke: gold;
+      }
+
+      .node-label {
         stroke: none;
       }
     }

@@ -22,6 +22,7 @@ export const appStates = reactive({
   displayingAbout: false,
   playingGame: false,
   shiftKeyIsPressed: false,
+  metaKeyIsPressed: false,
 })
 
 export const userStates = reactive({
