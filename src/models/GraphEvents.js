@@ -10,19 +10,9 @@ export default class GraphEvents {
   constructor(id) {
     this.gn = new GraphNode(id)
     this.seen = []
-    this.currentStack = []
-    this.results = []
-    this.exists = []
+    this.nodes = []
     this.visited = {}
-  }
-  
-  gatherNodes() {
-    let nodeIds = d3.selectAll(".node").data().map((n) => n.id)
-
-    nodeIds.forEach((n) => {
-      this.visited[n] = false
-      this.prev[n] = null
-    })
+    this.results = []
   }
 
   mouseEnterNode() {
@@ -133,9 +123,35 @@ export default class GraphEvents {
     node.connectionIds.forEach((nid) => {
       this.dfs(new GraphNode(nid), stack)
     })
+    
+    let root = d3.select(".root")
+    if (root.empty()) {
+    } else {
+      var temp = []
+      if (stack.last() == root.data()[0].id) {
+        ///////////
+        let links = []
+        for (let i=1; i<stack.length; i++) {
+          let t = stack[i-1]
+          let s = stack[i]
 
-    temp = stack.join("->")
-    this.results.push(temp)
+          temp = [t,s]
+
+          d3.select(`#${s}`).select(".outline").style("stroke", "lightgreen")
+          d3.select(`#${s}`).select(".text-container").style("stroke", "lightgreen")
+
+          let tar = d3.selectAll(`.link[source='${s}'][target='${t}']`)
+          if (tar.empty()) { 
+            tar =   d3.selectAll(`.link[source='${t}'][target='${s}']`)
+          }
+
+          tar.selectAll(".line").style("stroke", "lightgreen")
+          links.push(tar) 
+        }
+        //////////
+      }
+      this.results.push(temp)
+    }
 
     stack.pop()
   }
