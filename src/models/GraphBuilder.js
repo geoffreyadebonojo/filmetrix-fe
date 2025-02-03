@@ -5,8 +5,8 @@ import GraphNode from '@models/GraphNode'
 import GraphEvents from '@models/GraphEvents'
 import NewHereInstruction from '@models/NewHereInstruction.js'
 import { drawArc } from '@mixins/helpers'
+import { d3zoom } from '@mixins/zoom'
 import * as d3 from 'd3'
-
 
 export default class GraphBuilder {
   constructor(args) {
@@ -78,32 +78,49 @@ export default class GraphBuilder {
   }
 
   createViewerBody() {
-    let zoom = d3.zoom()
-    .on('zoom', (e) => {
-      this.args.outerWrapper
-      .attr("transform", e.transform)
+    // out of place here...
+
+    // const zoom = d3zoom(d3.select("#main-outer-wrapper"))
+
+    const zoom = d3.zoom().on('zoom', (e) => {
+      d3.select("#main-outer-wrapper").attr("transform", e.transform)
     })
     .on('end', (e) => {
       localStorage.setItem('currentZoom', e.transform)
     })
-    // out of place here...
+
+    const er = this.viewerBody
+
+    d3.select("body").on("keydown", function(event) {
+      if (event.key == "w") {
+        er.transition().duration(1000)
+        .call(zoom.transform, () => {
+          return d3.zoomIdentity
+          .translate(0,0)
+          .scale(4)
+        });
+        this.viewerBody.call(zoom)
+        .call(zoom).on("dblclick.zoom", null)
+
+        return er
+      }
+    })
+    
     if (this.graphControlButtons) {
       this.graphControlButtons.style("display", "block")
       .transition().duration(30).style("left", "-30px")
-      
+
       d3.select("#centering-button").on("click", (e) => {
         const duration = 1000
         
         d3.select(e.target).style("opacity", "1")
         
-        var transform = d3.zoomIdentity
-          .translate(0,0)
-          .scale(1)
-        
         d3.select(e.target).transition().duration(duration).style("opacity", "0.5")
         this.viewerBody.transition().duration(duration)
-          .call(zoom.transform, () => {
-            return transform
+        .call(zoom.transform, () => {
+          return d3.zoomIdentity
+            .translate(0,0)
+            .scale(1)
           });
         return this.viewerBody
       })

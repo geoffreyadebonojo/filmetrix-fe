@@ -12,7 +12,9 @@
 <template>
     <img class="poster"
          v-bind:id="$data.detailId + '-detail-poster'"
-         v-bind:src="panelStates.detailsData.poster">
+         v-bind:src="panelStates.detailsData.poster"
+         @pointerdown="flashNode()"
+         @pointerup="unflashNode()">
 </template>
 
 <script>
@@ -32,10 +34,20 @@
           stroke: "#7A797",
           textStroke: "none"
         }
+
       }
     },
-
+    
     methods: {
+      flashNode() {
+        const cn = new GraphNode(panelStates.detailsData.id)
+        cn.node.classed("poster-highlight", true)
+      },
+      
+      unflashNode() {
+        const cn = new GraphNode(panelStates.detailsData.id)
+        cn.node.classed("poster-highlight", false)
+      }
       // toggleHighlightLock() {
       //   graphStates.lockedHighlights.togglePresence(this.$data.detailId)
 

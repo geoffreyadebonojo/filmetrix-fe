@@ -74,6 +74,18 @@
       }
     }
 
+    .poster-highlight {
+      .outline, .node-label, .text-container {
+        stroke: red;
+        stroke-width: 2;
+      }
+
+      .node-label {
+        stroke: none;
+      }
+    }
+
+
     .shift-hover {
       .outline, .node-label, .text-container {
         stroke: lightblue;

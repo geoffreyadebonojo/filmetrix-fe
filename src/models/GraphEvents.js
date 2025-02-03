@@ -11,20 +11,9 @@ export default class GraphEvents {
   constructor(id) {
     this.gn = new GraphNode(id)
     this.seen = []
-    this.currentStack = []
-    this.results = []
-    this.exists = []
     this.nodes = []
     this.visited = {}
-  }
-  
-  gatherNodes() {
-    this.nodes = graphStates.existing.map((s) => s[0])
-
-    this.numNodes = this.nodes.length
-    this.nodes.forEach((n) => {
-      this.visited[n] = false
-    })
+    this.results = []
   }
 
   mouseEnterNode() {
@@ -77,9 +66,11 @@ export default class GraphEvents {
       this.dfs(new GraphNode(nid), stack)
     })
 
+    
     let root = d3.select(".root")
     if (root.empty()) {
     } else {
+      var temp = []
       if (stack.last() == root.data()[0].id) {
         ///////////
         let links = []
@@ -87,20 +78,25 @@ export default class GraphEvents {
           let t = stack[i-1]
           let s = stack[i]
 
-          d3.select(`#${s}`).select(".outline").style("stroke", "gold")
-          d3.select(`#${s}`).select(".text-container").style("stroke", "gold")
+          temp = [t,s]
+
+          // d3.select(`#${s}`).select(".outline").style("stroke", "lightgreen")
+          // d3.select(`#${s}`).select(".text-container").style("stroke", "lightgreen")
 
           let tar = d3.selectAll(`.link[source='${s}'][target='${t}']`)
           if (tar.empty()) { 
             tar =   d3.selectAll(`.link[source='${t}'][target='${s}']`)
           }
 
-          tar.selectAll(".line").style("stroke", "gold")
+          // tar.selectAll(".line").style("stroke", "lightgreen")
           links.push(tar) 
+          // console.log(links)
         }
         //////////
       }
+      this.results.push(temp)
     }
+
 
     stack.pop()
   }

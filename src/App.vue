@@ -4,13 +4,16 @@
     appStates,
     graphStates,
     userStates,
+    panelStates,
     store
    } from '@/stores/store.js'
   import api from "@mixins/api"
   import graph from "@mixins/graph"
   import { setFocus } from '@mixins/helpers'
   import manageGlobalState from "@mixins/manageGlobalState"
+  import { d3zoom } from '@mixins/zoom'
   import * as d3 from 'd3'
+
 </script>
 
 <template>
@@ -45,17 +48,28 @@
 
       graphStates.existing = JSON.parse(localStorage.getItem("lockedGraph"))
 
+      const zoom = d3zoom(d3.select("#main-outer-wrapper"))
+
       d3.select("body").on("keydown", function(event) {
         if (event.key === "Shift") {
           appStates.shiftKeyIsPressed = true
+        
         } else if (event.key == "Meta") {
           appStates.metaKeyIsPressed = true
+        
+        } else if (event.key == "q") {
+          d3.select(`#${panelStates.detailsData.id}`).classed("poster-highlight", true)
+        
         }
       }).on("keyup", function(event) {        
         if (event.key === "Shift") {
           appStates.shiftKeyIsPressed = false
+        
         } else if (event.key == "Meta") {
           appStates.metaKeyIsPressed = false
+        
+        } else if (event.key == "q") {
+          d3.select(`#${panelStates.detailsData.id}`).classed("poster-highlight", false)
         }
       })
 
