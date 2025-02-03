@@ -15,7 +15,7 @@ export default class GraphEvents {
     this.exists = []
 
     this.visited = {}
-    this.prev = {}
+    // this.prev = {}
   }
   
   gatherNodes() {
@@ -42,16 +42,15 @@ export default class GraphEvents {
 
   async doubleClickNode() {
     localStorage.setItem("newHere", false)
-
-        if (graphStates.existing.map(x => x[0]).includes(d.id)){
-          this.addToExistingNodes(d)
-        } else {
-          localStorage.setItem("newHere", false)
-          return await this.callForNodes(d)
-        }
-        
-        await api.fetchDetails(d.id)
-        panelStates.detailsData.id = d.id
+    if (graphStates.existing.map(x => x[0]).includes(d.id)){
+      this.addToExistingNodes(d)
+    } else {
+      localStorage.setItem("newHere", false)
+      return await this.callForNodes(d)
+    }
+    
+    await api.fetchDetails(d.id)
+    panelStates.detailsData.id = d.id
   }
 
   setRoot() {
@@ -65,20 +64,66 @@ export default class GraphEvents {
     this.setRoot()
     // var stack = []
     // this.dfs(this.gn, stack)
+    let root = d3.select("#person-4762")
+    let x = this.bfs(this.gn, root)    
+    console.log(x)
 
-  
-    this.bfs(this.gn)
-    
+    for (let i=1; i<x.length; i++) {
+      let link = d3.selectAll(`#${x[i-1]}--${x[i]},#${x[i]}--${x[i-1]}`)
+      link.selectAll(".line").style("stroke", "red")
+    }
+  }
 
-
-    // let root = d3.select(".root")
-    // let paths = this.results.filter((r) => {
-    //   return r.split("->").last() == root.data()[0].name
-    // })
-
-    // console.log(this.results)
+  bfs(startNode, endNode) {
+    return this.reconstructPath(
+      startNode, 
+      new GraphNode(endNode.data()[0].id), 
+      this.solve(startNode)
+    )
   }
   
+  reconstructPath(startNode, endNode, prev) {
+    let path = []
+
+    for (let at = endNode.id; at != null; at = prev[at]) {
+      path.push(at)
+    }
+
+    path.reverse()
+    
+    return path
+  }
+
+  solve(root) {
+    // this.gatherNodes()
+    let nodeIds = d3.selectAll(".node").data().map((n) => n.id)
+    let visited = []
+    let prev = []
+
+    nodeIds.forEach((n) => {
+      visited[n] = false
+      prev[n] = null
+    })
+
+    var queue = [root]
+    visited[root.id] = true
+    
+    while (queue.length > 0) {
+      let node = queue.shift()
+      node.connectionIds.forEach((neighborId) => {
+        if (visited[neighborId] == false) {
+          let gn = new GraphNode(neighborId)
+          queue.push(gn)
+          visited[neighborId] = true
+          prev[neighborId] = node.id
+        }
+      })
+      // console.log(queue.map((n) => n.node.data()[0].name))
+    }
+
+    return prev
+  }
+
   dfs(node, stack) {
     if (this.visited[node.id]) { return }
     this.visited[node.id] = true
@@ -95,32 +140,6 @@ export default class GraphEvents {
     this.results.push(temp)
 
     stack.pop()
-  }
-
-  bfs(root) {
-    this.gatherNodes()
-    
-    var queue = [root]
-    this.visited[root.id] = true
-
-    while (queue.length > 0) {
-      let node = queue.shift()
-
-      node.connectionIds.forEach((neighborId) => {
-        if (this.visited[neighborId] == false) {
-
-          let gn = new GraphNode(neighborId)
-          queue.push(gn)
-
-          this.visited[neighborId] = true
-          this.prev[neighborId] = node
-        }
-      })
-
-      // console.log(queue.map((n) => n.node.data()[0].name))
-    }
-
-    debugger
   }
 }
 
