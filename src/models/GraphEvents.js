@@ -13,9 +13,7 @@ export default class GraphEvents {
     this.currentStack = []
     this.results = []
     this.exists = []
-
     this.visited = {}
-    // this.prev = {}
   }
   
   gatherNodes() {
