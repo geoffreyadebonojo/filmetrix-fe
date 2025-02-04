@@ -22,14 +22,14 @@ export default class Simulation {
     .velocityDecay(0.5)
     .force("link", d3.forceLink(this.links).id(d => d.id).distance((link) => {
       // return (link.target.popularity + link.source.popularity)/2
-      return 100
+      return 200
     }).strength((link) => {
       // return 1 / Math.min(count(link.source), count(link.target));
       return 0.5
     }))
     .force("charge", d3.forceManyBody().strength((node) => {
       // console.log(node.name, node.popularity)
-      return -1000
+      return -2000
     }))
     .force('collide', d3.forceCollide(80).strength(1))
     .force("center", d3.forceCenter(

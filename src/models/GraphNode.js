@@ -58,58 +58,74 @@ export default class GraphNode {
 
   linkUnhighlighter() {
     let d = d3.selectAll(".link:not(.locked)")
-    d.selectAll(".character-label").remove()
+    // d.selectAll(".character-label").remove()
   }
 
   async linkHighlighter() {
     let merged = this.allLinks
     // let merged = this.targets
     let linkholder = merged.append("g").attr("class", "character-label")
-
-    let start = 40
     let fs = 10
 
-    linkholder.append("rect")
-    .attr('fill', "#222222")
-    .attr("x", (d) => {
-      if (d.target.x < d.source.x) { 
-        return start-200 -(d.roles.join("").length)
-      } else {
-        return start
-      }
-    })
-    .attr("y", -4)
-    .attr("height", 8)
-    .attr("width", (d) => {
-      let c = d.roles.join().split("").length
-      return c*4
-    })
-    .attr("transform", (d) => {
-      let theta = angle360(
-        d.source.x,
-        d.source.y,
-        d.target.x,
-        d.target.y
-      )
+    // linkholder.append("rect")
+    // .attr('fill', "#222222")
+    // .attr("x", (d) => {
+    //   let textLength = d.roles.join("").length
+    //   if (d.target.x < d.source.x) { 
+    //     return start-200 - textLength
+    //   } else {
+    //     return start
+    //   }
+    // })
+    // .attr("y", -4)
+    // .attr("height", 8)
+    // .attr("width", (d) => {
+    //   let c = d.roles.join().split("").length
+    //   return c*4
+    // })
+    // .attr("transform", (d) => {
+    //   let theta = angle360(
+    //     d.source.x,
+    //     d.source.y,
+    //     d.target.x,
+    //     d.target.y
+    //   )
 
-      if (d.target.x < d.source.x) {
-        return `translate(${d.source.x},${d.source.y})rotate(${theta+180})`
-      } else {
-        return `translate(${d.source.x},${d.source.y})rotate(${theta})`
-      }
-    })
+    //   // if (d.target.x < d.source.x) {
+    //   //   return `translate(${d.source.x},${d.source.y})rotate(${theta+180})`
+    //   // } else {
+    //   // }
+    //   return `translate(${d.source.x},${d.source.y})rotate(${theta})`
+    // })
+
+    ////
 
     linkholder.append("text")
     .text(d => d.roles.join(", "))
     .attr("x", (d) => {
-      if (d.target.x < d.source.x) { 
-        return start-200 -(d.roles.join("").length)
+
+      let nodeType = d3.select(".hover").data()[0].id.split("-")[0]
+
+      if (nodeType == "person") {
+        if (d.target.x < d.source.x) { 
+          return -50
+        } else {
+          return 50
+        }
       } else {
-        return start
+        let x = Math.abs( (d.source.x - d.target.x) )
+        let y = Math.abs( (d.source.y - d.target.y) )
+        let h = Math.sqrt( (x*x) + (y*y) )
+
+        if (d.target.x < d.source.x) { 
+          return -h + 50
+        } else {
+          return h - 50
+        }
       }
     })
     .attr("text-anchor", (link) => {
-      return "start"
+      return (link.target.x < link.source.x) ? "start" : "end"
     })
     .attr("y", 2)
     .attr("stroke", "#FFF")
