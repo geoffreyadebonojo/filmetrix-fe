@@ -23,22 +23,6 @@ export default class GraphBuilder {
         stroke: "#7A7978",
         fill: "#222222",
         text: "#FFFFFF"
-      },
-      fontSize: 12,
-      applyHighlight: {
-        scale: 1.05,
-        stroke: "white",
-        textStroke: "white"
-      },
-      shiftHighlight: {
-        scale: 1.05,
-        stroke: 'lightgreen',
-        textStroke: 'lightgreen'
-      },
-      removeHighlight: {
-        scale: 1,
-        stroke: "#7A7978",
-        textStroke: "none"
       }
     }
     
@@ -84,7 +68,7 @@ export default class GraphBuilder {
       d3.select("#main-outer-wrapper").attr("transform", e.transform)
     })
     .on('end', (e) => {
-      localStorage.setItem('currentZoom', e.transform)
+      // localStorage.setItem('currentZoom', e.transform)
     })
 
     const er = this.viewerBody
@@ -218,9 +202,7 @@ export default class GraphBuilder {
       .enter()
       .append("g")
       .attr("class", "link")
-      .attr("id", (d) => {
-        return `${d.source.id}--${d.target.id}`
-      })
+      .attr("id", (d) => d.id)
       .attr("source", (d => d.source.id))
       .attr("target", (d => d.target.id))
       .append("line")
@@ -240,30 +222,12 @@ export default class GraphBuilder {
       .attr("stroke-linecap", "round")
       .attr("stroke-linejoin", "round")
       .selectAll("g")
-      .data(nodes,(d) => {
-        d.r = 40
-        return d
-      })
+      .data(nodes)
       .join("g")
-      .attr("tabindex", (_d, i) => {
-        return i
-      })
-      .attr("class", (d) => {
-        // type means genre
-        if (d.type == null) {
-          return 'node'
-        } else {
-          return 'node ' + d.type.join(" ")
-        }
-      })
+      .attr("tabindex", (_d, i) => i)
+      .attr("class", (d) => d.genre)
       .attr("id", d => d.id)
-      .attr("name", (d) => {
-        if (d.name) {
-          return d.name.toLowerCase()//.replace(/ /g, "")
-        } else {
-          return ''
-        }
-      })
+      .attr("name", (d) => d.name)
     return node
   }
 
@@ -297,12 +261,14 @@ export default class GraphBuilder {
     .enter()
     .append("text")
     .text(d => d.letter)
-    .style("font-size", `7px`)
+    .style("font-size", (d) => {
+      return d.r/5
+    })
     .style("font-family", "Dosis, sans-serif")
     .style("text-transform", "uppercase")
     .style("transform", (d, i, a) => {
       let theta = (i- (a.length/2))* 7
-      return `rotate(${theta}deg)translateY(${-d.r+4}px)`
+      return `rotate(${theta}deg)translateY(${-d.r + (d.r/10) }px)`
     })
   }
 

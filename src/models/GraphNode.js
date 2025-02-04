@@ -66,7 +66,7 @@ export default class GraphNode {
     // let merged = this.targets
     let linkholder = merged.append("g").attr("class", "character-label")
 
-    let start = 65
+    let start = 40
     let fs = 10
 
     linkholder.append("rect")
@@ -108,7 +108,9 @@ export default class GraphNode {
         return start
       }
     })
-    .attr("text-anchor", "start")
+    .attr("text-anchor", (link) => {
+      return "start"
+    })
     .attr("y", 2)
     .attr("stroke", "#FFF")
     .style("font-family", "Dosis, sans-serif")

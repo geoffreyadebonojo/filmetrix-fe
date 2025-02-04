@@ -31,8 +31,16 @@ export default {
     localStorage.setItem("lockedGraph", JSON.stringify(graphStates.existing))
 
     graphStates.inMotion = true
-    var links = responseData.links
-    var nodes = responseData.nodes
+    var links = responseData.links.map((l) => {
+      l.id = `${l.source}--${l.target}`
+      return l
+    })
+    var nodes = responseData.nodes.map((n) => {
+      n.r =     40
+      n.genre = n.type ? 'node' : 'node ' + n.type.join(" ")
+      n.name =  n.name ? n.name.toLowerCase() : ''
+      return n
+    })
 
     const s = settings(responseData.type)
 
@@ -68,27 +76,6 @@ export default {
     })
     .on("end", () => {
       graphStates.inMotion = false
-      
-      // STRUGGLING
-      // const zoom = d3.zoom().on('zoom', (e) => {
-      //   d3.select("#main-outer-wrapper").attr("transform", e.transform)
-      // })
-      // .on('end', (e) => {
-      //   localStorage.setItem('currentZoom', e.transform)
-      // })
-      
-      // let zoomLevel = 2.5
-      // let node = d3.select(`#${panelStates.detailsData.id}`)
-      // let d = node.data()[0]
-      // let centering = { x: window.innerWidth *  0.5, 
-      //                   y: window.innerHeight * 0.4 }
-
-      // node.classed("poster-highlight", true)
-      // d3.select("#viewer-body").transition().ease(d3.easeQuadOut).duration(500).call(
-      //   zoom.transform, 
-      //   d3.zoomIdentity.translate(centering.x, centering.y)
-      //                   .scale(zoomLevel)
-      //                   .translate(-d.x, -d.y))
     })
     
     return innerWrapper.node();

@@ -6,7 +6,7 @@ export function d3zoom(parent) {
     parent.attr("transform", e.transform)
   })
   .on('end', (e) => {
-    localStorage.setItem('currentZoom', e.transform)
+    // localStorage.setItem('currentZoom', e.transform)
   })
 
   return zoom
