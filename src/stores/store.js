@@ -6,7 +6,8 @@ export const graphStates = reactive({
   inMotion: false,
   graphType: 'main',
   currentGraphId: '',
-  // ;\
+  pageSearchActive: false,
+  matching: [],
   visited: []
 })
 

@@ -90,7 +90,7 @@ export default class GraphBuilder {
     const er = this.viewerBody
     let d
 
-    const anchors = graphStates.existing.map((n) => n[0])
+    let anchors = graphStates.existing.map((n) => n[0])
     let currentIndex = anchors.indexOf(panelStates.detailsData.id)
     let currentAnchor
     let zoomLevel = 2.5
@@ -129,21 +129,20 @@ export default class GraphBuilder {
           currentIndex = 0
         }
 
+        if (graphStates.pageSearchActive) {
+          anchors = graphStates.matching
+        } else {
+          anchors = graphStates.existing.map((n) => n[0])
+        }
+
         currentAnchor = anchors[ currentIndex ]
+
         d3.selectAll(".node").classed("poster-highlight", false)
         let gn = new GraphNode(currentAnchor)
 
-        if (prevAnchor) {
-          prevAnchor.circle.style("stroke", "#7A7879").style("stroke-width", "1")
-        }
-
-        if (prevLinks) {
-          prevLinks.selectAll(".line").style("stroke", "#7A7879").style("stroke-width", "1")
-        }
-        
-        if (prevTargs) {
-          prevTargs.selectAll(".outline").style("stroke", "#7A7879").style("stroke-width", "1")
-        }
+        if (prevAnchor) { prevAnchor.circle.style("stroke", "#7A7879").style("stroke-width", "1")}
+        if (prevLinks) {  prevLinks.selectAll(".line").style("stroke", "#7A7879").style("stroke-width", "1")}
+        if (prevTargs) {  prevTargs.selectAll(".outline").style("stroke", "#7A7879").style("stroke-width", "1")}
         
         gn.circle.style("stroke", "gold")
         gn.allLinks.selectAll(".line").style("stroke", "lightgreen").style("stroke-width", "2")
@@ -260,7 +259,7 @@ export default class GraphBuilder {
       .attr("id", d => d.id)
       .attr("name", (d) => {
         if (d.name) {
-          return d.name.toLowerCase().replace(/ /g, "")
+          return d.name.toLowerCase()//.replace(/ /g, "")
         } else {
           return ''
         }

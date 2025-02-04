@@ -19,12 +19,22 @@
 <template>
   <div id="app-wrapper" class="dark-theme">
     <RouterView></RouterView>
+    <div id="letters"></div>
   </div>
 </template>
 
 <style lang="scss">
   .dark-theme {
     background: $graph-body-grey;
+  }
+
+  #letters {
+    position: absolute; 
+    top: 10px; 
+    left: 10px; 
+    font-family: $global-font;
+    font-size: 50px;
+    stroke-width: 2;
   }
 </style>
 
@@ -50,38 +60,70 @@
 
       const zoom = d3zoom(d3.select("#main-outer-wrapper"))
 
-      let pageSearchActive = false
       let pageSearchString = ''
       
       d3.select("body").on("keydown.click", function(event) {
-
         if (event.key === "Shift") {
           appStates.shiftKeyIsPressed = true
+
         } else if (event.key == "Meta") {
           appStates.metaKeyIsPressed =  true
+
         } else if (event.metaKey && event.shiftKey && event.key == 'f') {
-          pageSearchActive = !pageSearchActive
-        } else if (pageSearchActive) {
-          let validLetters = 'qwertyuiopasdfghjklzxcvbnm'.split("")
-
-          if (!validLetters.includes(event.key) && !event.key == "Backspace") { return }
-
-          if (event.key == "Backspace") {
-            pageSearchString = pageSearchString.slice(0, -1)
+          let tse = d3.select("#letters")
+          if (graphStates.pageSearchActive) {
+            graphStates.pageSearchActive = !graphStates.pageSearchActive
+            tse.node().innerHTML = ""
+            d3.selectAll(".node").style("opacity", 1)
           } else {
-            pageSearchString += event.key
+            graphStates.pageSearchActive = true
+            tse.node().innerHTML = ">"
+            tse.style("color", "white").transition().duration(300).style("color", "#7A7879")
           }
 
-          d3.selectAll(".node").filter((n) => {
-            return !n.name.toLowerCase().replace(/ /g, "").includes(pageSearchString)
-          }).style("opacity", 0)
+        } else if (graphStates.pageSearchActive) {
+          let validKeys = 'qwertyuiopasdfghjklzxcvbnm'.split("")
+          validKeys.push("Backspace")
+          
+          if (!validKeys.includes(event.key)) { return false }
+          
+          let searchTextElem = d3.select("#letters")
 
-          d3.selectAll(".node").filter((n) => {
-            return n.name.toLowerCase().replace(/ /g, "").includes(pageSearchString)
-          }).style("opacity", 1)
+          if (event.key == "Backspace") { pageSearchString = pageSearchString.slice(0, -1) }
+          else {                          pageSearchString += event.key                    }
+
+          searchTextElem.node().innerHTML = `> ${pageSearchString}`
+
+          let nws, nwos, pslc, pslcwos
+
+          let nonMatching = d3.selectAll(".node").filter((n) => {
+            nws = n.name.toLowerCase()
+            nwos = n.name.toLowerCase().replace(/ /g, "")
+            pslc = pageSearchString.toLowerCase()
+            pslc = pageSearchString.toLowerCase().replace(/ /g, "")
+            pslcwos = pageSearchString.toLowerCase().replace(/ /g, "")
+
+            return !(nws.includes(pslc) || nwos.includes(pslcwos))
+          })
+          
+          nonMatching.style("opacity", 0)
+
+          let matching = d3.selectAll(".node").filter((n) => {
+            nws = n.name.toLowerCase()
+            nwos = n.name.toLowerCase().replace(/ /g, "")
+            pslc = pageSearchString.toLowerCase()
+            pslcwos = pageSearchString.toLowerCase().replace(/ /g, "")
+            
+            return (nws.includes(pslc) || nwos.includes(pslcwos))
+          })
+          
+          matching.style("opacity", 1)
+          
+          graphStates.matching = matching.data().map((n) => n.id)
 
         } else {
           pageSearchString = ''
+          // d3.selectAll(".node").style("opacity", 1)
         }
 
       }).on("keyup", function(event) {        
