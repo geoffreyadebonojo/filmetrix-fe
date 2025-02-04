@@ -1,5 +1,6 @@
 import { 
   graphStates,
+  panelStates,
   appStates
 } from '@/stores/store.js'
 import GraphNode from '@models/GraphNode'
@@ -42,22 +43,31 @@ export default class GraphEvents {
   //   panelStates.detailsData.id = d.id
   // }
 
-  setRoot() {
-    if (appStates.metaKeyIsPressed) {
-      let cn = this.gn.node
-      d3.selectAll(".root").classed("root", false)
-      cn.classed("root", true)
-    }
-  }
-
+  // setRoot() {
+  //   if (appStates.metaKeyIsPressed) {
+  //     let cn = this.gn.node
+  //     d3.selectAll(".root").classed("root", false)
+  //     cn.classed("root", true)
+  //   }
+  // }
+  
   async singleClickNode() {
-    this.setRoot()
-    let root = d3.select("#person-4762")
-    // let x = this.bfs(this.gn, root)    
-    // for (let i=1; i<x.length; i++) {
-    //   let link = d3.selectAll(`#${x[i-1]}--${x[i]},#${x[i]}--${x[i-1]}`)
-    //   link.selectAll(".line").style("stroke", "yellow")
-    // }
+    if (appStates.metaKeyIsPressed) {
+      let root = d3.select("#person-4724")
+      
+      d3.selectAll(".node").select("circle").style("stroke", "#7A7879")
+      d3.selectAll(".link").select("line").style("stroke", "#7A7879")
+      
+      let x = this.bfs(this.gn, root)    
+      
+      for (let i=1; i<x.length; i++) {
+        d3.select(`#${x[i]}`).select("circle").style("stroke", "yellow")
+        let link = d3.selectAll(`#${x[i-1]}--${x[i]},#${x[i]}--${x[i-1]}`)
+        link.selectAll(".line").style("stroke", "yellow")
+      }
+
+      d3.select("#degrees-kevin").node().innerHTML = `${x.length-1} degrees`
+    }
   }
 
   bfs(startNode, endNode) {
@@ -130,7 +140,7 @@ export default class GraphEvents {
 
           temp = [t,s]
 
-          d3.select(`#${s}`).select(".outline").style("stroke", "lightgreen")
+          d3.select(`#${s}`).select("circle").style("stroke", "lightgreen")
           d3.select(`#${s}`).select(".text-container").style("stroke", "lightgreen")
 
           let tar = d3.selectAll(`.link[source='${s}'][target='${t}']`)

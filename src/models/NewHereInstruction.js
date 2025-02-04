@@ -4,7 +4,7 @@ export default class NewHereInstruction {
   constructor(target, parent) {
     this.node = target
     this.graph = parent.graph
-    this.letters = "double click me  double click me  double click me  "
+    this.pageSearch = "double click me  double click me  double click me  "
   }
   
   addInstructionHover() {
@@ -28,7 +28,7 @@ export default class NewHereInstruction {
 
     label.selectAll("text")
     .exit()
-    .data(this.letters.split(""))
+    .data(this.pageSearch.split(""))
     .enter()
     .append("text")
     .attr("class", "instruction")

@@ -142,11 +142,11 @@ export default class GraphBuilder {
 
         if (prevAnchor) { prevAnchor.circle.style("stroke", "#7A7879").style("stroke-width", "1")}
         if (prevLinks) {  prevLinks.selectAll(".line").style("stroke", "#7A7879").style("stroke-width", "1")}
-        if (prevTargs) {  prevTargs.selectAll(".outline").style("stroke", "#7A7879").style("stroke-width", "1")}
+        if (prevTargs) {  prevTargs.select("circle").style("stroke", "#7A7879").style("stroke-width", "1")}
         
         gn.circle.style("stroke", "gold")
         gn.allLinks.selectAll(".line").style("stroke", "lightgreen").style("stroke-width", "2")
-        gn.connections.selectAll(".outline").style("stroke", "lightgreen")
+        gn.connections.select("circle").style("stroke", "lightgreen")
 
         gn.node.moveToFront()
         d = gn.node.data()[0]

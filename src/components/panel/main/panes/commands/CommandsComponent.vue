@@ -53,6 +53,12 @@
           <img src="/left-arrow.svg" style="transform:rotate(270deg)"/>
         </span>
       </div>
+
+      <div class="item page-search" style="height:3em">
+        <span style="display: inline-flex">
+          CMD+SHIFT+F
+        </span>
+      </div>
     </div>
 
     <div id="centerline" class="line"></div>
@@ -128,6 +134,14 @@
         :section="'adjust-zoom'"
         :main="'adjust zoom node'"
         :secondary="'control level of zoom when switching between main nodes'"
+        :expandedHeight="'7em'"
+        style="height:3em"
+      />
+
+      <effect-explanation
+        :section="'page-search'"
+        :main="'search page for node'"
+        :secondary="'search page for node with matching name'"
         :expandedHeight="'7em'"
         style="height:3em"
       />

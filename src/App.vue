@@ -19,7 +19,8 @@
 <template>
   <div id="app-wrapper" class="dark-theme">
     <RouterView></RouterView>
-    <div id="letters"></div>
+    <div id="page-search"></div>
+    <div id="degrees-kevin"></div>
   </div>
 </template>
 
@@ -28,13 +29,23 @@
     background: $graph-body-grey;
   }
 
-  #letters {
+  #page-search {
     position: absolute; 
     top: 10px; 
     left: 10px; 
     font-family: $global-font;
     font-size: 50px;
     stroke-width: 2;
+  }
+
+  #degrees-kevin {
+    position: absolute; 
+    bottom: 10px; 
+    left: 10px; 
+    font-family: $global-font;
+    font-size: 50px;
+    stroke-width: 2;
+    color: gold
   }
 </style>
 
@@ -70,7 +81,7 @@
           appStates.metaKeyIsPressed =  true
 
         } else if (event.metaKey && event.shiftKey && event.key == 'f') {
-          let tse = d3.select("#letters")
+          let tse = d3.select("#page-search")
           if (graphStates.pageSearchActive) {
             graphStates.pageSearchActive = !graphStates.pageSearchActive
             tse.node().innerHTML = ""
@@ -87,7 +98,7 @@
           
           if (!validKeys.includes(event.key)) { return false }
           
-          let searchTextElem = d3.select("#letters")
+          let searchTextElem = d3.select("#page-search")
 
           if (event.key == "Backspace") { pageSearchString = pageSearchString.slice(0, -1) }
           else {                          pageSearchString += event.key                    }
