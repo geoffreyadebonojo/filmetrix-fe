@@ -58,12 +58,11 @@ export default class GraphNode {
 
   linkUnhighlighter() {
     let d = d3.selectAll(".link:not(.locked)")
-    // d.selectAll(".character-label").remove()
+    d.selectAll(".character-label").remove()
   }
 
   async linkHighlighter() {
     let merged = this.allLinks
-    // let merged = this.targets
     let linkholder = merged.append("g").attr("class", "character-label")
     let fs = 10
 
@@ -103,29 +102,26 @@ export default class GraphNode {
     linkholder.append("text")
     .text(d => d.roles.join(", "))
     .attr("x", (d) => {
-
       let nodeType = d3.select(".hover").data()[0].id.split("-")[0]
 
       if (nodeType == "person") {
-        if (d.target.x < d.source.x) { 
-          return -50
-        } else {
-          return 50
-        }
+        return (d.target.x < d.source.x) ? -50 : 50
+
       } else {
         let x = Math.abs( (d.source.x - d.target.x) )
         let y = Math.abs( (d.source.y - d.target.y) )
         let h = Math.sqrt( (x*x) + (y*y) )
-
-        if (d.target.x < d.source.x) { 
-          return -h + 50
-        } else {
-          return h - 50
-        }
+        return (d.target.x < d.source.x) ? -h + 50 : h - 50
       }
     })
     .attr("text-anchor", (link) => {
-      return (link.target.x < link.source.x) ? "start" : "end"
+      let nodeType = d3.select(".hover").data()[0].id.split("-")[0]
+
+      if (nodeType == "person") {
+        return (link.target.x < link.source.x) ? "end" : "start"
+      } else {
+        return (link.target.x < link.source.x) ? "start" : "end"
+      }
     })
     .attr("y", 2)
     .attr("stroke", "#FFF")
