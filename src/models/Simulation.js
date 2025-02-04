@@ -20,9 +20,9 @@ export default class Simulation {
   generateGraph(args) { 
     const sim = d3.forceSimulation(this.nodes, this.links)
     .velocityDecay(0.5)
-    .force("link", d3.forceLink(this.links).id(d => d.id).distance(100))
-    .force("charge", d3.forceManyBody().strength(-3000))
-    .force('collide', d3.forceCollide(80))
+    .force("link", d3.forceLink(this.links).id(d => d.id).distance(100).strength(0.5))
+    .force("charge", d3.forceManyBody().strength(-1000))
+    .force('collide', d3.forceCollide(80).strength(1))
     .force("center", d3.forceCenter(
       ...args.forceCenter
     ))

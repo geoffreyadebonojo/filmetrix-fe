@@ -19,6 +19,7 @@ export default class GraphEvents {
     if (graphStates.inMotion) { return }
     this.gn.hover()
     this.gn.linkHighlighter()
+    this.gn.node.moveToFront()
   }
   
   mouseLeaveNode() {
@@ -28,38 +29,35 @@ export default class GraphEvents {
     this.gn.linkUnhighlighter()
   }
 
-  async doubleClickNode() {
-    localStorage.setItem("newHere", false)
-    if (graphStates.existing.map(x => x[0]).includes(d.id)){
-      this.addToExistingNodes(d)
-    } else {
-      localStorage.setItem("newHere", false)
-      return await this.callForNodes(d)
-    }
+  // async doubleClickNode() {
+  //   localStorage.setItem("newHere", false)
+  //   if (graphStates.existing.map(x => x[0]).includes(d.id)){
+  //     this.addToExistingNodes(d)
+  //   } else {
+  //     localStorage.setItem("newHere", false)
+  //     return await this.callForNodes(d)
+  //   }
     
-    await api.fetchDetails(d.id)
-    panelStates.detailsData.id = d.id
-  }
+  //   await api.fetchDetails(d.id)
+  //   panelStates.detailsData.id = d.id
+  // }
 
   setRoot() {
     if (appStates.metaKeyIsPressed) {
       let cn = this.gn.node
-      cn.classed("root", !cn.classed("root"))
+      d3.selectAll(".root").classed("root", false)
+      cn.classed("root", true)
     }
   }
 
-  singleClickNode() {
+  async singleClickNode() {
     this.setRoot()
-    // var stack = []
-    // this.dfs(this.gn, stack)
     let root = d3.select("#person-4762")
-    let x = this.bfs(this.gn, root)    
-    console.log(x)
-
-    for (let i=1; i<x.length; i++) {
-      let link = d3.selectAll(`#${x[i-1]}--${x[i]},#${x[i]}--${x[i-1]}`)
-      link.selectAll(".line").style("stroke", "red")
-    }
+    // let x = this.bfs(this.gn, root)    
+    // for (let i=1; i<x.length; i++) {
+    //   let link = d3.selectAll(`#${x[i-1]}--${x[i]},#${x[i]}--${x[i-1]}`)
+    //   link.selectAll(".line").style("stroke", "yellow")
+    // }
   }
 
   bfs(startNode, endNode) {
@@ -72,18 +70,14 @@ export default class GraphEvents {
   
   reconstructPath(startNode, endNode, prev) {
     let path = []
-
     for (let at = endNode.id; at != null; at = prev[at]) {
       path.push(at)
     }
-
     path.reverse()
-    
     return path
   }
 
   solve(root) {
-    // this.gatherNodes()
     let nodeIds = d3.selectAll(".node").data().map((n) => n.id)
     let visited = []
     let prev = []
@@ -106,7 +100,6 @@ export default class GraphEvents {
           prev[neighborId] = node.id
         }
       })
-      // console.log(queue.map((n) => n.node.data()[0].name))
     }
 
     return prev
@@ -129,7 +122,7 @@ export default class GraphEvents {
     } else {
       var temp = []
       if (stack.last() == root.data()[0].id) {
-        ///////////
+
         let links = []
         for (let i=1; i<stack.length; i++) {
           let t = stack[i-1]
@@ -148,12 +141,14 @@ export default class GraphEvents {
           tar.selectAll(".line").style("stroke", "lightgreen")
           links.push(tar) 
         }
-        //////////
       }
       this.results.push(temp)
     }
 
     stack.pop()
   }
+  // remember to initialize the stack:
+  // var stack = []
+  // this.dfs(rootNode, stack)
 }
 

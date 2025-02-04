@@ -50,9 +50,40 @@
 
       const zoom = d3zoom(d3.select("#main-outer-wrapper"))
 
+      let pageSearchActive = false
+      let pageSearchString = ''
+      
       d3.select("body").on("keydown.click", function(event) {
-        if (event.key === "Shift") {    appStates.shiftKeyIsPressed = true } 
-        else if (event.key == "Meta") { appStates.metaKeyIsPressed =  true }
+
+        if (event.key === "Shift") {
+          appStates.shiftKeyIsPressed = true
+        } else if (event.key == "Meta") {
+          appStates.metaKeyIsPressed =  true
+        } else if (event.metaKey && event.shiftKey && event.key == 'f') {
+          pageSearchActive = !pageSearchActive
+        } else if (pageSearchActive) {
+          let validLetters = 'qwertyuiopasdfghjklzxcvbnm'.split("")
+
+          if (!validLetters.includes(event.key) && !event.key == "Backspace") { return }
+
+          if (event.key == "Backspace") {
+            pageSearchString = pageSearchString.slice(0, -1)
+          } else {
+            pageSearchString += event.key
+          }
+
+          d3.selectAll(".node").filter((n) => {
+            return !n.name.toLowerCase().replace(/ /g, "").includes(pageSearchString)
+          }).style("opacity", 0)
+
+          d3.selectAll(".node").filter((n) => {
+            return n.name.toLowerCase().replace(/ /g, "").includes(pageSearchString)
+          }).style("opacity", 1)
+
+        } else {
+          pageSearchString = ''
+        }
+
       }).on("keyup", function(event) {        
         if (event.key === "Shift") {    appStates.shiftKeyIsPressed = false } 
         else if (event.key == "Meta") { appStates.metaKeyIsPressed =  false }

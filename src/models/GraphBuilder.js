@@ -6,7 +6,8 @@ import GraphNode from '@models/GraphNode'
 import GraphEvents from '@models/GraphEvents'
 import NewHereInstruction from '@models/NewHereInstruction.js'
 import { drawArc } from '@mixins/helpers'
-// import { d3zoom } from '@mixins/zoom'
+import api from '@mixins/api.js'
+
 import * as d3 from 'd3'
 
 export default class GraphBuilder {
@@ -93,23 +94,17 @@ export default class GraphBuilder {
     let currentIndex = anchors.indexOf(panelStates.detailsData.id)
     let currentAnchor
     let zoomLevel = 2.5
-    
-    d3.select("body").on("keydown.nav", function(event) {
-      // zoom to current detailed node
-      if (event.key == "'") {
-        let node = d3.select(`#${panelStates.detailsData.id}`)
-        d = node.data()[0]
-        node.classed("poster-highlight", true)
-        er.transition().duration(2000).call(
-          zoom.transform, 
-          d3.zoomIdentity.translate(window.innerWidth * 0.6, window.innerHeight * 0.5).scale(zoomLevel).translate(-d.x, -d.y),
-        )
+    let centering = { x: window.innerWidth *  0.5, 
+                      y: window.innerHeight * 0.4 }
 
-      } else if (["ArrowUp", "ArrowDown"].includes(event.key)) {
+    let prevAnchor, prevLinks, prevTargs
+    
+    d3.select("body").on("keydown.nav", async function(event) {
+      if (["ArrowUp", "ArrowDown"].includes(event.key)) {
         if (event.key == "ArrowUp" && zoomLevel < 5) {
-          zoomLevel += 0.5
-        } else if (event.key == "ArrowDown" && zoomLevel > 0.5) {
           zoomLevel -= 0.5
+        } else if (event.key == "ArrowDown" && zoomLevel > 0.5) {
+          zoomLevel += 0.5
         }
 
         currentAnchor = anchors[ currentIndex % anchors.length ]
@@ -117,25 +112,63 @@ export default class GraphBuilder {
         d = node.data()[0]
         er.transition().duration(500).call(
           zoom.transform, 
-          d3.zoomIdentity.translate(window.innerWidth * 0.6, window.innerHeight * 0.5).scale(zoomLevel).translate(-d.x, -d.y)
-        )
+          d3.zoomIdentity.translate(centering.x, centering.y)
+                         .scale(zoomLevel)
+                         .translate(-d.x, -d.y))
 
       } else if (["ArrowRight", "ArrowLeft"].includes(event.key)) {
-        if (event.key == "ArrowRight" && currentIndex < anchors.length-1) {
+        if (event.key == "ArrowRight") {
           currentIndex += 1
-        } else if (event.key == "ArrowLeft" && currentIndex > 0) {
+        } else if (event.key == "ArrowLeft") {
           currentIndex -= 1
         }
-        
+
+        if (currentIndex < 0) {
+          currentIndex = anchors.length-1
+        } else if (currentIndex > anchors.length-1) {
+          currentIndex = 0
+        }
+
         currentAnchor = anchors[ currentIndex ]
         d3.selectAll(".node").classed("poster-highlight", false)
-        let node = d3.select(`#${currentAnchor}`)
-        node.classed("poster-highlight", true)
-        d = node.data()[0]
+        let gn = new GraphNode(currentAnchor)
+
+        if (prevAnchor) {
+          prevAnchor.circle.style("stroke", "#7A7879").style("stroke-width", "1")
+        }
+
+        if (prevLinks) {
+          prevLinks.selectAll(".line").style("stroke", "#7A7879").style("stroke-width", "1")
+        }
+        
+        if (prevTargs) {
+          prevTargs.selectAll(".outline").style("stroke", "#7A7879").style("stroke-width", "1")
+        }
+        
+        gn.circle.style("stroke", "gold")
+        gn.allLinks.selectAll(".line").style("stroke", "lightgreen").style("stroke-width", "2")
+        gn.connections.selectAll(".outline").style("stroke", "lightgreen")
+
+        gn.node.moveToFront()
+        d = gn.node.data()[0]
         er.transition().duration(500).call(
           zoom.transform, 
-          d3.zoomIdentity.translate(window.innerWidth * 0.6, window.innerHeight * 0.5).scale(zoomLevel).translate(-d.x, -d.y)
-        )
+          d3.zoomIdentity.translate(centering.x, centering.y)
+                         .scale(zoomLevel)
+                         .translate(-d.x, -d.y))
+
+        gn.node.classed("poster-highlight", true)
+
+        const dc = d3.selectAll(".details-component")
+        dc.style("left", () => { return `${currentIndex*100}%`})
+        dc.transition().duration(500).style("left", "0%")
+
+        prevAnchor = gn
+        prevLinks = gn.allLinks
+        prevTargs = gn.connections
+
+        await api.fetchDetails(currentAnchor) 
+
       }
     })
     
@@ -157,7 +190,7 @@ export default class GraphBuilder {
         return this.viewerBody
       })
     }
-    
+
     this.viewerBody.call(zoom)
                    .call(zoom).on("dblclick.zoom", null)
     
@@ -209,8 +242,7 @@ export default class GraphBuilder {
       .attr("stroke-linejoin", "round")
       .selectAll("g")
       .data(nodes,(d) => {
-        // also defined in Simulation.js:73
-        d.r = 50
+        d.r = 40
         return d
       })
       .join("g")
@@ -226,6 +258,13 @@ export default class GraphBuilder {
         }
       })
       .attr("id", d => d.id)
+      .attr("name", (d) => {
+        if (d.name) {
+          return d.name.toLowerCase().replace(/ /g, "")
+        } else {
+          return ''
+        }
+      })
     return node
   }
 
@@ -259,12 +298,12 @@ export default class GraphBuilder {
     .enter()
     .append("text")
     .text(d => d.letter)
-    .style("font-size", `${this.graph.fontSize}`)
+    .style("font-size", `7px`)
     .style("font-family", "Dosis, sans-serif")
     .style("text-transform", "uppercase")
     .style("transform", (d, i, a) => {
       let theta = (i- (a.length/2))* 7
-      return `rotate(${theta}deg)translateY(${-d.r+2}px)`
+      return `rotate(${theta}deg)translateY(${-d.r+4}px)`
     })
   }
 

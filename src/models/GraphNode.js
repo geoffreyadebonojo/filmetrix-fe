@@ -5,42 +5,42 @@ import * as d3 from 'd3'
 export default class GraphNode {
   constructor(nodeId) {
     this.id = nodeId
-    this.node = d3.select(`#${nodeId}`)
 
-    this.elem = {
-      circle: this.node.select('circle'),
-      label: this.node.select('.node-label'),
-      letters: this.node.select('.node-label').select('.text-container'),
-      poster: this.node.select('.poster'),
-      sources: d3.selectAll(`.link[source='${nodeId}']`),
-      targets: d3.selectAll(`.link[target='${nodeId}']`)
-    }
-
-    const x = this.elem.sources.nodes().map((d)=>d.__data__.target.id)
-    const z = this.elem.targets.nodes().map((d)=>d.__data__.source.id)
-
-    this.connections = d3.selectAll('.node').filter((d) => { return x.includes(d.id) || z.includes(d.id)})
-    this.connectionIds = this.connections._groups[0].map((n) => n.id)
-    this.currentColor = ''
-
+    this.node = d3.select(`#${this.id}`)
+    this.circle = this.node.select('circle'),
+    this.label = this.node.select('.node-label'),
+    this.letters = this.node.select('.node-label').select('.text-container'),
+    this.poster = this.node.select('.poster'),
+    this.sources = d3.selectAll(`.link[source='${this.id}']`),
+    this.targets = d3.selectAll(`.link[target='${this.id}']`)
     this.allLinks = d3.selectAll(`.link[target='${this.id}'], .link[source='${this.id}']`)
+
+    const x = this.sources.nodes().map((d)=> d.attributes.target.value)
+    const z = this.targets.nodes().map((d)=> d.attributes.source.value)
+
+    this.connections = d3.selectAll('.node').filter((d) => { return x.includes(d.id) || z.includes(d.id) })
+    this.connectionIds = this.connections._groups[0].map((n) => n.id)
+  }
+
+  defaultStyles () {
+
   }
 
   shrinkNodeScale(scale) {
-    this.elem.poster.transition().duration(1000).style("transform", `scale(${scale})`)
-    this.elem.circle.transition().duration(1000).style("transform", `scale(${scale})`)
-    this.elem.label.transition().duration(1000).style("transform", `scale(${scale})`)
+    this.poster.transition().duration(1000).style("transform", `scale(${scale})`)
+    this.circle.transition().duration(1000).style("transform", `scale(${scale})`)
+    this.label.transition().duration(1000).style("transform", `scale(${scale})`)
   }
 
   setNodeScale(scale) {
-    this.elem.poster.style("transform", `scale(${scale})`)
-    this.elem.circle.style("transform", `scale(${scale})`)
-    this.elem.label.style("transform", `scale(${scale})`)
+    this.poster.style("transform", `scale(${scale})`)
+    this.circle.style("transform", `scale(${scale})`)
+    this.label.style("transform", `scale(${scale})`)
   }
 
   setLinkLock() {
-    this.elem.sources.classed("locked", true)
-    this.elem.targets.classed("locked", true)
+    this.sources.classed("locked", true)
+    this.targets.classed("locked", true)
   }
 
 
@@ -67,7 +67,7 @@ export default class GraphNode {
 
   async linkHighlighter() {
     let merged = this.allLinks
-    // let merged = this.elem.targets
+    // let merged = this.targets
     let linkholder = merged.append("g").attr("class", "character-label")
 
     let start = 65

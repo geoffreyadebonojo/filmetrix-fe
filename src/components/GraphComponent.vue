@@ -9,7 +9,8 @@
 <template>
   <div class="graph-container" v-bind:id="$attrs.type + '-graph-component'">
     <svg class="graph-container" v-bind:id="$attrs.type + '-graph-container'" v-bind:viewBox="$data.vb">
-      <g class="outer-wrapper" v-bind:id="$attrs.type + '-outer-wrapper'"></g>
+      <g class="outer-wrapper" v-bind:id="$attrs.type + '-outer-wrapper'">
+      </g>
     </svg>
   </div>
 </template>
@@ -44,13 +45,14 @@
     width: 100%;
 
     .hover {
-      .outline, .node-label, .text-container {
-        stroke: lightgreen;
-      }
+      .outline, 
+      .node-label, 
+      .text-container {
 
       .node-label {
         // fill: lightgreen;
         stroke: none;
+      }
       }
     }
 
@@ -66,7 +68,7 @@
 
     .root {
       .outline, .node-label, .text-container {
-        stroke: gold;
+        stroke: red;
       }
 
       .node-label {
@@ -76,7 +78,7 @@
 
     .poster-highlight {
       .outline, .node-label, .text-container {
-        stroke: red;
+        stroke: gold;
         stroke-width: 2;
       }
 

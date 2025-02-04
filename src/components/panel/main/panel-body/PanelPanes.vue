@@ -5,7 +5,7 @@
   } from '@/stores/store.js'
   import { closeField, openField } from '@mixins/helpers'
   import AboutDetailsComponent from  '@about/AboutDetailsComponent.vue'
-  import MainNavArrowsComponent from '@main/panel-utils/MainNavArrowsComponent.vue'
+  // import MainNavArrowsComponent from '@main/panel-utils/MainNavArrowsComponent.vue'
   import CommandsComponent from      '@panes/commands/CommandsComponent.vue'
   import DetailsComponent from       '@panes/details/DetailsComponent.vue'
   import MainPromptContainer from    '@panes/prompts/MainPromptContainer.vue'
@@ -42,8 +42,8 @@
     <search-results-component v-else>
     </search-results-component>
     
-    <main-nav-arrows-component v-if="$attrs.type == 'main'">
-    </main-nav-arrows-component>
+    <!-- <main-nav-arrows-component v-if="$attrs.type == 'main'">
+    </main-nav-arrows-component> -->
 
   </div>
 </template>
@@ -58,7 +58,7 @@
       MainPromptContainer,
       SearchResultsComponent,
       UserProfileComponent,
-      MainNavArrowsComponent
+      // MainNavArrowsComponent
     },
     data () {
       return {
