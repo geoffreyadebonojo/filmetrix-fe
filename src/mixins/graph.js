@@ -146,14 +146,6 @@ export default {
       links: links,
       type: "main"
     }) 
-
-    let gn
-
-    nodes.slice(nodes.length-addCount).forEach((node) => {
-      gn = new GraphNode(node.id)
-      gn.tempHighlight()
-    })
-
   },
 
   async callForNodes(d, count=5) {
