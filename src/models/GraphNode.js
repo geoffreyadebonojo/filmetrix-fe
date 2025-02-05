@@ -66,36 +66,41 @@ export default class GraphNode {
     let linkholder = merged.append("g").attr("class", "character-label")
     let fs = 10
 
-    // linkholder.append("rect")
-    // .attr('fill', "#222222")
-    // .attr("x", (d) => {
-    //   let textLength = d.roles.join("").length
-    //   if (d.target.x < d.source.x) { 
-    //     return start-200 - textLength
-    //   } else {
-    //     return start
-    //   }
-    // })
-    // .attr("y", -4)
-    // .attr("height", 8)
-    // .attr("width", (d) => {
-    //   let c = d.roles.join().split("").length
-    //   return c*4
-    // })
-    // .attr("transform", (d) => {
-    //   let theta = angle360(
-    //     d.source.x,
-    //     d.source.y,
-    //     d.target.x,
-    //     d.target.y
-    //   )
+    linkholder.append("rect")
+    .attr('fill', "#222")
+    .attr("x", (d) => {
+      let textLength = d.roles.join("").length
+      let nodeType = d3.select(".hover").data()[0].id.split("-")[0]
+      if (nodeType == "person") {
+        return (d.target.x < d.source.x) ? -50 - (textLength*3.75) : 50
 
-    //   // if (d.target.x < d.source.x) {
-    //   //   return `translate(${d.source.x},${d.source.y})rotate(${theta+180})`
-    //   // } else {
-    //   // }
-    //   return `translate(${d.source.x},${d.source.y})rotate(${theta})`
-    // })
+      } else {
+        let x = Math.abs( (d.source.x - d.target.x) )
+        let y = Math.abs( (d.source.y - d.target.y) )
+        let h = Math.sqrt( (x*x) + (y*y) )
+        return (d.target.x < d.source.x) ? -h + 50 : h - 50 -(textLength*3.75)
+      }
+    })
+    .attr("y", -4)
+    .attr("height", 8)
+    .attr("width", (d) => {
+      let c = d.roles.join().split("").length
+      return c*3.5
+    })
+    .attr("transform", (d) => {
+      let theta = angle360(
+        d.source.x,
+        d.source.y,
+        d.target.x,
+        d.target.y
+      )
+
+      if (d.target.x < d.source.x) {
+        return `translate(${d.source.x},${d.source.y})rotate(${theta+180})`
+      } else {
+        return `translate(${d.source.x},${d.source.y})rotate(${theta})`
+      }
+    })
 
     ////
 
@@ -103,7 +108,6 @@ export default class GraphNode {
     .text(d => d.roles.join(", "))
     .attr("x", (d) => {
       let nodeType = d3.select(".hover").data()[0].id.split("-")[0]
-
       if (nodeType == "person") {
         return (d.target.x < d.source.x) ? -50 : 50
 
@@ -116,7 +120,6 @@ export default class GraphNode {
     })
     .attr("text-anchor", (link) => {
       let nodeType = d3.select(".hover").data()[0].id.split("-")[0]
-
       if (nodeType == "person") {
         return (link.target.x < link.source.x) ? "end" : "start"
       } else {
