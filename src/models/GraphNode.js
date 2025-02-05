@@ -22,12 +22,6 @@ export default class GraphNode {
     })
   }
 
-  tempHighlight() {
-    this.elem.circle.style("stroke", "blue").transition().duration(2000).style("stroke", "#7A7978")
-    this.elem.sources.select("line").style("stroke", "blue").transition().duration(2000).style("stroke", "#7A7978")
-    this.elem.targets.select("line").style("stroke", "blue").transition().duration(2000).style("stroke", "#7A7978")
-  }
-
   nodeTransformer(args) {
     this.node.moveToFront()
     this.elem.label.selectAll("text").style("stroke", args.textStroke)
