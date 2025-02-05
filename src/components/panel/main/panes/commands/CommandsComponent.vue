@@ -54,7 +54,7 @@
         </span>
       </div>
 
-      <div class="item page-search" style="height:3em">
+      <div class="item name-search" style="height:3em">
         <span style="display: inline-flex">
           CMD+SHIFT+F
         </span>
@@ -139,7 +139,7 @@
       />
 
       <effect-explanation
-        :section="'page-search'"
+        :section="'name-search'"
         :main="'search page for node'"
         :secondary="'search page for node with matching name'"
         :expandedHeight="'7em'"

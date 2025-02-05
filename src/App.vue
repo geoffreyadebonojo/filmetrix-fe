@@ -19,7 +19,8 @@
 <template>
   <div id="app-wrapper" class="dark-theme">
     <RouterView></RouterView>
-    <div id="page-search"></div>
+    <div id="name-search"></div>
+    <!-- <div id="genre-search"></div> -->
     <div id="degrees-kevin"></div>
   </div>
 </template>
@@ -29,9 +30,18 @@
     background: $graph-body-grey;
   }
 
-  #page-search {
+  #name-search {
     position: absolute; 
     top: 10px; 
+    left: 10px; 
+    font-family: $global-font;
+    font-size: 50px;
+    stroke-width: 2;
+  }
+
+  #genre-search {
+    position: absolute; 
+    top: 50px; 
     left: 10px; 
     font-family: $global-font;
     font-size: 50px;
@@ -81,14 +91,18 @@
           appStates.metaKeyIsPressed =  true
 
         } else if (event.metaKey && event.shiftKey && event.key == 'f') {
-          let tse = d3.select("#page-search")
+          let nameSearch = d3.select("#name-search")
+          // let genreSearch = d3.select("#genre-search")
+
           if (graphStates.pageSearchActive) {
             graphStates.pageSearchActive = !graphStates.pageSearchActive
-            tse.node().innerHTML = ""
+            nameSearch.node().innerHTML = ""
+            genreSearch.node().innerHTML = ""
             d3.selectAll(".node").style("opacity", 1)
           } else {
             graphStates.pageSearchActive = true
-            tse.node().innerHTML = ">"
+            nameSearch.node().innerHTML = ">"
+            genreSearch.node().innerHTML = ">"
             tse.style("color", "white").transition().duration(300).style("color", "#7A7879")
           }
 
@@ -98,12 +112,14 @@
           
           if (!validKeys.includes(event.key)) { return false }
           
-          let searchTextElem = d3.select("#page-search")
+          let searchTextElem = d3.select("#name-search")
+          // let genreTextElem = d3.select("#genre-search")
 
           if (event.key == "Backspace") { pageSearchString = pageSearchString.slice(0, -1) }
           else {                          pageSearchString += event.key                    }
 
           searchTextElem.node().innerHTML = `> ${pageSearchString}`
+          // genreTextElem.node().innerHTML = `> ${pageSearchString}`
 
           let nws, nwos, pslc, pslcwos
 
@@ -134,7 +150,6 @@
 
         } else {
           pageSearchString = ''
-          // d3.selectAll(".node").style("opacity", 1)
         }
 
       }).on("keyup", function(event) {        

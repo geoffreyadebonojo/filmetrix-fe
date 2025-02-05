@@ -11,7 +11,7 @@ import * as d3 from 'd3'
 export default {
   clearGraph() {
     d3.select("#degrees-kevin").node().innerHTML = ''
-    d3.select("#page-search").node().innerHTML = ''
+    d3.select("#name-search").node().innerHTML = ''
 
     localStorage.setItem("lockedGraph", JSON.stringify([]))
     graphStates.existing =         []

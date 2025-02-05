@@ -7,12 +7,13 @@ export default class GraphNode {
     this.id = nodeId
 
     this.node = d3.select(`#${this.id}`)
-    this.circle = this.node.select('circle'),
-    this.label = this.node.select('.node-label'),
+    this.circle =     this.node.select('circle'),
+    this.label =      this.node.select('.node-label'),
     this.pageSearch = this.node.select('.node-label').select('.text-container'),
-    this.poster = this.node.select('.poster'),
-    this.sources = d3.selectAll(`.link[source='${this.id}']`),
-    this.targets = d3.selectAll(`.link[target='${this.id}']`)
+    this.poster =     this.node.select('.poster'),
+    
+    this.sources =  d3.selectAll(`.link[source='${this.id}']`),
+    this.targets =  d3.selectAll(`.link[target='${this.id}']`)
     this.allLinks = d3.selectAll(`.link[target='${this.id}'], .link[source='${this.id}']`)
 
     const x = this.sources.nodes().map((d)=> d.attributes.target.value)

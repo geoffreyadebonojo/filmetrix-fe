@@ -37,7 +37,7 @@ export default {
     })
     var nodes = responseData.nodes.map((n) => {
       n.r =     40
-      n.genre = n.type ? 'node' : 'node ' + n.type.join(" ")
+      n.genre = n.type ? 'node ' + n.type.join(" ") : 'node'
       n.name =  n.name ? n.name.toLowerCase() : ''
       return n
     })
@@ -159,14 +159,12 @@ export default {
       type: "main"
     }) 
 
-    let gn
-    let connectionIds = new GraphNode(currentNodeId).connectionIds
-
-    connectionIds.slice(connectionIds.length-addCount).forEach((nodeId) => {
-      let n = document.querySelector(`#${nodeId}`)
-      n.classList.add('newest')
-    })
-
+    // let gn
+    // let connectionIds = new GraphNode(currentNodeId).connectionIds
+    // connectionIds.slice(connectionIds.length-addCount).forEach((nodeId) => {
+    //   let n = document.querySelector(`#${nodeId}`)
+    //   n.classList.add('newest')
+    // })
   },
   
   async callForNodes(d, count=5) {

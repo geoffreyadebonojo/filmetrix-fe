@@ -151,7 +151,6 @@ export default class GraphBuilder {
         prevTargs = gn.connections
 
         await api.fetchDetails(currentAnchor) 
-
       }
     })
     

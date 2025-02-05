@@ -50,14 +50,15 @@
       .text-container {
 
       .node-label {
-        // fill: lightgreen;
         stroke: none;
       }
       }
     }
 
     .alt-hover {
-      .outline, .node-label, .text-container {
+      .outline, 
+      .node-label, 
+      .text-container {
         stroke: rgb(241, 241, 156);
       }
 
@@ -67,7 +68,9 @@
     }
 
     .root {
-      .outline, .node-label, .text-container {
+      .outline, 
+      .node-label, 
+      .text-container {
         stroke: red;
       }
 
@@ -77,7 +80,9 @@
     }
 
     .poster-highlight {
-      .outline, .node-label, .text-container {
+      .outline, 
+      .node-label, 
+      .text-container {
         stroke: gold;
         stroke-width: 2;
       }
@@ -89,7 +94,9 @@
 
 
     .shift-hover {
-      .outline, .node-label, .text-container {
+      .outline, 
+      .node-label, 
+      .text-container {
         stroke: rgba(22, 99, 187, 0.634);
 
         animation-name: pulse;
@@ -114,6 +121,20 @@
         stroke: none;
       }
     }
+
+    // .newest {
+    //   .outline {
+    //     stroke: green;
+    //     stroke-width: 2;
+    //   }
+
+    //   .text-container {
+    //     text {
+    //       fill: green;
+    //       stroke: green;
+    //     }
+    //   }
+    // }
   }
 
   @keyframes pulse {

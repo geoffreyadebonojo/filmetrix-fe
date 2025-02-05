@@ -30,19 +30,6 @@ export default class GraphEvents {
     this.gn.linkUnhighlighter()
   }
 
-  // async doubleClickNode() {
-  //   localStorage.setItem("newHere", false)
-  //   if (graphStates.existing.map(x => x[0]).includes(d.id)){
-  //     this.addToExistingNodes(d)
-  //   } else {
-  //     localStorage.setItem("newHere", false)
-  //     return await this.callForNodes(d)
-  //   }
-    
-  //   await api.fetchDetails(d.id)
-  //   panelStates.detailsData.id = d.id
-  // }
-
   // setRoot() {
   //   if (appStates.metaKeyIsPressed) {
   //     let cn = this.gn.node
@@ -53,6 +40,7 @@ export default class GraphEvents {
   
   async singleClickNode() {
     if (appStates.metaKeyIsPressed) {
+      // kevin bacon
       let root = d3.select("#person-4724")
       
       d3.selectAll(".node").select("circle").style("stroke", "#7A7879")
