@@ -143,10 +143,10 @@ export default {
 
   ///////////////////////////////////
 
-  async saveGraph(existing, userId=null) {
+  async saveGraph(existing) {
     const ids = []
     const count = []
-    
+
     existing.forEach((d) => {
       ids.push(d[0])
       count.push(d[1])
@@ -159,7 +159,7 @@ export default {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ query:
           `query {
-            saveGraph(ids:"${ids}",counts:"${count}",userId:"${userId}") {
+            saveGraph(ids:"${ids}",count:"${count}") {
               resourceId
               shareUrl
             }
@@ -302,91 +302,5 @@ export default {
     )
 
     return api_response.data.addToMovieList
-  },
-
-
-  async signupUser(args) {
-    const API_URL =`${this.data().base_url}/signup`
-
-    const api_response = await (
-      fetch(API_URL, {
-        method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          "user": {
-            "email": `${args.email}`,
-            "password": `${args.password}`
-          }
-        })
-      }).then((response) => {
-        return response.json()
-      })
-    )
-
-    return api_response
-  },
-
-  async loginUser(args) {
-    const API_URL =`${this.data().base_url}/login`
-
-    const api_response = await (
-      fetch(API_URL, {
-        method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json' 
-        },
-        body: JSON.stringify({
-          "user": {
-            "email": `${args.email}`,
-            "password": `${args.password}`
-          }
-        })
-      }).then((response) => {
-        for(let entry of response.headers.entries()) {
-          localStorage.setItem(entry[0], entry[1]);
-        }
-
-        return response.json()
-      })
-    )
-
-    return api_response
-  },
-
-  async logoutUser() {
-    const API_URL =`${this.data().base_url}/logout`
-
-    const api_response = await fetch(API_URL, {
-      method: 'DELETE',
-      headers: { 
-        'Content-Type': 'application/json',
-        'Authorization': localStorage.getItem('authorization')
-      }
-    }).then((response) => {
-      return response.json()
-    })
-
-    return api_response
-  },
-
-  async currentUser() {
-    const API_URL =`${this.data().base_url}/current_user`
-    const api_response = await (
-      fetch(API_URL, {
-        method: 'GET',
-        headers: { 
-          'Content-Type': 'application/json',
-          'Authorization': localStorage.getItem('authorization')
-        }
-      }).then((response) => {
-        return response.json()
-      }).catch((error) => {
-        return {}
-      })
-    )
-
-    return api_response
-  },
+  }
 }

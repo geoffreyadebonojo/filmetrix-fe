@@ -19,16 +19,22 @@
     name: "GenerateLinkButton",
     methods: {
       async generateLinkToShare () {
-        
-        await api.saveGraph(graphStates.existing).then((response) => {
-          navigator.clipboard.writeText( response.shareUrl );
-          console.log('Content copied ', response.shareUrl, ' to clipboard');
-        })
 
-        
-        d3.select("#link-to-flash").html('copied')
-          .transition().duration(200).style("opacity", 1).style("color", "#72bcd4")
-          .transition().duration(1000).style("opacity", 0).style("color", "white")
+        await api.saveGraph(graphStates.existing).then((response) => {
+          if (response) {
+            navigator.clipboard.writeText( response.shareUrl );
+            console.log('Content copied ', response.shareUrl, ' to clipboard');
+            d3.select("#link-to-flash").html('copied')
+              .transition().duration(200).style("opacity", 1).style("color", "#72bcd4")
+              .transition().duration(1000).style("opacity", 0).style("color", "white")
+          
+            } else {
+            console.log('Something went wrong. Probably your fault.');
+            d3.select("#link-to-flash").html('error!')
+              .transition().duration(200).style("opacity", 1).style("color", "#72bcd4")
+              .transition().duration(1000).style("opacity", 0).style("color", "white")
+          }
+        })
       }
     }
   }
