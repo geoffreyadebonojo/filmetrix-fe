@@ -85,16 +85,18 @@ export default class GraphBuilder {
     
     d3.select("body").on("keydown.nav", async function(event) {
       if (["ArrowUp", "ArrowDown"].includes(event.key)) {
-        if (event.key == "ArrowUp" && zoomLevel < 5) {
-          zoomLevel -= 0.5
-        } else if (event.key == "ArrowDown" && zoomLevel > 0.5) {
+        if (event.key == "ArrowUp") {
+          if (zoomLevel > 5) {return}
           zoomLevel += 0.5
+        } else if (event.key == "ArrowDown") {
+          if (zoomLevel < 1) {return}
+          zoomLevel -= 0.5
         }
 
         currentAnchor = anchors[ currentIndex % anchors.length ]
         let node = d3.select(`#${currentAnchor}`)
         d = node.data()[0]
-        er.transition().duration(500).call(
+        er.transition().duration(100).call(
           zoom.transform, 
           d3.zoomIdentity.translate(centering.x, centering.y)
                          .scale(zoomLevel)
