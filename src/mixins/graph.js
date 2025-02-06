@@ -158,13 +158,6 @@ export default {
       links: links,
       type: "main"
     }) 
-
-    // let gn
-    // let connectionIds = new GraphNode(currentNodeId).connectionIds
-    // connectionIds.slice(connectionIds.length-addCount).forEach((nodeId) => {
-    //   let n = document.querySelector(`#${nodeId}`)
-    //   n.classList.add('newest')
-    // })
   },
   
   async callForNodes(d, count=5) {
