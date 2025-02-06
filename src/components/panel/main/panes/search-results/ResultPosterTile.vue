@@ -46,17 +46,19 @@
         posterElem: null,
         resultId: this.$attrs.result.id,
         refresh: true,
-
+        clicked: false
       }
     },
     methods: {
-      async fetchNodesAndDetails(result, count) {
+      async fetchNodesAndDetails(result, graphLoadedNodeCount) {
+        // TODO: do something to prevent doubleclick error
+        if (this.$data.clicked) { return }
 
         if (event.shiftKey) {
           await api.fetchDetails(result.id)
-          await graph.callForNodes(result, count)
+          await graph.callForNodes(result, graphLoadedNodeCount)
 
-          const firstOrder = graphStates.graphData[result.id].nodes.slice(1, count+1)  
+          const firstOrder = graphStates.graphData[result.id].nodes.slice(1, graphLoadedNodeCount+1)  
           firstOrder.forEach((node) => {
             graphStates.existing.push([node.id, 4])
           })
@@ -68,7 +70,7 @@
         } else {
 
           await api.fetchDetails(result.id)
-          await graph.callForNodes(result, count)
+          await graph.callForNodes(result, graphLoadedNodeCount)
 
         }
       }
