@@ -154,8 +154,8 @@ export default {
     
     if (graphStates.existing.map((f) => f[0]).excludes(d.id) ) { 
       graphStates.existing.push([d.id, count])
-      const ext = graphStates.existing.unique().map((d) => d[0])
-      await api.fetchGraphData(ext)
+      const nodeIds = graphStates.existing.unique().map((d) => d[0])
+      await api.fetchGraphData(nodeIds)
       
       new GraphManager().generate()
     }

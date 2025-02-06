@@ -95,20 +95,18 @@ export default {
     panelStates.detailsData = api_response.data.details
   },
 
-                          // NODE SENDCOUNT
-  async fetchGraphData(ids, count=50){
+  async fetchGraphData(ids){
     const API_URL = `${this.data().base_url}/graphql`
 
     const resp = await (
       fetch(API_URL, {
         method: 'POST',
         headers: { 
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': 'https://filmetrix.netlify.app' 
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({ query: `
           query {
-            graphData(ids:"${ids}",count:${count}) {
+            graphData(ids:"${ids}") {
               id
               nodes {
                 id
