@@ -67,11 +67,11 @@
         let data
         let nodes = []
         let links = []
+
         
         graphStates.existing.forEach((d) => {
           data = graphStates.graphData[d[0]]
           nodes = nodes.concat(data.nodes.slice(0,d[1]))
-          // NODE SENDCOUNT
           // watch how you slice, you'll get an error
           // if num links >= num nodes
           links = links.concat(data.links.slice(0,d[1]-1))

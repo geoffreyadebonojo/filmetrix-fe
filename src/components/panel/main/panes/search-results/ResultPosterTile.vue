@@ -17,8 +17,8 @@
        v-bind:id="$attrs.result.id"
        tabindex="0"
        :key="$data.resultId"
-       @click="fetchNodesAndDetails($attrs.result, 8)"
-       @keypress="fetchNodesAndDetails($attrs.result, 8)">  
+       @click="fetchNodesAndDetails($attrs.result, 10)"
+       @keypress="fetchNodesAndDetails($attrs.result, 10)">  
     <img v-bind:src="$attrs.result.poster" class="tile-img"/>
     <div>
       {{ $attrs.result.name }}
