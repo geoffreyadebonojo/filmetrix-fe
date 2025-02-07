@@ -168,7 +168,6 @@ export default class GraphBuilder {
         return i
       })
       .attr("class", (d) => {
-        // type means genre
         if (d.type == null) {
           return 'node'
         } else {
@@ -219,7 +218,23 @@ export default class GraphBuilder {
   }
 
   appendImage(node) {
-    node.append("svg:image")
+    let posterless = node.filter((n) => {
+      return n.poster == ""
+    })
+
+    posterless.append("text").text((n) => n.name[0])
+      .attr("text-anchor", "middle")
+      .attr("y", "25")
+      .style("font-size", `60px`)
+      .style("font-family", "Dosis, sans-serif")
+      .style("text-transform", "uppercase")
+      .style("fill", "#7A7879")
+
+    let posterful = node.filter((n) => {
+      return n.poster != ""
+    })
+
+    posterful.append("svg:image")
       .attr("class", "poster")
       .attr('x', this.image.offsetX)
       .attr('y', this.image.offsetY)
