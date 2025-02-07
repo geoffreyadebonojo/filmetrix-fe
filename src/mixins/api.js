@@ -2,6 +2,7 @@ import {
   panelStates,
   graphStates
 } from '@/stores/store.js'
+import * as d3 from 'd3'
 
 export default {
   data () {
@@ -13,6 +14,8 @@ export default {
 
   async fetchSearchData(term) {
     const API_URL = `${this.data().base_url}/graphql`
+    
+    d3.select("#no-results").style("display", "none")
 
     const api_response = await (
       fetch(API_URL, {
@@ -33,8 +36,15 @@ export default {
         })
       }).then((response) => {
         return response.json()
+      }).then((d) => {
+        if (d.data.search.length < 1) {
+          d3.select("#no-results").style("display", "block")
+        } else {
+          return d
+        }
       })
     )
+
     return api_response.data.search
   },
 
