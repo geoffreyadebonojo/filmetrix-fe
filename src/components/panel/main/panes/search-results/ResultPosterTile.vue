@@ -46,11 +46,12 @@
         posterElem: null,
         resultId: this.$attrs.result.id,
         refresh: true,
-
+        clicked: false
       }
     },
     methods: {
       async fetchNodesAndDetails(result, count) {
+        if (this.$data.clicked) { return }
 
         if (event.shiftKey) {
           await api.fetchDetails(result.id)
