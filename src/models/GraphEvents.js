@@ -1,6 +1,5 @@
 import { 
   graphStates,
-  panelStates,
   appStates
 } from '@/stores/store.js'
 import GraphNode from '@models/GraphNode'
@@ -30,14 +29,6 @@ export default class GraphEvents {
     this.gn.unHover()
     this.gn.linkUnhighlighter()
   }
-
-  // setRoot() {
-  //   if (appStates.metaKeyIsPressed) {
-  //     let cn = this.gn.node
-  //     d3.selectAll(".root").classed("root", false)
-  //     cn.classed("root", true)
-  //   }
-  // }
   
   async singleClickNode() {
     if (appStates.metaKeyIsPressed) {
@@ -61,13 +52,12 @@ export default class GraphEvents {
 
   bfs(startNode, endNode) {
     return this.reconstructPath(
-      startNode, 
       new GraphNode(endNode.data()[0].id), 
       this.solve(startNode)
     )
   }
   
-  reconstructPath(startNode, endNode, prev) {
+  reconstructPath(endNode, prev) {
     let path = []
     for (let at = endNode.id; at != null; at = prev[at]) {
       path.push(at)
