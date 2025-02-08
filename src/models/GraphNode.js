@@ -7,12 +7,12 @@ export default class GraphNode {
     this.id = nodeId
 
     this.node = d3.select(`#${this.id}`)
-    this.circle =     this.node.select('circle'),
-    this.label =      this.node.select('.node-label'),
-    this.pageSearch = this.node.select('.node-label').select('.text-container'),
-    this.poster =     this.node.select('.poster'),
+    this.circle =     this.node.select('circle')
+    this.label =      this.node.select('.node-label')
+    this.text =       this.node.select('.node-label').select('.text-container')
+    this.poster =     this.node.select('.poster')
     
-    this.sources =  d3.selectAll(`.link[source='${this.id}']`),
+    this.sources =  d3.selectAll(`.link[source='${this.id}']`)
     this.targets =  d3.selectAll(`.link[target='${this.id}']`)
     this.allLinks = d3.selectAll(`.link[target='${this.id}'], .link[source='${this.id}']`)
 
@@ -23,7 +23,7 @@ export default class GraphNode {
     this.connectionIds = this.connections._groups[0].map((n) => n.id)
   }
 
-  hover() {
+  applyHoverClass() {
     if (appStates.shiftKeyIsPressed) { 
       this.node.classed('shift-hover', true)
     } else if (appStates.metaKeyIsPressed) {
@@ -33,13 +33,15 @@ export default class GraphNode {
     }
   }
 
-  unHover() {
+  removeHoverClass() {
     this.node.classed('hover', false)
     this.node.classed('shift-hover', false)
     this.node.classed('alt-hover', false)
   }
 
   linkUnhighlighter() {
+    this.allLinks.select(".line").style("stroke", "#7A7879")
+    
     let d = d3.selectAll(".link:not(.locked)")
     d.selectAll(".character-label").remove()
   }
@@ -49,6 +51,8 @@ export default class GraphNode {
 
     let linkholder = this.allLinks.append("g").attr("class", "character-label")
     let nodeType = hoveredId.split("-")[0]
+
+    this.allLinks.select(".line").style("stroke", "white")
 
     this.appendRect(linkholder, nodeType)
     this.appendText(linkholder, nodeType)

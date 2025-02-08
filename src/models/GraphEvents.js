@@ -17,37 +17,47 @@ export default class GraphEvents {
 
   mouseEnterNode() {
     if (graphStates.inMotion) { return }
-    this.gn.hover()
+    this.gn.applyHoverClass()
     let hoveredId = d3.select(".hover").data()[0].id
     this.gn.linkHighlighter(hoveredId)
+
     this.gn.node.moveToFront()
   }
   
   mouseLeaveNode() {
     if (graphStates.inMotion) { return }
     this.gn.node.classed('added', false)
-    this.gn.unHover()
+    this.gn.removeHoverClass()
     this.gn.linkUnhighlighter()
   }
   
   async singleClickNode() {
-    if (appStates.metaKeyIsPressed) {
-      // kevin bacon
-      let root = d3.select("#person-4724")
-      
-      d3.selectAll(".node").select("circle").style("stroke", "#7A7879")
-      d3.selectAll(".link").select("line").style("stroke", "#7A7879")
-      
-      let x = this.bfs(this.gn, root)    
-      
-      for (let i=1; i<x.length; i++) {
-        d3.select(`#${x[i]}`).select("circle").style("stroke", "yellow")
-        let link = d3.selectAll(`#${x[i-1]}--${x[i]},#${x[i]}--${x[i-1]}`)
-        link.selectAll(".line").style("stroke", "yellow")
-      }
+    d3.selectAll(".node").classed("poster-highlight", false)
 
-      d3.select("#degrees-kevin").node().innerHTML = `${x.length-1} degrees`
+    if (appStates.metaKeyIsPressed) {
+      this.metaClick()
+
+    } else {
+      this.gn.node.classed("poster-highlight", true)
     }
+  }
+  
+  metaClick() {
+    // kevin bacon
+    let root = d3.select("#person-4724")
+      
+    d3.selectAll(".node").select("circle").style("stroke", "#7A7879")
+    d3.selectAll(".link").select("line").style("stroke", "#7A7879")
+    
+    let x = this.bfs(this.gn, root)    
+    
+    for (let i=1; i<x.length; i++) {
+      d3.select(`#${x[i]}`).select("circle").style("stroke", "yellow")
+      let link = d3.selectAll(`#${x[i-1]}--${x[i]},#${x[i]}--${x[i-1]}`)
+      link.selectAll(".line").style("stroke", "yellow")
+    }
+
+    d3.select("#degrees-kevin").node().innerHTML = `${x.length-1} degrees`
   }
 
   bfs(startNode, endNode) {

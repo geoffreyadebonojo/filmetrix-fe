@@ -8,7 +8,8 @@ export const graphStates = reactive({
   currentGraphId: '',
   pageSearchActive: false,
   matching: [],
-  visited: []
+  visited: [],
+  navLocked: false
 })
 
 export const panelStates = reactive({
