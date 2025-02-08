@@ -5,7 +5,6 @@ import {
 
 export default {
   data () {
-    graphStates
     return {
       base_url: import.meta.env.VITE_API_URL || `https://enigmatic-wildwood-58151.herokuapp.com`
     }
