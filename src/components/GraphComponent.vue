@@ -45,11 +45,13 @@
     width: 100%;
 
     .hover {
-      .outline, 
-      .text-container {
+      .outline {
+        stroke: white;
+      }
 
-        .node-label {
-          stroke: none;
+      .node-label {
+        .text-container {
+          stroke: white;
         }
       }
     }
@@ -80,15 +82,15 @@
     }
 
     .poster-highlight {
-      .outline, 
-      .node-label, 
-      .text-container {
-        // stroke: gold;
-        stroke-width: 2;
+      .outline {
+        stroke: white;
+        stroke-width: 1.4;
       }
 
       .node-label {
-        stroke: none;
+        .text-container {
+          stroke: white;
+        }
       }
     }
 
