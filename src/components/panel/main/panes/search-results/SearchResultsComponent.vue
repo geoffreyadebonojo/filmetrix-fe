@@ -20,7 +20,7 @@
     </div>
 
     <div v-else>
-      <div v-if="store.searchResults.length == 0" id="no-results" style="opacity:0" >
+      <div id="no-results" style="display:none" >
         <p>No result found:</p>
         <p id="term">
           {{ store.searchTerm }}
@@ -29,12 +29,11 @@
         <p style="margin-top:30px">Its important to spell thigns corectly</p>
       </div>
 
-      <div v-else-if="store.searchResults.length > 0" 
+      <div if="store.searchResults.length > 0" 
         v-bind:id="panelStates.currentFocus + '-results'"
         class="result-container">
         <result-poster-tile v-for="result in resultsWithPosters" :result="result"></result-poster-tile>
       </div>
-
     </div>
   </div>
 </template>
@@ -52,8 +51,6 @@
       if (store.searchResults.length > 0) {
         // inelegant, but functional
         this.updateNavHighlight()
-      } else {
-        d3.select("#no-results").transition().duration(300).style("opacity", 1)
       }
     },
     mounted () {

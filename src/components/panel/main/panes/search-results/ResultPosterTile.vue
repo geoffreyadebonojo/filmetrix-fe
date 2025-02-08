@@ -17,8 +17,8 @@
        v-bind:id="$attrs.result.id"
        tabindex="0"
        :key="$data.resultId"
-       @click="fetchNodesAndDetails($attrs.result, 8)"
-       @keypress="fetchNodesAndDetails($attrs.result, 8)">  
+       @click="fetchNodesAndDetails($attrs.result, 10)"
+       @keypress="fetchNodesAndDetails($attrs.result, 10)">  
     <img v-bind:src="$attrs.result.poster" class="tile-img"/>
     <div>
       {{ $attrs.result.name }}
@@ -46,11 +46,12 @@
         posterElem: null,
         resultId: this.$attrs.result.id,
         refresh: true,
-
+        clicked: false
       }
     },
     methods: {
       async fetchNodesAndDetails(result, count) {
+        if (this.$data.clicked) { return }
 
         if (event.shiftKey) {
           await api.fetchDetails(result.id)

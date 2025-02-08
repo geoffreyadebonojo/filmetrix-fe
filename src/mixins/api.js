@@ -2,6 +2,7 @@ import {
   panelStates,
   graphStates
 } from '@/stores/store.js'
+import * as d3 from 'd3'
 
 export default {
   data () {
@@ -12,8 +13,10 @@ export default {
 
   async fetchSearchData(term) {
     const API_URL = `${this.data().base_url}/graphql`
+    
+    d3.select("#no-results").style("display", "none")
 
-    const api_response = await (
+    return await (
       fetch(API_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -32,9 +35,15 @@ export default {
         })
       }).then((response) => {
         return response.json()
+      }).then((d) => {
+        if (d.data.search.length < 1 || d.errors != undefined) {
+          d3.select("#no-results").style("display", "block")
+          return []
+        } else {
+          return d.data.search
+        }
       })
     )
-    return api_response.data.search
   },
 
   async fetchSearchNext(term) {
@@ -101,8 +110,7 @@ export default {
       fetch(API_URL, {
         method: 'POST',
         headers: { 
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': 'https://filmetrix.netlify.app' 
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({ query: `
           query {

@@ -55,7 +55,8 @@ export default {
 
     const simulation = new Simulation({ nodes, 
                                         links,
-                                        graphType}, options).body
+                                        graphType }, options).body
+
 
     const [link, node] = new GraphBuilder({ links, 
                                             nodes,
@@ -158,8 +159,8 @@ export default {
       type: "main"
     }) 
   },
-  
-  async callForNodes(d, count=5) {
+
+  async callForNodes(d, count=10) {
     panelStates.detailsData.id = d.id
     panelStates.currentFocus = 'details'
     

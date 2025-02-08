@@ -173,7 +173,23 @@ export default class GraphBuilder {
       clipPath: "inset(0% 16px round 12px)"
     }
 
-    node.append("svg:image")
+    let posterless = node.filter((n) => {
+      return n.poster == ""
+    })
+
+    posterless.append("text").text((n) => n.name[0])
+      .attr("text-anchor", "middle")
+      .attr("y", "25")
+      .style("font-size", `60px`)
+      .style("font-family", "Dosis, sans-serif")
+      .style("text-transform", "uppercase")
+      .style("fill", "#7A7879")
+
+    let posterful = node.filter((n) => {
+      return n.poster != ""
+    })
+
+    posterful.append("svg:image")
       .attr("class", "poster")
       .attr('x', imageProps.offsetX)
       .attr('y', imageProps.offsetY)

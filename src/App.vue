@@ -177,6 +177,7 @@
         let data
         let nodes = []
         let links = []
+
         
         graphStates.existing.forEach((d) => {
           data = graphStates.graphData[d[0]]
