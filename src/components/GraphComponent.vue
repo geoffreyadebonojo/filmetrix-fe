@@ -46,12 +46,11 @@
 
     .hover {
       .outline, 
-      .node-label, 
       .text-container {
 
-      .node-label {
-        stroke: none;
-      }
+        .node-label {
+          stroke: none;
+        }
       }
     }
 
@@ -59,7 +58,8 @@
       .outline, 
       .node-label, 
       .text-container {
-        stroke: rgb(241, 241, 156);
+        // stroke: rgb(241, 241, 156);
+        stroke-width: 1.2;
       }
 
       .node-label {
@@ -83,7 +83,7 @@
       .outline, 
       .node-label, 
       .text-container {
-        stroke: gold;
+        // stroke: gold;
         stroke-width: 2;
       }
 
@@ -121,20 +121,6 @@
         stroke: none;
       }
     }
-
-    // .newest {
-    //   .outline {
-    //     stroke: green;
-    //     stroke-width: 2;
-    //   }
-
-    //   .text-container {
-    //     text {
-    //       fill: green;
-    //       stroke: green;
-    //     }
-    //   }
-    // }
   }
 
   @keyframes pulse {

@@ -130,12 +130,15 @@ export default class GraphBuilder {
         if (prevLinks) {  prevLinks.selectAll(".line").style("stroke", "#7A7879").style("stroke-width", "1")}
         if (prevTargs) {  prevTargs.select("circle").style("stroke", "#7A7879").style("stroke-width", "1")}
         
-        gn.circle.style("stroke", "gold")
-        gn.allLinks.selectAll(".line").style("stroke", "lightgreen").style("stroke-width", "2")
-        gn.connections.select("circle").style("stroke", "lightgreen")
+        gn.circle.style("stroke", "white").style("stroke-width", "1.2")
+        // gn.allLinks.selectAll(".line").style("stroke", "lightgreen").style("stroke-width", "2")
+        gn.allLinks.selectAll(".line").style("stroke", "white")
+        // gn.connections.select("circle").style("stroke", "lightgreen")
+        // gn.connections.select("circle").style("stroke", "white")
 
         gn.node.moveToFront()
         d = gn.node.data()[0]
+
         er.transition().duration(500).call(
           zoom.transform, 
           d3.zoomIdentity.translate(centering.x, centering.y)
