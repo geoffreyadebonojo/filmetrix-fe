@@ -9,7 +9,8 @@
 <template>
   <div class="graph-container" v-bind:id="$attrs.type + '-graph-component'">
     <svg class="graph-container" v-bind:id="$attrs.type + '-graph-container'" v-bind:viewBox="$data.vb">
-      <g class="outer-wrapper" v-bind:id="$attrs.type + '-outer-wrapper'"></g>
+      <g class="outer-wrapper" v-bind:id="$attrs.type + '-outer-wrapper'">
+      </g>
     </svg>
   </div>
 </template>
@@ -42,6 +43,96 @@
   .graph-container {
     display: block;
     width: 100%;
+
+    .hover {
+      .outline, 
+      .text-container {
+
+        .node-label {
+          stroke: none;
+        }
+      }
+    }
+
+    .alt-hover {
+      .outline, 
+      .node-label, 
+      .text-container {
+        // stroke: rgb(241, 241, 156);
+        stroke-width: 1.2;
+      }
+
+      .node-label {
+        stroke: none;
+      }
+    }
+
+    .root {
+      .outline, 
+      .node-label, 
+      .text-container {
+        stroke: red;
+      }
+
+      .node-label {
+        stroke: none;
+      }
+    }
+
+    .poster-highlight {
+      .outline, 
+      .node-label, 
+      .text-container {
+        // stroke: gold;
+        stroke-width: 2;
+      }
+
+      .node-label {
+        stroke: none;
+      }
+    }
+
+
+    .shift-hover {
+      .outline, 
+      .node-label, 
+      .text-container {
+        stroke: rgba(22, 99, 187, 0.634);
+
+        animation-name: pulse;
+        animation-duration: 0.75s;
+        animation-iteration-count: infinite;
+        animation-timing-function: linear;
+      }
+
+      .node-label {
+        stroke: none;
+      }
+    }
+    
+    .visited {
+      .outline {
+        stroke: #65a765;
+        stroke-width: 1.2;
+      }
+
+      .node-label {
+        fill: lightgreen;
+        stroke: none;
+      }
+    }
+  }
+
+  @keyframes pulse {
+    0% {
+      stroke-width: 1,
+    }
+    50% {
+      stroke-width: 3,
+    }
+    100% {
+      stroke-width: 1,
+    }
   }
 
   .inst {

@@ -12,7 +12,9 @@
 <template>
     <img class="poster"
          v-bind:id="$data.detailId + '-detail-poster'"
-         v-bind:src="panelStates.detailsData.poster">
+         v-bind:src="panelStates.detailsData.poster"
+         @pointerdown="flashNode()"
+         @pointerup="unflashNode()">
 </template>
 
 <script>
@@ -21,42 +23,19 @@
     data () {
       return {
         detailId: panelStates.detailsData.id,
-        graphNode: new GraphNode(panelStates.detailsData.id),
-        applyHighlight: {
-          scale: 1.05,
-          stroke: "aliceblue",
-          textStroke: "white"
-        },
-        removeHighlight: {
-          scale: 1,
-          stroke: "#7A797",
-          textStroke: "none"
-        }
+        graphNode: new GraphNode(panelStates.detailsData.id)
       }
     },
-
+    
     methods: {
-      toggleHighlightLock() {
-        graphStates.lockedHighlights.togglePresence(this.$data.detailId)
-
-        if (this.$data.graphNode.connections.classed("locked")) {
-          this.$data.graphNode.connections.classed("locked", false)
-        } else {
-          this.$data.graphNode.connections.classed("locked", true)
-        }
+      flashNode() {
+        const cn = new GraphNode(panelStates.detailsData.id)
+        cn.node.classed("poster-highlight", true)
       },
-
-      highlightNodes() {
-        if (this.$data.target.node() == undefined) { return }
-        this.$data.graphNode.nodeTransformer(this.$data.applyHighlight)
-      },
-
-      unhighlightNodes() {
-        if (this.$data.target.node() == undefined) { return }
-        if (this.$data.target.classed("poster-locked")) { return }
-        if (graphStates.lockedHighlights.includes(this.$data.detailId)) { return }
-
-        this.$data.graphNode.nodeTransformer(this.$data.removeHighlight)
+      
+      unflashNode() {
+        const cn = new GraphNode(panelStates.detailsData.id)
+        cn.node.classed("poster-highlight", false)
       }
     }
   }

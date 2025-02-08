@@ -36,7 +36,7 @@ export function drawArc(d) {
 
   const arc = d3.arc()
     .innerRadius(d.r -4)
-    .outerRadius(d.r + 14)
+    .outerRadius(d.r + 4)
     .startAngle((-degrees -12 )* Math.PI/180 / 2) //converting from degs to radians
     .endAngle(degrees * Math.PI/180 / 2) //just radians
 

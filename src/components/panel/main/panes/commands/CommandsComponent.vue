@@ -17,6 +17,13 @@
         <img src="/cursor-finger.svg" style="opacity:0.5"/> <p id="superscript">x2</p>
       </div>
 
+      <div class="item shift-double-click" style="height:3em">
+        <span style="display: inline-flex; min-width: 70px;">
+          <span>SHIFT +</span> 
+          <img src="/cursor-finger.svg" style="opacity: 0.5"/><p id="superscript">x2</p>
+        </span>
+      </div>
+
       <div class="item single-click" style="height:2.8em">
         <img src="/cursor-finger.svg" style="opacity:0.5"/>
       </div>
@@ -31,6 +38,26 @@
 
       <div class="item clear-graph" style="height:3em">
         <img src="/clear-graph.svg"/>
+      </div>
+
+      <div class="item left-right-arrow" style="height:3em">
+        <span style="display: inline-flex">
+          <img src="/left-arrow.svg"/>
+          <img src="/left-arrow.svg" style="transform:rotate(180deg)"/>
+        </span>
+      </div>
+
+      <div class="item adjust-zoom" style="height:3em">
+        <span style="display: inline-flex">
+          <img src="/left-arrow.svg" style="transform:rotate(90deg)"/>
+          <img src="/left-arrow.svg" style="transform:rotate(270deg)"/>
+        </span>
+      </div>
+
+      <div class="item name-search" style="height:3em">
+        <span style="display: inline-flex">
+          CMD+SHIFT+F
+        </span>
       </div>
     </div>
 
@@ -51,6 +78,14 @@
         :section="'double-click'"
         :main="'add mode nodes!'"
         :secondary="'double click a node to add more!'"
+        :expandedHeight="'5.5em'"
+        style="height:2.8em"
+      />
+
+      <effect-explanation
+        :section="'shift-double-click'"
+        :main="'superclick!'"
+        :secondary="'hold SHIFT and double click to add even more nodes than usual!'"
         :expandedHeight="'5.5em'"
         style="height:2.8em"
       />
@@ -83,6 +118,30 @@
         :section="'clear-graph'"
         :main="'clear graph'"
         :secondary="'this will reset the graph'"
+        :expandedHeight="'7em'"
+        style="height:3em"
+      />
+
+      <effect-explanation
+        :section="'left-right-arrow'"
+        :main="'prev/next main node'"
+        :secondary="'center graph on main nodes'"
+        :expandedHeight="'7em'"
+        style="height:3em"
+      />
+
+      <effect-explanation
+        :section="'adjust-zoom'"
+        :main="'adjust zoom node'"
+        :secondary="'control level of zoom when switching between main nodes'"
+        :expandedHeight="'7em'"
+        style="height:3em"
+      />
+
+      <effect-explanation
+        :section="'name-search'"
+        :main="'search page for node'"
+        :secondary="'search page for node with matching name'"
         :expandedHeight="'7em'"
         style="height:3em"
       />
@@ -126,7 +185,11 @@
       margin: auto 0 auto auto;
     }
 
-    .double-click {
+    .left-right-arrow, .adjust-zoom {
+      opacity: 0.5;
+    }
+
+    .double-click, .shift-double-click {
       img {
         margin-top: 0;
       }

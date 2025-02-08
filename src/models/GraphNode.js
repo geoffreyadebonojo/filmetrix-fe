@@ -1,62 +1,79 @@
 import { angle360 } from '@mixins/helpers'
+import { appStates, graphStates } from '@/stores/store.js'
 import * as d3 from 'd3'
 
 export default class GraphNode {
   constructor(nodeId) {
     this.id = nodeId
-    this.node = d3.select(`#${nodeId}`)
 
-    this.elem = {
-      circle: this.node.select('circle'),
-      label: this.node.select('.node-label'),
-      poster: this.node.select('.poster'),
-      sources: d3.selectAll(`.link[source='${nodeId}']`),
-      targets: d3.selectAll(`.link[target='${nodeId}']`)
-    }
-
-    const x = this.elem.sources.nodes().map((d)=>d.__data__.target.id)
-    const z = this.elem.targets.nodes().map((d)=>d.__data__.source.id)
+    this.node = d3.select(`#${this.id}`)
+    this.circle =     this.node.select('circle'),
+    this.label =      this.node.select('.node-label'),
+    this.pageSearch = this.node.select('.node-label').select('.text-container'),
+    this.poster =     this.node.select('.poster'),
     
-    this.connections = d3.selectAll('.node').filter((d) => {
-      return x.includes(d.id) || z.includes(d.id)
-    })
+    this.sources =  d3.selectAll(`.link[source='${this.id}']`),
+    this.targets =  d3.selectAll(`.link[target='${this.id}']`)
+    this.allLinks = d3.selectAll(`.link[target='${this.id}'], .link[source='${this.id}']`)
+
+    const x = this.sources.nodes().map((d)=> d.attributes.target.value)
+    const z = this.targets.nodes().map((d)=> d.attributes.source.value)
+
+    this.connections = d3.selectAll('.node').filter((d) => { return x.includes(d.id) || z.includes(d.id) })
+    this.connectionIds = this.connections._groups[0].map((n) => n.id)
   }
 
-  nodeTransformer(args) {
-    this.node.moveToFront()
-    this.elem.label.selectAll("text").style("stroke", args.textStroke)
-    this.elem.circle.style("stroke", args.stroke)
-    this.connections.select('circle').style("stroke", args.stroke)
-    this.connections.selectAll("text").style("stroke", args.textStroke)
-    this.elem.sources.select("line").attr("stroke", args.stroke)
-    this.elem.targets.select("line").attr("stroke", args.stroke)
+  hover() {
+    if (appStates.shiftKeyIsPressed) { 
+      this.node.classed('shift-hover', true)
+    } else if (appStates.metaKeyIsPressed) {
+      this.node.classed('alt-hover', true)
+    } else { 
+      this.node.classed('hover', true) 
+    }
+  }
+
+  unHover() {
+    this.node.classed('hover', false)
+    this.node.classed('shift-hover', false)
+    this.node.classed('alt-hover', false)
   }
 
   linkUnhighlighter() {
-    let merged = d3.selectAll(`.link[target='${this.id}'], .link[source='${this.id}']`)
-    merged.selectAll(".character-label").remove()
+    let d = d3.selectAll(".link:not(.locked)")
+    d.selectAll(".character-label").remove()
   }
 
-  linkHighlighter() {
-    let merged = d3.selectAll(`.link[target='${this.id}'], .link[source='${this.id}']`)
-    let linkholder = merged.append("g").attr("class", "character-label")
-    let start = 65
-    let fs = 10
+  async linkHighlighter(hoveredId) {
+    if (graphStates.inMotion) { return }
 
+    let linkholder = this.allLinks.append("g").attr("class", "character-label")
+    let nodeType = hoveredId.split("-")[0]
+
+    this.appendRect(linkholder, nodeType)
+    this.appendText(linkholder, nodeType)
+  }
+  
+  appendRect(linkholder, nodeType) {
     linkholder.append("rect")
-    .attr('fill', "#222222")
+    .attr('fill', "#222")
     .attr("x", (d) => {
-      if (d.target.x < d.source.x) { 
-        return start-200 -(d.roles.join("").length)
+      let textLength = d.roles.join("").length
+      if (nodeType == "person") {
+        return (d.target.x < d.source.x) ? -50 - (textLength*3.75) : 50
+
       } else {
-        return start
+        let x = Math.abs( (d.source.x - d.target.x) )
+        let y = Math.abs( (d.source.y - d.target.y) )
+        let h = Math.sqrt( (x*x) + (y*y) )
+        return (d.target.x < d.source.x) ? -h + 50 : h - 50 -(textLength*3.75)
       }
     })
     .attr("y", -4)
     .attr("height", 8)
     .attr("width", (d) => {
       let c = d.roles.join().split("").length
-      return c*4
+      return c*3.5
     })
     .attr("transform", (d) => {
       let theta = angle360(
@@ -72,23 +89,34 @@ export default class GraphNode {
         return `translate(${d.source.x},${d.source.y})rotate(${theta})`
       }
     })
+  }
 
-
+  appendText(linkholder, nodeType) {
     linkholder.append("text")
     .text(d => d.roles.join(", "))
     .attr("x", (d) => {
-      if (d.target.x < d.source.x) { 
-        return start-200 -(d.roles.join("").length)
+      if (nodeType == "person") {
+        return (d.target.x < d.source.x) ? -50 : 50
+
       } else {
-        return start
+        let x = Math.abs( (d.source.x - d.target.x) )
+        let y = Math.abs( (d.source.y - d.target.y) )
+        let h = Math.sqrt( (x*x) + (y*y) )
+        return (d.target.x < d.source.x) ? -h + 50 : h - 50
       }
     })
-    .attr("text-anchor", "start")
+    .attr("text-anchor", (link) => {
+      if (nodeType == "person") {
+        return (link.target.x < link.source.x) ? "end" : "start"
+      } else {
+        return (link.target.x < link.source.x) ? "start" : "end"
+      }
+    })
     .attr("y", 2)
     .attr("stroke", "#FFF")
     .style("font-family", "Dosis, sans-serif")
     .style("font-size", () => {
-      return `${fs}px`
+      return `${10}px`
     })
     .attr("transform", (d) => {
       let theta = angle360(

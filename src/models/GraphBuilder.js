@@ -1,12 +1,10 @@
-import { 
-  appStates,
-  graphStates 
-} from '@/stores/store.js'
-import GraphNode from '@models/GraphNode'
+import GraphEvents from '@models/GraphEvents'
 import NewHereInstruction from '@models/NewHereInstruction.js'
 import { drawArc } from '@mixins/helpers'
-import * as d3 from 'd3'
+import keyFunctions from '@mixins/keyFunctions.js'
+import centeringFunction from '@mixins/centeringFunction.js'
 
+import * as d3 from 'd3'
 
 export default class GraphBuilder {
   constructor(args) {
@@ -21,47 +19,20 @@ export default class GraphBuilder {
         stroke: "#7A7978",
         fill: "#222222",
         text: "#FFFFFF"
-      },
-      fontSize: 12,
-      applyHighlight: {
-        scale: 1.05,
-        stroke: "white",
-        textStroke: "white"
-      },
-      removeHighlight: {
-        scale: 1,
-        stroke: "#7A7978",
-        textStroke: "none"
       }
     }
-    
-    this.image = { 
-      offsetX: -39,
-      offsetY: -35,
-      width: 60,
-      height: 70,
-      clipPath: "inset(0% 16px round 12px)"
-    }
   }
-
+  
   attachMouseEvents(node) {
     if (this.newHere) {
       const instructionLabel = new NewHereInstruction(node, this)
       instructionLabel.addInstructionHover()
     } else {
-      node.on("mouseenter", (_e, d) => {        
-        if (!graphStates.inMotion) {
-          const gn = new GraphNode(d.id)
-          gn.nodeTransformer(this.graph.applyHighlight)
-          gn.linkHighlighter()
-        }
+      node.on("mouseenter", (_e, d) => {      
+        new GraphEvents(d.id).mouseEnterNode()
       })
       .on("mouseleave", (_e, d) => {
-        if (!graphStates.inMotion) {
-          const gn = new GraphNode(d.id)
-          gn.nodeTransformer(this.graph.removeHighlight)
-          gn.linkUnhighlighter()
-        }
+        new GraphEvents(d.id).mouseLeaveNode()
       })
     }
   }
@@ -80,42 +51,24 @@ export default class GraphBuilder {
   }
 
   createViewerBody() {
-    let zoom = d3.zoom()
-    .on('zoom', (e) => {
-      this.args.outerWrapper
-      .attr("transform", e.transform)
+    const zoom = d3.zoom().on('zoom', (e) => {
+      d3.select("#main-outer-wrapper").attr("transform", e.transform)
     })
-    .on('end', (e) => {
-      localStorage.setItem('currentZoom', e.transform)
-    })
-    // out of place here...
-    if (this.graphControlButtons) {
-      this.graphControlButtons.style("display", "block")
-      .transition().duration(30).style("left", "-30px")
-      
-      d3.select("#centering-button").on("click", (e) => {
-        const duration = 1000
-        
-        d3.select(e.target).style("opacity", "1")
-        
-        var transform = d3.zoomIdentity
-          .translate(0,0)
-          .scale(1)
-        
-        d3.select(e.target).transition().duration(duration).style("opacity", "0.5")
-        this.viewerBody.transition().duration(duration)
-          .call(zoom.transform, () => {
-            return transform
-          });
-        return this.viewerBody
-      })
-    }
+
+    keyFunctions.attachNavKeyFunctions(this.viewerBody, zoom)
     
+    if (this.graphControlButtons) {
+      this.graphControlButtons.style("display", "block").transition().duration(30).style("left", "-30px")
+      centeringFunction.attachCenteringEffect(d3.select("#centering-button"), this.viewerBody, zoom)
+    }
+
     this.viewerBody.call(zoom)
                    .call(zoom).on("dblclick.zoom", null)
     
     return this.viewerBody
   }
+
+  //////////////////
 
   createLinks(parent, links) {
     const link = this.buildLinks(parent, links)
@@ -131,6 +84,8 @@ export default class GraphBuilder {
     return node
   }
 
+  /////////////////
+
   buildLinks(parent, links) {
     let link = parent.append("g")
       .attr("class", "links")
@@ -139,11 +94,12 @@ export default class GraphBuilder {
       .enter()
       .append("g")
       .attr("class", "link")
+      .attr("id", (d) => d.id)
       .attr("source", (d => d.source.id))
       .attr("target", (d => d.target.id))
       .append("line")
       .attr("class", "line")
-      .attr("stroke", this.graph.colors.stroke)
+      .style("stroke", this.graph.colors.stroke)
 
     link
     .attr("stroke-width", "1px")
@@ -158,23 +114,12 @@ export default class GraphBuilder {
       .attr("stroke-linecap", "round")
       .attr("stroke-linejoin", "round")
       .selectAll("g")
-      .data(nodes,(d) => {
-        // also defined in Simulation.js:73
-        d.r = 50
-        return d
-      })
+      .data(nodes)
       .join("g")
-      .attr("tabindex", (_d, i) => {
-        return i
-      })
-      .attr("class", (d) => {
-        if (d.type == null) {
-          return 'node'
-        } else {
-          return 'node ' + d.type.join(" ")
-        }
-      })
+      .attr("tabindex", (_d, i) => i)
+      .attr("class", (d) => d.genre)
       .attr("id", d => d.id)
+      .attr("name", (d) => d.name)
     return node
   }
 
@@ -208,16 +153,26 @@ export default class GraphBuilder {
     .enter()
     .append("text")
     .text(d => d.letter)
-    .style("font-size", `${this.graph.fontSize}`)
+    .style("font-size", (d) => {
+      return d.r/5
+    })
     .style("font-family", "Dosis, sans-serif")
     .style("text-transform", "uppercase")
     .style("transform", (d, i, a) => {
       let theta = (i- (a.length/2))* 7
-      return `rotate(${theta}deg)translateY(${-d.r+2}px)`
+      return `rotate(${theta}deg)translateY(${-d.r + (d.r/10) }px)`
     })
   }
 
   appendImage(node) {
+    const imageProps = { 
+      offsetX: -39,
+      offsetY: -35,
+      width: 60,
+      height: 70,
+      clipPath: "inset(0% 16px round 12px)"
+    }
+
     let posterless = node.filter((n) => {
       return n.poster == ""
     })
@@ -236,15 +191,15 @@ export default class GraphBuilder {
 
     posterful.append("svg:image")
       .attr("class", "poster")
-      .attr('x', this.image.offsetX)
-      .attr('y', this.image.offsetY)
-      .attr('width', this.image.width)
-      .attr('height', this.image.height)
+      .attr('x', imageProps.offsetX)
+      .attr('y', imageProps.offsetY)
+      .attr('width', imageProps.width)
+      .attr('height', imageProps.height)
       .attr("xlink:href", d => d.poster)
       .style("transform", (d) => {
         return `scale(${d.r/50})`
       })
-      .style("clip-path", this.image.clipPath)
+      .style("clip-path", imageProps.clipPath)
     return node
   }
 
