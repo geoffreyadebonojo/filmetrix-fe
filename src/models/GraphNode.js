@@ -23,18 +23,6 @@ export default class GraphNode {
     this.connectionIds = this.connections._groups[0].map((n) => n.id)
   }
 
-  shrinkNodeScale(scale) {
-    this.poster.transition().duration(1000).style("transform", `scale(${scale})`)
-    this.circle.transition().duration(1000).style("transform", `scale(${scale})`)
-    this.label.transition().duration(1000).style("transform", `scale(${scale})`)
-  }
-
-  setNodeScale(scale) {
-    this.poster.style("transform", `scale(${scale})`)
-    this.circle.style("transform", `scale(${scale})`)
-    this.label.style("transform", `scale(${scale})`)
-  }
-
   hover() {
     if (appStates.shiftKeyIsPressed) { 
       this.node.classed('shift-hover', true)
@@ -59,11 +47,14 @@ export default class GraphNode {
   async linkHighlighter(hoveredId) {
     if (graphStates.inMotion) { return }
 
-    let merged = this.allLinks
-    let linkholder = merged.append("g").attr("class", "character-label")
-    let fs = 10
+    let linkholder = this.allLinks.append("g").attr("class", "character-label")
     let nodeType = hoveredId.split("-")[0]
 
+    this.appendRect(linkholder, nodeType)
+    this.appendText(linkholder, nodeType)
+  }
+  
+  appendRect(linkholder, nodeType) {
     linkholder.append("rect")
     .attr('fill', "#222")
     .attr("x", (d) => {
@@ -98,9 +89,9 @@ export default class GraphNode {
         return `translate(${d.source.x},${d.source.y})rotate(${theta})`
       }
     })
+  }
 
-    ////
-
+  appendText(linkholder, nodeType) {
     linkholder.append("text")
     .text(d => d.roles.join(", "))
     .attr("x", (d) => {
@@ -125,7 +116,7 @@ export default class GraphNode {
     .attr("stroke", "#FFF")
     .style("font-family", "Dosis, sans-serif")
     .style("font-size", () => {
-      return `${fs}px`
+      return `${10}px`
     })
     .attr("transform", (d) => {
       let theta = angle360(
