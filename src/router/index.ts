@@ -8,6 +8,10 @@ const router = createRouter({
       path: '/',
       name: 'root',
       component: MainView
+    },
+    {
+      path: '/graph',
+      redirect: '/'
     }
   ]
 })
