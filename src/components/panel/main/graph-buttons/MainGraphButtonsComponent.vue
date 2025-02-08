@@ -8,7 +8,9 @@
 <template>
   <generate-link-button></generate-link-button>
   <clear-graph-button></clear-graph-button>
+
   <div class="graph-control-buttons" id="centering-button"></div>
+  <div class="graph-control-buttons" id="nav-lock-button"></div>
 </template>
 
 <script>
@@ -50,10 +52,18 @@
     }
   }
 
+  #nav-lock-button {
+    background-image: url("/lock-open.svg");
+    background-size: contain;
+    bottom: 60px;
+    width: 20px;
+    height: 20px;
+  }
+
   #centering-button {
     background-image: url("/center-graph-icon.svg");
     background-size: contain;
-    bottom: 10px;
+    bottom: 20px;
     width: 20px;
     height: 20px;
   }

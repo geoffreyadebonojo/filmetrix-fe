@@ -34,7 +34,8 @@
             chev.transition().duration(200).style("transform", "rotate(270deg)")
             el.transition().delay(100).style("display", "block")
           } else {
-            si.transition().duration(200).style("height", "3em")
+            let height = this.$attrs.section == "search-info" ? "5em" : "3em"
+            si.transition().duration(200).style("height", height)
             chev.transition().duration(200).style("transform", "rotate(90deg)")
             el.transition().delay(100).style("display", "none")
           }

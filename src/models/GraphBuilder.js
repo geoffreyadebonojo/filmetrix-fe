@@ -59,6 +59,8 @@ export default class GraphBuilder {
     
     if (this.graphControlButtons) {
       this.graphControlButtons.style("display", "block").transition().duration(30).style("left", "-30px")
+      
+      centeringFunction.attachNavLockEffect(d3.select("#nav-lock-button"))
       centeringFunction.attachCenteringEffect(d3.select("#centering-button"), this.viewerBody, zoom)
     }
 

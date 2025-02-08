@@ -23,8 +23,8 @@ export default {
     let anchors = graphStates.existing.map((n) => n[0])
     let currentIndex = anchors.indexOf(panelStates.detailsData.id)
 
-    d3.select("body").on("keydown.nav", async function(event) {
-      if (["ArrowUp", "ArrowDown"].includes(event.key)) {
+    d3.select("body").on("keydown.nav", async function(event) {      
+      if (["ArrowUp", "ArrowDown"].includes(event.key) && !graphStates.navLocked) {
         if (event.key == "ArrowUp") {
           if (zoomLevel > 5) {return}
           zoomLevel += 0.5
@@ -80,11 +80,13 @@ export default {
 
         d = gn.node.data()[0]
 
-        vb.transition().duration(500).call(
-          zoom.transform, 
-          d3.zoomIdentity.translate(centering.x, centering.y)
-                         .scale(zoomLevel)
-                         .translate(-d.x, -d.y))
+        if (!graphStates.navLocked) {
+          vb.transition().duration(500).call(
+            zoom.transform, 
+            d3.zoomIdentity.translate(centering.x, centering.y)
+                           .scale(zoomLevel)
+                           .translate(-d.x, -d.y))
+        }
 
         gn.node.classed("poster-highlight", true)
         gn.linkHighlighter(gn.id)

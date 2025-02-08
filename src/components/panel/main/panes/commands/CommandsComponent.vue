@@ -9,8 +9,12 @@
       <div class="header">Cause</div>
       <hr class="line" style="margin:20px 0">
       
-      <div class="item search-info" style="height:3.8em">
+      <div class="item search-info" style="height:5em">
         <img src="/search-icon-light.svg" style="opacity:0.5"/>
+      </div>
+
+      <div class="item single-click" style="height:2.8em">
+        <img src="/cursor-finger.svg" style="opacity:0.5"/>
       </div>
 
       <div class="item double-click" style="display:flex; height:2.8em">
@@ -22,10 +26,6 @@
           <span>SHIFT +</span> 
           <img src="/cursor-finger.svg" style="opacity: 0.5"/><p id="superscript">x2</p>
         </span>
-      </div>
-
-      <div class="item single-click" style="height:2.8em">
-        <img src="/cursor-finger.svg" style="opacity:0.5"/>
       </div>
 
       <div class="item link-to" style="height:3em">
@@ -59,6 +59,10 @@
           CMD+SHIFT+F
         </span>
       </div>
+
+      <div class="item lock-nav" style="height:3em">
+        <img src="/lock-closed.svg" style="opacity: 0.5"/>
+      </div>
     </div>
 
     <div id="centerline" class="line"></div>
@@ -71,8 +75,16 @@
         :section="'search-info'"
         :main="'search for actors, movies, or tv shows'"
         :secondary="'you can search and add nodes to an existing graph'"
-        :expandedHeight="'6.7em'"
-        style="height:3.8em"/>
+        :expandedHeight="'7.7em'"
+        style="height:5em"/>
+
+      <effect-explanation
+        :section="'single-click'"
+        :main="'get details'"
+        :secondary="'single click on any node to view details for that person, movie, or tv show'"
+        :expandedHeight="'6.2em'"
+        style="height:2.8em"
+      />
 
       <effect-explanation
         :section="'double-click'"
@@ -87,14 +99,6 @@
         :main="'superclick!'"
         :secondary="'hold SHIFT and double click to add even more nodes than usual!'"
         :expandedHeight="'5.5em'"
-        style="height:2.8em"
-      />
-
-      <effect-explanation
-        :section="'single-click'"
-        :main="'get details'"
-        :secondary="'single click on any node to view details for that person, movie, or tv show'"
-        :expandedHeight="'6.2em'"
         style="height:2.8em"
       />
 
@@ -140,8 +144,16 @@
 
       <effect-explanation
         :section="'name-search'"
-        :main="'search page for node'"
+        :main="'toggle page seach'"
         :secondary="'search page for node with matching name'"
+        :expandedHeight="'7em'"
+        style="height:3em"
+      />
+
+      <effect-explanation
+        :section="'lock-nav'"
+        :main="'lock/unlock arrow navigation'"
+        :secondary="'when locked, graph will not re-center on focused node when using left-right arrow navigation'"
         :expandedHeight="'7em'"
         style="height:3em"
       />

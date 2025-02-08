@@ -1,3 +1,7 @@
+import { 
+  graphStates
+} from '@/stores/store.js'
+
 import * as d3 from 'd3'
 
 export default {
@@ -13,6 +17,15 @@ export default {
           .translate(0,0)
           .scale(1)
       });
+    })
+  },
+
+  attachNavLockEffect(targetBody) {
+    targetBody.on("click", (e) => {
+      graphStates.navLocked = !graphStates.navLocked
+      let lockSetting = graphStates.navLocked ? "url('/lock-closed.svg')" : "url('/lock-open.svg')"
+      console.log(lockSetting)
+      targetBody.style("background-image", lockSetting)
     })
   }
 }
