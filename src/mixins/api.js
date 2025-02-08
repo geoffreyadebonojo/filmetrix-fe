@@ -17,7 +17,7 @@ export default {
     
     d3.select("#no-results").style("display", "none")
 
-    const api_response = await (
+    return await (
       fetch(API_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -37,15 +37,14 @@ export default {
       }).then((response) => {
         return response.json()
       }).then((d) => {
-        if (d.data.search.length < 1) {
+        if (d.data.search.length < 1 || d.errors != undefined) {
           d3.select("#no-results").style("display", "block")
+          return []
         } else {
-          return d
+          return d.data.search
         }
       })
     )
-
-    return api_response.data.search
   },
 
   async fetchSearchNext(term) {
@@ -113,8 +112,7 @@ export default {
       fetch(API_URL, {
         method: 'POST',
         headers: { 
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': 'https://filmetrix.netlify.app' 
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({ query: `
           query {
