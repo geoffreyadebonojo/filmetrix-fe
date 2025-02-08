@@ -35,12 +35,6 @@ export default class GraphNode {
     this.label.style("transform", `scale(${scale})`)
   }
 
-  setLinkLock() {
-    this.sources.classed("locked", true)
-    this.targets.classed("locked", true)
-  }
-
-
   hover() {
     if (appStates.shiftKeyIsPressed) { 
       this.node.classed('shift-hover', true)
@@ -62,16 +56,18 @@ export default class GraphNode {
     d.selectAll(".character-label").remove()
   }
 
-  async linkHighlighter() {
+  async linkHighlighter(hoveredId) {
+    if (graphStates.inMotion) { return }
+
     let merged = this.allLinks
     let linkholder = merged.append("g").attr("class", "character-label")
     let fs = 10
+    let nodeType = hoveredId.split("-")[0]
 
     linkholder.append("rect")
     .attr('fill', "#222")
     .attr("x", (d) => {
       let textLength = d.roles.join("").length
-      let nodeType = d3.select(".hover").data()[0].id.split("-")[0]
       if (nodeType == "person") {
         return (d.target.x < d.source.x) ? -50 - (textLength*3.75) : 50
 
@@ -108,7 +104,6 @@ export default class GraphNode {
     linkholder.append("text")
     .text(d => d.roles.join(", "))
     .attr("x", (d) => {
-      let nodeType = d3.select(".hover").data()[0].id.split("-")[0]
       if (nodeType == "person") {
         return (d.target.x < d.source.x) ? -50 : 50
 
@@ -120,7 +115,6 @@ export default class GraphNode {
       }
     })
     .attr("text-anchor", (link) => {
-      let nodeType = d3.select(".hover").data()[0].id.split("-")[0]
       if (nodeType == "person") {
         return (link.target.x < link.source.x) ? "end" : "start"
       } else {

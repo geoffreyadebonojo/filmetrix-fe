@@ -19,7 +19,8 @@ export default class GraphEvents {
   mouseEnterNode() {
     if (graphStates.inMotion) { return }
     this.gn.hover()
-    this.gn.linkHighlighter()
+    let hoveredId = d3.select(".hover").data()[0].id
+    this.gn.linkHighlighter(hoveredId)
     this.gn.node.moveToFront()
   }
   
