@@ -94,7 +94,6 @@ export default {
     panelStates.detailsData = api_response.data.details
   },
 
-                          // NODE SENDCOUNT
   async fetchGraphData(ids, count=50){
     const API_URL = `${this.data().base_url}/graphql`
 
@@ -221,85 +220,4 @@ export default {
       }
     })
   },
-
-  async fetchGraphList(userId) {
-    const API_URL =`${this.data().base_url}/graphql`
-    const api_response = await (
-      fetch(API_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ query:
-          `query {
-            fetchGraphList(userId:"${userId}") {
-              slug
-              posters
-            }
-          }`
-        })
-      }).then((response) => {
-        return response.json()
-      })
-    )
-
-    return api_response.data.fetchGraphList
-  },
-
-  async fetchMovieList(userId) {    
-    const API_URL =`${this.data().base_url}/graphql`
-    const api_response = await (
-      fetch(API_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ query:
-          `query {
-            fetchMovieList(userId:"${userId}")
-          }`
-        })
-      }).then((response) => {
-        return response.json()
-      })
-    )
-
-    return api_response.data.fetchMovieList
-  },
-
-  async removeFromMovieList(args) {    
-    const API_URL =`${this.data().base_url}/graphql`
-    
-    const api_response = await (
-      fetch(API_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ query:
-          `query {
-            removeFromMovieList(userId:"${args.userId}", movieId:"${args.movieId}")
-          }`
-        })
-      }).then((response) => {
-        return response.json()
-      })
-    )
-
-    return api_response.data.removeFromMovieList
-  },
-
-  async addToMovieList(args) {    
-    const API_URL =`${this.data().base_url}/graphql`
-    
-    const api_response = await (
-      fetch(API_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ query:
-          `query {
-            addToMovieList(userId:"${args.userId}", movieId:"${args.movieId}")
-          }`
-        })
-      }).then((response) => {
-        return response.json()
-      })
-    )
-
-    return api_response.data.addToMovieList
-  }
 }

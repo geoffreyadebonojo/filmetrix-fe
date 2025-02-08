@@ -10,7 +10,6 @@ import GraphBuilder from '@models/GraphBuilder.js'
 import GraphManager from '@models/GraphManager.js'
 import GraphNode from '@models/GraphNode'
 import GraphEvents from '@models/GraphEvents'
-import LinkMap from '@models/LinkMap'
 import Simulation from '@models/Simulation.js'
 
 let timer;
