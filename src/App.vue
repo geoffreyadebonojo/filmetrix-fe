@@ -20,6 +20,7 @@
   <div id="app-wrapper" class="dark-theme">
     <RouterView></RouterView>
     <div id="name-search"></div>
+    <div id="filters"></div>
     <div id="degrees-kevin"></div>
   </div>
 </template>
@@ -38,13 +39,32 @@
     stroke-width: 2;
   }
 
-  #genre-search {
+  #filters {
     position: absolute; 
-    top: 50px; 
+    top: 85px; 
     left: 10px; 
-    font-family: $global-font;
-    font-size: 50px;
-    stroke-width: 2;
+    width: 0px;
+    height: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-content: flex-start;
+    
+    .filter {
+      font-family: $global-font;
+      font-size: 20px;
+      stroke-width: 2;
+      color: #7A7879;
+
+      text:hover {
+        cursor: $cursor;
+        color: lightblue;
+      }
+    }
+
+    .active > text {
+      color: lightblue;
+    }
   }
 
   #degrees-kevin {
@@ -74,12 +94,16 @@
       
       if (localStorage.getItem("lockedGraph") == null) {
         localStorage.setItem("lockedGraph", "[]")
+      }     
+
+      if (localStorage.getItem("genres") == null) {
+        localStorage.setItem("genres", "[]")
       }
 
       graphStates.existing = JSON.parse(localStorage.getItem("lockedGraph"))
 
       let pageSearchString = ''
-      const performMatching = this.performMatching
+      const performStringMatching = this.performStringMatching
       const deselectPageSearch = this.deselectPageSearch
       const filterByGenres = this.filterByGenres
 
@@ -87,10 +111,37 @@
         const searchTextElem = d3.select("#name-search")
 
         if (event.key == "`") {
-          let k = Object.keys(graphStates.movieGenreCounts)
+          let genres = d3.selectAll(".movie").data().map((n) => n.genre).join(" ").split(" ").unique()
+          let roles =  d3.selectAll(".person").data().map((n) => n.genre).join(" ").split(" ").unique()
 
-          let res = filterByGenres(['comedy', 'mystery'], "not")
+          let textContainer = d3.select("#filters").selectAll("g")
+                                .data(genres.concat(roles)).enter()
+                                .append("g")
+                                .attr("class", (d) => {
+                                  let activeGenres = JSON.parse(localStorage.getItem("genres"))
+                                  let active = activeGenres.includes(d) ? "active" : ""
+                                  return ['filter', active].join(" ")
+                                })
           
+          textContainer.on("click", (e, d) => {
+            let thisFilterClassed = d3.select(e.currentTarget).classed("active")
+            d3.select(e.currentTarget).classed("active", !thisFilterClassed)
+
+            let activeFilters = d3.selectAll(".filter.active").data()
+
+            localStorage.setItem('genres', JSON.stringify(activeFilters))
+            
+            d3.selectAll(".node").style("display", "block")
+
+            if (activeFilters.any()) {
+              let nonMatches = d3.selectAll(`.node:not(.${activeFilters.join(".")})`)
+              nonMatches.style("display", "none")
+              // nonMatches.each(nm => new GraphNode(nm.id).connectionLines.style("display", "none"))
+            }
+          })                        
+
+          textContainer.append("text").text((d) => d)
+
         }
         if (event.key === "Shift") {
           appStates.shiftKeyIsPressed = true
@@ -120,7 +171,7 @@
           }
 
           searchTextElem.node().innerHTML = `> ${pageSearchString}`
-          performMatching(pageSearchString)
+          performStringMatching(pageSearchString)
 
         } else {
           pageSearchString = ''
@@ -186,23 +237,7 @@
         d3.selectAll(".node").style("opacity", 1)
       },
 
-      filterByGenres (genres, filterType) {
-        let nodes
-
-        if (filterType == "or") {
-          nodes = d3.selectAll(`.${genres.join(",.")}`)
-        } else if (filterType == "and") {
-          nodes = d3.selectAll(`.${genres.join(".")}`)
-        } else if (filterType == "not") {
-          nodes = d3.selectAll(`.node:not(.${genres.join(",.")})`)
-        } else {
-          nodes = []
-        }
-
-        return nodes
-      },
-      
-      performMatching (pageSearchString) {
+      performStringMatching (pageSearchString) {
         let nws, nwos, pslc, pslcwos, gn
         // interesting question of how to handle anchors...
         // let nonAnchors = d3.selectAll(".node").filter((n) => {

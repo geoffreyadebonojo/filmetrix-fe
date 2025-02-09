@@ -20,7 +20,7 @@ export default class GraphNode {
     const z = this.targets.nodes().map((d)=> d.attributes.source.value)
 
     this.connections = d3.selectAll('.node').filter((d) => { return x.includes(d.id) || z.includes(d.id) })
-    this.connectionIds = this.connections._groups[0].map((n) => n.id)
+    this.connectionIds = this.connections.data().map((n) => n.id)
     this.connectionLines = this.allLinks.select(".line")
   }
 
@@ -42,8 +42,6 @@ export default class GraphNode {
 
   linkUnhighlighter() {
     this.allLinks.select(".line").style("stroke", "#7A7879")
-    
-    // let d = d3.selectAll(".link:not(.active)")
     d3.selectAll(".character-label").remove()
   }
 

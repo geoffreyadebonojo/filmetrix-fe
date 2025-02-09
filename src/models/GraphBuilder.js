@@ -121,7 +121,9 @@ export default class GraphBuilder {
       .data(nodes)
       .join("g")
       .attr("tabindex", (_d, i) => i)
-      .attr("class", (d) => d.genre)
+      .attr("class", (d) => {
+        return ['node', d.entity, d.genre].join(" ")
+      })
       .attr("id", d => d.id)
       .attr("name", (d) => d.name)
     return node

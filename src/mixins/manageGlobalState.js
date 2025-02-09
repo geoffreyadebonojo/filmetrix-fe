@@ -14,6 +14,7 @@ export default {
     d3.select("#name-search").node().innerHTML = ''
 
     localStorage.setItem("lockedGraph", JSON.stringify([]))
+    localStorage.setItem("genres", JSON.stringify([]))
     graphStates.existing =         []
     graphStates.graphData =        {}
     graphStates.currentGraphId =   ''

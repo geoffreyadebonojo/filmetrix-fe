@@ -127,6 +127,7 @@ Array.prototype.flatten = function() {
 Array.prototype.overlapsWith = function(otherArray) {
   const x = []
   
+  // :(
   this.forEach((c) => {
     otherArray.forEach((d) => {
       if (c == d) {
@@ -136,6 +137,14 @@ Array.prototype.overlapsWith = function(otherArray) {
   })
 
   return x
+}
+
+Array.prototype.empty = function() {
+  return this.length == 0
+}
+
+Array.prototype.any = function() {
+  return this.length != 0
 }
 
 d3.selection.prototype.moveToFront = function() {

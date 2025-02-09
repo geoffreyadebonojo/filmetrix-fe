@@ -25,30 +25,25 @@ export default {
   },
   draw (responseData, options={}) {
     localStorage.setItem("lockedGraph", JSON.stringify(graphStates.existing))
+    // let activeFilters = JSON.parse(localStorage.getItem("genres"))
+
     graphStates.inMotion = true
-    let h = {}
+    // let h = {}
 
     var links = responseData.links.map((l) => {
       l.id = `${l.source}--${l.target}`
       return l
     })
+
     var nodes = responseData.nodes.map((n) => {
-      if (n.entity != "person"){
-        n.type.forEach((t) => {
-          if (h[t]) {
-            h[t] += 1
-          } else {
-            h[t] = 1
-          }
-        })
-      }
       n.r =     40
-      n.genre = n.type ? 'node ' + n.type.join(" ") : 'node'
+      n.genre = n.type ? n.type.join(" ") : ''
       n.name =  n.name ? n.name.toLowerCase() : ''
+      
       return n
     })
 
-    graphStates.movieGenreCounts = h
+    // graphStates.movieGenreCounts = h
 
     const s = settings(responseData.type)
 
