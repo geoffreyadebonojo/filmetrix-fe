@@ -7,6 +7,7 @@
     panelStates,
     store
    } from '@/stores/store.js'
+  import GraphNode from '@models/GraphNode'
   import api from "@mixins/api"
   import graph from "@mixins/graph"
   import { setFocus } from '@mixins/helpers'
@@ -19,7 +20,6 @@
   <div id="app-wrapper" class="dark-theme">
     <RouterView></RouterView>
     <div id="name-search"></div>
-    <!-- <div id="genre-search"></div> -->
     <div id="degrees-kevin"></div>
   </div>
 </template>
@@ -79,8 +79,19 @@
       graphStates.existing = JSON.parse(localStorage.getItem("lockedGraph"))
 
       let pageSearchString = ''
-      
+      const performMatching = this.performMatching
+      const deselectPageSearch = this.deselectPageSearch
+      const filterByGenres = this.filterByGenres
+
       d3.select("body").on("keydown.click", function(event) {
+        const searchTextElem = d3.select("#name-search")
+
+        if (event.key == "`") {
+          let k = Object.keys(graphStates.movieGenreCounts)
+
+          let res = filterByGenres(['comedy', 'mystery'], "not")
+          
+        }
         if (event.key === "Shift") {
           appStates.shiftKeyIsPressed = true
 
@@ -88,19 +99,13 @@
           appStates.metaKeyIsPressed =  true
 
         } else if (event.metaKey && event.shiftKey && event.key == 'f') {
-          let nameSearch = d3.select("#name-search")
-          // let genreSearch = d3.select("#genre-search")
 
           if (graphStates.pageSearchActive) {
-            graphStates.pageSearchActive = !graphStates.pageSearchActive
-            nameSearch.node().innerHTML = ""
-            genreSearch.node().innerHTML = ""
-            d3.selectAll(".node").style("opacity", 1)
+            pageSearchString = ""
+            deselectPageSearch(pageSearchString, searchTextElem)
           } else {
             graphStates.pageSearchActive = true
-            nameSearch.node().innerHTML = ">"
-            genreSearch.node().innerHTML = ">"
-            tse.style("color", "white").transition().duration(300).style("color", "#7A7879")
+            searchTextElem.node().innerHTML = ">"
           }
 
         } else if (graphStates.pageSearchActive) {
@@ -108,42 +113,14 @@
           validKeys.push("Backspace")
           
           if (!validKeys.includes(event.key)) { return false }
-          
-          let searchTextElem = d3.select("#name-search")
-          // let genreTextElem = d3.select("#genre-search")
-
-          if (event.key == "Backspace") { pageSearchString = pageSearchString.slice(0, -1) }
-          else {                          pageSearchString += event.key                    }
+          if (event.key == "Backspace") { 
+            pageSearchString = pageSearchString.slice(0, -1) 
+          } else { 
+            pageSearchString += event.key
+          }
 
           searchTextElem.node().innerHTML = `> ${pageSearchString}`
-          // genreTextElem.node().innerHTML = `> ${pageSearchString}`
-
-          let nws, nwos, pslc, pslcwos
-
-          let nonMatching = d3.selectAll(".node").filter((n) => {
-            nws = n.name.toLowerCase()
-            nwos = n.name.toLowerCase().replace(/ /g, "")
-            pslc = pageSearchString.toLowerCase()
-            pslc = pageSearchString.toLowerCase().replace(/ /g, "")
-            pslcwos = pageSearchString.toLowerCase().replace(/ /g, "")
-
-            return !(nws.includes(pslc) || nwos.includes(pslcwos))
-          })
-          
-          nonMatching.style("opacity", 0)
-
-          let matching = d3.selectAll(".node").filter((n) => {
-            nws = n.name.toLowerCase()
-            nwos = n.name.toLowerCase().replace(/ /g, "")
-            pslc = pageSearchString.toLowerCase()
-            pslcwos = pageSearchString.toLowerCase().replace(/ /g, "")
-            
-            return (nws.includes(pslc) || nwos.includes(pslcwos))
-          })
-          
-          matching.style("opacity", 1)
-          
-          graphStates.matching = matching.data().map((n) => n.id)
+          performMatching(pageSearchString)
 
         } else {
           pageSearchString = ''
@@ -201,6 +178,69 @@
               setFocus("details")
             }
         })
+      },
+
+      deselectPageSearch (pageSearchString, searchTextElem) {
+        graphStates.pageSearchActive = false
+        searchTextElem.node().innerHTML = ""
+        d3.selectAll(".node").style("opacity", 1)
+      },
+
+      filterByGenres (genres, filterType) {
+        let nodes
+
+        if (filterType == "or") {
+          nodes = d3.selectAll(`.${genres.join(",.")}`)
+        } else if (filterType == "and") {
+          nodes = d3.selectAll(`.${genres.join(".")}`)
+        } else if (filterType == "not") {
+          nodes = d3.selectAll(`.node:not(.${genres.join(",.")})`)
+        } else {
+          nodes = []
+        }
+
+        return nodes
+      },
+      
+      performMatching (pageSearchString) {
+        let nws, nwos, pslc, pslcwos, gn
+        // interesting question of how to handle anchors...
+        // let nonAnchors = d3.selectAll(".node").filter((n) => {
+        //   return graphStates.existing.map((d) => d[0]).excludes(n.id)
+        // })
+        const allNodes = d3.selectAll(".node")
+
+        const nonMatching = allNodes.filter((n) => {
+          nws =  n.name.toLowerCase()
+          nwos = n.name.toLowerCase().replace(/ /g, "")
+          pslc =    pageSearchString.toLowerCase()
+          pslcwos = pageSearchString.toLowerCase().replace(/ /g, "")
+
+          return !(nws.includes(pslc) || nwos.includes(pslcwos))
+        })
+        
+        nonMatching.each((d) => {
+          gn = new GraphNode(d.id)
+          gn.node.classed("hidden", true)
+          gn.allLinks.classed("hidden", true)
+        })
+
+        const matching = allNodes.filter((n) => {
+          nws =  n.name.toLowerCase()
+          nwos = n.name.toLowerCase().replace(/ /g, "")
+          pslc =    pageSearchString.toLowerCase()
+          pslcwos = pageSearchString.toLowerCase().replace(/ /g, "")
+          
+          return (nws.includes(pslc) || nwos.includes(pslcwos))
+        })
+        
+        matching.each((d) => {
+          gn = new GraphNode(d.id)
+          gn.node.classed("hidden", false)
+          gn.allLinks.classed("hidden", false)
+        })
+
+        graphStates.matching = matching.data().map((n) => n.id)
       }
     }
   }

@@ -44,6 +44,10 @@
     display: block;
     width: 100%;
 
+    .hidden {
+      display: none;
+    }
+
     .hover {
       .outline {
         stroke: white;

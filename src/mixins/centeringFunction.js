@@ -24,8 +24,9 @@ export default {
     targetBody.on("click", (e) => {
       graphStates.navLocked = !graphStates.navLocked
       let lockSetting = graphStates.navLocked ? "url('/lock-closed.svg')" : "url('/lock-open.svg')"
-      console.log(lockSetting)
-      targetBody.style("background-image", lockSetting)
+      let opacity =     graphStates.navLocked ? "1" : "0.5"
+
+      targetBody.style("background-image", lockSetting).style("opacity", opacity)
     })
   }
 }

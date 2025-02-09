@@ -14,9 +14,6 @@ import Simulation from '@models/Simulation.js'
 
 let timer;
 let alreadyClicked = false
-let lm
-
-// IGNORE THE LINTER
 
 export default {
   name: "graph",
@@ -28,18 +25,30 @@ export default {
   },
   draw (responseData, options={}) {
     localStorage.setItem("lockedGraph", JSON.stringify(graphStates.existing))
-
     graphStates.inMotion = true
+    let h = {}
+
     var links = responseData.links.map((l) => {
       l.id = `${l.source}--${l.target}`
       return l
     })
     var nodes = responseData.nodes.map((n) => {
+      if (n.entity != "person"){
+        n.type.forEach((t) => {
+          if (h[t]) {
+            h[t] += 1
+          } else {
+            h[t] = 1
+          }
+        })
+      }
       n.r =     40
       n.genre = n.type ? 'node ' + n.type.join(" ") : 'node'
       n.name =  n.name ? n.name.toLowerCase() : ''
       return n
     })
+
+    graphStates.movieGenreCounts = h
 
     const s = settings(responseData.type)
 
@@ -126,7 +135,7 @@ export default {
     let addCount
 
     if (appStates.shiftKeyIsPressed) {
-      addCount = 7
+      addCount = 10
     } else {
       addCount = 3
     }
@@ -134,7 +143,7 @@ export default {
     let newNodeCount = currentNodeCount + addCount
 
     if (newNodeCount > graphStates.graphData[currentNodeId].nodes.length) {
-      newNodeCount = graphStates.graphData[currentNodeId].nodes.length
+      newNodeCount = graphStates.graphData[currentNodeId].nodes.length-1
     }
 
     currentNode[1] = newNodeCount

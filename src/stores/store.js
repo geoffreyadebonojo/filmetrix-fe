@@ -9,7 +9,8 @@ export const graphStates = reactive({
   pageSearchActive: false,
   matching: [],
   visited: [],
-  navLocked: false
+  navLocked: false,
+  movieGenreCounts : {}
 })
 
 export const panelStates = reactive({

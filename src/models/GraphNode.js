@@ -21,6 +21,7 @@ export default class GraphNode {
 
     this.connections = d3.selectAll('.node').filter((d) => { return x.includes(d.id) || z.includes(d.id) })
     this.connectionIds = this.connections._groups[0].map((n) => n.id)
+    this.connectionLines = this.allLinks.select(".line")
   }
 
   applyHoverClass() {
@@ -42,8 +43,8 @@ export default class GraphNode {
   linkUnhighlighter() {
     this.allLinks.select(".line").style("stroke", "#7A7879")
     
-    let d = d3.selectAll(".link:not(.locked)")
-    d.selectAll(".character-label").remove()
+    // let d = d3.selectAll(".link:not(.active)")
+    d3.selectAll(".character-label").remove()
   }
 
   async linkHighlighter(hoveredId) {

@@ -20,7 +20,6 @@ export default class GraphEvents {
     this.gn.applyHoverClass()
     let hoveredId = d3.select(".hover").data()[0].id
     this.gn.linkHighlighter(hoveredId)
-
     this.gn.node.moveToFront()
   }
   
@@ -33,12 +32,15 @@ export default class GraphEvents {
   
   async singleClickNode() {
     d3.selectAll(".node").classed("poster-highlight", false)
-
     if (appStates.metaKeyIsPressed) {
       this.metaClick()
 
     } else {
       this.gn.node.classed("poster-highlight", true)
+      this.gn.circle.style("stroke", "white")
+      this.gn.connectionLines.style("stroke", "white")
+      this.gn.allLinks.classed("active", true)
+      this.gn.linkHighlighter(this.gn.id)
     }
   }
   
