@@ -96,9 +96,7 @@ export default class GraphBuilder {
       .enter()
       .append("g")
       .attr("class", "link")
-      .attr("id", (d) => {
-       return d.id
-      })
+      .attr("id", d => d.id)
       .attr("source", (d => d.source.id))
       .attr("target", (d => d.target.id))
       .append("line")

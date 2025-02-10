@@ -25,13 +25,15 @@ export default {
   },
   draw (responseData, options={}) {
     localStorage.setItem("lockedGraph", JSON.stringify(graphStates.existing))
-    // let activeFilters = JSON.parse(localStorage.getItem("genres"))
 
     graphStates.inMotion = true
-    // let h = {}
 
     var links = responseData.links.map((l) => {
-      l.id = `${l.source}--${l.target}`
+      if (l.source.id) {
+        l.id = `${l.source.id}--${l.target.id}`
+      } else {
+        l.id = `${l.source}--${l.target}`
+      }
       return l
     })
 
@@ -42,8 +44,6 @@ export default {
       
       return n
     })
-
-    // graphStates.movieGenreCounts = h
 
     const s = settings(responseData.type)
 
@@ -168,7 +168,7 @@ export default {
     panelStates.detailsData.id = d.id
     panelStates.currentFocus = 'details'
     
-    if (graphStates.existing.map((f) => f[0]).excludes(d.id) ) { 
+    if (graphStates.existing.map((f) => f[0]).excludes(d.id)) { 
       graphStates.existing.push([d.id, count])
       const ext = graphStates.existing.unique().map((d) => d[0])
       await api.fetchGraphData(ext)

@@ -8,6 +8,7 @@
     store
    } from '@/stores/store.js'
   import GraphNode from '@models/GraphNode'
+  import GraphManager from '@models/GraphManager.js'
   import api from "@mixins/api"
   import graph from "@mixins/graph"
   import { setFocus } from '@mixins/helpers'
@@ -138,6 +139,9 @@
               nonMatches.style("display", "none")
               // nonMatches.each(nm => new GraphNode(nm.id).connectionLines.style("display", "none"))
             }
+
+            new GraphManager().generate()
+
           })                        
 
           textContainer.append("text").text((d) => d)

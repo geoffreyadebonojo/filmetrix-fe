@@ -106,6 +106,8 @@ export default {
   async fetchGraphData(ids, count=50){
     const API_URL = `${this.data().base_url}/graphql`
 
+    const filters = JSON.parse(localStorage.getItem("genres"))
+
     const resp = await (
       fetch(API_URL, {
         method: 'POST',
@@ -114,7 +116,7 @@ export default {
         },
         body: JSON.stringify({ query: `
           query {
-            graphData(ids:"${ids}",count:${count}) {
+            graphData(ids:"${ids}",genres:"${filters}") {
               id
               nodes {
                 id
