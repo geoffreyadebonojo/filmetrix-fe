@@ -70,6 +70,12 @@
     }
   }
 
+  // .node.locked {
+  //   circle {
+  //     stroke: red
+  //   }
+  // }
+
   #degrees-kevin {
     position: absolute; 
     bottom: 10px; 
@@ -106,81 +112,69 @@
       d3.select("body").on("keydown.click", function(event) {
         const searchTextElem = d3.select("#name-search")
 
-        // if (event.key == "`") {
-        //   let genres = d3.selectAll(".movie").data().map((n) => n.genre).join(" ").split(" ").unique()
-        //   // let roles =  d3.selectAll(".person").data().map((n) => n.genre).join(" ").split(" ").unique()
-        //   // let filter = genres.concat(roles)
-        //   let filter = genres
+        if (event.key == "`") {
+          graphStates.genreSearchActive = !graphStates.genreSearchActive
 
-        //   let textContainer = d3.select("#filters").selectAll("g")
-        //                         .data(filter).enter()
-        //                         .append("g")
-        //                         .attr("class", (d) => {
-        //                           let activeGenres = JSON.parse(localStorage.getItem("genres"))
-        //                           let active = activeGenres.includes(d) ? "locked" : ""
-        //                           return ['filter', active].join(" ")
-        //                         })
-          
-        //   textContainer.on("mouseenter", (e, d) => {
-        //     let nonMatches = d3.selectAll(`.node:not(.${d})`)
-        //     nonMatches.style("display", "none")
-        //   })                   
-          
-        //   textContainer.on("mouseleave", (e, d) => {
-        //     d3.selectAll(".node").style("display", "block")
-        //   })
+          if (!graphStates.genreSearchActive) { 
+            d3.select("#filters").selectAll("g").remove()
+          } else {
+            let filter = d3.selectAll(".movie").data().map((n) => n.genre).join(" ").split(" ").unique()
 
-        //   textContainer.on("click", (e, d) => {
-        //     let thisFilterClassed = d3.select(e.currentTarget).classed("locked")
-        //     d3.select(e.currentTarget).classed("locked", !thisFilterClassed)
-        //     let activeFilters = d3.selectAll(".filter.locked").data()
-        //     localStorage.setItem('genres', JSON.stringify(activeFilters))
+            function setClass(d) {
+              let activeGenres = JSON.parse(localStorage.getItem("genres"))
+              let active = activeGenres.includes(d) ? "locked" : ""
+              return ['filter', active].join(" ")
+            }
+
+            let textContainer = d3.select("#filters").selectAll("g")
+                                  .data(filter).enter()
+                                  .append("g")
+                                  .attr("class", d => setClass(d))
             
-        //     let data = {links: [], nodes: []}
+            function mouseover(e, d) {
+              let nonMatches = d3.selectAll(`.movie:not(.${d})`)
+              nonMatches.style("display", "none")  
+              nonMatches.each((n) => {
+                let id = n.id
+                d3.selectAll(".link").filter(l => l.id.includes(id)).style("display", "none")
+              })
+            }                     
             
-        //     Object.values(graphStates.graphData).map((ge) => {
-        //       data.links.push(ge.links)
-        //       data.nodes.push(ge.nodes)
-        //     })
+            function mouseout(e, d) {
+              d3.selectAll(`.node`).style("display", "block")
+              d3.selectAll(".link").style("display", "block")
+            }
 
-        //     function xfilter(filters, n) {
-        //       let x
-        //       if (n.entity == "person") {
-        //         x = true
-        //       } else {
-        //         x = activeFilters.overlapsWith(n.type).any()
-        //       }
-        //       return x
-        //     }
+            function filterClick(e) {
+              const thisFilterClassed = d3.select(e.currentTarget).classed("locked")
+              d3.select(e.currentTarget).classed("locked", !thisFilterClassed)
+              const activeFilters = d3.selectAll(".filter.locked").data()
+              localStorage.setItem('genres', JSON.stringify(activeFilters))
+
+              let nodes = []
+
+              graphData.active.nodes.forEach((n) => {
+                if (n.type.overlapsWith(activeFilters).any() || n.entity == "person") {
+                  nodes.push(n)
+                }
+              })
+
+              function filt(l, nids) {
+                return l.id.split("--").overlapsWith(nids).length > 1
+              }
+
+              let links = graphData.active.links.filter((l) => filt(l, nodes.map(n => n.id)))
+
+              new GraphManager().generate({nodes, links})
+            }
             
-        //     let nodes = data.nodes.flatten().filter(n => xfilter(activeFilters, n))
+            textContainer.on("mouseenter", (e, d) => mouseover(e, d))                   
+                         .on("mouseleave", (e, d) => mouseout(e, d))
+                         .on("click", (e) => filterClick(e))
+                         .append("text").text((d) => d)  
+          }
+        }
 
-        //     function yfilter(nodeIds, l) {
-        //       let x
-        //       if (l.index != undefined) {
-        //         x = nodeIds.includes(l.source.id) && nodeIds.includes(l.target.id)
-        //       } else {
-        //         x = nodeIds.includes(l.source) && nodeIds.includes(l.target)
-        //       }
-        //       return x
-        //     }
-
-        //     let ids = nodes.map(n => n.id)
-        //     let links = data.links.flatten().filter(l => yfilter(ids, l))
-
-        //     // debugger
-
-        //     graph.draw({
-        //       nodes: nodes.uniqueById(),
-        //       links: links,
-        //       type: "main"
-        //     })
-            
-        //   })
-
-        //   textContainer.append("text").text((d) => d)
-
-        // }
         if (event.key === "Shift") {
           appStates.shiftKeyIsPressed = true
 
@@ -223,7 +217,6 @@
     },
 
     mounted () {
-      d3.select("#loading").transition().duration(5000).attr("width", 500)
       if (graphStates.existing != null) {
         if (graphStates.existing.length > 0) {
           this.loadSavedGraph()

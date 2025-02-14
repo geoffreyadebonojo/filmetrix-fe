@@ -15,56 +15,62 @@ export default class GraphManager {
     this.graphType = graphType
   }
 
-  async generate() {
-    console.group("GraphManager.generate()")
-    console.log("start")
-    let methodStart = Date.now()
+  async generate(filteredData={}) {
+    // console.group("GraphManager.generate()")
+    // console.log("start")
+    // let methodStart = Date.now()
 
-    if (graphStates.existing == null) { return }
-    if (graphStates.existing.length < 1) { return }
+    let outgoingLinks
+    let outgoingNodes
 
-    store.isLocked = true
-  
-    await api.fetchGraphData(graphStates.existing.map(d => d[0]))
-    await api.fetchDetails(graphStates.existing[0])
+    if (filteredData.nodes && filteredData.links) {
+      outgoingLinks = filteredData.links
+      outgoingNodes = filteredData.nodes  
+    } else {
 
-    let data, start, percent
+      if (graphStates.existing == null) { return }
+      if (graphStates.existing.length < 1) { return }
+
+      store.isLocked = true
     
-    graphStates.existing.forEach((d, i) => {
-      start = Date.now()
+      await api.fetchGraphData(graphStates.existing.map(d => d[0]))
+      await api.fetchDetails(graphStates.existing[0])
 
-      data = graphStates.graphData[d[0]]
+      let data, start, percent
+      
+      graphStates.existing.forEach((d, i) => {
+        start = Date.now()
 
-      let [activeNodes, inactiveNodes] = data.nodes.splitAt(d[1])
-      let [activeLinks, inactiveLinks] = data.links.splitAt(d[1]-1)
+        data = graphStates.graphData[d[0]]
 
-      graphData.active.nodes = graphData.active.nodes.concat(activeNodes).uniqueById()
-      graphData.active.links = graphData.active.links.concat(activeLinks).unique()
+        let [activeNodes, inactiveNodes] = data.nodes.splitAt(d[1])
+        let [activeLinks, inactiveLinks] = data.links.splitAt(d[1]-1)
 
-      graphData.inactive.nodes = graphData.inactive.nodes.concat(inactiveNodes).uniqueById()
-      graphData.inactive.links = graphData.inactive.links.concat(inactiveLinks).unique()
+        graphData.active.nodes = graphData.active.nodes.concat(activeNodes).uniqueById()
+        graphData.active.links = graphData.active.links.concat(activeLinks).unique()
 
-      this.links = graphData.active.links
-      this.nodes = graphData.active.nodes
+        graphData.inactive.nodes = graphData.inactive.nodes.concat(inactiveNodes).uniqueById()
+        graphData.inactive.links = graphData.inactive.links.concat(inactiveLinks).unique()
 
-      percent = i / graphStates.existing.length-1
-      // this.anim(percent)
-      console.log(`${Date.now() - start}`)
-    })
+        this.links = graphData.active.links
+        this.nodes = graphData.active.nodes
+
+        percent = i / graphStates.existing.length-1
+        // console.log(`${Date.now() - start}`)
+      })
+
+      outgoingLinks = graphData.active.links
+      outgoingNodes = graphData.active.nodes
+    }
 
     graph.draw({
-      nodes: graphData.active.nodes,
-      links: graphData.active.links,
+      nodes: outgoingNodes,
+      links: outgoingLinks,
       type: this.graphType
     })
 
-    console.log(`duration: ${Date.now() - methodStart}`)
-    console.log("end")
-    console.groupEnd()
-  }
-
-  anim(p) {
-    graphStates.loading = 1- p*-1
-    // d3.select("#loading").selectAll("text").data(p).append("text").text((d) => d)
+    // console.log(`duration: ${Date.now() - methodStart}`)
+    // console.log("end")
+    // console.groupEnd()
   }
 }
