@@ -103,7 +103,7 @@ export default {
     panelStates.detailsData = api_response.data.details
   },
 
-  async fetchGraphData(ids, count=50){
+  async fetchGraphData(ids){
     const API_URL = `${this.data().base_url}/graphql`
 
     const filters = JSON.parse(localStorage.getItem("genres"))
