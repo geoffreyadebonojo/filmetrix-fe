@@ -1,6 +1,7 @@
 import { 
   graphStates, 
   panelStates,
+  graphData,
   appStates
 } from '@/stores/store.js'
 import { settings, setFocus } from '@mixins/helpers.js'
@@ -23,27 +24,34 @@ export default {
       links: []
     }
   },
-  draw (responseData, options={}) {
-    localStorage.setItem("lockedGraph", JSON.stringify(graphStates.existing))
 
+  linkFormatter(l) {
+    if (l.source.id) {
+      l.id = `${l.source.id}--${l.target.id}`
+    } else {
+      l.id = `${l.source}--${l.target}`
+    }
+    return l
+  },
+
+  nodeFormatter(n, s, t) {
+    n.r = 40
+    // n.r =     n.poster == "" ? 10 : 40
+    n.genre = n.type ? n.type.join(" ") : ''
+    n.name =  n.name ? n.name.toLowerCase() : ''
+    return n
+  },
+
+  draw (responseData, options={}) {
+    let start = Date.now()
+    console.group("graph.draw()")
+    console.log("start")
+
+    localStorage.setItem("lockedGraph", JSON.stringify(graphStates.existing))
     graphStates.inMotion = true
 
-    var links = responseData.links.map((l) => {
-      if (l.source.id) {
-        l.id = `${l.source.id}--${l.target.id}`
-      } else {
-        l.id = `${l.source}--${l.target}`
-      }
-      return l
-    })
-
-    var nodes = responseData.nodes.map((n) => {
-      n.r =     40
-      n.genre = n.type ? n.type.join(" ") : ''
-      n.name =  n.name ? n.name.toLowerCase() : ''
-      
-      return n
-    })
+    var links = responseData.links.map((l) => { return this.linkFormatter(l) })
+    var nodes = responseData.nodes.map((n) => { return this.nodeFormatter(n) })
 
     const s = settings(responseData.type)
 
@@ -77,11 +85,14 @@ export default {
           .attr("y2", d => d.target.y)
 
       node.attr("transform", d => `translate(${d.x},${d.y})`);
-    })
-    .on("end", () => {
+    }).on("end", () => {
       graphStates.inMotion = false
     })
     
+    console.log(`duration: ${Date.now() - start}`)
+    console.log("end")
+    console.groupEnd()
+
     return innerWrapper.node();
   },
 
@@ -94,7 +105,7 @@ export default {
         localStorage.setItem("newHere", false)
 
         if (graphStates.existing.map(x => x[0]).includes(d.id)){
-          this.addToExistingNodes(d)
+          await this.addToExistingNodes(d)
         } else {
           localStorage.setItem("newHere", false)
           return await this.callForNodes(d)
@@ -108,11 +119,13 @@ export default {
       } else {
         timer = setTimeout(async function () {          
           alreadyClicked = false;
-          setFocus('details')
-          panelStates.detailsData.id = d.id
-         
-          ge.singleClickNode()
-          await api.fetchDetails(d.id)
+          
+          if (panelStates.detailsData.id) {
+            setFocus('details')
+            panelStates.detailsData.id = d.id
+            ge.singleClickNode()
+            await api.fetchDetails(d.id)
+          }
 
         }, doubleClickDelay);
         alreadyClicked = true;
@@ -127,15 +140,13 @@ export default {
 
     const currentNodeId =    currentNode[0]
     const currentNodeCount = currentNode[1]
-    let addCount
-
-    if (appStates.shiftKeyIsPressed) {
-      addCount = 10
-    } else {
-      addCount = 3
-    }
-
+    
+    let addCount = appStates.shiftKeyIsPressed ? 10 : 3
     let newNodeCount = currentNodeCount + addCount
+
+    if (graphStates.graphData[currentNodeId] == undefined) {
+      debugger
+    }
 
     if (newNodeCount > graphStates.graphData[currentNodeId].nodes.length) {
       newNodeCount = graphStates.graphData[currentNodeId].nodes.length-1
@@ -150,18 +161,14 @@ export default {
     graphStates.existing.forEach(function(key) {
       vals = graphStates.graphData[key[0]]
       vals.nodes.slice(0,key[1]+1).forEach((node) => {
-        if (nodes.map(d => d.id).excludes(node.id)){
+        if (nodes.ids().excludes(node.id)){
           nodes.push(node)
         }
       })
       links = links.concat(vals.links.slice(0,key[1]))
     })
 
-    this.draw({
-      nodes: nodes,
-      links: links,
-      type: "main"
-    }) 
+    new GraphManager().generate()
   },
 
   async callForNodes(d, count=10) {
@@ -175,14 +182,5 @@ export default {
       
       new GraphManager().generate()
     }
-
-    let gn
-    let connectionIds = new GraphNode(d.id).connectionIds
-
-    connectionIds.slice(connectionIds.length-count).forEach((nodeId) => {
-      let n = document.querySelector(`#${nodeId}`)
-      n.classList.add('newest')
-    })
-
   }
 }
