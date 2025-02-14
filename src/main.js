@@ -26,25 +26,28 @@ Array.prototype.random = function(size=1) {
   return shuffled.slice(0, size);
 }
 
-// Array.prototype.fromEnd = function(x) {
-//   if (this.length > 0) {
-//     let val = this
-//     if (x > this.length) {
-//       val = this[0]
-//     } else {
-//       val = []
-//     }
-//     val = this[this.length- 1-x]
-//     return val
-//   }
-// }
-
-Array.prototype.last = function() {
+Array.prototype.last = function(n=1) {
   if (this.length > 0) {
-    return this[this.length- 1]
+    let l = this.length
+    return this.slice(l-n, l)
   } else {
     return []
   }
+}
+
+Array.prototype.first = function(n=1) {
+  if (this.length > 0) {
+    return this.slice(0,n)
+  } else {
+    return []
+  }
+}
+
+Array.prototype.splitAt = function(indexOfLastElem) {
+  let x = this.first(indexOfLastElem)
+  let y = this.last(this.length-indexOfLastElem)
+
+  return [x, y]
 }
 
 Array.prototype.ids = function() {
@@ -60,6 +63,7 @@ Array.prototype.uniqueById = function() {
   })
   return uniq
 }
+
 Array.prototype.pushUniqueById = function(elem) {
   if (!this.map(d => d.id).excludes(elem.id)) {
     this.push(elem)
