@@ -5,6 +5,7 @@
     graphStates,
     userStates,
     panelStates,
+    graphData,
     store
    } from '@/stores/store.js'
   import GraphNode from '@models/GraphNode'
@@ -13,6 +14,7 @@
   import graph from "@mixins/graph"
   import { setFocus } from '@mixins/helpers'
   import manageGlobalState from "@mixins/manageGlobalState"
+
   import * as d3 from 'd3'
 
 </script>
@@ -63,7 +65,7 @@
       }
     }
 
-    .active > text {
+    .locked > text {
       color: lightblue;
     }
   }
@@ -85,21 +87,14 @@
       return {
         isMobile: /Android|iPhone/i.test(navigator.userAgent),
         newHere: JSON.parse(localStorage.getItem("newHere")),
+        loading: graphStates.loading
       }
     },
     
     async created () {
-      if (this.$data.newHere == null) {
-        localStorage.setItem("newHere", true)
-      }
-      
-      if (localStorage.getItem("lockedGraph") == null) {
-        localStorage.setItem("lockedGraph", "[]")
-      }     
-
-      if (localStorage.getItem("genres") == null) {
-        localStorage.setItem("genres", "[]")
-      }
+      if (this.$data.newHere == null) { localStorage.setItem("newHere", true) }
+      if (localStorage.getItem("lockedGraph") == null) { localStorage.setItem("lockedGraph", "[]") }     
+      if (localStorage.getItem("genres") == null) { localStorage.setItem("genres", "[]") }
 
       graphStates.existing = JSON.parse(localStorage.getItem("lockedGraph"))
 
@@ -111,42 +106,81 @@
       d3.select("body").on("keydown.click", function(event) {
         const searchTextElem = d3.select("#name-search")
 
-        if (event.key == "`") {
-          let genres = d3.selectAll(".movie").data().map((n) => n.genre).join(" ").split(" ").unique()
-          let roles =  d3.selectAll(".person").data().map((n) => n.genre).join(" ").split(" ").unique()
+        // if (event.key == "`") {
+        //   let genres = d3.selectAll(".movie").data().map((n) => n.genre).join(" ").split(" ").unique()
+        //   // let roles =  d3.selectAll(".person").data().map((n) => n.genre).join(" ").split(" ").unique()
+        //   // let filter = genres.concat(roles)
+        //   let filter = genres
 
-          let textContainer = d3.select("#filters").selectAll("g")
-                                .data(genres.concat(roles)).enter()
-                                .append("g")
-                                .attr("class", (d) => {
-                                  let activeGenres = JSON.parse(localStorage.getItem("genres"))
-                                  let active = activeGenres.includes(d) ? "active" : ""
-                                  return ['filter', active].join(" ")
-                                })
+        //   let textContainer = d3.select("#filters").selectAll("g")
+        //                         .data(filter).enter()
+        //                         .append("g")
+        //                         .attr("class", (d) => {
+        //                           let activeGenres = JSON.parse(localStorage.getItem("genres"))
+        //                           let active = activeGenres.includes(d) ? "locked" : ""
+        //                           return ['filter', active].join(" ")
+        //                         })
           
-          textContainer.on("click", (e, d) => {
-            let thisFilterClassed = d3.select(e.currentTarget).classed("active")
-            d3.select(e.currentTarget).classed("active", !thisFilterClassed)
+        //   textContainer.on("mouseenter", (e, d) => {
+        //     let nonMatches = d3.selectAll(`.node:not(.${d})`)
+        //     nonMatches.style("display", "none")
+        //   })                   
+          
+        //   textContainer.on("mouseleave", (e, d) => {
+        //     d3.selectAll(".node").style("display", "block")
+        //   })
 
-            let activeFilters = d3.selectAll(".filter.active").data()
-
-            localStorage.setItem('genres', JSON.stringify(activeFilters))
+        //   textContainer.on("click", (e, d) => {
+        //     let thisFilterClassed = d3.select(e.currentTarget).classed("locked")
+        //     d3.select(e.currentTarget).classed("locked", !thisFilterClassed)
+        //     let activeFilters = d3.selectAll(".filter.locked").data()
+        //     localStorage.setItem('genres', JSON.stringify(activeFilters))
             
-            d3.selectAll(".node").style("display", "block")
+        //     let data = {links: [], nodes: []}
+            
+        //     Object.values(graphStates.graphData).map((ge) => {
+        //       data.links.push(ge.links)
+        //       data.nodes.push(ge.nodes)
+        //     })
 
-            if (activeFilters.any()) {
-              let nonMatches = d3.selectAll(`.node:not(.${activeFilters.join(".")})`)
-              nonMatches.style("display", "none")
-              // nonMatches.each(nm => new GraphNode(nm.id).connectionLines.style("display", "none"))
-            }
+        //     function xfilter(filters, n) {
+        //       let x
+        //       if (n.entity == "person") {
+        //         x = true
+        //       } else {
+        //         x = activeFilters.overlapsWith(n.type).any()
+        //       }
+        //       return x
+        //     }
+            
+        //     let nodes = data.nodes.flatten().filter(n => xfilter(activeFilters, n))
 
-            new GraphManager().generate()
+        //     function yfilter(nodeIds, l) {
+        //       let x
+        //       if (l.index != undefined) {
+        //         x = nodeIds.includes(l.source.id) && nodeIds.includes(l.target.id)
+        //       } else {
+        //         x = nodeIds.includes(l.source) && nodeIds.includes(l.target)
+        //       }
+        //       return x
+        //     }
 
-          })                        
+        //     let ids = nodes.map(n => n.id)
+        //     let links = data.links.flatten().filter(l => yfilter(ids, l))
 
-          textContainer.append("text").text((d) => d)
+        //     // debugger
 
-        }
+        //     graph.draw({
+        //       nodes: nodes.uniqueById(),
+        //       links: links,
+        //       type: "main"
+        //     })
+            
+        //   })
+
+        //   textContainer.append("text").text((d) => d)
+
+        // }
         if (event.key === "Shift") {
           appStates.shiftKeyIsPressed = true
 
@@ -188,51 +222,27 @@
 
     },
 
-    async mounted () {
+    mounted () {
+      d3.select("#loading").transition().duration(5000).attr("width", 500)
       if (graphStates.existing != null) {
         if (graphStates.existing.length > 0) {
-          await this.loadSavedGraph()
+          this.loadSavedGraph()
         }
       }
     },
-    
+
     methods: {
       async loadSavedGraph () {
-        if (graphStates.existing == null) { return }
-        if (graphStates.existing.length < 1) { return }
-
-        store.isLocked = true
-
-        await api.fetchGraphData(graphStates.existing.map(d => d[0]))
-        await api.fetchDetails(graphStates.existing[0])
-
-        let data
-        let nodes = []
-        let links = []
-
-        
-        graphStates.existing.forEach((d) => {
-          data = graphStates.graphData[d[0]]
-          nodes = nodes.concat(data.nodes.slice(0,d[1]))
-          // watch how you slice, you'll get an error
-          // if num links >= num nodes
-          links = links.concat(data.links.slice(0,d[1]-1))
+        d3.select("#app-wrapper").transition().delay(0)
+        .on("end", () => {
+          if (JSON.parse(localStorage.getItem("lockedGraph")) == []){
+            setFocus("empty")
+          } else {
+            setFocus("details")
+          }
         })
         
-        graph.draw({
-          nodes: nodes.uniqueById(),
-          links: links,
-          type: "main"
-        })
-        
-        d3.select("#main-outer-wrapper").transition()
-          .on("start", () => {
-            if (JSON.parse(localStorage.getItem("lockedGraph")) == []){
-              setFocus("empty")
-            } else {
-              setFocus("details")
-            }
-        })
+        new GraphManager().generate()
       },
 
       deselectPageSearch (pageSearchString, searchTextElem) {
