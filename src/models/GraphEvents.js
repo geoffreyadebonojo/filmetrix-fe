@@ -23,7 +23,7 @@ export default class GraphEvents {
     // not quite ready yet
     // let c = this.gn.connections
     // c.style("display", "block")
-    // c.selectAll("circle").style("stroke", "white")
+    this.gn.connections.selectAll("circle").style("stroke", "white")
     this.gn.node.moveToFront()
   }
   
@@ -32,6 +32,7 @@ export default class GraphEvents {
     this.gn.node.classed('added', false)
     this.gn.removeHoverClass()
     this.gn.linkUnhighlighter()
+    d3.selectAll("circle").style("stroke", "#7A7879")
   }
   
   async singleClickNode() {
