@@ -181,15 +181,18 @@ export default class GraphBuilder {
       return n.poster == ""
     })
 
-    posterless.append("text").text((n) => n.name[0])
+    posterless.append("text").text((n) => {
+      return n.name.split(" ").map(m => m[0]).first(2).join("")
+    })
       .attr("text-anchor", "middle")
-      .attr("y", "25")
-      .style("font-size", `60px`)
+      .attr("y", "15")
+      .style("font-size", `40px`)
       .style("font-family", "Dosis, sans-serif")
       .style("text-transform", "uppercase")
       .style("fill", "#7A7879")
 
-    let posterful = node.filter((n) => {
+    
+      let posterful = node.filter((n) => {
       return n.poster != ""
     })
 
