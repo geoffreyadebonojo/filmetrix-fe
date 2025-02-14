@@ -4,6 +4,7 @@
   import {
     graphStates,
     panelStates,
+    graphData,
     store
   } from '@/stores/store.js'
   import * as d3 from 'd3'
@@ -17,7 +18,7 @@
        v-bind:id="$attrs.result.id"
        tabindex="0"
        :key="$data.resultId"
-       @click="fetchNodesAndDetails($attrs.result, 10)"
+       @click="fetchNodesAndDetails($attrs.result, 10, $event)"
        @keypress="fetchNodesAndDetails($attrs.result, 10)">  
     <img v-bind:src="$attrs.result.poster" class="tile-img"/>
     <div>
@@ -50,28 +51,22 @@
       }
     },
     methods: {
-      async fetchNodesAndDetails(result, count) {
+      async fetchNodesAndDetails(result, count, event) {
         if (this.$data.clicked) { return }
 
-        if (event.shiftKey) {
-          await api.fetchDetails(result.id)
-          await graph.callForNodes(result, count)
+        await api.fetchDetails(result.id)
+        await graph.callForNodes(result, count)
 
+        // Daaaaahaammn
+        if (event.shiftKey) {
           const firstOrder = graphStates.graphData[result.id].nodes.slice(1, count+1)  
           firstOrder.forEach((node) => {
-            graphStates.existing.push([node.id, 4])
+            graphStates.existing.push([node.id, 12])
           })
-
-          // NODE MULTISEND
-          await api.fetchGraphData(graphStates.existing.map(d => d[0]))
-  
-          new GraphManager().generate()
-        } else {
-
-          await api.fetchDetails(result.id)
-          await graph.callForNodes(result, count)
-
+          await api.fetchGraphData(graphStates.existing.map(d => d[0])) 
         }
+
+        new GraphManager().generate()
       }
     }
   }
