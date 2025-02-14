@@ -7,7 +7,7 @@ import centeringFunction from '@mixins/centeringFunction.js'
 import * as d3 from 'd3'
 
 export default class GraphBuilder {
-  constructor(args) {
+  constructor(args, simulation) {
     this.args = args
 
     this.graphControlButtons = d3.selectAll(".graph-control-buttons")
@@ -21,6 +21,8 @@ export default class GraphBuilder {
         text: "#FFFFFF"
       }
     }
+
+    this.simulation = simulation
   }
   
   attachMouseEvents(node) {
@@ -28,11 +30,11 @@ export default class GraphBuilder {
       const instructionLabel = new NewHereInstruction(node, this)
       instructionLabel.addInstructionHover()
     } else {
-      node.on("mouseenter", (_e, d) => {      
-        new GraphEvents(d.id).mouseEnterNode()
+      node.on("mouseenter", (e, d) => {      
+        new GraphEvents(d.id).mouseEnterNode(e)
       })
-      .on("mouseleave", (_e, d) => {
-        new GraphEvents(d.id).mouseLeaveNode()
+      .on("mouseleave", (e, d) => {
+        new GraphEvents(d.id).mouseLeaveNode(e)
       })
     }
   }
@@ -111,6 +113,41 @@ export default class GraphBuilder {
   }
 
   buildNode(parent, nodes) {
+
+    const drag = simulation => {
+      function dragstarted(event, d) {
+        if (event.sourceEvent.shiftKey) {
+          if (!event.active) simulation.alphaTarget(0.8).restart();
+          d.fx = d.x;
+          d.fy = d.y;
+        }
+      }
+      
+      function dragged(event, d) {
+        d.fx = event.x;
+        d.fy = event.y;
+      }
+      
+      function dragended(event, d) {
+        let es = event.sourceEvent
+      
+        if (es.shiftKey && es.metaKey) {
+          if (!event.active) simulation.alphaTarget(0);
+          d.x = d.fx;
+          d.y = d.fy;
+        } else if (es.shiftKey) {
+          if (!event.active) simulation.alphaTarget(0);
+          d.fx = null;
+          d.fy = null;
+        }
+      }
+      
+      return d3.drag()
+        .on("start", dragstarted)
+        .on("drag", dragged)
+        .on("end", dragended);
+    }
+
     let node = parent.append("g")
       .attr("class", "nodes")
       .attr("stroke-linecap", "round")
@@ -124,6 +161,7 @@ export default class GraphBuilder {
       })
       .attr("id", d => d.id)
       .attr("name", (d) => d.name)
+      .call(drag(this.simulation))
     return node
   }
 
