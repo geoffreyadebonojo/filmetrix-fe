@@ -1,5 +1,11 @@
+import { 
+  graphStates,
+  graphData,
+  store
+ } from "@/stores/store.js"
+import api from "@mixins/api"
 import graph from "@/mixins/graph"
-import { graphStates } from "@/stores/store.js"
+import * as d3 from 'd3'
 
 export default class GraphManager {
   constructor(graphType="main") {
@@ -8,46 +14,57 @@ export default class GraphManager {
     this.links = []
     this.graphType = graphType
   }
+
+  async generate() {
+    console.group("GraphManager.generate()")
+    console.log("start")
+    let methodStart = Date.now()
+
+    if (graphStates.existing == null) { return }
+    if (graphStates.existing.length < 1) { return }
+
+    store.isLocked = true
   
-  generate() {
-    graphStates.existing.forEach((d) => {
-      let id = d[0]
-      this.data = graphStates.graphData[id]
+    await api.fetchGraphData(graphStates.existing.map(d => d[0]))
+    await api.fetchDetails(graphStates.existing[0])
 
-      let nodesFilteredByGenres = this.data.nodes.filter((n) => {
-        let x
-        let activeGenres = JSON.parse(localStorage.getItem('genres'))
-        if (n.entity == "movie") {
-          x = activeGenres.overlapsWith(n.type).any()
-        } else {
-          x = true
-        }
-        return x
-      })
+    let data, start, percent
+    
+    graphStates.existing.forEach((d, i) => {
+      start = Date.now()
 
-      this.nodes = this.nodes.concat(
-        nodesFilteredByGenres.slice(0,d[1]+1)
-      )
-      
-      function xfunc(nodeIds, link) {
-        return nodeIds.includes(link.target.id) || nodeIds.includes(link.target)
-      }
-      
-      let linksFilteredByGenres = this.data.links.filter((link) => {
-        return xfunc(this.nodes.map((n) => n.id), link)
-      })
+      data = graphStates.graphData[d[0]]
 
-      console.log(linksFilteredByGenres)
+      let [activeNodes, inactiveNodes] = data.nodes.splitAt(d[1])
+      let [activeLinks, inactiveLinks] = data.links.splitAt(d[1]-1)
 
-      this.links = this.links.concat(
-        linksFilteredByGenres.slice(0,d[1])
-      )
+      graphData.active.nodes = graphData.active.nodes.concat(activeNodes).uniqueById()
+      graphData.active.links = graphData.active.links.concat(activeLinks).unique()
+
+      graphData.inactive.nodes = graphData.inactive.nodes.concat(inactiveNodes).uniqueById()
+      graphData.inactive.links = graphData.inactive.links.concat(inactiveLinks).unique()
+
+      this.links = graphData.active.links
+      this.nodes = graphData.active.nodes
+
+      percent = i / graphStates.existing.length-1
+      // this.anim(percent)
+      console.log(`${Date.now() - start}`)
     })
 
     graph.draw({
-      nodes: this.nodes.uniqueById(),
-      links: this.links, //uniqueById()
+      nodes: graphData.active.nodes,
+      links: graphData.active.links,
       type: this.graphType
     })
+
+    console.log(`duration: ${Date.now() - methodStart}`)
+    console.log("end")
+    console.groupEnd()
+  }
+
+  anim(p) {
+    graphStates.loading = 1- p*-1
+    // d3.select("#loading").selectAll("text").data(p).append("text").text((d) => d)
   }
 }
