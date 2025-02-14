@@ -11,14 +11,11 @@ export default class GraphNode {
     this.label =      this.node.select('.node-label')
     this.text =       this.node.select('.node-label').select('.text-container')
     this.poster =     this.node.select('.poster')
+     
+    const x = d3.selectAll(`.link[source='${this.id}']`).nodes().map((d)=> d.attributes.target.value)
+    const z = d3.selectAll(`.link[target='${this.id}']`).nodes().map((d)=> d.attributes.source.value)
     
-    this.sources =  d3.selectAll(`.link[source='${this.id}']`)
-    this.targets =  d3.selectAll(`.link[target='${this.id}']`)
     this.allLinks = d3.selectAll(`.link[target='${this.id}'], .link[source='${this.id}']`)
-
-    const x = this.sources.nodes().map((d)=> d.attributes.target.value)
-    const z = this.targets.nodes().map((d)=> d.attributes.source.value)
-
     this.connections = d3.selectAll('.node').filter((d) => { return x.includes(d.id) || z.includes(d.id) })
     this.connectionIds = this.connections.data().map((n) => n.id)
     this.connectionLines = this.allLinks.select(".line")
