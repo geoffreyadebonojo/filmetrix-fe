@@ -1,5 +1,16 @@
 import { reactive } from 'vue'
 
+export const graphData = reactive({
+  active: {
+    links: [],
+    nodes: []
+  },
+  inactive: {
+    links: [],
+    nodes: []
+  }
+})
+
 export const graphStates = reactive({
   existing: [],
   graphData: {},
@@ -10,7 +21,8 @@ export const graphStates = reactive({
   matching: [],
   visited: [],
   navLocked: false,
-  movieGenreCounts : {}
+  movieGenreCounts : {},
+  loading: 0
 })
 
 export const panelStates = reactive({
