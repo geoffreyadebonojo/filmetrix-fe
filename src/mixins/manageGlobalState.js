@@ -13,8 +13,19 @@ export default {
     d3.select("#degrees-kevin").node().innerHTML = ''
     d3.select("#name-search").node().innerHTML = ''
 
+    let allGenres = ['acting', 'adventure', 'thriller', 
+                     'scifi', 'action', 'mystery', 'drama', 
+                     'war', 'crime', 'romance', 'fantasy', 
+                     'history', 'horror', 'production', 
+                     'sound', 'camera', 'writing', 'directing', 
+                     'comedy', 'costume & make-up', 'crew', 
+                     'visual', 'effects', 'editing', 'animation', 
+                     'art', 'lighting', 'family', 'western', 
+                     'tvmovie']
+                     
     localStorage.setItem("lockedGraph", JSON.stringify([]))
-    localStorage.setItem("genres", JSON.stringify([]))
+    // localStorage.setItem("genres", JSON.stringify([]))
+    localStorage.setItem("genres", JSON.stringify(allGenres))
     graphStates.existing =         []
     graphStates.graphData =        {}
     graphStates.currentGraphId =   ''
