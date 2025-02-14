@@ -130,13 +130,11 @@ export default class GraphBuilder {
       
       function dragended(event, d) {
         let es = event.sourceEvent
-      
-        if (es.shiftKey && es.metaKey) {
-          if (!event.active) simulation.alphaTarget(0);
+        if (!event.active) simulation.alphaTarget(0);
+        if (es.shiftKey && es.getModifierState('CapsLock')) {
           d.x = d.fx;
           d.y = d.fy;
         } else if (es.shiftKey) {
-          if (!event.active) simulation.alphaTarget(0);
           d.fx = null;
           d.fy = null;
         }
