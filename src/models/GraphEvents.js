@@ -15,16 +15,22 @@ export default class GraphEvents {
     this.results = []
   }
 
-  mouseEnterNode() {
+  mouseEnterNode(event) {
     if (graphStates.inMotion) { return }
     this.gn.applyHoverClass()
-    let hoveredId = d3.select(".hover").data()[0].id
-    this.gn.linkHighlighter(hoveredId)
-    this.gn.connections.selectAll("circle").style("stroke", "white")
-    this.gn.node.moveToFront()
+
+    if (!event.shiftKey) {
+      let hoveredId = d3.select(".hover").data()[0].id
+      this.gn.linkHighlighter(hoveredId)
+      // not quite ready yet
+      // let c = this.gn.connections
+      // c.style("display", "block")
+      this.gn.connections.selectAll("circle").style("stroke", "white")
+      this.gn.node.moveToFront()
+    }
   }
   
-  mouseLeaveNode() {
+  mouseLeaveNode(event) {
     if (graphStates.inMotion) { return }
     this.gn.node.classed('added', false)
     this.gn.removeHoverClass()

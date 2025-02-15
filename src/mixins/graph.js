@@ -74,7 +74,7 @@ export default {
                                             nodes,
                                             containerId,
                                             innerWrapper,
-                                            outerWrapper }).build()
+                                            outerWrapper }, simulation).build()
     
     this.attachNodeClickActions(node)
 
