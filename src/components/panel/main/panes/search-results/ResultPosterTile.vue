@@ -54,16 +54,20 @@
       async fetchNodesAndDetails(result, count, event) {
         if (this.$data.clicked) { return }
 
-        await api.fetchDetails(result.id)
-        await graph.callForNodes(result, count)
-
         // Daaaaahaammn
         if (event.shiftKey) {
+          await api.fetchDetails(result.id)
+          await graph.callForNodes(result, count)
+
           const firstOrder = graphStates.graphData[result.id].nodes.slice(1, count+1)  
           firstOrder.forEach((node) => {
             graphStates.existing.push([node.id, 12])
           })
           await api.fetchGraphData(graphStates.existing.map(d => d[0])) 
+        } else {
+
+          await api.fetchDetails(result.id)
+          await graph.callForNodes(result, count)
         }
 
         new GraphManager().generate()

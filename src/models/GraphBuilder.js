@@ -1,8 +1,12 @@
 import GraphEvents from '@models/GraphEvents'
+import GraphNode from '@models/GraphNode'
 import NewHereInstruction from '@models/NewHereInstruction.js'
 import { drawArc } from '@mixins/helpers'
 import keyFunctions from '@mixins/keyFunctions.js'
 import centeringFunction from '@mixins/centeringFunction.js'
+import { 
+  graphStates
+} from '@/stores/store.js'
 
 import * as d3 from 'd3'
 
@@ -117,6 +121,11 @@ export default class GraphBuilder {
     const drag = simulation => {
       function dragstarted(event, d) {
         if (event.sourceEvent.shiftKey) {
+          graphStates.inMotion = true
+
+          let gn = new GraphNode(d.id)
+          gn.allLinks.select(".character-label").remove()
+
           if (!event.active) simulation.alphaTarget(0.8).restart();
           d.fx = d.x;
           d.fy = d.y;
@@ -129,12 +138,15 @@ export default class GraphBuilder {
       }
       
       function dragended(event, d) {
+        graphStates.inMotion = false
+
         let es = event.sourceEvent
         if (!event.active) simulation.alphaTarget(0);
-        if (es.shiftKey && es.getModifierState('CapsLock')) {
+        // this will also happen if you release shift before raise mouse
+        if (es.shiftKey && graphStates.navLocked) {
           d.x = d.fx;
           d.y = d.fy;
-        } else if (es.shiftKey) {
+        } else if (!graphStates.navLocked) {
           d.fx = null;
           d.fy = null;
         }

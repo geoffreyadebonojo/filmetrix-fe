@@ -24,7 +24,38 @@ export default {
     let currentIndex = anchors.indexOf(panelStates.detailsData.id)
 
     d3.select("body").on("keydown.nav", async function(event) {      
-      if (["ArrowUp", "ArrowDown"].includes(event.key) && !graphStates.navLocked) {
+      if (event.key == "/") {
+        graphStates.navLocked = !graphStates.navLocked
+
+        let lockSetting = graphStates.navLocked ? "url('/lock-closed.svg')" : "url('/lock-open.svg')"
+        let opacity =     graphStates.navLocked ? "1" : "0.5"
+  
+        d3.select("#nav-lock-button").style("background-image", lockSetting).style("opacity", opacity)
+      }
+      // if (!graphStates.pageSearchActive && ['w','a','s','d'].includes(event.key)) {
+        // let moveInc = 40
+
+        // switch (event.key) {
+        //   case 'w':
+        //     centering.y += moveInc
+        //     break;
+        //   case 's':
+        //     centering.y -= moveInc
+        //     break;
+        //   case 'a':
+        //     centering.x += moveInc
+        //     break;
+        //   case 'd':
+        //     centering.x -= moveInc
+        //     break;
+        // }
+
+        // vb.transition().duration(10).call(
+        //   zoom.transform, 
+        //   d3.zoomIdentity.translate(centering.x, centering.y))
+
+      // } else 
+      if (["ArrowUp", "ArrowDown"].includes(event.key) ){// && !graphStates.navLocked) {
         if (event.key == "ArrowUp") {
           if (zoomLevel > 5) {return}
           zoomLevel += 0.5
@@ -80,13 +111,13 @@ export default {
 
         d = gn.node.data()[0]
 
-        if (!graphStates.navLocked) {
+        // if (!graphStates.navLocked) {
           vb.transition().duration(500).call(
             zoom.transform, 
             d3.zoomIdentity.translate(centering.x, centering.y)
                            .scale(zoomLevel)
                            .translate(-d.x, -d.y))
-        }
+        // }
 
         gn.node.classed("poster-highlight", true)
         gn.linkHighlighter(gn.id)
