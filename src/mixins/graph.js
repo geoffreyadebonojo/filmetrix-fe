@@ -44,8 +44,8 @@ export default {
 
   draw (responseData, options={}) {
     let start = Date.now()
-    console.group("graph.draw()")
-    console.log("start")
+    // console.group("graph.draw()")
+    // console.log("start")
 
     localStorage.setItem("lockedGraph", JSON.stringify(graphStates.existing))
     graphStates.inMotion = true
@@ -89,9 +89,9 @@ export default {
       graphStates.inMotion = false
     })
     
-    console.log(`duration: ${Date.now() - start}`)
-    console.log("end")
-    console.groupEnd()
+    // console.log(`duration: ${Date.now() - start}`)
+    // console.log("end")
+    // console.groupEnd()
 
     return innerWrapper.node();
   },
