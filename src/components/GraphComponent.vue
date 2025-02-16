@@ -1,15 +1,22 @@
 <script setup>
   import {
-    panelStates
+    panelStates,
+    graphStates
   } from '@/stores/store.js'
   import GraphManager from "@/models/GraphManager.js"
   import api from "@mixins/api"
+  import LoadingScreen from "@/components/LoadingScreen.vue"
 </script>
 
 <template>
   <div class="graph-container" v-bind:id="$attrs.type + '-graph-component'">
     <svg class="graph-container" v-bind:id="$attrs.type + '-graph-container'" v-bind:viewBox="$data.vb">
       <g class="outer-wrapper" v-bind:id="$attrs.type + '-outer-wrapper'">
+        <g id="main-inner-wrapper">
+          <g v-if="graphStates.existing.length > 0">
+            <text id="loading">loading...</text>
+          </g>
+        </g>
       </g>
     </svg>
   </div>
@@ -18,6 +25,9 @@
 <script>
   export default {
     name: "GraphComponent",
+    components: {
+      LoadingScreen
+    },
     data() {
       return {
         vb: `${-350} ${-window.innerHeight/2} ${window.innerWidth*2} ${window.innerHeight*2}`
@@ -31,7 +41,7 @@
     },
     
     methods: {
-      async loadFromSlug (gid) {
+      async loadFromSlug (gid) {        
         await api.findBySlug(gid)
         new GraphManager().generate()
       }
@@ -40,9 +50,49 @@
 </script>
 
 <style lang="scss">
+  #loading {
+    font-family: $global-font;
+    font-size: 50px;
+    fill: white;
+    stroke: white;
+    stroke-width: 0.8px;
+    opacity: 0;
+    text-anchor: middle;
+
+    animation-name: pulseLoading;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+  }
+
+  @keyframes pulseLoading {
+    0% {
+      stroke: white;
+      fill: white;
+      transform: translate(500px, 300px) scale(1);
+    }
+
+    50% {
+      stroke: skyblue;
+      fill: skyblue;
+      transform: translate(500px, 300px) scale(1.1);
+    }
+
+    100% {
+      stroke: white;
+      fill: white;
+      transform: translate(500px, 300px) scale(1);
+    }
+  }
+
   .graph-container {
     display: block;
     width: 100%;
+
+    .dragging {
+      circle {
+        stroke: red;
+      }
+    }
 
     .hidden {
       display: none;

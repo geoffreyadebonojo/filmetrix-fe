@@ -100,7 +100,9 @@
     async created () {
       if (this.$data.newHere == null) { localStorage.setItem("newHere", true) }
       if (localStorage.getItem("lockedGraph") == null) { localStorage.setItem("lockedGraph", "[]") }     
-      if (localStorage.getItem("genres") == null) { localStorage.setItem("genres", "[]") }
+      if (localStorage.getItem("genres") == null) { localStorage.setItem("genres", graphStates.genres) }
+      if (localStorage.getItem("lockedNodes") == null) { localStorage.setItem("lockedNodes", "[]") }
+      // if (localStorage.getItem("dragLockOn") == null) { localStorage.setItem("dragLockOn", "false") }
 
       graphStates.existing = JSON.parse(localStorage.getItem("lockedGraph"))
 
@@ -122,6 +124,7 @@
 
             function setClass(d) {
               let activeGenres = JSON.parse(localStorage.getItem("genres"))
+              // let activeGenres = graphStates.genres
               let active = activeGenres.includes(d) ? "locked" : ""
               return ['filter', active].join(" ")
             }

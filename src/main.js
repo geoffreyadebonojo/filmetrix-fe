@@ -13,7 +13,7 @@ app.use(router)
 app.mount('#app')
 
 
-/////////// Extenstions ///////////////////
+/////////// Extensions ///////////////////
 
 Array.prototype.random = function(size=1) {
   var shuffled = this.slice(0), i = this.length, temp, index;
@@ -54,6 +54,16 @@ Array.prototype.ids = function() {
   return this.map(d => d.id)
 }
 
+Array.prototype.includesByAttr = function(elem, attr) {
+  return this.map(d => d[attr]).includes(elem[attr])
+}
+
+Array.prototype.indexByAttr = function(elem, attr) {
+  if (elem[attr] == undefined) throw new TypeError("element does not have attr " + attr)
+
+  return this.map(d => d[attr]).indexOf(elem[attr])
+}
+
 Array.prototype.uniqueById = function() {
   let uniq = []
   this.forEach((d) => {
@@ -65,7 +75,14 @@ Array.prototype.uniqueById = function() {
 }
 
 Array.prototype.pushUniqueById = function(elem) {
-  if (!this.map(d => d.id).excludes(elem.id)) {
+  if (this.map(d => d.id).excludes(elem.id)) {
+    this.push(elem)
+  }
+  return this
+}
+
+Array.prototype.pushUniqueByAttr = function(elem, attr) {
+  if (this.map(d => d[attr]).excludes(elem[attr])) {
     this.push(elem)
   }
   return this

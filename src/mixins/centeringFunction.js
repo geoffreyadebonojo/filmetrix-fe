@@ -22,9 +22,9 @@ export default {
 
   attachNavLockEffect(targetBody) {
     targetBody.on("click", (e) => {
-      graphStates.navLocked = !graphStates.navLocked
-      let lockSetting = graphStates.navLocked ? "url('/lock-closed.svg')" : "url('/lock-open.svg')"
-      let opacity =     graphStates.navLocked ? "1" : "0.5"
+      graphStates.dragLocked = !graphStates.dragLocked
+      let lockSetting = graphStates.dragLocked ? "url('/lock-closed.svg')" : "url('/lock-open.svg')"
+      let opacity =     graphStates.dragLocked ? "1" : "0.5"
 
       targetBody.style("background-image", lockSetting).style("opacity", opacity)
     })

@@ -1,12 +1,17 @@
 import GraphEvents from '@models/GraphEvents'
 import GraphNode from '@models/GraphNode'
 import NewHereInstruction from '@models/NewHereInstruction.js'
-import { drawArc } from '@mixins/helpers'
+import { 
+  drawArc,
+  setFocus 
+} from '@mixins/helpers'
 import keyFunctions from '@mixins/keyFunctions.js'
 import centeringFunction from '@mixins/centeringFunction.js'
 import { 
-  graphStates
+  graphStates,
+  panelStates
 } from '@/stores/store.js'
+import api from '@mixins/api.js'
 
 import * as d3 from 'd3'
 
@@ -34,11 +39,11 @@ export default class GraphBuilder {
       const instructionLabel = new NewHereInstruction(node, this)
       instructionLabel.addInstructionHover()
     } else {
-      node.on("mouseenter", (e, d) => {      
-        new GraphEvents(d.id).mouseEnterNode(e)
+      node.on("mouseenter", async (e, d) => {
+        new GraphNode(d.id).mouseEnter(e)
       })
       .on("mouseleave", (e, d) => {
-        new GraphEvents(d.id).mouseLeaveNode(e)
+        new GraphNode(d.id).mouseLeave(e)
       })
     }
   }
@@ -61,11 +66,10 @@ export default class GraphBuilder {
       d3.select("#main-outer-wrapper").attr("transform", e.transform)
     })
 
-    keyFunctions.attachNavKeyFunctions(this.viewerBody, zoom)
+    keyFunctions.attachNavKeyFunctions(this.viewerBody, zoom, this.simulation)
     
     if (this.graphControlButtons) {
       this.graphControlButtons.style("display", "block").transition().duration(30).style("left", "-30px")
-      
       centeringFunction.attachNavLockEffect(d3.select("#nav-lock-button"))
       centeringFunction.attachCenteringEffect(d3.select("#centering-button"), this.viewerBody, zoom)
     }
@@ -117,19 +121,18 @@ export default class GraphBuilder {
   }
 
   buildNode(parent, nodes) {
-
     const drag = simulation => {
       function dragstarted(event, d) {
-        if (event.sourceEvent.shiftKey) {
-          graphStates.inMotion = true
+        graphStates.inMotion = true
+        d3.selectAll(".character-label").remove()
 
-          let gn = new GraphNode(d.id)
-          gn.allLinks.select(".character-label").remove()
+        if (!event.active) simulation.alphaTarget(1).restart();
+        d.fx = d.x;
+        d.fy = d.y;
 
-          if (!event.active) simulation.alphaTarget(0.8).restart();
-          d.fx = d.x;
-          d.fy = d.y;
-        }
+        let thisNode = d3.select(`#${d.id}`)
+        thisNode.select("circle").style("stroke", "red")
+        thisNode.classed("dragging", true)
       }
       
       function dragged(event, d) {
@@ -138,18 +141,34 @@ export default class GraphBuilder {
       }
       
       function dragended(event, d) {
-        graphStates.inMotion = false
-
-        let es = event.sourceEvent
         if (!event.active) simulation.alphaTarget(0);
-        // this will also happen if you release shift before raise mouse
-        if (es.shiftKey && graphStates.navLocked) {
+        
+        let thisNode = d3.select(`#${d.id}`)
+        thisNode.select("circle").style("stroke", "#7A7879")
+        thisNode.classed("dragging", false)
+        
+        let lockedNodes = JSON.parse(localStorage.getItem("lockedNodes"))
+        let index = lockedNodes.indexByAttr(d, "id")
+
+        if (localStorage.getItem("nodeDragEnabled") == "true") {
+          let nodeData = { id: d.id, fx: d.fx, fy: d.fy }
+
+          if (index > -1) {
+            lockedNodes[index] = nodeData
+          } else {
+            lockedNodes.pushUniqueByAttr(nodeData, 'id')
+          }
+          
           d.x = d.fx;
           d.y = d.fy;
-        } else if (!graphStates.navLocked) {
+        } else {
+          lockedNodes.splice(index, 1)
+          
           d.fx = null;
           d.fy = null;
         }
+
+        localStorage.setItem("lockedNodes", JSON.stringify(lockedNodes))
       }
       
       return d3.drag()
@@ -157,6 +176,19 @@ export default class GraphBuilder {
         .on("drag", dragged)
         .on("end", dragended);
     }
+
+    let ln = JSON.parse(localStorage.getItem('lockedNodes'))
+
+    function applySavedCoords(n, ln) {
+      if (ln.includesByAttr(n, "id")) {
+        let v = ln.filter(d => d.id == n.id)[0]
+        n.fx = v.fx;
+        n.fy = v.fy;
+      }
+      return n
+    }
+
+    nodes = nodes.map(n => applySavedCoords(n, ln))
 
     let node = parent.append("g")
       .attr("class", "nodes")
@@ -171,7 +203,13 @@ export default class GraphBuilder {
       })
       .attr("id", d => d.id)
       .attr("name", (d) => d.name)
-      .call(drag(this.simulation))
+
+    if (localStorage.getItem('nodeDragEnabled') == 'true') {
+      node.call(drag(this.simulation))
+    } else if (localStorage.getItem('nodeDragEnabled') == 'false') {
+      node.call(drag).on("drag", null)
+    }
+
     return node
   }
 

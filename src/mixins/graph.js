@@ -6,12 +6,11 @@ import {
 } from '@/stores/store.js'
 import { settings, setFocus } from '@mixins/helpers.js'
 import api from './api.js'
-import * as d3 from 'd3'
 import GraphBuilder from '@models/GraphBuilder.js'
 import GraphManager from '@models/GraphManager.js'
-import GraphNode from '@models/GraphNode'
-import GraphEvents from '@models/GraphEvents'
+import GraphNode from '@models/GraphNode.js'
 import Simulation from '@models/Simulation.js'
+import * as d3 from 'd3'
 
 let timer;
 let alreadyClicked = false
@@ -34,7 +33,7 @@ export default {
     return l
   },
 
-  nodeFormatter(n, s, t) {
+  nodeFormatter(n) {
     n.r = 40
     // n.r =     n.poster == "" ? 10 : 40
     n.genre = n.type ? n.type.join(" ") : ''
@@ -43,7 +42,7 @@ export default {
   },
 
   draw (responseData, options={}) {
-    let start = Date.now()
+    // let start = Date.now()
     // console.group("graph.draw()")
     // console.log("start")
 
@@ -69,7 +68,6 @@ export default {
                                         links,
                                         graphType }, options).body
 
-
     const [link, node] = new GraphBuilder({ links, 
                                             nodes,
                                             containerId,
@@ -77,7 +75,7 @@ export default {
                                             outerWrapper }, simulation).build()
     
     this.attachNodeClickActions(node)
-
+    
     simulation.on("tick", () => {
       link.attr("x1", d => d.source.x)
           .attr("y1", d => d.source.y)
@@ -85,6 +83,7 @@ export default {
           .attr("y2", d => d.target.y)
 
       node.attr("transform", d => `translate(${d.x},${d.y})`);
+
     }).on("end", () => {
       graphStates.inMotion = false
     })
@@ -99,8 +98,8 @@ export default {
   attachNodeClickActions(node) {
     node.on('click', async (_e, d) => {
       const doubleClickDelay = 300
-      const ge = new GraphEvents(d.id)
-      
+      const gn = new GraphNode(d.id)
+
       if (alreadyClicked) { 
         localStorage.setItem("newHere", false)
 
@@ -119,13 +118,7 @@ export default {
       } else {
         timer = setTimeout(async function () {          
           alreadyClicked = false;
-          
-          if (panelStates.detailsData.id) {
-            setFocus('details')
-            panelStates.detailsData.id = d.id
-            ge.singleClickNode()
-            await api.fetchDetails(d.id)
-          }
+          gn.getDetails()
 
         }, doubleClickDelay);
         alreadyClicked = true;

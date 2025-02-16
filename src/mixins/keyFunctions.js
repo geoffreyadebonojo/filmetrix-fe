@@ -10,7 +10,7 @@ import * as d3 from 'd3'
 
 
 export default {
-  attachNavKeyFunctions(vb, z) {
+  attachNavKeyFunctions(vb, z, sim) {
     let d;
     let zoom = z
     let zoomLevel = 2.5
@@ -22,13 +22,13 @@ export default {
                       y: window.innerHeight * 0.4 }
     let anchors = graphStates.existing.map((n) => n[0])
     let currentIndex = anchors.indexOf(panelStates.detailsData.id)
+    let simulation = sim
 
     d3.select("body").on("keydown.nav", async function(event) {      
       if (event.key == "/") {
-        graphStates.navLocked = !graphStates.navLocked
-
-        let lockSetting = graphStates.navLocked ? "url('/lock-closed.svg')" : "url('/lock-open.svg')"
-        let opacity =     graphStates.navLocked ? "1" : "0.5"
+        graphStates.dragLocked = !graphStates.dragLocked
+        let lockSetting = graphStates.dragLocked ? "url('/lock-closed.svg')" : "url('/lock-open.svg')"
+        let opacity =     graphStates.dragLocked ? "1" : "0.5"
   
         d3.select("#nav-lock-button").style("background-image", lockSetting).style("opacity", opacity)
       }
@@ -55,7 +55,7 @@ export default {
         //   d3.zoomIdentity.translate(centering.x, centering.y))
 
       // } else 
-      if (["ArrowUp", "ArrowDown"].includes(event.key) ){// && !graphStates.navLocked) {
+      if (["ArrowUp", "ArrowDown"].includes(event.key) ){// && !graphStates.dragLocked) {
         if (event.key == "ArrowUp") {
           if (zoomLevel > 5) {return}
           zoomLevel += 0.5
@@ -99,7 +99,7 @@ export default {
 
         if (prevAnchor) { 
           prevAnchor.circle.style("stroke", "#7A7879").style("stroke-width", "1")
-          prevAnchor.linkUnhighlighter()
+          prevAnchor.removeLineText()
         }
         if (prevLinks) {  prevLinks.selectAll(".line").style("stroke", "#7A7879").style("stroke-width", "1")}
         if (prevTargs) {  prevTargs.select("circle").style("stroke", "#7A7879").style("stroke-width", "1")}
@@ -111,7 +111,7 @@ export default {
 
         d = gn.node.data()[0]
 
-        // if (!graphStates.navLocked) {
+        // if (!graphStates.dragLocked) {
           vb.transition().duration(500).call(
             zoom.transform, 
             d3.zoomIdentity.translate(centering.x, centering.y)
@@ -120,7 +120,7 @@ export default {
         // }
 
         gn.node.classed("poster-highlight", true)
-        gn.linkHighlighter(gn.id)
+        gn.appendLineText(gn.id)
 
         const dc = d3.selectAll(".details-component")
         dc.style("left", () => { return `${currentIndex*100}%`})

@@ -1,0 +1,268 @@
+<html>
+  <head>
+    <link 
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Dosis:wght@200&display=swap"
+    >
+  </head>
+
+  <style lang="scss">
+    body {
+      height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      font-size: 15px;
+      font-family: 'Dosis', sans-serif;
+      grid-column-gap: 20px;
+    }
+    .public-method {
+      box-sizing: border-box;
+    }
+    .hover {
+      border: solid 1px red !important;
+    } 
+    h1 {
+      font-size: 20px;
+    }
+    .object {
+      height: 100%
+    }
+    .ref {
+      color: green;
+      &:hover {
+        cursor: pointer;
+      }
+    }
+    .api {
+      color: gold;
+    }
+    .name {
+      font-size: 18px;
+    }
+    .method-body {
+      position: relative;
+      left: 10px;
+    }
+    .private-method {
+      position: relative;
+    }
+    .attrs{
+      position: relative;
+      left: 10px;
+      width: 155px;
+    }
+
+  </style>
+
+  <div class="object GraphManager">  
+    <h1>models/GraphManager.js</h1>
+    <div class="public-method generate">
+      <div class="name">.generate( )</div>
+
+      <div class="method-body">
+        <div class="api" id="fetchGraphData">
+          api.fetchGraphData( )
+        </div>
+
+        <div class="api" id="fetchDetails">
+          api.fetchDetails( )
+        </div>
+
+        <div class="ref graph-draw">
+          graph.draw( )
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="object graph">
+    <h1>mixins/graph.js</h1> 
+    <div class="public-method draw">
+      <div class="name">.draw( )</div>
+      <div class="method-body" >
+        <div class="private-method" id="linkFormatter">
+          .linkFormatter( )
+        </div>
+
+        <div class="private-method" id="nodeFormatter">
+          .nodeFormatter( )
+        </div>
+
+        <div class="Simulation">
+          new Simulation.body
+        </div>
+
+        <div class="ref GraphBuilder-build">
+          new GraphBuilder.build( )
+        </div>
+      </div>
+    </div>
+
+    <div class="private-method" id="attachNodeClickActions">
+      <div class="name">.attachNodeClickActions( )</div>
+      <div class="method-body">
+        <b>*double click*</b>
+        <br>
+        <div style="position: relative; left: 20px">
+          <div class="private-method" id="addToExistingNodes">
+            ↪.addToExistingNodes( )
+          </div>
+          <div class="ref GraphManager-generate" style="position: relative; left: 30px">
+            new GraphManager.generate( )
+          </div>
+          <div class="public-method" id="callForNodes">
+            ↪.callForNodes( )
+            <div class="api" id="fetchGraphData" style="position: relative; left: 30px">
+              api.fetchGraphData( )
+            </div>
+            <div class="ref GraphManager-generate" style="position: relative; left: 30px">
+              new GraphManager.generate( )
+            </div>
+          </div>
+          <div class="api" id="fetchDetails">api.fetchDetails( )</div>
+        </div>
+
+        <b>*single click*</b>
+        <br>
+        <div style="position: relative; left: 20px">
+          <div class="ref GraphEvents-singleClickNode">GraphEvents.singleClickNode( )</div>
+          <div class="api" id="fetchDetails">api.fetchDetails( )</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="object GraphBuilder">
+    <h1>models/GraphBuilder.js</h1>
+    <div class="public-method build">
+      <div class="name">.build( )</div>
+      <div class="private-method" id="createNodes">
+        ↪.createNodes( )
+        <br>
+        <div class="private-method" id="attachMouseEvents" style="left:20px">
+          ↪.attachMouseEvents( )
+          <div class="method-body">
+            <div class="ref GraphEvents-mouseEnterNode">
+              new GraphEvents.mouseEnterNode( )
+            </div>
+            <div class="ref GraphEvents-mouseLeaveNode">
+              new GraphEvents.mouseLeaveNode( )
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="private-method" id="createLinks">
+      .createLinks( )
+      <br>
+      .buildLinks( )
+    </div>
+    <div class="private-method" id="createViewerBody">
+      .createViewerBody( )
+    </div>
+    </div>
+  </div>
+
+  <div class="object GraphNode">
+    <h1>models/GraphNode.js</h1>
+    attrs
+    <div class="public-method attrs">
+        .id
+        .node 
+        .circle
+        .label
+        .text
+        .poster
+        .allLinks 
+        .connections
+        .connectionIds
+        .connectionLines
+    </div>
+    <div class="public-method applyHoverClass">
+      .applyHoverClass( )
+    </div>
+    <div class="public-method removeHoverClass">
+      .removeHoverClass( )
+    </div>
+    <div class="public-method removeLineText">
+      .removeLineText( )
+    </div>
+    <div class="public-method appendLineText">
+      .appendLineText( )
+      <div class="private-method" id="appendRect" style="left:10px">
+        .appendRect( )
+      </div>
+      <div class="private-method" id="appendText" style="left:10px">
+        .appendText( )
+      </div>
+    </div>
+  </div>
+
+  <div class="object GraphEvents">
+    <h1>models/GraphEvents.js</h1>
+    <div>
+      <div class="public-method mouseEnterNode">
+        .mouseEnterNode( )
+        <div class="ref GraphNode-applyHoverClass">
+          ↪ GraphNode.applyHoverClass( )
+        </div>
+        <div class="ref GraphNode-appendLineText">
+          ↪ GraphNode.appendLineText( )
+        </div>
+      </div>
+      <div class="public-method mouseLeaveNode">
+        .mouseLeaveNode( )
+        <div class="ref GraphNode-removeHoverClass">
+          ↪ GraphNode.removeHoverClass
+        </div>
+        <div class="ref GraphNode-removeLineText">
+          ↪ GraphNode.removeLineText( )
+        </div>
+      </div>
+      <div class="public-method singleClickNode">
+        .singleClickNode( ) 
+        <div class="ref GraphNode-appendLineText">
+          ↪ GraphNode.appendLineText( )
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="object GraphComponent">
+    <h1>components/GraphComponent.vue</h1>
+    <div>
+      <div>this is where the node styles live</div>
+      <div class="public-method" id="created">
+        .created( )
+        <div class="private-method" id="loadFromSlug">
+          .loadFromSlug( )
+            <div class="ref GraphManager-generate">
+              ↪ GraphManager.generate()
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let x = document.querySelectorAll('.ref')
+    x.forEach((y) => {
+      let n = y.classList.value.replace("ref ", "")
+      
+      y.addEventListener("mouseover", (e) => {
+        let targ = n.split("-").join(" .")
+
+        if (targ.length > 1) {
+          let elem = document.querySelector(`.${targ}`)
+          elem.classList.add("hover")
+        }
+      })
+
+      y.addEventListener("mouseleave", (e) => {
+        document.querySelectorAll('div').forEach(elem => elem.classList.remove("hover"))
+      })
+      
+    })
+  </script>
+</html>

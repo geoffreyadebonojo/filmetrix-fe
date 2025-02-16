@@ -39,8 +39,7 @@ export default class GraphManager {
       let data, start, percent
       
       graphStates.existing.forEach((d, i) => {
-        start = Date.now()
-
+        // start = Date.now()
         data = graphStates.graphData[d[0]]
 
         let [activeNodes, inactiveNodes] = data.nodes.splitAt(d[1])

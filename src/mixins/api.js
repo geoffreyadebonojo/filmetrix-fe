@@ -83,7 +83,7 @@ export default {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ query: 
           `query {
-            details(id: "${id}") {
+            details(id:"${id}") {
               id
               summary
               entity
@@ -106,8 +106,6 @@ export default {
   async fetchGraphData(ids){
     const API_URL = `${this.data().base_url}/graphql`
 
-    const filters = JSON.parse(localStorage.getItem("genres"))
-
     const resp = await (
       fetch(API_URL, {
         method: 'POST',
@@ -116,7 +114,7 @@ export default {
         },
         body: JSON.stringify({ query: `
           query {
-            graphData(ids:"${ids}",genres:"${filters}") {
+            graphData(ids:"${ids}") {
               id
               nodes {
                 id
@@ -137,6 +135,7 @@ export default {
           }`
         })
       }).then((response) => {
+        d3.select("#loading").style("opacity", 1)
         return response.json()
       })
     )
@@ -152,14 +151,6 @@ export default {
   ///////////////////////////////////
 
   async saveGraph(existing) {
-    const ids = []
-    const count = []
-
-    existing.forEach((d) => {
-      ids.push(d[0])
-      count.push(d[1])
-    })
-
     const API_URL =`${this.data().base_url}/graphql`
     const resp = await (
       fetch(API_URL, {
@@ -167,7 +158,7 @@ export default {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ query:
           `query {
-            saveGraph(ids:"${ids}",count:"${count}") {
+            saveGraph(ids:"${existing.join(";")}") {
               resourceId
               shareUrl
             }

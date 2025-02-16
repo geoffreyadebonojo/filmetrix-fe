@@ -18,11 +18,21 @@ export const graphStates = reactive({
   graphType: 'main',
   currentGraphId: '',
   pageSearchActive: false,
+  genreSearchActive: false,
   matching: [],
   visited: [],
-  navLocked: false,
+  dragLocked: false,
   movieGenreCounts : {},
-  loading: 0
+  genres: [ 'acting', 'adventure', 'thriller', 
+            'scifi', 'action', 'mystery', 'drama', 
+            'war', 'crime', 'romance', 'fantasy', 
+            'history', 'horror', 'production', 
+            'sound', 'camera', 'writing', 'directing', 
+            'comedy', 'costume & make-up', 'crew', 
+            'visual', 'effects', 'editing', 'animation', 
+            'art', 'lighting', 'family', 'western', 
+            'tvmovie']
+  // simulation: null
 })
 
 export const panelStates = reactive({

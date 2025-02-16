@@ -1,4 +1,7 @@
-import { graphStates } from "@/stores/store.js"
+import { 
+  graphStates,
+  graphData
+} from "@/stores/store.js"
 import * as d3 from 'd3'
 
 export default class Simulation {
@@ -18,8 +21,11 @@ export default class Simulation {
     this.sim.force("link", d3.forceLink(this.links).id(d => d.id).distance((d) => {
               // seems like a helpful change
               let data = graphStates.graphData[d.source.id] || graphStates.graphData[d.target.id]
-              let dist = data.links.filter(l => l.index).length * 6
-              return dist+200
+
+              // let dist = data.links.filter(l => l.index).any() ? data.links.filter(l => l.index).length * 6 : 6
+              // return dist+100
+
+              return 140
             }))
             .force("charge", d3.forceManyBody().strength((d) => {
               let c = -2000

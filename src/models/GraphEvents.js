@@ -14,43 +14,6 @@ export default class GraphEvents {
     this.visited = {}
     this.results = []
   }
-
-  mouseEnterNode(event) {
-    if (graphStates.inMotion) { return }
-    this.gn.applyHoverClass()
-
-    if (!event.shiftKey) {
-      let hoveredId = d3.select(".hover").data()[0].id
-      this.gn.linkHighlighter(hoveredId)
-      // not quite ready yet
-      // let c = this.gn.connections
-      // c.style("display", "block")
-      this.gn.connections.selectAll("circle").style("stroke", "white")
-      this.gn.node.moveToFront()
-    }
-  }
-  
-  mouseLeaveNode(event) {
-    if (graphStates.inMotion) { return }
-    this.gn.node.classed('added', false)
-    this.gn.removeHoverClass()
-    this.gn.linkUnhighlighter()
-    d3.selectAll("circle").style("stroke", "#7A7879")
-  }
-  
-  async singleClickNode() {
-    d3.selectAll(".node").classed("poster-highlight", false)
-    if (appStates.metaKeyIsPressed) {
-      this.metaClick()
-
-    } else {
-      this.gn.node.classed("poster-highlight", true)
-      this.gn.circle.style("stroke", "white")
-      this.gn.connectionLines.style("stroke", "white")
-      this.gn.allLinks.classed("active", true)
-      this.gn.linkHighlighter(this.gn.id)
-    }
-  }
   
   metaClick() {
     // kevin bacon

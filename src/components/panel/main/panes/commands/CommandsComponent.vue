@@ -60,9 +60,9 @@
         </span>
       </div>
 
-      <div class="item lock-nav" style="height:3em">
+      <!-- <div class="item lock-nav" style="height:3em">
         <img src="/lock-closed.svg" style="opacity: 0.5"/>
-      </div>
+      </div> -->
     </div>
 
     <div id="centerline" class="line"></div>
@@ -150,13 +150,13 @@
         style="height:3em"
       />
 
-      <effect-explanation
+      <!-- <effect-explanation
         :section="'lock-nav'"
         :main="'lock/unlock arrow navigation'"
         :secondary="'when locked, graph will not re-center on focused node when using left-right arrow navigation'"
         :expandedHeight="'7em'"
         style="height:3em"
-      />
+      /> -->
     </div>
   </div>
 </template>
