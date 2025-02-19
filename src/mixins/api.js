@@ -73,6 +73,10 @@ export default {
 
     return api_response.data.getNextPage
   },
+
+  // async fetchBulkDetails(ids) {
+  //   const API_URL =`${this.data().base_url}/graphql`
+  // },
   
   async fetchDetails(id) {
     const API_URL =`${this.data().base_url}/graphql`
@@ -150,7 +154,8 @@ export default {
 
   ///////////////////////////////////
 
-  async saveGraph(existing) {
+  async saveGraph(existing, lockedNodes) {
+    const positions = lockedNodes.map(n => [ n.id, n.fx, n.fy ])
     const API_URL =`${this.data().base_url}/graphql`
     const resp = await (
       fetch(API_URL, {
@@ -158,8 +163,7 @@ export default {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ query:
           `query {
-            saveGraph(ids:"${existing.join(";")}") {
-              resourceId
+            saveGraph(ids:"${existing.join(";")}", lockedNodes:"${positions.join(";")}") {
               shareUrl
             }
           }`
@@ -167,8 +171,8 @@ export default {
       }).then((response) => {
         return response.json()
       })
-    )
-
+      )
+      
     return resp.data.saveGraph
   },
 
@@ -182,6 +186,7 @@ export default {
         body: JSON.stringify({ query: `
           query {
             findBySlug(slug:"${slug}") {
+              position
               existing
               data {
                 nodes {
@@ -209,7 +214,7 @@ export default {
     )
 
     if (resp.data.findBySlug == false) { return }
-    
+
     const d = resp.data.findBySlug
 
     graphStates.existing = d.existing.map(d => [d[0], +d[1]])
@@ -220,5 +225,15 @@ export default {
         nodes: d.nodes
       }
     })
+
+    const pos = resp.data.findBySlug.position.map((entry) => {
+      return {
+        id: entry[0],
+        fx: +entry[1],
+        fy: +entry[2]
+      }
+    })
+
+    localStorage.setItem("lockedNodes", JSON.stringify(pos))
   },
 }

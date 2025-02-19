@@ -19,8 +19,9 @@
     name: "GenerateLinkButton",
     methods: {
       async generateLinkToShare () {
+        const lockedNodes = JSON.parse(localStorage.getItem("lockedNodes"))
 
-        await api.saveGraph(graphStates.existing).then((response) => {
+        await api.saveGraph(graphStates.existing, lockedNodes).then((response) => {
           if (response) {
             navigator.clipboard.writeText( response.shareUrl );
             console.log('Content copied ', response.shareUrl, ' to clipboard');

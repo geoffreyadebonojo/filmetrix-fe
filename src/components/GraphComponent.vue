@@ -34,15 +34,15 @@
       }
     },
 
-    async created () {
+    created () {
       const gid = this.$route.query.gid
       if (gid == null) { return }
-      await this.loadFromSlug(gid)
+      this.loadFromSlug(gid)
     },
     
     methods: {
-      async loadFromSlug (gid) {        
-        await api.findBySlug(gid)
+      loadFromSlug (gid) {        
+        api.findBySlug(gid)
         new GraphManager().generate()
       }
     }
@@ -92,10 +92,6 @@
       circle {
         stroke: red;
       }
-    }
-
-    .hidden {
-      display: none;
     }
 
     .hover {

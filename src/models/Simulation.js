@@ -2,6 +2,8 @@ import {
   graphStates,
   graphData
 } from "@/stores/store.js"
+import GraphNode from '@models/GraphNode.js'
+
 import * as d3 from 'd3'
 
 export default class Simulation {
@@ -20,26 +22,27 @@ export default class Simulation {
   generateGraph(args) { 
     this.sim.force("link", d3.forceLink(this.links).id(d => d.id).distance((d) => {
               // seems like a helpful change
-              let data = graphStates.graphData[d.source.id] || graphStates.graphData[d.target.id]
-
+              // let data = graphStates.graphData[d.source.id] || graphStates.graphData[d.target.id]
               // let dist = data.links.filter(l => l.index).any() ? data.links.filter(l => l.index).length * 6 : 6
               // return dist+100
 
-              return 140
+              return 200
             }))
             .force("charge", d3.forceManyBody().strength((d) => {
-              let c = -2000
-              // if (graphStates.graphData[d.id]) {
-              //   c = graphStates.graphData[d.id].links.filter(l => l.index).length * -20
+              return -2000
+            }))
+            .force('collide', d3.forceCollide((d) => {
+              let c = 100
+              // if (d.hidden) {
+              //   c = 50
               // }
               return c
-            }))
-            .force('collide', d3.forceCollide(60))
+            }).strength(0.8))
             .force("center", d3.forceCenter(
               ...args.forceCenter
-            ))
+            ).strength(0.2))
             .force("radial", d3.forceRadial((d) => {
-              return 500, 0, 0
+              return 0, 0, 0
             }))
     
     this.sim.alpha(args.alpha.g)

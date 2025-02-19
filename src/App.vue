@@ -23,7 +23,18 @@
   <div id="app-wrapper" class="dark-theme">
     <RouterView></RouterView>
     <div id="name-search"></div>
-    <div id="filters"></div>
+    <div id="filters">
+      <div id="movie-filters-container">
+        <g class="all" id="all-movies"><text>ALL</text></g>
+        <g id="movie-filters"></g>
+        <g class="none" id="no-movies"><text>NONE</text></g>
+      </div>
+      <div id="person-filters-container">
+        <g class="all" id="all-persons"><text>ALL</text></g>
+        <g id="person-filters"></g>
+        <g class="none" id="no-persons"><text>NONE</text></g>
+      </div>
+    </div>
     <div id="degrees-kevin"></div>
   </div>
 </template>
@@ -31,6 +42,10 @@
 <style lang="scss">
   .dark-theme {
     background: $graph-body-grey;
+  }
+
+  .hidden {
+    display: none;
   }
 
   #name-search {
@@ -43,33 +58,46 @@
   }
 
   #filters {
+    // display: grid;
+    display: none;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 20px 1fr 20px;
     position: absolute; 
     top: 85px; 
     left: 10px; 
     width: 0px;
-    height: 100%;
-    display: flex;
+    // height: 100%;
     flex-wrap: wrap;
     justify-content: flex-start;
     align-content: flex-start;
-    
-    .filter {
-      font-family: $global-font;
-      font-size: 20px;
-      stroke-width: 2;
-      color: #7A7879;
 
-      text:hover {
-        cursor: $cursor;
+    #person-filters-container, #movie-filters-container{
+      width: 90px;
+      height: 100%;
+      display: grid;
+      grid-template-rows: 20px 1fr 20px;
+
+      #movie-filters, #person-filters {
+        display: grid;
+      }
+
+      .all, .none, .filter {
+        font-family: $global-font;
+        font-size: 20px;
+        stroke-width: 2;
+        color: #7A7879;
+
+        text:hover {
+          cursor: $cursor;
+          color: lightblue;
+        }
+      }
+
+      .locked > text {
         color: lightblue;
       }
     }
-
-    .locked > text {
-      color: lightblue;
-    }
   }
-
   // .node.locked {
   //   circle {
   //     stroke: red
@@ -96,11 +124,11 @@
         loading: graphStates.loading
       }
     },
-    
+
     async created () {
       if (this.$data.newHere == null) { localStorage.setItem("newHere", true) }
       if (localStorage.getItem("lockedGraph") == null) { localStorage.setItem("lockedGraph", "[]") }     
-      if (localStorage.getItem("genres") == null) { localStorage.setItem("genres", graphStates.genres) }
+      if (localStorage.getItem("genres") == null) { localStorage.setItem("genres", `[]`)}
       if (localStorage.getItem("lockedNodes") == null) { localStorage.setItem("lockedNodes", "[]") }
       // if (localStorage.getItem("dragLockOn") == null) { localStorage.setItem("dragLockOn", "false") }
 
@@ -110,80 +138,91 @@
       const performStringMatching = this.performStringMatching
       const deselectPageSearch = this.deselectPageSearch
       const filterByGenres = this.filterByGenres
+      const resetGraphWithFilters = this.resetGraphWithFilters
 
       d3.select("body").on("keydown.click", function(event) {
         const searchTextElem = d3.select("#name-search")
 
-        if (event.key == "`") {
-          graphStates.genreSearchActive = !graphStates.genreSearchActive
+        // if (event.key == "`") {
+        //   graphStates.genreSearchActive = !graphStates.genreSearchActive
 
-          if (!graphStates.genreSearchActive) { 
-            d3.select("#filters").selectAll("g").remove()
-          } else {
-            let filter = d3.selectAll(".movie").data().map((n) => n.genre).join(" ").split(" ").unique()
+        //   if (!graphStates.genreSearchActive) { 
+        //     d3.select("#filters").style("display", "none")
+        //   } else {
+        //     d3.select("#filters").style("display", "grid")
+        //     let movies = d3.selectAll(".movie, .tv").data().map((n) => n.genre).join(" ").split(" ").unique()
+        //     let people = d3.selectAll(".person").data().map((n) => n.type.join(" ")).join(" ").split(" ").unique().remove("&")
 
-            function setClass(d) {
-              let activeGenres = JSON.parse(localStorage.getItem("genres"))
-              // let activeGenres = graphStates.genres
-              let active = activeGenres.includes(d) ? "locked" : ""
-              return ['filter', active].join(" ")
-            }
+        //     // let filter = movies.concat(people)
+        //     function setClass(d) {
+        //       let activeGenres = JSON.parse(localStorage.getItem("genres"))
+        //       let active = activeGenres.includes(d) ? "locked" : ""
+        //       return ['filter', active].join(" ")
+        //     }
 
-            let textContainer = d3.select("#filters").selectAll("g")
-                                  .data(filter).enter()
-                                  .append("g")
-                                  .attr("class", d => setClass(d))
+        //     let pplTextContainer = d3.select("#person-filters").selectAll("g")
+        //                           .data(people).enter()
+        //                           .append("g")
+        //                           .attr("class", d => setClass(d))
+
+        //     let movTextContainer = d3.select("#movie-filters").selectAll("g")
+        //                           .data(movies).enter()
+        //                           .append("g")
+        //                           .attr("class", d => setClass(d))
             
-            function mouseover(e, d) {
-              let nonMatches = d3.selectAll(`.movie:not(.${d})`)
-              nonMatches.style("display", "none")  
-              nonMatches.each((n) => {
-                let id = n.id
-                d3.selectAll(".link").filter(l => l.id.includes(id)).style("display", "none")
-              })
-            }                     
+        //     function mouseover(e, d) {
+        //       let matches = d3.selectAll(`.movie${d}, person${d}`)
+        //       // matches.classed("hidden", true)  
+
+        //       matches.each((n) => {
+        //         let id = n.id
+        //         d3.select(`#${id}`).select("circle").style("stroke", "red")
+        //         // d3.selectAll(".link").filter(l => l.id.includes(id)).classed("hidden", true)
+        //       })
+        //     }                     
             
-            function mouseout(e, d) {
-              d3.selectAll(`.node`).style("display", "block")
-              d3.selectAll(".link").style("display", "block")
-            }
+        //     function mouseout(e, d) {
+        //       // d3.selectAll(`.node`).classed("hidden", false)
+        //       // d3.selectAll(".link").classed("hidden", false)
+        //       d3.selectAll("circle").style("stroke", "#7A7879")
+        //       // let nonmatches = d3.selectAll(`.movie:not(.${d}), .person:not(.${d})`)
+        //       // matches.classed("hidden", true)  
 
-            function filterClick(e) {
-              const thisFilterClassed = d3.select(e.currentTarget).classed("locked")
-              d3.select(e.currentTarget).classed("locked", !thisFilterClassed)
-              const activeFilters = d3.selectAll(".filter.locked").data()
-              localStorage.setItem('genres', JSON.stringify(activeFilters))
+        //       // nonmatches.each((n) => {
+        //       //   let id = n.id
+        //       // })
+        //     }
 
-              let nodes = []
+        //     function filterClick(e) {
+        //       let prev = JSON.parse(localStorage.getItem('genres'))
+        //       let activeFilters = prev.togglePresence(e.target.innerHTML)
+        //       localStorage.setItem('genres', JSON.stringify(activeFilters))
 
-              graphData.active.nodes.forEach((n) => {
-                if (n.type.overlapsWith(activeFilters).any() || n.entity == "person") {
-                  nodes.push(n)
-                }
-              })
+        //       let current = d3.select(e.target.parentElement).classed("locked")
+        //       d3.select(e.target.parentElement).classed("locked", !current)
 
-              function filt(l, nids) {
-                return l.id.split("--").overlapsWith(nids).length > 1
-              }
-
-              let links = graphData.active.links.filter((l) => filt(l, nodes.map(n => n.id)))
-
-              new GraphManager().generate({nodes, links})
-            }
+        //       resetGraphWithFilters(activeFilters)
+        //     }
             
-            textContainer.on("mouseenter", (e, d) => mouseover(e, d))                   
-                         .on("mouseleave", (e, d) => mouseout(e, d))
-                         .on("click", (e) => filterClick(e))
-                         .append("text").text((d) => d)  
-          }
-        }
+        //     pplTextContainer.on("mouseenter", (e, d) => mouseover(e, d))                   
+        //                  .on("mouseleave", (e, d) => mouseout(e, d))
+        //                  .on("click", (e) => filterClick(e))
+        //                  .append("text").text((d) => d)  
+
+     
+        //     movTextContainer.on("mouseenter", (e, d) => mouseover(e, d))                   
+        //                  .on("mouseleave", (e, d) => mouseout(e, d))
+        //                  .on("click", (e) => filterClick(e))
+        //                  .append("text").text((d) => d)
+        //   }
+
+        // }
 
         if (event.key === "Shift") {
           appStates.shiftKeyIsPressed = true
 
         } else if (event.key == "Meta") {
           appStates.metaKeyIsPressed =  true
-
         } else if (event.metaKey && event.shiftKey && event.key == 'f') {
 
           if (graphStates.pageSearchActive) {
@@ -220,6 +259,50 @@
     },
 
     mounted () {
+      d3.select("#all-persons")
+      .on("click", (e) => {
+        let filters = d3.select("#person-filters").selectAll(".filter")
+        filters.classed("locked", true)
+
+        let allFilters = d3.selectAll(".filter.locked").data()
+        localStorage.setItem("genres", JSON.stringify(allFilters))
+                
+        this.resetGraphWithFilters(allFilters)
+      })
+
+      d3.select("#all-movies")
+      .on("click", (e) => {
+        let filters = d3.select("#movie-filters").selectAll(".filter")
+        filters.classed("locked", true)
+
+        let allFilters = d3.selectAll(".filter.locked").data()
+        localStorage.setItem("genres", JSON.stringify(allFilters))        
+        
+        this.resetGraphWithFilters(allFilters)
+      })
+
+      d3.select("#no-persons")
+      .on("click", (e) => {
+        let filters = d3.select("#person-filters").selectAll(".filter")
+        filters.classed("locked", false)
+
+        let allFilters = d3.selectAll(".filter.locked").data()
+        localStorage.setItem("genres", JSON.stringify(allFilters))
+
+        this.resetGraphWithFilters(allFilters)
+      })
+
+      d3.select("#no-movies")
+      .on("click", (e) => {
+        let filters = d3.select("#movie-filters").selectAll(".filter")
+        filters.classed("locked", false)
+
+        let allFilters = d3.selectAll(".filter.locked").data()
+        localStorage.setItem("genres", JSON.stringify(allFilters))
+
+        this.resetGraphWithFilters(allFilters)
+      })
+
       if (graphStates.existing != null) {
         if (graphStates.existing.length > 0) {
           this.loadSavedGraph()
@@ -237,7 +320,6 @@
             setFocus("details")
           }
         })
-        
         new GraphManager().generate()
       },
 
@@ -267,7 +349,7 @@
         nonMatching.each((d) => {
           gn = new GraphNode(d.id)
           gn.node.classed("hidden", true)
-          gn.allLinks.classed("hidden", true)
+          gn.GraphLinks.links.classed("hidden", true)
         })
 
         const matching = allNodes.filter((n) => {
@@ -282,10 +364,49 @@
         matching.each((d) => {
           gn = new GraphNode(d.id)
           gn.node.classed("hidden", false)
-          gn.allLinks.classed("hidden", false)
+          gn.GraphLinks.links.classed("hidden", false)
         })
 
         graphStates.matching = matching.data().map((n) => n.id)
+      },
+
+      resetGraphWithFilters(activeFilters) {
+        let am = []
+        let ap = []
+        let lm = []
+        
+        graphStates.existing.forEach((d) => {
+          let allNodes = graphStates.graphData[d[0]].nodes
+          
+          let [matching, nonMatching] = allNodes.filter((n) => {
+            return (n.type.overlapsWith(activeFilters).any())
+          }).splitAt(d[1]-1)
+
+          am.push(matching)
+          // nonMatching.forEach((n) => {n.hidden = true})
+          // am.push(nonMatching.first(20))
+        })
+
+        let nodes = am.flatten().uniqueById()
+
+        graphStates.existing.forEach((d) => {
+          let allLinks = graphStates.graphData[d[0]].links
+
+          allLinks.forEach((l) => {
+            let nids = nodes.ids()
+            if ((nids.includes(l.source.id) && nids.includes(l.target.id)) || 
+                (nids.includes(l.source) && nids.includes(l.target))) {
+              lm.push(l)
+            }
+          })
+        })
+
+        let links = lm
+
+        debugger
+        console.log({links, nodes})
+
+        new GraphManager().generateFiltered({links, nodes})
       }
     }
   }

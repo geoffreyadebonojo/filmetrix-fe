@@ -25,6 +25,7 @@ export default {
     // localStorage.setItem("genres", JSON.stringify(graphStates.genres))
                      
     localStorage.setItem("lockedGraph", JSON.stringify([]))
+    localStorage.setItem("lockedNodes", JSON.stringify([]))
     graphStates.existing =         []
     graphStates.graphData =        {}
     graphStates.currentGraphId =   ''

@@ -15,20 +15,24 @@ export default class GraphNode {
     this.id =   nodeId
     this.node = d3.select(`#${this.id}`)
 
-    this.circle = this.node.select('circle')
-    this.label =  this.node.select('.node-label')
-    this.text =   this.node.select('.node-label').select('.text-container')
-    this.poster = this.node.select('.poster')
+    this.circle =   this.node.select('circle')
+    this.label =    this.node.select('.node-label')
+    this.text =     this.node.select('.node-label').select('.text-container')
+    this.poster =   this.node.select('.poster')
+    this.initials = this.node.select('.initials')
      
     const x = d3.selectAll(`.link[source='${this.id}']`).nodes().map((d)=> d.attributes.target.value)
     const z = d3.selectAll(`.link[target='${this.id}']`).nodes().map((d)=> d.attributes.source.value)
-    
+
     this.connections = d3.selectAll('.node').filter((d) => { return x.includes(d.id) || z.includes(d.id) })
     this.connectionIds = this.connections.data().map((n) => n.id)
+    this.GraphLinks = new GraphLinks(nodeId)
     
-    this.links = new GraphLinks(nodeId)
-
-    this.highlightDelay = 200
+    this.highlightDelay = 150
+  }
+  
+  neighbors() {
+    return this.connectionIds.map(n => new GraphNode(n))
   }
 
   async singleClickNode() {
@@ -39,36 +43,58 @@ export default class GraphNode {
     } else {
       this.node.classed("poster-highlight", true)
       this.circle.style("stroke", "white")
-      // this.connectionLines.style("stroke", "white")
-      this.allLinks.classed("active", true)
-      this.appendLineText(this.id)
+      this.GraphLinks.links.classed("active", true)
+      this.GraphLinks.appendLineText(this.id)
     }
   }
 
-  mouseEnter(event) {
-    if (!graphStates.inMotion) {
-      this.applyHoverClass()
-      this.clearHighlightedAttributes()
+  scaleTo(circleScale, labelScale, posterScale) {
+    this.circle.style("transform", `scale(${circleScale})`)
+    this.label.style("transform", `scale(${labelScale})`)
+    this.poster.style("transform", `scale(${posterScale})`)
+    this.initials.style("transform", `scale(${posterScale})`)
+  }
 
-      if (!event.shiftKey) {
-        this.circle.transition().duration(this.highlightDelay).style("stroke", "white").transition().style("stroke-width", "2")
-        // setTimeout(() => {
-          this.links.appendLineText()
-        // }, i)
-        this.links.highlightLines(this.highlightDelay)
-        this.connections.selectAll("circle").transition().delay(this.highlightDelay*1.5).duration(this.highlightDelay).style("stroke", "white")
-        this.node.moveToFront()
-      }
-    }
+  mouseEnter(event, textAnchor="middle") {
+    if (graphStates.inMotion) return false
+      
+    d3.selectAll(".character-label").remove()
+
+    this.node.moveToFront()
+    this.applyHoverClass()
+    this.clearHighlightedAttributes()
+    // this.scaleTo(1.5, 1.5, 1.5)
+
+    if (event.shiftKey) return
+
+    this.circle.transition().duration(this.highlightDelay)
+      .style("stroke", "white")
+      .style("stroke-width", "1.44")
+
+    this.GraphLinks.highlightLines(this.highlightDelay)
+    setTimeout(() => { this.GraphLinks.appendLineText(3, textAnchor) }, this.highlightDelay)
+    
+    this.connections.selectAll(".outline").transition().duration(this.highlightDelay/2).delay(this.highlightDelay*1.5)
+      .transition().style("transform", "scale(1.1)")
+      .transition().style("stroke", "white")
+    this.connections.selectAll(".node-label").transition().duration(this.highlightDelay/2).delay(this.highlightDelay*1.5)
+      .transition().style("transform", "scale(1.1)")
+    this.connections.selectAll(".poster").transition().duration(this.highlightDelay/2).delay(this.highlightDelay*1.5)
+      .transition().style("transform", "scale(1.1)")      
   }
 
   mouseLeave() {
-    if (!graphStates.inMotion) { 
-      this.node.classed('added', false)
-      this.removeHoverClass()
-      this.removeLineText()
-      this.clearHighlightedAttributes()
-    }
+    if (graphStates.inMotion) return false
+    
+    this.node.classed('added', false)
+    // this.scaleTo(1, 1, 1)
+    this.removeHoverClass()
+    this.clearHighlightedAttributes()
+    
+    d3.selectAll(".character-label").remove()
+    d3.selectAll(".outline").style("transform", "scale(1)")
+    d3.selectAll(".node-label").style("transform", "scale(1)")
+    d3.selectAll(".poster").style("transform", "scale(1)")
   }
   
   clearHighlightedAttributes() {
@@ -106,104 +132,4 @@ export default class GraphNode {
     this.node.classed('shift-hover', false)
     this.node.classed('alt-hover', false)
   }
-
-  removeLineText() {
-    d3.selectAll(".character-label").remove()
-  }
-
-  async appendLineText(hoveredId) {
-    if (graphStates.inMotion) { return }
-
-
-  }
-
-  // async appendLineText(hoveredId) {
-  //   if (graphStates.inMotion) { return }
-
-  //   let linkholder = this.allLinks.append("g").attr("class", "character-label")
-  //   let nodeType = hoveredId.split("-")[0]
-
-  //   this.appendRect(linkholder, nodeType)
-  //   this.appendText(linkholder, nodeType)
-  // }
-  
-  // appendRect(linkholder, nodeType) {
-  //   linkholder.append("rect")
-  //   .attr('fill', "#222")
-  //   .attr("x", (d) => {
-  //     let textLength = d.roles.join("").length
-  //     if (nodeType == "person") {
-  //       return (d.target.x < d.source.x) ? -50 - (textLength*3.75) : 50
-
-  //     } else {
-  //       let x = Math.abs( (d.source.x - d.target.x) )
-  //       let y = Math.abs( (d.source.y - d.target.y) )
-  //       let h = Math.sqrt( (x*x) + (y*y) )
-  //       return (d.target.x < d.source.x) ? -h + 50 : h - 50 -(textLength*3.75)
-  //     }
-  //   })
-  //   .attr("y", -4)
-  //   .attr("height", 8)
-  //   .attr("width", (d) => {
-  //     let c = d.roles.join().split("").length
-  //     return c*3.5
-  //   })
-  //   .attr("transform", (d) => {
-  //     let theta = angle360(
-  //       d.source.x,
-  //       d.source.y,
-  //       d.target.x,
-  //       d.target.y
-  //     )
-
-  //     if (d.target.x < d.source.x) {
-  //       return `translate(${d.source.x},${d.source.y})rotate(${theta+180})`
-  //     } else {
-  //       return `translate(${d.source.x},${d.source.y})rotate(${theta})`
-  //     }
-  //   })
-  // }
-
-  // appendText(linkholder, nodeType) {
-  //   linkholder.append("text")
-  //   .text(d => d.roles.join(", "))
-  //   .attr("x", (d) => {
-  //     if (nodeType == "person") {
-  //       return (d.target.x < d.source.x) ? -50 : 50
-
-  //     } else {
-  //       let x = Math.abs( (d.source.x - d.target.x) )
-  //       let y = Math.abs( (d.source.y - d.target.y) )
-  //       let h = Math.sqrt( (x*x) + (y*y) )
-  //       return (d.target.x < d.source.x) ? -h + 50 : h - 50
-  //     }
-  //   })
-  //   .attr("text-anchor", (link) => {
-  //     if (nodeType == "person") {
-  //       return (link.target.x < link.source.x) ? "end" : "start"
-  //     } else {
-  //       return (link.target.x < link.source.x) ? "start" : "end"
-  //     }
-  //   })
-  //   .attr("y", 2)
-  //   .attr("stroke", "#FFF")
-  //   .style("font-family", "Dosis, sans-serif")
-  //   .style("font-size", () => {
-  //     return `${10}px`
-  //   })
-  //   .attr("transform", (d) => {
-  //     let theta = angle360(
-  //       d.source.x,
-  //       d.source.y,
-  //       d.target.x,
-  //       d.target.y
-  //     )
-
-  //     if (d.target.x < d.source.x) {
-  //       return `translate(${d.source.x},${d.source.y})rotate(${theta+180})`
-  //     } else {
-  //       return `translate(${d.source.x},${d.source.y})rotate(${theta})`
-  //     }
-  //   })
-  // }
 }

@@ -5,7 +5,8 @@ import {
  } from "@/stores/store.js"
 import api from "@mixins/api"
 import graph from "@/mixins/graph"
-import * as d3 from 'd3'
+import GraphNode from '@models/GraphNode'
+
 
 export default class GraphManager {
   constructor(graphType="main") {
@@ -15,61 +16,54 @@ export default class GraphManager {
     this.graphType = graphType
   }
 
-  async generate(filteredData={}) {
-    // console.group("GraphManager.generate()")
-    // console.log("start")
-    // let methodStart = Date.now()
+  async generateFiltered(incoming={links:false, nodes:false}) {
+    if (graphStates.existing == null) { return }
+    if (graphStates.existing.length < 1) { return }
 
-    let outgoingLinks
-    let outgoingNodes
-
-    if (filteredData.nodes && filteredData.links) {
-      outgoingLinks = filteredData.links
-      outgoingNodes = filteredData.nodes  
-    } else {
-
-      if (graphStates.existing == null) { return }
-      if (graphStates.existing.length < 1) { return }
-
-      store.isLocked = true
+    store.isLocked = true
     
-      await api.fetchGraphData(graphStates.existing.map(d => d[0]))
-      await api.fetchDetails(graphStates.existing[0])
-
-      let data, start, percent
-      
-      graphStates.existing.forEach((d, i) => {
-        // start = Date.now()
-        data = graphStates.graphData[d[0]]
-
-        let [activeNodes, inactiveNodes] = data.nodes.splitAt(d[1])
-        let [activeLinks, inactiveLinks] = data.links.splitAt(d[1]-1)
-
-        graphData.active.nodes = graphData.active.nodes.concat(activeNodes).uniqueById()
-        graphData.active.links = graphData.active.links.concat(activeLinks).unique()
-
-        graphData.inactive.nodes = graphData.inactive.nodes.concat(inactiveNodes).uniqueById()
-        graphData.inactive.links = graphData.inactive.links.concat(inactiveLinks).unique()
-
-        this.links = graphData.active.links
-        this.nodes = graphData.active.nodes
-
-        percent = i / graphStates.existing.length-1
-        // console.log(`${Date.now() - start}`)
-      })
-
-      outgoingLinks = graphData.active.links
-      outgoingNodes = graphData.active.nodes
-    }
-
+    let outgoingNodes = incoming.nodes
+    // .filter((d) => {
+    //   let connections = new GraphNode(d.id).connections
+    //   return connections.data().any()
+    // })
+    let outgoingLinks = incoming.links
+    
     graph.draw({
       nodes: outgoingNodes,
       links: outgoingLinks,
+      type: 'main'
+    })
+  }
+
+  async generate() {
+    let outgoingLinks = []
+    let outgoingNodes = []
+    // if (filteredData.nodes && filteredData.links) {
+    //   let outgoingLinks = filteredData.links
+    //   let outgoingNodes = filteredData.nodes  
+    // } else {
+    if (graphStates.existing == null) { return }
+    if (graphStates.existing.length < 1) { return }
+
+    store.isLocked = true
+  
+    await api.fetchGraphData(graphStates.existing.map(d => d[0]))
+    await api.fetchDetails(graphStates.existing[0][0])
+
+    let data
+    
+    graphStates.existing.forEach((d, i) => {
+      data = graphStates.graphData[d[0]]
+      outgoingNodes.push( data.nodes.splitAt(d[1]+1)[0] )
+      outgoingLinks.push( data.links.splitAt(d[1])[0] )
+    })
+    // }
+
+    graph.draw({
+      nodes: outgoingNodes.flatten().uniqueById(),
+      links: outgoingLinks.flatten(),
       type: this.graphType
     })
-
-    // console.log(`duration: ${Date.now() - methodStart}`)
-    // console.log("end")
-    // console.groupEnd()
   }
 }

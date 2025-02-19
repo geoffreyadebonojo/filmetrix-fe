@@ -43,6 +43,13 @@ export function drawArc(d) {
   return arc()
 }
 
+export function distance(a, b) {
+  const x = Math.abs( (a.x - b.x) )
+  const y = Math.abs( (a.y - b.y) )
+  
+  return Math.sqrt( (x*x) + (y*y) )
+}
+
 export function angle(cx, cy, ex, ey) {
   var dy = ey - cy;
   var dx = ex - cx;

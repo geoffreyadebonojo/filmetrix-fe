@@ -135,11 +135,12 @@ Array.prototype.excludes = function(elem) {
 
 Array.prototype.flatten = function() {
   const flattened = []
-
   this.forEach((sub) => {
-    sub.forEach((d) => {
-      flattened.push(d)
-    })
+    if (sub) {
+      sub.forEach((d) => {
+        flattened.push(d)
+      })
+    }
   })
 
   return flattened

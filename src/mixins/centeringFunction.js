@@ -20,11 +20,27 @@ export default {
     })
   },
 
-  attachNavLockEffect(targetBody) {
+  // doesn't belong here
+  attachNavLockEffect(targetBody, simulation) {
     targetBody.on("click", (e) => {
-      graphStates.dragLocked = !graphStates.dragLocked
-      let lockSetting = graphStates.dragLocked ? "url('/lock-closed.svg')" : "url('/lock-open.svg')"
-      let opacity =     graphStates.dragLocked ? "1" : "0.5"
+      let stickySetting = JSON.parse(localStorage.getItem("sticky"))
+      
+      let lockSetting = !JSON.parse(stickySetting) ? "url('/lock-closed.svg')" : "url('/lock-open.svg')"
+      let opacity =     !JSON.parse(stickySetting) ? "1" : "0.5"
+      
+      localStorage.setItem("sticky", JSON.stringify( !JSON.parse(stickySetting) ))
+      
+      if (!JSON.parse(stickySetting)) {
+        // localStorage.setItem('lockedNodes', JSON.stringify([]))
+        // d3.selectAll('.node').data().forEach((n) => {
+          //   n.fy = null
+          //   n.fx = null
+          // })
+          // graphStates.inMotion = true
+          d3.selectAll(".character-label").remove()
+          // simulation.alpha(2).restart();
+          
+        }
 
       targetBody.style("background-image", lockSetting).style("opacity", opacity)
     })

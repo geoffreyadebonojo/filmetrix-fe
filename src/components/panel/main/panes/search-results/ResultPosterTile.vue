@@ -18,8 +18,8 @@
        v-bind:id="$attrs.result.id"
        tabindex="0"
        :key="$data.resultId"
-       @click="fetchNodesAndDetails($attrs.result, 10, $event)"
-       @keypress="fetchNodesAndDetails($attrs.result, 10)">  
+       @click="fetchNodesAndDetails($attrs.result, 12, $event)"
+       @keypress="fetchNodesAndDetails($attrs.result, 12)">  
     <img v-bind:src="$attrs.result.poster" class="tile-img"/>
     <div>
       {{ $attrs.result.name }}
@@ -59,10 +59,11 @@
           await api.fetchDetails(result.id)
           await graph.callForNodes(result, count)
 
-          const firstOrder = graphStates.graphData[result.id].nodes.slice(1, count+1)  
+          const firstOrder = graphStates.graphData[result.id].nodes.slice(1, count)  
           firstOrder.forEach((node) => {
             graphStates.existing.push([node.id, 12])
           })
+
           await api.fetchGraphData(graphStates.existing.map(d => d[0])) 
         } else {
 

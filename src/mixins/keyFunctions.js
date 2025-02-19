@@ -26,7 +26,12 @@ export default {
 
     d3.select("body").on("keydown.nav", async function(event) {      
       if (event.key == "/") {
-        graphStates.dragLocked = !graphStates.dragLocked
+
+        let stickySetting = JSON.parse(localStorage.getItem("sticky"))
+        localStorage.setItem("sticky", JSON.stringify( !JSON.parse(stickySetting) ))
+
+        graphStates.dragLocked = stickySetting
+
         let lockSetting = graphStates.dragLocked ? "url('/lock-closed.svg')" : "url('/lock-open.svg')"
         let opacity =     graphStates.dragLocked ? "1" : "0.5"
   
@@ -55,7 +60,7 @@ export default {
         //   d3.zoomIdentity.translate(centering.x, centering.y))
 
       // } else 
-      if (["ArrowUp", "ArrowDown"].includes(event.key) ){// && !graphStates.dragLocked) {
+      if (["ArrowUp", "ArrowDown"].includes(event.key) ) {
         if (event.key == "ArrowUp") {
           if (zoomLevel > 5) {return}
           zoomLevel += 0.5
@@ -74,6 +79,8 @@ export default {
                          .translate(-d.x, -d.y))
 
       } else if (["ArrowRight", "ArrowLeft"].includes(event.key)) {
+        if (graphStates.inMotion) return false
+
         if (event.key == "ArrowRight") {
           currentIndex += 1
         } else if (event.key == "ArrowLeft") {
@@ -97,38 +104,31 @@ export default {
         d3.selectAll(".node").classed("poster-highlight", false)
         let gn = new GraphNode(currentAnchor)
 
-        if (prevAnchor) { 
-          prevAnchor.circle.style("stroke", "#7A7879").style("stroke-width", "1")
-          prevAnchor.removeLineText()
-        }
-        if (prevLinks) {  prevLinks.selectAll(".line").style("stroke", "#7A7879").style("stroke-width", "1")}
-        if (prevTargs) {  prevTargs.select("circle").style("stroke", "#7A7879").style("stroke-width", "1")}
+        if (prevAnchor) prevAnchor.mouseLeave()
         
         gn.circle.style("stroke", "white").style("stroke-width", "1.2")
-        gn.allLinks.selectAll(".line").style("stroke", "white")
-
+        gn.GraphLinks.links.selectAll(".line").style("stroke", "white")
         gn.node.moveToFront()
 
-        d = gn.node.data()[0]
+        d = gn.node.datum()
 
-        // if (!graphStates.dragLocked) {
-          vb.transition().duration(500).call(
-            zoom.transform, 
-            d3.zoomIdentity.translate(centering.x, centering.y)
-                           .scale(zoomLevel)
-                           .translate(-d.x, -d.y))
-        // }
+        vb.transition().duration(500).call(
+          zoom.transform, 
+          d3.zoomIdentity.translate(centering.x, centering.y)
+                          .scale(zoomLevel)
+                          .translate(-d.x, -d.y))
 
+        const _event = {event: {shiftKey:false}}
+        gn.mouseEnter(_event, "end")
         gn.node.classed("poster-highlight", true)
-        gn.appendLineText(gn.id)
 
         const dc = d3.selectAll(".details-component")
         dc.style("left", () => { return `${currentIndex*100}%`})
         dc.transition().duration(500).style("left", "0%")
 
         prevAnchor = gn
-        prevLinks = gn.allLinks
-        prevTargs = gn.connections
+        // prevLinks = gn.allLinks
+        // prevTargs = gn.connections
 
         await api.fetchDetails(currentAnchor) 
       }

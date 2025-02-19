@@ -18,6 +18,17 @@
     name: "MainGraphButtonsComponent",
     data () {
       return {}
+    },
+    mounted() {
+      d3.select("#nav-lock-button").style("opacity", (d) => {
+        const isSticky = JSON.parse(localStorage.getItem("sticky"))
+        let opacity =     isSticky ? "1" : "0.5"
+        return opacity 
+      }).style("background-image", (d) => {
+        const isSticky = JSON.parse(localStorage.getItem("sticky"))
+        let lockSetting = isSticky ? "url('/lock-closed.svg')" : "url('/lock-open.svg')"
+        return lockSetting
+      })
     }
   }
 </script>
@@ -54,6 +65,7 @@
 
   #nav-lock-button {
     background-image: url("/lock-open.svg");
+    // opacity: 0.5;
     background-size: contain;
     bottom: 60px;
     width: 20px;

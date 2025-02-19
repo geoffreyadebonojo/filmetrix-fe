@@ -25,6 +25,7 @@ export default {
   },
 
   linkFormatter(l) {
+    if (l.source == undefined) {debugger}
     if (l.source.id) {
       l.id = `${l.source.id}--${l.target.id}`
     } else {
@@ -34,8 +35,7 @@ export default {
   },
 
   nodeFormatter(n) {
-    n.r = 40
-    // n.r =     n.poster == "" ? 10 : 40
+    n.r =     n.poster == "" ? 30 : 40
     n.genre = n.type ? n.type.join(" ") : ''
     n.name =  n.name ? n.name.toLowerCase() : ''
     return n
@@ -52,7 +52,9 @@ export default {
     var links = responseData.links.map((l) => { return this.linkFormatter(l) })
     var nodes = responseData.nodes.map((n) => { return this.nodeFormatter(n) })
 
-    const s = settings(responseData.type)
+    let type = responseData.type || "main"
+
+    const s = settings(type)
 
     const graphType =      s.graphType
     const containerId =    s.containerId
