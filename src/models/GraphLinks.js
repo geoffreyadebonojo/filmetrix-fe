@@ -12,7 +12,6 @@ export default class GraphLink {
     this.nodeId = nodeId
     this.links = d3.selectAll(`.link[target='${nodeId}'], .link[source='${nodeId}']`)
     this.lines = this.links.select("line")
-    this.labels = this.links.select(".character-label")
   }
 
   highlightLines(i) {
@@ -27,6 +26,7 @@ export default class GraphLink {
     function appendToLink(l, appendRect, appendText, textAnchor) {
       let link = d3.select(`#${l.id}`)
       let linkholder = link.append("g").attr("class", "character-label")
+      
       appendRect(linkholder, nodeType, scale, textAnchor)
       appendText(linkholder, nodeType, scale, textAnchor)
     }
@@ -90,7 +90,6 @@ export default class GraphLink {
 
   
   appendText(linkholder, nodeType, scale, textAnchor) {
-    
     function applyTextAnchor(link, nodeType, textAnchor) {
       if (textAnchor == "middle") {
         return "middle"

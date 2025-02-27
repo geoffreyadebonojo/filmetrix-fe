@@ -1,6 +1,7 @@
 <script setup>
   import GenerateLinkButton from './GenerateLinkButton.vue'
   import ClearGraphButton from './ClearGraphButton.vue'
+  import SaveGraphButton from './SaveGraphButton.vue'
   import api from "@mixins/api"
   import * as d3 from 'd3'
 </script>
@@ -8,6 +9,7 @@
 <template>
   <generate-link-button></generate-link-button>
   <clear-graph-button></clear-graph-button>
+  <save-graph-button v-if="this.slug"></save-graph-button>
 
   <div class="graph-control-buttons" id="centering-button"></div>
   <div class="graph-control-buttons" id="nav-lock-button"></div>
@@ -17,7 +19,9 @@
   export default {
     name: "MainGraphButtonsComponent",
     data () {
-      return {}
+      return {
+        slug: this.$route.query.gid
+      }
     },
     mounted() {
       d3.select("#nav-lock-button").style("opacity", (d) => {
@@ -29,6 +33,10 @@
         let lockSetting = isSticky ? "url('/lock-closed.svg')" : "url('/lock-open.svg')"
         return lockSetting
       })
+
+      if (this.slug) {
+
+      }
     }
   }
 </script>

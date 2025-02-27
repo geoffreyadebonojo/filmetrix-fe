@@ -154,6 +154,29 @@ export default {
 
   ///////////////////////////////////
 
+  async updateGraph(id, existing, lockedNodes) {
+    const positions = lockedNodes.map(n => [ n.id, n.fx, n.fy ])
+    const API_URL =`${this.data().base_url}/graphql`
+
+    const resp = await (
+      fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query:
+          `query {
+            updateGraph(id:"${id}", existing:"${existing.join(";")}", lockedNodes:"${positions.join(";")}") {
+              shareUrl
+            }
+          }`
+        })
+      }).then((response) => {
+        return response.json()
+      })
+    )
+
+    return resp.data.updateGraph
+  },
+
   async saveGraph(existing, lockedNodes) {
     const positions = lockedNodes.map(n => [ n.id, n.fx, n.fy ])
     const API_URL =`${this.data().base_url}/graphql`
@@ -171,7 +194,7 @@ export default {
       }).then((response) => {
         return response.json()
       })
-      )
+    )
       
     return resp.data.saveGraph
   },
