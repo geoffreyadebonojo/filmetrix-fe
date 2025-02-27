@@ -21,13 +21,17 @@ export default class GraphNode {
     this.poster =   this.node.select('.poster')
     this.initials = this.node.select('.initials')
      
-    const x = d3.selectAll(`.link[source='${this.id}']`).nodes().map((d)=> d.attributes.target.value)
-    const z = d3.selectAll(`.link[target='${this.id}']`).nodes().map((d)=> d.attributes.source.value)
+    let targets = d3.selectAll(`.link[source='${this.id}']`)
+    let sources = d3.selectAll(`.link[target='${this.id}']`)
 
+    const x = targets.nodes().map((d)=> d.attributes.target.value)
+    const z = sources.nodes().map((d)=> d.attributes.source.value)
+    
     this.connections = d3.selectAll('.node').filter((d) => { return x.includes(d.id) || z.includes(d.id) })
     this.connectionIds = this.connections.data().map((n) => n.id)
     this.GraphLinks = new GraphLinks(nodeId)
     
+    this.isLeaf = targets.empty()
     this.highlightDelay = 150
   }
   
@@ -60,6 +64,13 @@ export default class GraphNode {
       
     d3.selectAll(".character-label").remove()
 
+    let ids = this.connectionIds
+    ids.push(this.id)
+   
+    // d3.select(".nodes").style("opacity", 0.2)
+    // console.log(`.node #${ids.join(", #")}`)
+    // d3.selectAll(`#${ids.join(",#")}`).style("opacity", 1)
+
     this.node.moveToFront()
     this.applyHoverClass()
     this.clearHighlightedAttributes()
@@ -73,14 +84,18 @@ export default class GraphNode {
 
     this.GraphLinks.highlightLines(this.highlightDelay)
     setTimeout(() => { this.GraphLinks.appendLineText(3, textAnchor) }, this.highlightDelay)
-    
-    this.connections.selectAll(".outline").transition().duration(this.highlightDelay/2).delay(this.highlightDelay*1.5)
-      .transition().style("transform", "scale(1.1)")
-      .transition().style("stroke", "white")
-    this.connections.selectAll(".node-label").transition().duration(this.highlightDelay/2).delay(this.highlightDelay*1.5)
-      .transition().style("transform", "scale(1.1)")
-    this.connections.selectAll(".poster").transition().duration(this.highlightDelay/2).delay(this.highlightDelay*1.5)
-      .transition().style("transform", "scale(1.1)")      
+
+    this.connections.selectAll(".outline")//.transition().duration(this.highlightDelay/2).delay(this.highlightDelay*1.5)
+      // .transition()
+      .style("transform", "scale(1.1)")
+      // .transition()
+      .style("stroke", "white")
+    this.connections.selectAll(".node-label")//.transition().duration(this.highlightDelay/2).delay(this.highlightDelay*1.5)
+      // .transition()
+      .style("transform", "scale(1.1)")
+    this.connections.selectAll(".poster")//.transition().duration(this.highlightDelay/2).delay(this.highlightDelay*1.5)
+      // .transition()
+      .style("transform", "scale(1.1)")
   }
 
   mouseLeave() {
@@ -91,6 +106,8 @@ export default class GraphNode {
     this.removeHoverClass()
     this.clearHighlightedAttributes()
     
+    d3.selectAll('.node').style("opacity", 1)
+
     d3.selectAll(".character-label").remove()
     d3.selectAll(".outline").style("transform", "scale(1)")
     d3.selectAll(".node-label").style("transform", "scale(1)")

@@ -25,14 +25,14 @@ export default class Simulation {
               // let data = graphStates.graphData[d.source.id] || graphStates.graphData[d.target.id]
               // let dist = data.links.filter(l => l.index).any() ? data.links.filter(l => l.index).length * 6 : 6
               // return dist+100
-
+              // return d.roles.join(" ").length*10
               return 200
             }))
             .force("charge", d3.forceManyBody().strength((d) => {
-              return -2000
+              return -1000
             }))
             .force('collide', d3.forceCollide((d) => {
-              let c = 100
+              let c = 50
               // if (d.hidden) {
               //   c = 50
               // }
