@@ -18,4 +18,4 @@ EXPOSE 8080
 
 # Define the command to run the application
 # This may need to be revisited when we go to set it up on EB. AWS.
-CMD ["npm", "run", "dev"]
+CMD ["bash", "-c", "npm", "run", "dev", "--", "--host", "0.0.0.0"]
