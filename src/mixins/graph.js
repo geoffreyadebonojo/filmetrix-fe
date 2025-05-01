@@ -58,10 +58,6 @@ export default {
     
     this.attachNodeClickActions(node)
 
-
-    // lm = new LinkMap(links)
-    // localStorage.setItem('visited', [])
-
     simulation.on("tick", () => {
       link.attr("x1", d => d.source.x)
           .attr("y1", d => d.source.y)
@@ -113,7 +109,6 @@ export default {
   },
 
   async addToExistingNodes (d) {
-    // current Anchor
     let currentNode = graphStates.existing.filter((y) => {
       return y[0] === d.id
     })[0]
@@ -162,7 +157,6 @@ export default {
     connectionIds.slice(connectionIds.length-addCount).forEach((nodeId) => {
       let n = document.querySelector(`#${nodeId}`)
       n.classList.add('newest')
-      // gn = new GraphNode(nodeId)
     })
 
   },
@@ -185,7 +179,6 @@ export default {
     connectionIds.slice(connectionIds.length-count).forEach((nodeId) => {
       let n = document.querySelector(`#${nodeId}`)
       n.classList.add('newest')
-      // gn = new GraphNode(nodeId)
     })
 
   }

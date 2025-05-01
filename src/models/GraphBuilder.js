@@ -1,12 +1,13 @@
 import { 
+  panelStates,
   graphStates 
 } from '@/stores/store.js'
 import GraphNode from '@models/GraphNode'
 import GraphEvents from '@models/GraphEvents'
 import NewHereInstruction from '@models/NewHereInstruction.js'
 import { drawArc } from '@mixins/helpers'
+// import { d3zoom } from '@mixins/zoom'
 import * as d3 from 'd3'
-
 
 export default class GraphBuilder {
   constructor(args) {
@@ -78,32 +79,80 @@ export default class GraphBuilder {
   }
 
   createViewerBody() {
-    let zoom = d3.zoom()
-    .on('zoom', (e) => {
-      this.args.outerWrapper
-      .attr("transform", e.transform)
+    const zoom = d3.zoom().on('zoom', (e) => {
+      d3.select("#main-outer-wrapper").attr("transform", e.transform)
     })
     .on('end', (e) => {
       localStorage.setItem('currentZoom', e.transform)
     })
-    // out of place here...
+
+    const er = this.viewerBody
+    let d
+
+    const anchors = graphStates.existing.map((n) => n[0])
+    let currentIndex = anchors.indexOf(panelStates.detailsData.id)
+    let currentAnchor
+    let zoomLevel = 2.5
+    
+    d3.select("body").on("keydown.nav", function(event) {
+      // zoom to current detailed node
+      if (event.key == "'") {
+        let node = d3.select(`#${panelStates.detailsData.id}`)
+        d = node.data()[0]
+        node.classed("poster-highlight", true)
+        er.transition().duration(2000).call(
+          zoom.transform, 
+          d3.zoomIdentity.translate(window.innerWidth * 0.6, window.innerHeight * 0.5).scale(zoomLevel).translate(-d.x, -d.y),
+        )
+
+      } else if (["ArrowUp", "ArrowDown"].includes(event.key)) {
+        if (event.key == "ArrowUp" && zoomLevel < 5) {
+          zoomLevel += 0.5
+        } else if (event.key == "ArrowDown" && zoomLevel > 0.5) {
+          zoomLevel -= 0.5
+        }
+
+        currentAnchor = anchors[ currentIndex % anchors.length ]
+        let node = d3.select(`#${currentAnchor}`)
+        d = node.data()[0]
+        er.transition().duration(500).call(
+          zoom.transform, 
+          d3.zoomIdentity.translate(window.innerWidth * 0.6, window.innerHeight * 0.5).scale(zoomLevel).translate(-d.x, -d.y)
+        )
+
+      } else if (["ArrowRight", "ArrowLeft"].includes(event.key)) {
+        if (event.key == "ArrowRight" && currentIndex < anchors.length-1) {
+          currentIndex += 1
+        } else if (event.key == "ArrowLeft" && currentIndex > 0) {
+          currentIndex -= 1
+        }
+        
+        currentAnchor = anchors[ currentIndex ]
+        d3.selectAll(".node").classed("poster-highlight", false)
+        let node = d3.select(`#${currentAnchor}`)
+        node.classed("poster-highlight", true)
+        d = node.data()[0]
+        er.transition().duration(500).call(
+          zoom.transform, 
+          d3.zoomIdentity.translate(window.innerWidth * 0.6, window.innerHeight * 0.5).scale(zoomLevel).translate(-d.x, -d.y)
+        )
+      }
+    })
+    
     if (this.graphControlButtons) {
       this.graphControlButtons.style("display", "block")
       .transition().duration(30).style("left", "-30px")
-      
+
       d3.select("#centering-button").on("click", (e) => {
         const duration = 1000
-        
+        d3.selectAll(".node").classed("poster-highlight", false)
         d3.select(e.target).style("opacity", "1")
-        
-        var transform = d3.zoomIdentity
-          .translate(0,0)
-          .scale(1)
-        
         d3.select(e.target).transition().duration(duration).style("opacity", "0.5")
         this.viewerBody.transition().duration(duration)
-          .call(zoom.transform, () => {
-            return transform
+        .call(zoom.transform, () => {
+          return d3.zoomIdentity
+            .translate(0,0)
+            .scale(1)
           });
         return this.viewerBody
       })

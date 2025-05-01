@@ -74,9 +74,21 @@
       }
     }
 
+    .poster-highlight {
+      .outline, .node-label, .text-container {
+        stroke: red;
+        stroke-width: 2;
+      }
+
+      .node-label {
+        stroke: none;
+      }
+    }
+
+
     .shift-hover {
       .outline, .node-label, .text-container {
-        stroke: lightblue;
+        stroke: rgba(22, 99, 187, 0.634);
 
         animation-name: pulse;
         animation-duration: 0.75s;
@@ -102,24 +114,12 @@
     }
   }
 
-  @keyframes pulseGreen {
-    0% {
-      stroke: white,
-    }
-    50% {
-      stroke: lightgreen,
-    }
-    100% {
-      stroke: white,
-    }
-  }
-
   @keyframes pulse {
     0% {
       stroke-width: 1,
     }
     50% {
-      stroke-width: 2,
+      stroke-width: 3,
     }
     100% {
       stroke-width: 1,
